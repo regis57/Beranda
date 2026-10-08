@@ -1,0 +1,39 @@
+/* Theme "japan" (和): washi paper by day, sumi ink by night.
+   Restraint is the design: thin type, one vermilion accent, a lot of empty space (間).
+   Fonts: install `fonts-noto-cjk` on the Pi for kanji and the thin Latin weights. */
+
+:root {
+  --f-sans: "Noto Sans CJK JP", "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans CJK JP", "Noto Sans JP", "Hiragino Sans", "Helvetica Neue", system-ui, sans-serif;
+  --f-serif: "Noto Serif CJK JP", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "Times New Roman", serif;
+}
+
+/* Day: washi (和紙) and sumi (墨). */
+:root, :root[data-mode="light"] {
+  --bg: #f4efe4;
+  --ink: #23201d;
+  --ink-2: rgba(35, 32, 29, 0.66);
+  --ink-3: rgba(35, 32, 29, 0.42);
+  --line: rgba(35, 32, 29, 0.14);
+  --accent: #bf3b2b;   /* shu-iro 朱色, vermilion */
+  --rain: #2f5d8a;     /* ai-iro 藍色, indigo */
+  --warm: #c9694f;
+  --cool: #6f8fae;
+  --moon-lit: #2a2622;
+  --moon-dark: rgba(35, 32, 29, 0.1);
+}
+
+/* Night: not an inversion. Ink black, text dimmed to ease the eyes, accent desaturated. */
+:root[data-mode="night"] {
+  --bg: #0d0d0f;
+  --ink: rgba(236, 229, 216, 0.82);
+  --ink-2: rgba(236, 229, 216, 0.55);
+  --ink-3: rgba(236, 229, 216, 0.34);
+  --line: rgba(236, 229, 216, 0.12);
+  --accent: #b5645a;
+  --rain: #6f8fb4;
+  --warm: #a9604f;
+  --cool: #58728f;
+  --moon-lit: #e6dfd0;
+  --moon-dark: rgba(236, 229, 216, 0.09);
+}

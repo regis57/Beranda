@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beranda"
+version = "0.1.0"
+description = "A lean, beautiful, offline-tolerant dashboard for a smart mirror or a big tablet. Runs on a Raspberry Pi 3B."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "Beranda contributors" }]
+keywords = ["smart-mirror", "raspberry-pi", "dashboard", "kiosk", "weather"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+]
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "httpx>=0.27",
+  "holidays>=0.50",
+  "icalendar>=5.0",
+  "recurring-ical-events>=2.2",
+  "astral>=3.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "respx>=0.21", "playwright>=1.44", "ruff>=0.5"]
+
+[project.scripts]
+beranda = "beranda.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+beranda = ["web/**/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

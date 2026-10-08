@@ -1,0 +1,35 @@
+# Beranda configuration. Copy to ~/.config/beranda/config.toml (or /etc/beranda/config.toml),
+# or point to it with `beranda --config path` or the BERANDA_CONFIG environment variable.
+# Every key is optional: the defaults give you a working display for Metz, France.
+
+country = "FR"          # ISO 3166-1 code: drives public holidays, week start and units
+language = "fr"         # fr, en and ja are translated; any other code falls back to English
+                        # text, with dates still written in that language
+# subdivision = "57"    # optional region/state for regional public holidays
+# units = "metric"      # metric | imperial (default: imperial in the US, metric elsewhere)
+theme = "japan"
+mode = "auto"           # auto (follows the sun) | light | night
+
+[location]
+name = "Metz"
+latitude = 49.1193
+longitude = 6.1757
+timezone = "Europe/Paris"
+
+[calendar]
+# Any .ics link works: Google ("Secret address in iCal format"), iCloud (public calendar),
+# Outlook, Nextcloud... Read-only, no account to connect. Treat these links like passwords.
+ics_urls = [
+  # "https://calendar.google.com/calendar/ical/.../basic.ics",
+]
+
+# Dates that matter to you. "MM-DD" repeats every year; "YYYY-MM-DD" also shows the number
+# of years. kind: birth | death | anniversary | other
+[[key_dates]]
+date = "2018-06-02"
+label = "Léa"
+kind = "birth"
+
+[server]
+host = "0.0.0.0"
+port = 8080

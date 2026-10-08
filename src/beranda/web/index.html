@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr" data-mode="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Beranda</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/layout.css">
+  <link rel="stylesheet" href="/static/themes/japan.css" id="theme-css">
+  <script type="module" src="/static/display.js"></script>
+</head>
+<body>
+  <main class="board" id="board">
+
+    <header class="clock">
+      <div class="time"><span id="hm">--:--</span><span class="period" id="period"></span></div>
+      <div class="date" id="date"></div>
+    </header>
+
+    <section class="now" aria-label="Météo">
+      <div class="now-row">
+        <div class="now-icon" id="now-icon"></div>
+        <div class="now-temp"><span id="now-temp">–</span><span class="now-unit" id="now-unit">°</span></div>
+        <div class="now-text">
+          <div class="now-label" id="now-label"></div>
+          <div class="now-detail" id="now-detail"></div>
+        </div>
+      </div>
+      <div class="rain">
+        <div class="rain-bars" id="rain-bars"></div>
+        <div class="rain-scale"><span id="rain-from"></span><span id="rain-to"></span></div>
+        <div class="rain-text" id="rain-text"></div>
+      </div>
+    </section>
+
+    <section class="week" id="week" aria-label="Prévisions sur 7 jours"></section>
+
+    <aside class="side">
+      <section class="sky">
+        <div class="season">
+          <div class="season-kanji" id="season-kanji" lang="ja"></div>
+          <div class="season-text">
+            <span class="seal" lang="ja" aria-hidden="true">候</span>
+            <div class="season-name" id="season-name"></div>
+            <div class="season-romaji" id="season-romaji"></div>
+            <div class="season-next" id="season-next"></div>
+          </div>
+        </div>
+        <div class="moon">
+          <svg class="moon-svg" id="moon-svg" viewBox="-60 -60 120 120" role="img" aria-hidden="true"></svg>
+          <div class="moon-name" id="moon-name"></div>
+          <div class="moon-detail" id="moon-detail"></div>
+          <div class="sun" id="sun"></div>
+        </div>
+      </section>
+
+      <section class="cal" aria-label="Calendrier">
+        <div class="cal-title" id="cal-title"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </section>
+
+      <section class="upcoming" aria-label="À venir">
+        <ul class="upcoming-list" id="upcoming"></ul>
+      </section>
+    </aside>
+
+    <footer class="status">
+      <span class="badge" id="badge-demo" hidden></span>
+      <span class="badge" id="badge-offline" hidden></span>
+      <span class="place" id="place"></span>
+    </footer>
+  </main>
+</body>
+</html>
