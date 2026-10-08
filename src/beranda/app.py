@@ -127,7 +127,7 @@ async def build_state(
     # --- agenda ------------------------------------------------------------------
     events: list[dict] = []
     if cfg.demo:
-        events = demo.events(today, _iso_offset(now))
+        events = demo.events(today, _iso_offset(now), cfg.language)
     for index, url in enumerate(cfg.ics_urls):
         digest = hashlib.sha1(url.encode()).hexdigest()[:12]
 
@@ -154,7 +154,7 @@ async def build_state(
             news = await build_news(cfg, cache, now, errors, stale)
 
     # --- special days ------------------------------------------------------------
-    day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today)) if cfg.demo else cfg
+    day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today, cfg.language)) if cfg.demo else cfg
     days = specialdays.special_days(day_cfg, start, end)
 
     # --- sky & season (all local) --------------------------------------------------

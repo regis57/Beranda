@@ -73,20 +73,44 @@ def weather(today: date, now: datetime, units: str = "metric") -> dict:
     }
 
 
-def events(today: date, tz_offset_iso: str) -> list[dict]:
+# Invented agenda, in the display language: (yoga, dentist, dinner, market, weekend,
+# birthday, remembrance, wedding anniversary).
+_AGENDA = {
+    "en": ("Yoga", "Dentist", "Dinner at Sam's", "Market", "Weekend away", "Léa", "Grandpa", "Wedding anniversary"),
+    "fr": ("Yoga", "Dentiste", "Dîner chez Sam", "Marché", "Week-end en Alsace", "Léa", "Papi", "Anniversaire de mariage"),
+    "de": ("Yoga", "Zahnarzt", "Abendessen bei Sam", "Wochenmarkt", "Wochenende an der Ostsee", "Lea", "Opa", "Hochzeitstag"),
+    "es": ("Yoga", "Dentista", "Cena en casa de Sam", "Mercado", "Fin de semana en la sierra", "Lea", "Abuelo", "Aniversario de boda"),
+    "it": ("Yoga", "Dentista", "Cena da Sam", "Mercato", "Weekend al lago", "Lea", "Nonno", "Anniversario di matrimonio"),
+    "pt": ("Ioga", "Dentista", "Jantar em casa do Sam", "Mercado", "Fim de semana no Alentejo", "Lea", "Avô", "Aniversário de casamento"),
+    "pt-BR": ("Ioga", "Dentista", "Jantar na casa do Sam", "Feira", "Fim de semana na praia", "Lea", "Vovô", "Aniversário de casamento"),
+    "id": ("Yoga", "Dokter gigi", "Makan malam di rumah Sam", "Pasar", "Akhir pekan ke Bandung", "Ayu", "Kakek", "Ulang tahun pernikahan"),
+    "ja": ("ヨガ", "歯医者", "サムの家で夕食", "朝市", "週末旅行", "結衣", "祖父", "結婚記念日"),
+    "ar": ("يوغا", "طبيب الأسنان", "عشاء عند سامي", "السوق", "عطلة نهاية الأسبوع", "ليلى", "الجد", "ذكرى الزواج"),
+    "sw": ("Yoga", "Daktari wa meno", "Chakula cha jioni kwa Sam", "Soko", "Wikendi Mombasa", "Amani", "Babu", "Maadhimisho ya ndoa"),
+    "am": ("ዮጋ", "የጥርስ ሐኪም", "ራት ከሳም ጋር", "ገበያ", "የሳምንት መጨረሻ ጉዞ", "ሊያ", "አያት", "የጋብቻ በዓል"),
+    "af": ("Joga", "Tandarts", "Ete by Sam", "Mark", "Naweek weg", "Lea", "Oupa", "Huweliksherdenking"),
+}
+
+
+def _agenda(language: str) -> tuple[str, ...]:
+    return _AGENDA.get(language) or _AGENDA.get(language.split("-")[0]) or _AGENDA["en"]
+
+
+def events(today: date, tz_offset_iso: str, language: str = "fr") -> list[dict]:
     """A few invented agenda entries relative to today. `tz_offset_iso` like '+02:00'."""
+    yoga, dentist, dinner, market, weekend, *_ = _agenda(language)
 
     def at(offset_days: int, hh: int, mm: int = 0) -> str:
         d = today + timedelta(days=offset_days)
         return f"{d.isoformat()}T{hh:02d}:{mm:02d}:00{tz_offset_iso}"
 
     return [
-        {"title": "Yoga", "start": at(0, 18, 30), "end": at(0, 19, 30), "all_day": False, "calendar": 0},
-        {"title": "Dentiste", "start": at(1, 9, 15), "end": at(1, 10), "all_day": False, "calendar": 0},
-        {"title": "Dîner chez Sam", "start": at(3, 20), "end": at(3, 22, 30), "all_day": False, "calendar": 0},
-        {"title": "Marché", "start": at(4, 8), "end": at(4, 12), "all_day": False, "calendar": 0},
+        {"title": yoga, "start": at(0, 18, 30), "end": at(0, 19, 30), "all_day": False, "calendar": 0},
+        {"title": dentist, "start": at(1, 9, 15), "end": at(1, 10), "all_day": False, "calendar": 0},
+        {"title": dinner, "start": at(3, 20), "end": at(3, 22, 30), "all_day": False, "calendar": 0},
+        {"title": market, "start": at(4, 8), "end": at(4, 12), "all_day": False, "calendar": 0},
         {
-            "title": "Week-end en Alsace",
+            "title": weekend,
             "start": f"{(today + timedelta(days=5)).isoformat()}T00:00:00{tz_offset_iso}",
             "end": f"{(today + timedelta(days=7)).isoformat()}T00:00:00{tz_offset_iso}",
             "all_day": True,
@@ -95,15 +119,16 @@ def events(today: date, tz_offset_iso: str) -> list[dict]:
     ]
 
 
-def key_dates(today: date) -> tuple[KeyDate, ...]:
+def key_dates(today: date, language: str = "fr") -> tuple[KeyDate, ...]:
     """Invented personal dates falling inside the next few weeks."""
+    *_, child, grandpa, wedding = _agenda(language)
     a = today + timedelta(days=3)
     b = today + timedelta(days=11)
     c = today + timedelta(days=17)
     return (
-        KeyDate(a.month, a.day, "Anniversaire de Léa", "birth", a.year - 8),
-        KeyDate(b.month, b.day, "Souvenir de Papi", "death", b.year - 12),
-        KeyDate(c.month, c.day, "Anniversaire de mariage", "anniversary", c.year - 6),
+        KeyDate(a.month, a.day, child, "birth", a.year - 8),
+        KeyDate(b.month, b.day, grandpa, "death", b.year - 12),
+        KeyDate(c.month, c.day, wedding, "anniversary", c.year - 6),
     )
 
 
@@ -131,7 +156,7 @@ _HEADLINES = {
     "sw": ("Maktaba ya mji yaongeza saa za kufunguliwa", "Njia mpya ya baiskeli kufunguliwa Jumatatu",
            "Maonyesho ya wikendi yavunja rekodi ya wageni", "Treni ya usiku yarejea kwenye njia ya mkoa"),
 }
-_DEMO_SOURCES = ("Beranda démo", "Demo Press", "Demo Radio", "Demo Daily")
+_DEMO_SOURCES = ("Demo Press", "Demo Radio", "Demo Daily", "Demo Times")
 
 
 def news(language: str, now: datetime) -> dict:

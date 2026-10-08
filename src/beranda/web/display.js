@@ -99,7 +99,9 @@ function icon(code, isDay = true) {
 let clockTimer = null;
 function renderClock() {
   const now = new Date();
-  const parts = dtf({ hour: 'numeric', minute: '2-digit' }).formatToParts(now);
+  // "09:05" on a 24-hour clock, "9:05 PM" on a 12-hour one.
+  const h24 = dtf({ hour: 'numeric' }).resolvedOptions().hourCycle?.startsWith('h2');
+  const parts = dtf({ hour: h24 ? '2-digit' : 'numeric', minute: '2-digit' }).formatToParts(now);
   const get = (type) => parts.find((p) => p.type === type)?.value ?? '';
   const hour = get('hour');
   $('hm').textContent = `${hour}${get('literal') || ':'}${get('minute')}`;
@@ -363,6 +365,9 @@ function renderUpcoming() {
     li.append(when, mark, label, time);
     list.append(li);
   }
+  // Drop the lines that would be cut by the bottom edge rather than show half of one.
+  const box = list.parentElement;
+  while (list.children.length > 1 && list.scrollHeight > box.clientHeight) list.lastElementChild.remove();
 }
 
 // ---------------------------------------------------------------- news ------------------

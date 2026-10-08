@@ -11,6 +11,7 @@ feed address can change without notice. Prints one line per feed and exits 1 if 
 from __future__ import annotations
 
 import asyncio
+import os
 import sys
 
 from beranda.providers import news, news_catalog
@@ -38,6 +39,13 @@ async def main(ids: list[str]) -> int:
         else:
             print(f"ok    {source['id']:<22} {count:>3} items")
     print(f"\n{len(results) - failed}/{len(results)} feeds answer.")
+    if os.environ.get("GITHUB_ACTIONS"):
+        # One annotation each, readable in the pull request without opening the raw log.
+        bad = [f"{s['id']}: {e}" for s, e, _ in results if e]
+        good = [f"{s['id']} ({n})" for s, e, n in results if not e]
+        print(f"::notice title={len(good)} feeds answer::" + ", ".join(good))
+        if bad:
+            print(f"::error title={len(bad)} feeds fail::" + "%0A".join(bad))
     return 1 if failed else 0
 
 

@@ -56,6 +56,7 @@ def main() -> int:
     parser.add_argument("--portrait", action="store_true", help="also capture 800x1280")
     parser.add_argument("--lang", default=None, help="force the UI language (fr, en, ja...)")
     parser.add_argument("--theme", default=None, help="force a theme (japan, indonesia, france)")
+    parser.add_argument("--config", default=None, help="config file to start the server with")
     parser.add_argument("--prefix", default="display")
     args = parser.parse_args()
 
@@ -64,7 +65,8 @@ def main() -> int:
     port = free_port()
     base = f"http://127.0.0.1:{port}"
     server = subprocess.Popen(
-        [sys.executable, "-m", "beranda", "--demo", "--host", "127.0.0.1", "--port", str(port)],
+        [sys.executable, "-m", "beranda", "--demo", "--host", "127.0.0.1", "--port", str(port)]
+        + (["--config", args.config] if args.config else []),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
