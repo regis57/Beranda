@@ -1,0 +1,149 @@
+import tomllib
+from dataclasses import replace
+
+import httpx
+import respx
+from fastapi.testclient import TestClient
+
+from beranda import admin, config
+from beranda.app import create_app
+from beranda.config import Config
+from tests.test_calendar_ics import SAMPLE
+
+LOCAL = ("192.168.1.20", 5000)
+OUTSIDE = ("8.8.8.8", 5000)
+
+
+def make(tmp_path, client=LOCAL, **kw):
+    cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
+    path = tmp_path / "config.toml"
+    return TestClient(create_app(cfg, config_path=path), client=client), path
+
+
+def valid_body(**over):
+    body = {
+        "country": "ID", "language": "id", "units": "metric", "theme": "indonesia", "mode": "auto",
+        "location": {"name": "Yogyakarta", "latitude": -7.797, "longitude": 110.37, "timezone": "Asia/Jakarta"},
+        "calendar": {"ics_urls": ["https://example.org/a.ics"]},
+        "key_dates": [{"date": "2018-06-02", "label": "Ayu", "kind": "birth"}],
+    }
+    body.update(over)
+    return body
+
+
+def test_admin_page_and_options_are_served(tmp_path):
+    client, _ = make(tmp_path)
+    assert client.get("/admin").status_code == 200
+    data = client.get("/api/admin/config").json()
+    assert data["editable"] is True and "FR" in data["options"]["countries"]
+    assert data["options"]["themes"] == ["japan", "indonesia", "france"]
+    assert "server" not in data["config"] and "admin" not in data["config"]
+
+
+def test_outside_addresses_are_refused(tmp_path):
+    client, _ = make(tmp_path, client=OUTSIDE)
+    assert client.get("/api/admin/config").status_code == 403
+    assert client.get("/api/admin/status").status_code == 403
+    assert client.put("/api/admin/config", json=valid_body()).status_code == 403
+    # the display itself stays reachable
+    assert client.get("/api/state").status_code == 200
+
+
+def test_loopback_and_ipv4_mapped_ipv6_count_as_local():
+    assert admin._is_local("127.0.0.1") and admin._is_local("::1")
+    assert admin._is_local("::ffff:192.168.0.5") and admin._is_local("10.0.0.2")
+    assert not admin._is_local("8.8.8.8") and not admin._is_local("testclient")
+    assert not admin._is_local(None) and not admin._is_local("")
+
+
+def test_saving_writes_a_private_toml_and_applies_it_live(tmp_path):
+    client, path = make(tmp_path)
+    assert client.put("/api/admin/config", json=valid_body()).json()["saved"] is True
+    assert oct(path.stat().st_mode & 0o777) == "0o600"
+    written = tomllib.loads(path.read_text())
+    assert written["location"]["name"] == "Yogyakarta" and written["theme"] == "indonesia"
+    assert written["key_dates"] == [{"date": "2018-06-02", "label": "Ayu", "kind": "birth"}]
+    # the written file loads back to the same configuration
+    assert config.load(path).location.timezone == "Asia/Jakarta"
+    # and the running display uses it without a restart
+    state = client.get("/api/state").json()
+    assert state["config"]["location"]["name"] == "Yogyakarta"
+    assert state["season"]["kind"] == "mangsa"
+
+
+def test_invalid_settings_are_rejected_and_nothing_is_written(tmp_path):
+    client, path = make(tmp_path)
+    bad = valid_body(location={"name": "X", "latitude": 123, "longitude": 0, "timezone": "UTC"})
+    assert client.put("/api/admin/config", json=bad).status_code == 422
+    assert client.put("/api/admin/config", json=valid_body(units="furlongs")).status_code == 422
+    bad_key = valid_body(key_dates=[{"date": "tomorrow", "label": "x", "kind": "other"}])
+    assert client.put("/api/admin/config", json=bad_key).status_code == 422
+    assert not path.exists()
+
+
+def test_cross_origin_writes_are_refused(tmp_path):
+    client, path = make(tmp_path)
+    r = client.put("/api/admin/config", json=valid_body(), headers={"origin": "https://evil.example"})
+    assert r.status_code == 403 and not path.exists()
+    ok = client.put("/api/admin/config", json=valid_body(), headers={"origin": "http://testserver"})
+    assert ok.status_code == 200
+
+
+def test_pin_is_required_when_set_and_can_be_set_from_the_page(tmp_path):
+    client, _ = make(tmp_path)
+    assert client.get("/api/admin/status").json()["pin_required"] is False
+    assert client.put("/api/admin/config", json=valid_body(pin="2468")).status_code == 200
+    assert client.get("/api/admin/status").json()["pin_required"] is True
+    assert client.get("/api/admin/config").status_code == 401
+    assert client.get("/api/admin/config", headers={"x-beranda-pin": "0000"}).status_code == 401
+    good = {"x-beranda-pin": "2468"}
+    assert client.get("/api/admin/config", headers=good).json()["pin_set"] is True
+    # saving again without a pin key keeps the pin
+    assert client.put("/api/admin/config", json=valid_body(), headers=good).status_code == 200
+    assert client.get("/api/admin/config").status_code == 401
+    # an empty pin clears it
+    assert client.put("/api/admin/config", json=valid_body(pin=""), headers=good).status_code == 200
+    assert client.get("/api/admin/config").status_code == 200
+
+
+def test_without_a_config_path_saving_is_refused(tmp_path):
+    cfg = replace(Config(), cache_dir=tmp_path / "cache")
+    client = TestClient(create_app(cfg), client=LOCAL)
+    assert client.get("/api/admin/config").json()["editable"] is False
+    assert client.put("/api/admin/config", json=valid_body()).status_code == 409
+
+
+def test_state_can_preview_another_theme(tmp_path):
+    client, _ = make(tmp_path, demo=True)
+    assert client.get("/api/state?theme=france").json()["season"]["kind"] == "republican"
+    assert client.get("/api/state?theme=../../x").json()["season"]["kind"] == "ko"
+
+
+@respx.mock
+def test_city_search_proxies_open_meteo(tmp_path):
+    respx.get(admin.GEOCODE_URL).mock(return_value=httpx.Response(200, json={"results": [
+        {"name": "Yogyakarta", "admin1": "Special Region", "country_code": "ID",
+         "latitude": -7.8, "longitude": 110.36, "timezone": "Asia/Jakarta", "population": 1}]}))
+    client, _ = make(tmp_path)
+    found = client.get("/api/admin/geocode", params={"q": "Yogya", "language": "id"}).json()["results"]
+    assert found == [{"name": "Yogyakarta", "region": "Special Region", "country": "ID",
+                      "latitude": -7.8, "longitude": 110.36, "timezone": "Asia/Jakarta"}]
+
+
+@respx.mock
+def test_city_search_failure_is_a_clean_502(tmp_path):
+    respx.get(admin.GEOCODE_URL).mock(side_effect=httpx.ConnectError("down"))
+    client, _ = make(tmp_path)
+    assert client.get("/api/admin/geocode", params={"q": "Paris"}).status_code == 502
+
+
+@respx.mock
+def test_ics_test_reports_events_and_never_echoes_the_secret(tmp_path):
+    secret = "https://calendar.example.org/private/SECRET-TOKEN-9/basic.ics"
+    client, _ = make(tmp_path)
+    respx.get(secret).mock(return_value=httpx.Response(200, text=SAMPLE))
+    ok = client.post("/api/admin/test-ics", json={"url": secret}).json()
+    assert ok["ok"] is True
+    respx.get(secret).mock(side_effect=httpx.ConnectError(f"cannot reach {secret}"))
+    bad = client.post("/api/admin/test-ics", json={"url": secret}).json()
+    assert bad == {"ok": False, "error": "ConnectError"}

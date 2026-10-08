@@ -16,15 +16,18 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import __version__
+from .admin import Runtime
+from .admin import router as admin_router
 from .cache import Cache
 from .config import Config
 from .providers import astro as astro_mod
-from .providers import calendar_ics, demo, microseasons, specialdays
+from .providers import calendar_ics, demo, seasons, specialdays
 from .providers import weather as weather_mod
 
 log = logging.getLogger(__name__)
 
 WEB_DIR = Path(__file__).parent / "web"
+THEMES = {"japan", "indonesia", "france"}
 WEATHER_TTL = 15 * 60
 CALENDAR_TTL = 15 * 60
 
@@ -32,7 +35,7 @@ CALENDAR_TTL = 15 * 60
 # entry or feed from ever running code on the mirror.
 CSP = (
     "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; "
-    "connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+    "connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'"
 )
 
 
@@ -49,7 +52,9 @@ def _window(today: date) -> tuple[date, date]:
     return first, last
 
 
-async def build_state(cfg: Config, cache: Cache, now: datetime) -> dict:
+async def build_state(
+    cfg: Config, cache: Cache, now: datetime, theme: str | None = None
+) -> dict:
     loc = cfg.location
     today = now.date()
     start, end = _window(today)
@@ -116,7 +121,7 @@ async def build_state(cfg: Config, cache: Cache, now: datetime) -> dict:
         },
         "weather": weather,
         "sky": sky,
-        "season": microseasons.current(today),
+        "season": seasons.current(theme or cfg.theme, today),
         "events": events,
         "special_days": days,
         "window": {"start": start.isoformat(), "end": end.isoformat()},
@@ -125,11 +130,16 @@ async def build_state(cfg: Config, cache: Cache, now: datetime) -> dict:
     }
 
 
-def create_app(cfg: Config, now_fn: Callable[[], datetime] | None = None) -> FastAPI:
-    zone = ZoneInfo(cfg.location.timezone)
-    clock = now_fn or (lambda: datetime.now(zone))
+def create_app(
+    cfg: Config,
+    now_fn: Callable[[], datetime] | None = None,
+    config_path: Path | None = None,
+) -> FastAPI:
+    runtime = Runtime(cfg=cfg, config_path=config_path)
+    clock = now_fn or (lambda: datetime.now(ZoneInfo(runtime.cfg.location.timezone)))
     cache = Cache(cfg.cache_dir)
     app = FastAPI(title="Beranda", version=__version__, docs_url=None, redoc_url=None)
+    app.include_router(admin_router(runtime))
 
     @app.middleware("http")
     async def security_headers(request: Request, call_next):
@@ -144,13 +154,19 @@ def create_app(cfg: Config, now_fn: Callable[[], datetime] | None = None) -> Fas
         return {"status": "ok", "version": __version__}
 
     @app.get("/api/state")
-    async def state() -> JSONResponse:
-        data = await build_state(cfg, cache, clock())
+    async def state(theme: str | None = None) -> JSONResponse:
+        # `theme` lets the admin preview another theme with its own seasonal calendar.
+        theme = theme if theme in THEMES else None
+        data = await build_state(runtime.cfg, cache, clock(), theme)
         return JSONResponse(data, headers={"Cache-Control": "no-store"})
 
     @app.get("/")
     async def index() -> FileResponse:
         return FileResponse(WEB_DIR / "index.html", headers={"Cache-Control": "no-cache"})
+
+    @app.get("/admin")
+    async def admin_page() -> FileResponse:
+        return FileResponse(WEB_DIR / "admin.html", headers={"Cache-Control": "no-cache"})
 
     app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
     return app

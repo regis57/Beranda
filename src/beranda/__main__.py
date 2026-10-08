@@ -23,7 +23,8 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    cfg = config.load(args.config)
+    config_path = args.config or config.find_config_path() or config.DEFAULT_CONFIG_PATH
+    cfg = config.load(config_path if config_path.is_file() else None)
     overrides = {}
     if args.demo:
         overrides["demo"] = True
@@ -34,7 +35,7 @@ def main(argv: list[str] | None = None) -> None:
     if overrides:
         cfg = replace(cfg, **overrides)
 
-    uvicorn.run(create_app(cfg), host=cfg.host, port=cfg.port, log_level="info")
+    uvicorn.run(create_app(cfg, config_path=config_path), host=cfg.host, port=cfg.port, log_level="info")
 
 
 if __name__ == "__main__":

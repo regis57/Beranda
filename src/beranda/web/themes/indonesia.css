@@ -1,0 +1,61 @@
+/* Theme "indonesia" (Batik): sogan brown on warm cloth by day, indigo night by dark.
+   Inspired by Javanese batik dyes: soga brown, wedel indigo, turmeric gold.
+   The season block shows the pranata mangsa, the Javanese farmers' calendar. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f3e8d0;
+  --ink: #3a2518;
+  --ink-2: rgba(58, 37, 24, 0.72);
+  --ink-3: rgba(58, 37, 24, 0.5);
+  --line: rgba(58, 37, 24, 0.18);
+  --accent: #b5651d;   /* gold of turmeric dye */
+  --rain: #1f4a73;     /* indigo */
+  --warm: #c97a2b;
+  --cool: #5d83a6;
+  --moon-lit: #3a2518;
+  --moon-dark: rgba(58, 37, 24, 0.1);
+  --ornament: url("/static/themes/kawung.svg");
+}
+
+:root[data-mode="night"] {
+  --bg: #0e1620;
+  --ink: rgba(240, 226, 196, 0.84);
+  --ink-2: rgba(240, 226, 196, 0.58);
+  --ink-3: rgba(240, 226, 196, 0.36);
+  --line: rgba(240, 226, 196, 0.13);
+  --accent: #c9953f;
+  --rain: #6e9cc8;
+  --warm: #b98443;
+  --cool: #4f7596;
+  --moon-lit: #efe2c4;
+  --moon-dark: rgba(240, 226, 196, 0.09);
+}
+
+/* Kawung: four ovals around a centre, one of the oldest batik motifs. A faint band marks
+   the season block; it is a static image, so it costs the Pi nothing. */
+.season {
+  flex: 1 1 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.3rem;
+  background: var(--ornament) center / 3.4rem repeat;
+  box-shadow: inset 0 0 0 1px var(--line);
+  position: relative;
+}
+.season::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: var(--bg); opacity: 0.86; z-index: 0;
+}
+.season > * { position: relative; z-index: 1; }
+.season-kanji { font-size: 2.8rem; font-weight: 300; letter-spacing: 0; line-height: 1; }
+.seal { border-radius: 50%; }
+.season-romaji { font-style: normal; font-size: 0.76rem; line-height: 1.4; color: var(--ink-2); max-width: none; }
+.season-note { font-style: italic; }
+.clock .date { letter-spacing: 0.06em; }

@@ -55,6 +55,7 @@ def main() -> int:
     parser.add_argument("--size", default="1280x800")
     parser.add_argument("--portrait", action="store_true", help="also capture 800x1280")
     parser.add_argument("--lang", default=None, help="force the UI language (fr, en, ja...)")
+    parser.add_argument("--theme", default=None, help="force a theme (japan, indonesia, france)")
     parser.add_argument("--prefix", default="display")
     args = parser.parse_args()
 
@@ -83,7 +84,9 @@ def main() -> int:
                         lambda m: errors.append(m.text) if m.type in ("error", "warning") else None,
                     )
                     page.on("pageerror", lambda e: errors.append(str(e)))
-                    query = f"?mode={mode}" + (f"&lang={args.lang}" if args.lang else "")
+                    query = f"?mode={mode}" + (f"&lang={args.lang}" if args.lang else "") + (
+                        f"&theme={args.theme}" if args.theme else ""
+                    )
                     page.goto(f"{base}/{query}")
                     page.wait_for_selector("body[data-ready=true]", timeout=15000)
                     page.wait_for_timeout(1700)  # let the colour transition finish

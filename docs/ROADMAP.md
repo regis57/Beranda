@@ -3,7 +3,8 @@
 Master word: **ease of installation**. Each step ships as its own PR with a screenshot.
 
 1. **v0.1** – display page, weather, moon, calendar, holidays, ICS (done)
-2. Setup web page + config menu
+2. Settings web page, Indonesian and French themes (v0.2, done)
+2b. Config menu on the Pi itself (raspi-config style)
 3. One-line install script, systemd service, kiosk mode (WPE `cog`)
 4. Wi-Fi captive portal and ready-to-flash image (pi-gen)
 5. Photo carousel from a local folder (sync with rclone/Syncthing)
