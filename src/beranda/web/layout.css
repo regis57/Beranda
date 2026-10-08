@@ -1,0 +1,187 @@
+/* Beranda layout. Theme-agnostic: every colour and font comes from a theme's tokens.
+   Performance rules for a Raspberry Pi 3B: no blur, no backdrop-filter, no animated
+   shadows. Only transform and opacity are ever animated. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html {
+  /* One knob scales the whole board: ~16px at 1280x800, ~23px at 1920x1080. */
+  font-size: clamp(12px, 0.8vw + 0.7vh, 26px);
+  background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--f-sans);
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--bg);
+  transition: background-color 1.4s ease, color 1.4s ease;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  height: 100vh;
+  height: 100dvh;
+  padding: clamp(1rem, 3.4vmin, 2.6rem) clamp(1.4rem, 4.6vmin, 3.6rem);
+  gap: 1.2rem clamp(2rem, 5.5vw, 5.5rem);
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "clock side"
+    "now   side"
+    "week  side";
+}
+
+/* ---- clock ------------------------------------------------------------------ */
+.clock { grid-area: clock; }
+.time {
+  font-family: var(--f-display);
+  font-size: 8.6rem;
+  font-weight: 100;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.period { font-size: 2rem; letter-spacing: 0; margin-left: 0.5rem; color: var(--ink-2); }
+.date {
+  margin-top: 0.5rem;
+  font-size: 1.55rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+.date::first-letter { text-transform: uppercase; }
+
+/* ---- weather now -------------------------------------------------------------- */
+.now { grid-area: now; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; min-height: 0; }
+.now-row { display: flex; align-items: center; gap: 1.6rem; }
+.now-icon { width: 5.6rem; height: 5.6rem; color: var(--ink); flex: none; }
+.now-icon svg { width: 100%; height: 100%; }
+.now-temp { font-family: var(--f-display); font-size: 6.6rem; font-weight: 100; line-height: 1; letter-spacing: -0.03em; }
+.now-unit { font-size: 2.2rem; vertical-align: top; position: relative; top: 0.6rem; margin-left: 0.15rem; color: var(--ink-2); font-weight: 300; letter-spacing: 0; }
+.now-label { font-size: 1.7rem; font-weight: 300; letter-spacing: 0.03em; }
+.now-detail { margin-top: 0.3rem; font-size: 1rem; color: var(--ink-2); letter-spacing: 0.05em; }
+
+.rain { max-width: 34rem; }
+.rain-bars { display: flex; align-items: flex-end; gap: 0.35rem; height: 3.2rem; border-bottom: 1px solid var(--line); }
+.rain-bars .bar {
+  flex: 1;
+  height: calc(var(--h, 0) * 100%);
+  min-height: 2px;
+  background: var(--rain);
+  border-radius: 1px 1px 0 0;
+  opacity: 0.9;
+}
+.rain-bars .bar.dry { background: var(--line); min-height: 2px; opacity: 1; }
+.rain-scale { display: flex; justify-content: space-between; margin-top: 0.3rem; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--ink-3); }
+.rain-text { margin-top: 0.5rem; font-size: 1.05rem; color: var(--ink-2); letter-spacing: 0.04em; }
+
+/* ---- 7-day forecast ----------------------------------------------------------- */
+.week { grid-area: week; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.4rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.day { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
+.day-name { font-size: 0.95rem; letter-spacing: 0.1em; text-transform: lowercase; color: var(--ink-2); }
+.day.today .day-name { color: var(--accent); }
+.day-num { font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.05em; margin-top: -0.25rem; }
+.day-icon { width: 2.3rem; height: 2.3rem; color: var(--ink); }
+.day-icon svg { width: 100%; height: 100%; }
+.day-hi { font-size: 1.25rem; font-weight: 300; font-variant-numeric: tabular-nums; }
+.day-track { position: relative; width: 2px; height: 3.6rem; background: var(--line); border-radius: 1px; }
+.day-range {
+  position: absolute; left: -1px; width: 4px; border-radius: 2px;
+  top: calc(var(--top, 0) * 1%); height: calc(var(--len, 10) * 1%);
+  background: linear-gradient(to bottom, var(--warm), var(--cool));
+}
+.day-lo { font-size: 1.05rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.day-pop { font-size: 0.75rem; letter-spacing: 0.05em; color: var(--rain); height: 1em; }
+
+/* ---- side column ------------------------------------------------------------------ */
+.side { grid-area: side; display: flex; flex-direction: column; gap: 1.6rem; min-height: 0; padding-left: clamp(1rem, 2.6vw, 2.6rem); border-left: 1px solid var(--line); }
+
+.sky { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.season { display: flex; gap: 1.1rem; align-items: flex-start; min-width: 0; }
+.season-kanji {
+  writing-mode: vertical-rl;
+  font-family: var(--f-serif);
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.season-text { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.seal {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.5rem; height: 1.5rem; margin-bottom: 0.2rem;
+  font-family: var(--f-serif); font-size: 0.95rem; font-weight: 700;
+  color: var(--bg); background: var(--accent); border-radius: 0.2rem;
+}
+.season-name { font-size: 1.05rem; line-height: 1.35; letter-spacing: 0.02em; max-width: 11rem; }
+.season-romaji { font-size: 0.8rem; font-style: italic; color: var(--ink-3); letter-spacing: 0.03em; max-width: 11rem; }
+.season-next { font-size: 0.75rem; letter-spacing: 0.08em; color: var(--ink-3); }
+
+.moon { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; text-align: center; flex: none; }
+.moon-svg { width: 6.4rem; height: 6.4rem; }
+.moon-name { font-size: 0.95rem; letter-spacing: 0.05em; }
+.moon-detail { font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.04em; line-height: 1.5; }
+.sun { font-size: 0.8rem; color: var(--ink-2); letter-spacing: 0.04em; display: flex; gap: 0.8rem; margin-top: 0.1rem; font-variant-numeric: tabular-nums; }
+
+/* ---- calendar ------------------------------------------------------------------ */
+.cal-title { font-size: 1.15rem; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+.cal-title::first-letter { text-transform: uppercase; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 0.15rem; text-align: center; }
+.cal-dow { font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.1em; padding-bottom: 0.35rem; }
+.cal-cell { position: relative; height: 2.35rem; font-size: 0.98rem; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0.2rem; }
+.cal-cell.past { color: var(--ink-3); }
+.cal-cell.sunday, .cal-cell.holiday-day { color: var(--accent); }
+.cal-cell.today .cal-num { color: var(--bg); background: var(--accent); border-radius: 50%; width: 1.7rem; height: 1.7rem; display: inline-flex; align-items: center; justify-content: center; margin-top: -0.1rem; }
+.cal-marks { display: flex; gap: 0.18rem; height: 0.5rem; align-items: center; margin-top: 0.12rem; }
+.mark { display: block; width: 0.34rem; height: 0.34rem; background: var(--accent); border-radius: 50%; }
+.mark.birth { background: transparent; border: 1.5px solid var(--accent); }
+.mark.death { border-radius: 0; transform: rotate(45deg); background: var(--ink-2); }
+.mark.anniversary { background: transparent; border: 1.5px solid var(--accent); box-shadow: inset 0 0 0 1.5px var(--bg), inset 0 0 0 5px var(--accent); }
+.mark.other { border-radius: 1px; width: 0.5rem; height: 2px; background: var(--ink-2); }
+.mark.event { border-radius: 1px; width: 0.5rem; height: 2px; background: var(--rain); }
+.cal-cell.today .mark { background: var(--accent); }
+
+/* ---- upcoming ------------------------------------------------------------------- */
+.upcoming { min-height: 0; flex: 1; overflow: hidden; }
+.upcoming-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.up { display: grid; grid-template-columns: 5.6rem 0.9rem minmax(0, 1fr) auto; align-items: baseline; gap: 0.5rem; font-size: 1.02rem; }
+.up-when { font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-3); text-transform: lowercase; white-space: nowrap; }
+.up-when.soon { color: var(--accent); }
+.up-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.up-time { font-size: 0.85rem; color: var(--ink-2); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.up .mark { align-self: center; }
+.empty { font-size: 0.95rem; color: var(--ink-3); letter-spacing: 0.06em; }
+
+/* ---- status --------------------------------------------------------------------- */
+.status { position: absolute; right: clamp(1.2rem, 3vmin, 2.4rem); bottom: clamp(0.6rem, 1.6vmin, 1.2rem); display: flex; gap: 0.7rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
+.badge { padding: 0.12rem 0.5rem; border: 1px solid currentColor; border-radius: 99px; }
+.place { opacity: 0.9; }
+
+/* ---- portrait / small screens: one column, scrollable ---------------------------------- */
+@media (max-aspect-ratio: 1/1), (max-width: 760px) {
+  body { overflow: auto; }
+  .board {
+    height: auto; min-height: 100vh;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: "clock" "now" "week" "side";
+    gap: 1.6rem;
+  }
+  .side { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  .time { font-size: 7rem; }
+  .status { position: static; justify-content: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
+}

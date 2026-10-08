@@ -1,0 +1,408 @@
+// Beranda display. Vanilla JS, no framework, no build step: it has to stay light on a Pi 3B.
+// Data comes from one endpoint (/api/state); the display never talks to third parties.
+
+const POLL_MS = 60_000;
+const RETRY_MS = 5_000;
+const params = new URLSearchParams(location.search);
+
+let state = null;
+let strings = {};
+let lang = 'fr';
+let tz = 'Europe/Paris';
+let loadedLang = null;
+
+const $ = (id) => document.getElementById(id);
+
+// ---------------------------------------------------------------- i18n -----
+function deepMerge(base, extra) {
+  const out = { ...base };
+  for (const [k, v] of Object.entries(extra)) {
+    out[k] = v && typeof v === 'object' && !Array.isArray(v) ? deepMerge(base[k] || {}, v) : v;
+  }
+  return out;
+}
+
+async function loadStrings(code) {
+  const short = String(code).toLowerCase().split('-')[0];
+  if (!/^[a-z]{2,3}$/.test(short)) return;
+  if (loadedLang === short) return;
+  const get = async (name) => {
+    try { const r = await fetch(`/static/i18n/${name}.json`); return r.ok ? await r.json() : {}; }
+    catch { return {}; }
+  };
+  // English is the fallback for any string a translation does not have yet.
+  const en = await get('en');
+  strings = short === 'en' ? en : deepMerge(en, await get(short));
+  loadedLang = short;
+  document.documentElement.lang = short;
+}
+
+function t(key, vars) {
+  let s = key.split('.').reduce((o, k) => (o ? o[k] : undefined), strings);
+  if (typeof s !== 'string') return key;
+  if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, v);
+  return s;
+}
+
+const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(lang, { timeZone: zone, ...opts });
+const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+const noon = (iso) => new Date(`${iso}T12:00:00Z`); // a date-only string, safely in the middle of its day
+
+// ---------------------------------------------------------------- icons ----
+// Original line icons on a 64x64 grid, drawn with strokes so they inherit the theme colour.
+const CLOUD = 'M18 46h28a10 10 0 0 0 1.5-19.9A14 14 0 0 0 20.5 24 11 11 0 0 0 18 46z';
+const RAYS = (cx, cy, r1, r2) => [0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
+  const rad = (a * Math.PI) / 180, c = Math.cos(rad), s = Math.sin(rad);
+  return `M${(cx + c * r1).toFixed(1)} ${(cy + s * r1).toFixed(1)}L${(cx + c * r2).toFixed(1)} ${(cy + s * r2).toFixed(1)}`;
+}).join('');
+const DROPS = (xs, y) => xs.map((x) => `M${x} ${y}l-3 7`).join('');
+const MOON = 'M40 14a20 20 0 1 0 12 36A17 17 0 0 1 40 14z';
+
+const ICONS = {
+  sun: `<circle cx="32" cy="32" r="10"/><path d="${RAYS(32, 32, 16, 24)}"/>`,
+  moon: `<path d="${MOON}" transform="translate(-4 2)"/>`,
+  partly: `<circle cx="24" cy="24" r="8"/><path d="${RAYS(24, 24, 13, 18)}"/><g transform="translate(6 6)"><path fill="var(--bg)" d="${CLOUD}"/></g>`,
+  partlyNight: `<path d="${MOON}" transform="translate(-14 -6) scale(.75)"/><g transform="translate(6 6)"><path fill="var(--bg)" d="${CLOUD}"/></g>`,
+  cloud: `<path d="${CLOUD}"/>`,
+  fog: `<path d="M12 24h40M8 34h40M16 44h40"/>`,
+  drizzle: `<path d="${CLOUD}" transform="translate(0 -6)"/><path d="${DROPS([24, 36, 48], 44)}" stroke-dasharray="3 5"/>`,
+  rain: `<path d="${CLOUD}" transform="translate(0 -6)"/><path d="${DROPS([22, 33, 44], 44)}"/><path d="${DROPS([28, 39], 53)}"/>`,
+  snow: `<path d="${CLOUD}" transform="translate(0 -6)"/><path d="M22 46v6M19 49h6M34 46v6M31 49h6M46 46v6M43 49h6"/>`,
+  storm: `<path d="${CLOUD}" transform="translate(0 -6)"/><path d="M34 38l-7 10h8l-5 10"/>`,
+};
+
+function iconName(code, isDay) {
+  if (code === 0 || code === 1) return isDay ? 'sun' : 'moon';
+  if (code === 2) return isDay ? 'partly' : 'partlyNight';
+  if (code === 3) return 'cloud';
+  if (code === 45 || code === 48) return 'fog';
+  if ([51, 53, 55, 56, 57].includes(code)) return 'drizzle';
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return 'rain';
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return 'snow';
+  if ([95, 96, 99].includes(code)) return 'storm';
+  return 'cloud';
+}
+
+function icon(code, isDay = true) {
+  return `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[iconName(code, isDay)]}</svg>`;
+}
+
+// ---------------------------------------------------------------- clock ----
+let clockTimer = null;
+function renderClock() {
+  const now = new Date();
+  const parts = dtf({ hour: 'numeric', minute: '2-digit' }).formatToParts(now);
+  const get = (type) => parts.find((p) => p.type === type)?.value ?? '';
+  const hour = get('hour');
+  $('hm').textContent = `${hour}${get('literal') || ':'}${get('minute')}`;
+  $('period').textContent = get('dayPeriod');
+  $('date').textContent = dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+  // Re-run exactly when the next minute starts: no per-second timer, no wasted CPU.
+  clearTimeout(clockTimer);
+  clockTimer = setTimeout(() => { renderClock(); renderCalendarDay(); }, 60_000 - (now.getTime() % 60_000) + 50);
+}
+
+// ---------------------------------------------------------------- weather ----
+function renderWeather() {
+  const w = state.weather;
+  if (!w) {
+    $('now-icon').innerHTML = '';
+    $('now-temp').textContent = '–';
+    $('now-label').textContent = t('no_weather');
+    $('now-detail').textContent = '';
+    $('rain-bars').replaceChildren();
+    $('rain-text').textContent = '';
+    $('week').replaceChildren();
+    return;
+  }
+  const c = w.current;
+  $('now-icon').innerHTML = icon(c.code, c.is_day);
+  $('now-temp').textContent = c.temp;
+  $('now-unit').textContent = w.units.temp;
+  $('now-label').textContent = t(`wmo.${c.code}`);
+  $('now-detail').textContent = `${t('feels')} ${c.feels}° · ${c.humidity} % · ${c.wind} ${w.units.wind}`;
+  renderRain(w.rain);
+  renderWeek(w);
+}
+
+function renderRain(rain) {
+  const bars = $('rain-bars');
+  bars.replaceChildren();
+  const slots = Math.max(rain.intervals.length, 8);
+  for (let i = 0; i < slots; i++) {
+    const mm = rain.intervals[i] ?? 0;
+    const bar = document.createElement('div');
+    bar.className = mm >= 0.1 ? 'bar' : 'bar dry';
+    // sqrt scale: a drizzle must stay visible next to a downpour
+    if (mm >= 0.1) bar.style.setProperty('--h', Math.min(1, Math.sqrt(mm / 1.2)).toFixed(2));
+    bars.append(bar);
+  }
+  $('rain-from').textContent = t('rain.now');
+  $('rain-to').textContent = t('rain.in2h');
+  let text;
+  if (rain.raining_now) {
+    text = rain.stops_in_min == null ? t('rain.long') : t('rain.stops', { min: rain.stops_in_min });
+  } else if (rain.starts_in_min != null) {
+    text = rain.starts_in_min === 0 ? t('rain.starts_now') : t('rain.starts', { min: rain.starts_in_min });
+  } else {
+    text = t('rain.none');
+  }
+  $('rain-text').textContent = text;
+}
+
+function renderWeek(w) {
+  const root = $('week');
+  root.replaceChildren();
+  const lo = Math.min(...w.daily.map((d) => d.tmin));
+  const hi = Math.max(...w.daily.map((d) => d.tmax));
+  const span = Math.max(hi - lo, 1);
+  const today = dayKey(new Date());
+  for (const d of w.daily) {
+    const el = document.createElement('div');
+    el.className = `day${d.date === today ? ' today' : ''}`;
+    const top = ((hi - d.tmax) / span) * 100;
+    const len = Math.max(((d.tmax - d.tmin) / span) * 100, 8);
+    el.innerHTML = `
+      <div class="day-name"></div>
+      <div class="day-icon">${icon(d.code, true)}</div>
+      <div class="day-hi"></div>
+      <div class="day-track"><div class="day-range"></div></div>
+      <div class="day-lo"></div>
+      <div class="day-pop"></div>`;
+    el.querySelector('.day-name').textContent = dtf({ weekday: 'short' }, 'UTC').format(noon(d.date));
+    el.querySelector('.day-hi').textContent = `${d.tmax}°`;
+    el.querySelector('.day-lo').textContent = `${d.tmin}°`;
+    el.querySelector('.day-pop').textContent = d.pop >= 20 ? `${d.pop}%` : '';
+    const range = el.querySelector('.day-range');
+    range.style.setProperty('--top', top.toFixed(1));
+    range.style.setProperty('--len', len.toFixed(1));
+    root.append(el);
+  }
+}
+
+// ---------------------------------------------------------------- sky ---------
+// Draw the lit part of the moon as one path: a half-disc limb plus the terminator ellipse.
+function moonPath(phase, r) {
+  const waxing = phase < 0.5;
+  const rx = Math.abs(Math.cos(2 * Math.PI * phase)) * r;
+  const crescent = phase < 0.25 || phase > 0.75;
+  const limb = waxing ? 1 : 0;
+  const term = waxing ? (crescent ? 0 : 1) : (crescent ? 1 : 0);
+  return `M0 ${-r}A${r} ${r} 0 0 ${limb} 0 ${r}A${rx.toFixed(2)} ${r} 0 0 ${term} 0 ${-r}Z`;
+}
+
+function renderSky() {
+  const m = state.sky.moon;
+  const flip = m.mirrored ? ' transform="scale(-1 1)"' : '';
+  $('moon-svg').innerHTML =
+    `<g${flip}><circle r="50" fill="var(--moon-dark)" stroke="var(--line)" stroke-width="1"/>` +
+    `<path d="${moonPath(m.phase, 50)}" fill="var(--moon-lit)"/></g>`;
+  $('moon-name').textContent = t(`moon.${m.name}`);
+  const shortDate = (iso) => dtf({ day: 'numeric', month: 'short' }).format(new Date(iso));
+  const events = [
+    { at: m.next_full, text: t('moon.next_full', { date: shortDate(m.next_full) }) },
+    { at: m.next_new, text: t('moon.next_new', { date: shortDate(m.next_new) }) },
+  ].sort((a, b) => a.at.localeCompare(b.at));
+  const lit = t('moon.lit', { pct: Math.round(m.illumination * 100) });
+  const detail = $('moon-detail');
+  detail.replaceChildren(...[lit, events[0].text].map((line) => {
+    const div = document.createElement('div');
+    div.textContent = line;
+    return div;
+  }));
+
+  const sun = $('sun');
+  sun.replaceChildren();
+  const time = (iso) => dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+  if (state.sky.sun.sunrise) {
+    for (const [key, iso] of [['sun.rise', state.sky.sun.sunrise], ['sun.set', state.sky.sun.sunset]]) {
+      const span = document.createElement('span');
+      span.textContent = `${t(key)} ${time(iso)}`;
+      sun.append(span);
+    }
+  }
+
+  const s = state.season;
+  $('season-kanji').textContent = s.kanji;
+  $('season-name').textContent = s[loadedLang === 'fr' ? 'fr' : 'en'];
+  $('season-romaji').textContent = s.romaji;
+  $('season-next').textContent = s.days_left <= 1 ? t('season.tomorrow') : t('season.in_days', { n: s.days_left });
+}
+
+// ---------------------------------------------------------------- calendar --------
+function marksByDay() {
+  const map = new Map();
+  const add = (date, cls) => {
+    const list = map.get(date) || [];
+    if (!list.includes(cls)) list.push(cls);
+    map.set(date, list);
+  };
+  for (const d of state.special_days) add(d.date, d.kind);
+  for (const e of state.events) {
+    const first = e.start.slice(0, 10);
+    add(first, 'event');
+    if (e.all_day) { // an all-day event's end date is exclusive
+      const last = e.end.slice(0, 10);
+      for (let d = new Date(`${first}T12:00:00Z`); ; ) {
+        d.setUTCDate(d.getUTCDate() + 1);
+        const key = d.toISOString().slice(0, 10);
+        if (key >= last) break;
+        add(key, 'event');
+      }
+    }
+  }
+  return map;
+}
+
+function renderCalendar() {
+  const todayKey = dayKey(new Date());
+  const [y, m] = todayKey.split('-').map(Number);
+  const startJS = (state.config.week_start + 1) % 7; // server: 0=Mon..6=Sun -> JS: 0=Sun..6=Sat
+  const first = new Date(Date.UTC(y, m - 1, 1));
+  const lead = (first.getUTCDay() - startJS + 7) % 7;
+  const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+
+  $('cal-title').textContent = dtf({ month: 'long', year: 'numeric' }, 'UTC').format(first);
+  const grid = $('cal-grid');
+  grid.replaceChildren();
+
+  for (let i = 0; i < 7; i++) {
+    const dow = document.createElement('div');
+    dow.className = 'cal-dow';
+    dow.textContent = dtf({ weekday: 'narrow' }, 'UTC').format(new Date(Date.UTC(2024, 0, 7 + startJS + i)));
+    grid.append(dow);
+  }
+  for (let i = 0; i < lead; i++) grid.append(document.createElement('div'));
+
+  const marks = marksByDay();
+  for (let day = 1; day <= days; day++) {
+    const key = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const kinds = marks.get(key) || [];
+    const cell = document.createElement('div');
+    const dow = new Date(Date.UTC(y, m - 1, day)).getUTCDay();
+    cell.className = 'cal-cell';
+    if (key < todayKey) cell.classList.add('past');
+    if (key === todayKey) cell.classList.add('today');
+    if (dow === 0) cell.classList.add('sunday');
+    if (kinds.includes('holiday')) cell.classList.add('holiday-day');
+    const num = document.createElement('span');
+    num.className = 'cal-num';
+    num.textContent = day;
+    const row = document.createElement('div');
+    row.className = 'cal-marks';
+    for (const kind of kinds.slice(0, 3)) {
+      const mark = document.createElement('i');
+      mark.className = `mark ${kind}`;
+      row.append(mark);
+    }
+    cell.append(num, row);
+    grid.append(cell);
+  }
+}
+
+function renderCalendarDay() { if (state) { renderCalendar(); renderUpcoming(); } }
+
+function renderUpcoming() {
+  const list = $('upcoming');
+  list.replaceChildren();
+  const today = new Date();
+  const todayKey = dayKey(today);
+  const tomorrowKey = dayKey(new Date(today.getTime() + 86_400_000));
+  const horizon = dayKey(new Date(today.getTime() + 12 * 86_400_000));
+
+  const items = [
+    ...state.special_days.map((d) => ({ date: d.date, kind: d.kind, label: d.label, time: '', sort: '00' })),
+    ...state.events.map((e) => ({
+      date: e.start.slice(0, 10), kind: 'event', label: e.title, sort: e.all_day ? '01' : e.start.slice(11, 16),
+      time: e.all_day ? t('all_day') : dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start)),
+    })),
+  ].filter((i) => i.date >= todayKey && i.date <= horizon)
+    .sort((a, b) => a.date.localeCompare(b.date) || a.sort.localeCompare(b.sort))
+    .slice(0, 7);
+
+  if (!items.length) {
+    const li = document.createElement('li');
+    li.className = 'empty';
+    li.textContent = t('nothing_upcoming');
+    list.append(li);
+    return;
+  }
+  for (const item of items) {
+    const li = document.createElement('li');
+    li.className = 'up';
+    const when = document.createElement('span');
+    when.className = 'up-when';
+    if (item.date === todayKey) { when.textContent = t('today'); when.classList.add('soon'); }
+    else if (item.date === tomorrowKey) when.textContent = t('tomorrow');
+    else when.textContent = dtf({ weekday: 'short', day: 'numeric' }, 'UTC').format(noon(item.date));
+    const mark = document.createElement('i');
+    mark.className = `mark ${item.kind}`;
+    const label = document.createElement('span');
+    label.className = 'up-label';
+    label.textContent = item.label;
+    const time = document.createElement('span');
+    time.className = 'up-time';
+    time.textContent = item.time;
+    li.append(when, mark, label, time);
+    list.append(li);
+  }
+}
+
+// ---------------------------------------------------------------- status & loop ------
+function renderStatus(online) {
+  const demo = $('badge-demo');
+  demo.hidden = !state?.demo;
+  demo.textContent = t('demo');
+  const off = $('badge-offline');
+  off.hidden = online && !(state?.stale?.length);
+  off.textContent = t('offline');
+  // Open-Meteo's free tier requires attribution.
+  const credit = state?.weather?.source === 'Open-Meteo' ? ' · Open-Meteo' : '';
+  $('place').textContent = (state?.config.location.name ?? '') + credit;
+}
+
+function applyMode() {
+  const forced = params.get('mode');
+  const mode = forced === 'light' || forced === 'night' ? forced : state.mode;
+  document.documentElement.dataset.mode = mode;
+}
+
+function applyTheme() {
+  const name = params.get('theme') || state.config.theme;
+  if (!/^[a-z0-9-]+$/.test(name)) return;
+  const link = $('theme-css') || document.querySelector('link#theme-css');
+  const href = `/static/themes/${name}.css`;
+  if (link && !link.getAttribute('href').endsWith(href)) link.setAttribute('href', href);
+}
+
+async function render(online) {
+  tz = state.config.location.timezone;
+  lang = params.get('lang') || state.config.language;
+  await loadStrings(lang);
+  applyTheme();
+  applyMode();
+  renderClock();
+  renderWeather();
+  renderSky();
+  renderCalendar();
+  renderUpcoming();
+  renderStatus(online);
+  document.body.dataset.ready = 'true'; // handy for screenshots and tests
+}
+
+async function refresh() {
+  let delay = POLL_MS;
+  try {
+    const response = await fetch('/api/state', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    state = await response.json();
+    await render(true);
+  } catch (err) {
+    console.warn('refresh failed', err);
+    if (state) renderStatus(false); // keep showing the last good data
+    delay = RETRY_MS;
+  }
+  setTimeout(refresh, delay);
+}
+
+refresh();

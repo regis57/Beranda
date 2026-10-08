@@ -1,0 +1,71 @@
+"""A tiny TTL cache that survives restarts and network outages.
+
+The display must keep working when Wi-Fi drops, so every provider call goes through
+`Cache.get`: fresh data when possible, the last good copy (flagged stale) when not.
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import re
+import time
+from collections.abc import Awaitable, Callable
+from pathlib import Path
+from typing import Any
+
+log = logging.getLogger(__name__)
+
+
+class Cache:
+    def __init__(self, directory: Path) -> None:
+        self.directory = directory
+        self._memory: dict[str, tuple[float, Any]] = {}
+        try:
+            directory.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:  # read-only SD card, etc.: degrade to memory only
+            log.warning("cache directory unusable (%s); using memory only", exc)
+
+    def _path(self, key: str) -> Path:
+        return self.directory / (re.sub(r"[^A-Za-z0-9_.-]", "_", key) + ".json")
+
+    def _read_disk(self, key: str) -> tuple[float, Any] | None:
+        try:
+            raw = json.loads(self._path(key).read_text(encoding="utf-8"))
+            return float(raw["saved_at"]), raw["value"]
+        except (OSError, ValueError, KeyError):
+            return None
+
+    def _write_disk(self, key: str, saved_at: float, value: Any) -> None:
+        try:
+            self._path(key).write_text(
+                json.dumps({"saved_at": saved_at, "value": value}), encoding="utf-8"
+            )
+        except (OSError, TypeError) as exc:
+            log.debug("could not persist cache key %s: %s", key, exc)
+
+    async def get(
+        self,
+        key: str,
+        ttl: float,
+        fetch: Callable[[], Awaitable[Any]],
+    ) -> tuple[Any, bool]:
+        """Return (value, stale). Raises only if there is nothing to fall back on."""
+        now = time.time()
+        entry = self._memory.get(key) or self._read_disk(key)
+        if entry and now - entry[0] < ttl:
+            self._memory[key] = entry
+            return entry[1], False
+        try:
+            value = await fetch()
+        except Exception as exc:
+            if entry:
+                # Log the exception type only: messages from httpx contain the full URL,
+                # and an ICS "secret address" must never end up in a log file.
+                log.warning("fetch %s failed (%s); serving stale copy", key, type(exc).__name__)
+                self._memory[key] = entry
+                return entry[1], True
+            raise
+        self._memory[key] = (now, value)
+        self._write_disk(key, now, value)
+        return value, False

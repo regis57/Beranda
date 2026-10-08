@@ -1,0 +1,49 @@
+{
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "upcoming": "Upcoming",
+  "nothing_upcoming": "Nothing planned",
+  "all_day": "all day",
+  "loading": "Loading…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Weather unavailable",
+  "feels": "feels like",
+  "rain": {
+    "none": "No rain in the next 2 hours",
+    "starts": "Rain in {min} min",
+    "starts_now": "Rain is starting",
+    "stops": "Raining, stops in {min} min",
+    "long": "Rain for more than 2 hours",
+    "now": "now",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "New moon",
+    "waxing_crescent": "Waxing crescent",
+    "first_quarter": "First quarter",
+    "waxing_gibbous": "Waxing gibbous",
+    "full": "Full moon",
+    "waning_gibbous": "Waning gibbous",
+    "last_quarter": "Last quarter",
+    "waning_crescent": "Waning crescent",
+    "lit": "{pct}% lit",
+    "next_full": "Full moon {date}",
+    "next_new": "New moon {date}"
+  },
+  "sun": { "rise": "sunrise", "set": "sunset" },
+  "season": { "in_days": "changes in {n} d", "tomorrow": "changes tomorrow" },
+  "kind": { "holiday": "Holiday", "birth": "Birth", "death": "Remembrance", "anniversary": "Anniversary", "other": "Key date" },
+  "wmo": {
+    "0": "Clear sky", "1": "Mostly clear", "2": "Partly cloudy", "3": "Overcast",
+    "45": "Fog", "48": "Rime fog",
+    "51": "Light drizzle", "53": "Drizzle", "55": "Dense drizzle",
+    "56": "Freezing drizzle", "57": "Dense freezing drizzle",
+    "61": "Light rain", "63": "Rain", "65": "Heavy rain",
+    "66": "Freezing rain", "67": "Heavy freezing rain",
+    "71": "Light snow", "73": "Snow", "75": "Heavy snow", "77": "Snow grains",
+    "80": "Light showers", "81": "Showers", "82": "Heavy showers",
+    "85": "Snow showers", "86": "Heavy snow showers",
+    "95": "Thunderstorm", "96": "Thunderstorm with hail", "99": "Severe thunderstorm with hail"
+  }
+}
