@@ -1,0 +1,59 @@
+/* Theme "germany" (Bauhaus): a calm grey sheet, black type, the three primary colours used
+   sparingly as geometry. The season block reads nature's calendar: the ten phenological
+   seasons of the Deutscher Wetterdienst ("Vollherbst: Eicheln fallen"). */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "DejaVu Sans", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", "DejaVu Sans", system-ui, sans-serif;
+  --f-serif: "Noto Sans", "Noto Sans CJK JP", "DejaVu Sans", system-ui, sans-serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #efeeea;
+  --ink: #141414;
+  --ink-2: rgba(20, 20, 20, 0.7);
+  --ink-3: rgba(20, 20, 20, 0.46);
+  --line: rgba(20, 20, 20, 0.15);
+  --accent: #d6301f;   /* red */
+  --rain: #1f4fa3;     /* blue */
+  --sun: #f1b51c;      /* yellow */
+  --warm: #d6301f;
+  --cool: #1f4fa3;
+  --moon-lit: #141414;
+  --moon-dark: rgba(20, 20, 20, 0.08);
+}
+
+:root[data-mode="night"] {
+  --bg: #0d0d0d;
+  --ink: rgba(236, 236, 232, 0.84);
+  --ink-2: rgba(236, 236, 232, 0.58);
+  --ink-3: rgba(236, 236, 232, 0.36);
+  --line: rgba(236, 236, 232, 0.13);
+  --accent: #c8544a;
+  --rain: #6b8fd1;
+  --sun: #c9a243;
+  --warm: #b8564b;
+  --cool: #5576b4;
+  --moon-lit: #ecece8;
+  --moon-dark: rgba(236, 236, 232, 0.08);
+}
+
+/* Geometry: the season number sits in a black square, the seal is a yellow circle,
+   a red bar marks the clock. */
+.season { align-items: center; }
+.season-kanji {
+  display: grid; place-items: center;
+  min-width: 4.4rem; height: 4.4rem; padding: 0 0.4rem;
+  font-family: var(--f-display); font-size: 2rem; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--bg); background: var(--ink);
+}
+.seal { background: var(--sun); color: var(--ink); border-radius: 50%; font-size: 0.8rem; }
+.season-name { font-weight: 700; letter-spacing: 0.01em; }
+.season-romaji { font-style: normal; color: var(--ink-2); }
+.clock .time { position: relative; padding-left: 1.1rem; }
+.clock .time::before {
+  content: ""; position: absolute; left: 0; top: 12%; bottom: 12%; width: 0.45rem; background: var(--accent);
+}
+.day.today .day-name { font-weight: 700; }

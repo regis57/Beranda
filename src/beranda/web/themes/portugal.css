@@ -1,0 +1,50 @@
+/* Theme "portugal" (Azulejo): white glazed tiles and cobalt blue, the colours of Lisbon's
+   façades. The season block: the season with the provérbio of the month. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 200;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f5f7fa;
+  --ink: #102a5c;
+  --ink-2: rgba(16, 42, 92, 0.72);
+  --ink-3: rgba(16, 42, 92, 0.48);
+  --line: rgba(16, 42, 92, 0.15);
+  --accent: #1d4fb0;   /* cobalt */
+  --rain: #2f86c9;
+  --warm: #c0782f;     /* a touch of the yellow tiles */
+  --cool: #6d9ad1;
+  --moon-lit: #102a5c;
+  --moon-dark: rgba(16, 42, 92, 0.08);
+  --ornament: url("/static/themes/azulejo.svg");
+}
+
+:root[data-mode="night"] {
+  --bg: #07101f;
+  --ink: rgba(226, 234, 248, 0.86);
+  --ink-2: rgba(226, 234, 248, 0.6);
+  --ink-3: rgba(226, 234, 248, 0.38);
+  --line: rgba(226, 234, 248, 0.13);
+  --accent: #6f95dc;
+  --rain: #64a4d8;
+  --warm: #b78446;
+  --cool: #4d6f9e;
+  --moon-lit: #e2eaf8;
+  --moon-dark: rgba(226, 234, 248, 0.08);
+}
+
+.season {
+  flex: 1 1 0; position: relative; padding: 0.7rem 0.9rem;
+  background: var(--ornament) center / 3rem repeat;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.season::after { content: ""; position: absolute; inset: 0; background: var(--bg); opacity: 0.8; }
+.season > * { position: relative; z-index: 1; }
+.season-kanji { font-size: 2.6rem; font-weight: 300; letter-spacing: 0.02em; line-height: 1; }
+.season-romaji { font-family: var(--f-serif); font-size: 0.95rem; color: var(--ink-2); max-width: none; }
+.season-note { font-variant: small-caps; letter-spacing: 0.06em; }

@@ -105,3 +105,44 @@ def key_dates(today: date) -> tuple[KeyDate, ...]:
         KeyDate(b.month, b.day, "Souvenir de Papi", "death", b.year - 12),
         KeyDate(c.month, c.day, "Anniversaire de mariage", "anniversary", c.year - 6),
     )
+
+
+# Invented headlines, clearly fake on purpose (the display shows a "demo" badge too).
+_HEADLINES = {
+    "en": ("The town library extends its opening hours", "Cycle lanes: the new route opens on Monday",
+           "Autumn fair: record attendance this weekend", "Night trains are back on the regional line"),
+    "fr": ("La médiathèque élargit ses horaires d'ouverture", "Pistes cyclables : le nouveau tracé ouvre lundi",
+           "Foire d'automne : affluence record ce week-end", "Le train de nuit revient sur la ligne régionale"),
+    "de": ("Die Stadtbibliothek verlängert ihre Öffnungszeiten", "Radweg: die neue Strecke öffnet am Montag",
+           "Herbstmarkt: Besucherrekord am Wochenende", "Nachtzüge fahren wieder auf der Regionallinie"),
+    "es": ("La biblioteca municipal amplía su horario", "Carril bici: el nuevo trazado abre el lunes",
+           "Feria de otoño: récord de visitantes este fin de semana", "Vuelven los trenes nocturnos a la línea regional"),
+    "it": ("La biblioteca comunale allunga gli orari", "Pista ciclabile: il nuovo tratto apre lunedì",
+           "Fiera d'autunno: record di visitatori nel fine settimana", "Tornano i treni notturni sulla linea regionale"),
+    "pt": ("A biblioteca municipal alarga o horário", "Ciclovia: o novo troço abre na segunda-feira",
+           "Feira de outono: afluência recorde no fim de semana", "Os comboios noturnos voltam à linha regional"),
+    "pt-BR": ("Biblioteca municipal amplia o horário de funcionamento", "Ciclovia: novo trecho abre na segunda-feira",
+              "Feira de primavera bate recorde de público", "Trem noturno volta à linha regional"),
+    "id": ("Perpustakaan kota memperpanjang jam buka", "Jalur sepeda baru dibuka hari Senin",
+           "Pasar malam akhir pekan pecahkan rekor pengunjung", "Kereta malam kembali beroperasi di jalur regional"),
+    "ja": ("市立図書館、開館時間を延長", "新しい自転車道、月曜に開通", "秋祭り、週末に来場者数が過去最多", "地域線に夜行列車が復活"),
+    "ar": ("مكتبة المدينة تمدد ساعات العمل", "افتتاح مسار الدراجات الجديد يوم الاثنين",
+           "معرض الخريف يسجل رقما قياسيا في عدد الزوار", "عودة قطار الليل إلى الخط الإقليمي"),
+    "sw": ("Maktaba ya mji yaongeza saa za kufunguliwa", "Njia mpya ya baiskeli kufunguliwa Jumatatu",
+           "Maonyesho ya wikendi yavunja rekodi ya wageni", "Treni ya usiku yarejea kwenye njia ya mkoa"),
+}
+_DEMO_SOURCES = ("Beranda démo", "Demo Press", "Demo Radio", "Demo Daily")
+
+
+def news(language: str, now: datetime) -> dict:
+    lines = _HEADLINES.get(language) or _HEADLINES.get(language.split("-")[0]) or _HEADLINES["en"]
+    items = [
+        {
+            "title": title,
+            "source": _DEMO_SOURCES[i % len(_DEMO_SOURCES)],
+            "published": (now - timedelta(minutes=12 + 37 * i)).isoformat(timespec="minutes"),
+            "host": "",
+        }
+        for i, title in enumerate(lines)
+    ]
+    return {"items": items, "sources": len(items)}

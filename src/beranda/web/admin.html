@@ -11,7 +11,7 @@
 </head>
 <body>
   <header class="top">
-    <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b><span id="ver"></span></div>
+    <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></div>
     <a class="link" id="open-display" href="/" target="_blank" rel="noopener"></a>
   </header>
 
@@ -27,8 +27,17 @@
   <main id="app" class="layout" hidden>
     <form id="form" class="forms" autocomplete="off">
 
+      <section class="card welcome" id="welcome" hidden>
+        <h2 data-i18n="admin.welcome_title"></h2>
+        <ol class="steps">
+          <li data-i18n="admin.welcome_1"></li>
+          <li data-i18n="admin.welcome_2"></li>
+          <li data-i18n="admin.welcome_3"></li>
+        </ol>
+      </section>
+
       <section class="card" id="sec-place">
-        <h2 data-i18n="admin.place"></h2>
+        <h2><span class="num">1</span><span data-i18n="admin.place"></span></h2>
         <p class="hint" data-i18n="admin.place_hint"></p>
         <div class="row">
           <input id="q" type="search" data-ph="admin.search_placeholder" aria-label="search">
@@ -44,10 +53,11 @@
         <label><span data-i18n="admin.timezone"></span>
           <span class="row"><select id="loc-tz"></select><button type="button" id="tz-device" data-i18n="admin.use_device_tz"></button></span>
         </label>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.place_help"></p></details>
       </section>
 
       <section class="card" id="sec-region">
-        <h2 data-i18n="admin.region"></h2>
+        <h2><span class="num">2</span><span data-i18n="admin.region"></span></h2>
         <div class="grid2">
           <label><span data-i18n="admin.country"></span><select id="country"></select></label>
           <label><span data-i18n="admin.subdivision"></span><select id="subdivision"></select></label>
@@ -55,30 +65,63 @@
           <label><span data-i18n="admin.units"></span><select id="units"></select></label>
         </div>
         <p class="hint" data-i18n="admin.region_hint"></p>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.region_help"></p></details>
       </section>
 
       <section class="card" id="sec-look">
-        <h2 data-i18n="admin.look"></h2>
+        <h2><span class="num">3</span><span data-i18n="admin.look"></span></h2>
+        <p class="hint" data-i18n="admin.look_hint"></p>
         <div class="themes" id="themes" role="radiogroup"></div>
         <div class="seg" id="modes" role="radiogroup"></div>
       </section>
 
       <section class="card" id="sec-cal">
-        <h2 data-i18n="admin.calendar"></h2>
+        <h2><span class="num">4</span><span data-i18n="admin.calendar"></span></h2>
         <p class="hint" data-i18n="admin.calendar_hint"></p>
         <div id="ics-list"></div>
         <button type="button" id="ics-add" data-i18n="admin.add"></button>
+        <details class="help guide" id="cal-guide" open>
+          <summary data-i18n="admin.cal_where"></summary>
+          <ul class="providers" id="cal-providers"></ul>
+          <p class="hint" data-i18n="admin.cal_privacy"></p>
+        </details>
       </section>
 
       <section class="card" id="sec-keys">
-        <h2 data-i18n="admin.key_dates"></h2>
+        <h2><span class="num">5</span><span data-i18n="admin.key_dates"></span></h2>
         <p class="hint" data-i18n="admin.key_dates_hint"></p>
         <div id="key-list"></div>
         <button type="button" id="key-add" data-i18n="admin.add_date"></button>
       </section>
 
+      <section class="card" id="sec-news">
+        <h2><span class="num">6</span><span data-i18n="admin.news"></span></h2>
+        <p class="hint" data-i18n="admin.news_hint"></p>
+        <label class="check"><input type="checkbox" id="news-on"><span data-i18n="admin.news_enabled"></span></label>
+        <div id="news-body">
+          <label class="check"><input type="checkbox" id="news-auto"><span data-i18n="admin.news_auto"></span></label>
+          <p class="hint" id="news-auto-hint"></p>
+          <div class="chips" id="news-chips" aria-live="polite"></div>
+          <div id="news-manual">
+            <h3 data-i18n="admin.news_city_title"></h3>
+            <div id="news-city"></div>
+            <h3 id="news-country-title"></h3>
+            <div id="news-country"></div>
+            <h3 data-i18n="admin.news_world"></h3>
+            <div id="news-world"></div>
+            <h3 data-i18n="admin.news_other"></h3>
+            <select id="news-other-country"></select>
+            <div id="news-other"></div>
+          </div>
+          <h3 data-i18n="admin.news_custom"></h3>
+          <div id="feed-list"></div>
+          <button type="button" id="feed-add" data-i18n="admin.news_add"></button>
+          <details class="help"><summary data-i18n="admin.news_custom_where"></summary><p data-i18n="admin.news_custom_hint"></p></details>
+        </div>
+      </section>
+
       <section class="card" id="sec-sec">
-        <h2 data-i18n="admin.security"></h2>
+        <h2><span class="num">7</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

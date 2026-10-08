@@ -24,13 +24,15 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics
+from .providers import calendar_ics, news_catalog, seasons
+from .providers import news as news_mod
 
 log = logging.getLogger(__name__)
 
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
 USER_AGENT = "Beranda/0.2 (+https://github.com/regis57/Beranda)"
-LANGUAGES = ("fr", "en", "ja", "id")  # languages the display is translated into
+# Languages the display is translated into (the settings page falls back to English).
+LANGUAGES = ("en", "fr", "de", "es", "it", "pt", "pt-BR", "ja", "id", "ar", "sw", "am", "af")
 
 
 @dataclass
@@ -93,17 +95,28 @@ def router(runtime: Runtime) -> APIRouter:
         data = config_mod.to_dict(runtime.cfg)
         data.pop("admin", None)
         data.pop("server", None)
+        # The library lists every country twice (FR and FRA) plus aliases (UK): keep ISO alpha-2.
         countries = {
-            code: sorted(subs) for code, subs in holidays.list_supported_countries().items()
+            code: sorted(subs)
+            for code, subs in holidays.list_supported_countries().items()
+            if len(code) == 2 and code != "UK"
         }
+        cfg = runtime.cfg
         return {
             "config": data,
-            "pin_set": bool(runtime.cfg.admin_pin),
+            "pin_set": bool(cfg.admin_pin),
             "editable": runtime.config_path is not None,
+            # first visit: no config file yet, the page shows a short welcome
+            "first_run": runtime.config_path is not None and not runtime.config_path.exists(),
+            "news_auto": news_catalog.automatic(cfg.country, cfg.language, cfg.location.name),
             "options": {
                 "countries": countries,
                 "languages": list(LANGUAGES),
-                "themes": ["japan", "indonesia", "france"],
+                "themes": list(seasons.THEMES),
+                "news": [
+                    {k: v for k, v in src.items() if k != "url"} for src in news_catalog.SOURCES
+                ],
+                "regions": {"africa": sorted(news_catalog.AFRICA), "latam": sorted(news_catalog.LATAM)},
             },
         }
 
@@ -117,6 +130,11 @@ def router(runtime: Runtime) -> APIRouter:
             merged["admin"] = {"pin": str(merged.pop("pin"))}
         elif runtime.cfg.admin_pin:
             merged["admin"] = {"pin": runtime.cfg.admin_pin}
+        sources = (merged.get("news") or {}).get("sources")
+        if sources is not None:
+            unknown = [x for x in sources if x != "city" and x not in news_catalog.BY_ID]
+            if unknown:
+                raise HTTPException(422, f"invalid settings: unknown news source {unknown[0]!r}")
         try:
             new = config_mod.from_dict(merged)
         except (ValueError, KeyError, TypeError) as exc:
@@ -165,5 +183,30 @@ def router(runtime: Runtime) -> APIRouter:
         except Exception as exc:  # noqa: BLE001 - class name only: the URL is a secret
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "count": len(events), "next": [e["title"] for e in events[:3]]}
+
+    @api.get("/news-auto", dependencies=[Depends(guard)])
+    async def news_auto(country: str, language: str, city: str = "") -> dict:
+        """What 'choose for me' would pick for these settings (the page shows it live)."""
+        lang = config_mod.normalise_language(language)
+        return {"sources": news_catalog.automatic(country.upper()[:2], lang, city.strip() or None)}
+
+    @api.post("/test-feed", dependencies=[Depends(guard)])
+    async def test_feed(body: dict) -> dict:
+        """Read one feed now: a catalog id, 'city' (with the town and language) or a URL."""
+        source_id = str(body.get("id", ""))
+        if source_id == "city":
+            url = news_catalog.city_feed_url(str(body.get("city", "")), str(body.get("language", "en")))
+            name = ""
+        elif source_id in news_catalog.BY_ID:
+            url, name = news_catalog.BY_ID[source_id]["url"], news_catalog.BY_ID[source_id]["name"]
+        else:
+            url, name = str(body.get("url", "")).strip(), ""
+            if not url.lower().startswith(("http://", "https://")):
+                return {"ok": False, "error": "NotALink"}
+        try:
+            items = news_mod.parse(await news_mod.fetch(url), name)
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "error": type(exc).__name__}
+        return {"ok": True, "count": len(items), "first": items[0]["title"] if items else ""}
 
     return api

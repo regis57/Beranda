@@ -1,0 +1,33 @@
+{
+  "upcoming": "Em breve",
+  "loading": "Carregando…",
+  "offline": "sem conexão",
+  "no_weather": "Previsão indisponível",
+  "rain": {
+    "starts": "Chuva em {min} min",
+    "stops": "Está chovendo, para em {min} min"
+  },
+  "season": {
+    "in_days": "muda em {n} dias"
+  },
+  "wmo": {
+    "0": "Céu limpo",
+    "1": "Poucas nuvens",
+    "3": "Nublado",
+    "45": "Neblina",
+    "48": "Neblina congelante",
+    "51": "Garoa fraca",
+    "53": "Garoa",
+    "55": "Garoa forte",
+    "56": "Garoa congelante",
+    "57": "Garoa congelante forte",
+    "80": "Pancadas de chuva fracas",
+    "81": "Pancadas de chuva",
+    "82": "Pancadas de chuva fortes",
+    "85": "Pancadas de neve",
+    "86": "Pancadas de neve fortes",
+    "95": "Tempestade",
+    "96": "Tempestade com granizo",
+    "99": "Tempestade forte com granizo"
+  }
+}

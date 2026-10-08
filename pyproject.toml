@@ -26,6 +26,7 @@ dependencies = [
   "recurring-ical-events>=2.2",
   "astral>=3.2",
   "tomli-w>=1.0",
+  "defusedxml>=0.7",
 ]
 
 [project.optional-dependencies]

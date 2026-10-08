@@ -22,19 +22,26 @@ function deepMerge(base, extra) {
   return out;
 }
 
+const RTL = new Set(['ar', 'fa', 'he', 'ur']);
+
+// "pt-BR" loads en.json, then pt.json, then pt-BR.json: each file only needs what differs.
 async function loadStrings(code) {
-  const short = String(code).toLowerCase().split('-')[0];
-  if (!/^[a-z]{2,3}$/.test(short)) return;
-  if (loadedLang === short) return;
+  const m = /^([a-z]{2,3})(?:-([A-Za-z]{2}))?$/.exec(String(code).replace('_', '-'));
+  if (!m) return;
+  const full = m[2] ? `${m[1]}-${m[2].toUpperCase()}` : m[1];
+  if (loadedLang === full) return;
   const get = async (name) => {
     try { const r = await fetch(`/static/i18n/${name}.json`); return r.ok ? await r.json() : {}; }
     catch { return {}; }
   };
   // English is the fallback for any string a translation does not have yet.
-  const en = await get('en');
-  strings = short === 'en' ? en : deepMerge(en, await get(short));
-  loadedLang = short;
-  document.documentElement.lang = short;
+  let merged = await get('en');
+  if (m[1] !== 'en') merged = deepMerge(merged, await get(m[1]));
+  if (full !== m[1]) merged = deepMerge(merged, await get(full));
+  strings = merged;
+  loadedLang = full;
+  document.documentElement.lang = full;
+  document.documentElement.dir = RTL.has(m[1]) ? 'rtl' : 'ltr';
 }
 
 function t(key, vars) {
@@ -44,7 +51,8 @@ function t(key, vars) {
   return s;
 }
 
-const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(lang, { timeZone: zone, ...opts });
+// Latin digits everywhere: the temperatures next to the dates are Latin digits too.
+const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(loadedLang || lang, { timeZone: zone, numberingSystem: 'latn', ...opts });
 const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 const noon = (iso) => new Date(`${iso}T12:00:00Z`); // a date-only string, safely in the middle of its day
 
@@ -223,15 +231,17 @@ function renderSky() {
   }
 
   const s = state.season;
-  const pick = (o) => (o && (o[loadedLang] || o.en)) || '';
+  const base = (loadedLang || 'en').split('-')[0];
+  const pick = (o) => (o && (o[loadedLang] || o[base] || o.en)) || '';
   $('season').dataset.kind = s.kind;
   $('season-kanji').textContent = s.glyph;
   $('season-kanji').lang = s.kind === 'ko' ? 'ja' : loadedLang;
   $('season-seal').textContent = s.seal;
   $('season-seal').lang = s.kind === 'ko' ? 'ja' : loadedLang;
-  $('season-name').textContent = pick(s.title);
+  $('season-name').textContent = s.title_key ? t(s.title_key) : pick(s.title);
   $('season-romaji').textContent = pick(s.sub);
-  $('season-note').textContent = s.note || '';
+  $('season-romaji').lang = s.sub_lang || (s.kind === 'ko' ? 'ja' : loadedLang);
+  $('season-note').textContent = typeof s.note === 'string' ? s.note : pick(s.note);
   $('season-next').textContent = s.days_left == null ? ''
     : s.days_left <= 1 ? t('season.tomorrow') : t('season.in_days', { n: s.days_left });
 }
@@ -355,6 +365,46 @@ function renderUpcoming() {
   }
 }
 
+// ---------------------------------------------------------------- news ------------------
+// One headline at a time, 12 s each, cross-faded. Titles only: no pictures, no links.
+const NEWS_MS = 12_000;
+let newsIndex = 0;
+let newsTimer = null;
+
+function newsAge(iso) {
+  if (!iso) return '';
+  const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
+  const rtf = new Intl.RelativeTimeFormat(loadedLang || 'en', { numeric: 'auto', style: 'short' });
+  if (minutes < 60) return rtf.format(-Math.max(minutes, 1), 'minute');
+  if (minutes < 48 * 60) return rtf.format(-Math.round(minutes / 60), 'hour');
+  return rtf.format(-Math.round(minutes / 1440), 'day');
+}
+
+function showHeadline() {
+  const items = state?.news?.items || [];
+  const box = $('news');
+  if (!items.length) { box.hidden = true; return; }
+  box.hidden = false;
+  const item = items[newsIndex % items.length];
+  $('news-src').textContent = item.source;
+  $('news-title').textContent = item.title;
+  $('news-age').textContent = newsAge(item.published);
+}
+
+function renderNews() {
+  clearTimeout(newsTimer);
+  showHeadline();
+  const items = state?.news?.items || [];
+  if (items.length < 2) return;
+  const box = $('news');
+  const next = () => {
+    box.classList.add('out');
+    setTimeout(() => { newsIndex += 1; showHeadline(); box.classList.remove('out'); }, 650);
+    newsTimer = setTimeout(next, NEWS_MS);
+  };
+  newsTimer = setTimeout(next, NEWS_MS);
+}
+
 // ---------------------------------------------------------------- status & loop ------
 function renderStatus(online) {
   const demo = $('badge-demo');
@@ -393,6 +443,7 @@ async function render(online) {
   renderSky();
   renderCalendar();
   renderUpcoming();
+  renderNews();
   renderStatus(online);
   document.body.dataset.ready = 'true'; // handy for screenshots and tests
 }

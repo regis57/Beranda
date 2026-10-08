@@ -1,21 +1,57 @@
-// Beranda admin page. Vanilla JS, no build step. Talks only to /api/admin/*.
+// Beranda settings page. Vanilla JS, no build step. Talks only to /api/admin/*.
+// Written for people who are not technical: every section explains itself.
 
 const $ = (id) => document.getElementById(id);
 const THEME_COLORS = {
   japan: ['#f4efe4', '#bf3b2b', '#2f5d8a', '#23201d'],
   indonesia: ['#f3e8d0', '#b5651d', '#1f4a73', '#3a2518'],
   france: ['#f6f3ec', '#c8372d', '#2a4d8f', '#1b2340'],
+  germany: ['#efeeea', '#d6301f', '#f1b51c', '#141414'],
+  spain: ['#f6eddf', '#b4441f', '#23519f', '#3a1e12'],
+  italy: ['#f5efe3', '#a8322d', '#335c8a', '#2b2420'],
+  portugal: ['#f5f7fa', '#1d4fb0', '#2f86c9', '#102a5c'],
+  brazil: ['#f4f5ef', '#0d8a4a', '#e7b400', '#1f4aa8'],
 };
 const KINDS = ['birth', 'death', 'anniversary', 'other'];
 const IMPERIAL = new Set(['US', 'LR', 'MM']);
+const RTL = new Set(['ar', 'fa', 'he', 'ur']);
+
+// The language Beranda suggests when you pick a country (you can always change it).
+const COUNTRY_LANG = {
+  FR: 'fr', BE: 'fr', LU: 'fr', MC: 'fr', CH: 'fr', CA: 'en', HT: 'fr',
+  DE: 'de', AT: 'de', LI: 'de', ES: 'es', IT: 'it', SM: 'it', VA: 'it', PT: 'pt', BR: 'pt-BR',
+  JP: 'ja', ID: 'id',
+  AR: 'es', BO: 'es', CL: 'es', CO: 'es', CR: 'es', CU: 'es', DO: 'es', EC: 'es', SV: 'es', GT: 'es',
+  HN: 'es', MX: 'es', NI: 'es', PA: 'es', PY: 'es', PE: 'es', PR: 'es', UY: 'es', VE: 'es', GQ: 'es',
+  BJ: 'fr', BF: 'fr', BI: 'fr', CM: 'fr', CF: 'fr', TD: 'fr', KM: 'fr', CG: 'fr', CD: 'fr', CI: 'fr',
+  DJ: 'fr', GA: 'fr', GN: 'fr', MG: 'fr', ML: 'fr', NE: 'fr', RW: 'fr', SN: 'fr', TG: 'fr', SC: 'fr',
+  DZ: 'ar', EG: 'ar', LY: 'ar', MA: 'ar', MR: 'ar', SD: 'ar', TN: 'ar', SO: 'ar', EH: 'ar',
+  SA: 'ar', AE: 'ar', QA: 'ar', KW: 'ar', BH: 'ar', OM: 'ar', JO: 'ar', LB: 'ar', IQ: 'ar', SY: 'ar', YE: 'ar', PS: 'ar',
+  KE: 'sw', TZ: 'sw', UG: 'en', ET: 'am', ZA: 'en', NA: 'en',
+  AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt',
+};
+
+// Official help pages, opened in the reader's language when the site offers it.
+const MS_LOCALE = { fr: 'fr-fr', de: 'de-de', es: 'es-es', it: 'it-it', pt: 'pt-pt', 'pt-BR': 'pt-br', ja: 'ja-jp', id: 'id-id', ar: 'ar-sa' };
+const APPLE_LOCALE = { fr: 'fr-fr/', de: 'de-de/', es: 'es-es/', it: 'it-it/', pt: 'pt-pt/', 'pt-BR': 'pt-br/', ja: 'ja-jp/', id: 'id-id/' };
+const CAL_GUIDES = [
+  ['google', 'Google Calendar', (l) => `https://support.google.com/calendar/answer/37648?hl=${l}`],
+  ['apple', 'Apple iCloud', (l) => `https://support.apple.com/${APPLE_LOCALE[l] || ''}guide/icloud/share-a-calendar-mm6b1a9479/icloud`],
+  ['outlook', 'Outlook / Microsoft 365', (l) => `https://support.microsoft.com/${MS_LOCALE[l] || 'en-us'}/outlook/share-your-calendar-in-outlook-com`],
+  ['nextcloud', 'Nextcloud', () => 'https://docs.nextcloud.com/server/stable/user_manual/en/groupware/calendar.html#publishing-a-calendar'],
+  ['proton', 'Proton Calendar', () => 'https://proton.me/support/share-calendar-via-link'],
+];
 
 let strings = {};
 let lang = 'en';
-let options = { countries: {}, languages: [], themes: [] };
+let options = { countries: {}, languages: [], themes: [], news: [], regions: {} };
 let cfg = null;
 let editable = true;
 let dirty = false;
 let unitsTouched = false;
+let languageTouched = false;
+let newsSelected = new Set();
+let newsAuto = true;
 let pin = '';
 try { pin = sessionStorage.getItem('beranda-pin') || ''; } catch { /* storage may be blocked */ }
 
@@ -27,11 +63,16 @@ const merge = (a, b) => {
 };
 async function loadStrings(code) {
   const get = async (n) => { try { const r = await fetch(`/static/i18n/${n}.json`); return r.ok ? r.json() : {}; } catch { return {}; } };
-  const short = String(code).slice(0, 2).toLowerCase();
-  const en = await get('en');
-  strings = short === 'en' ? en : merge(en, await get(short));
-  lang = short;
-  document.documentElement.lang = short;
+  const m = /^([a-z]{2,3})(?:-([A-Za-z]{2}))?/.exec(String(code).replace('_', '-').toLowerCase()) || [null, 'en'];
+  const base = m[1];
+  const full = m[2] ? `${base}-${m[2].toUpperCase()}` : base;
+  const chain = [...new Set(['en', base, full])];
+  let merged = {};
+  for (const c of chain) merged = merge(merge(merged, await get(c)), { admin: await get(`admin/${c}`) });
+  strings = merged;
+  lang = full;
+  document.documentElement.lang = full;
+  document.documentElement.dir = RTL.has(base) ? 'rtl' : 'ltr';
 }
 function t(key, vars) {
   let s = key.split('.').reduce((o, k) => (o ? o[k] : undefined), strings);
@@ -68,7 +109,7 @@ const el = (tag, props = {}, ...kids) => {
 };
 function fill(select, items, current) {
   select.replaceChildren(...items.map(([value, label]) => el('option', { value, textContent: label })));
-  if (current != null && ![...select.options].some((o) => o.value === current)) {
+  if (current != null && current !== '' && ![...select.options].some((o) => o.value === current)) {
     select.prepend(el('option', { value: current, textContent: current }));
   }
   select.value = current ?? select.options[0]?.value ?? '';
@@ -81,9 +122,8 @@ function languageName(code) {
 }
 function markDirty() {
   dirty = true;
-  const s = $('state');
-  s.textContent = t('admin.unsaved');
-  s.className = '';
+  $('state').textContent = t('admin.unsaved');
+  $('state').className = '';
 }
 let previewTimer = null;
 function refreshPreview() {
@@ -96,10 +136,22 @@ function refreshPreview() {
 }
 function fitPreview() {
   $('frame').style.setProperty('--s', ($('frame').clientWidth / 1280).toFixed(4));
-  $('preview').style.setProperty('--s', ($('frame').clientWidth / 1280).toFixed(4));
+}
+function testButton(run) {
+  const button = el('button', { type: 'button', textContent: t('admin.test') });
+  const msg = el('div', { className: 'msg', hidden: true });
+  button.addEventListener('click', async () => {
+    msg.hidden = false; msg.className = 'msg'; msg.textContent = '…';
+    try {
+      const [ok, text] = await run();
+      msg.className = `msg ${ok ? 'ok' : 'bad'}`;
+      msg.textContent = text;
+    } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message; }
+  });
+  return [button, msg];
 }
 
-// ------------------------------------------------------------------ render ---
+// ------------------------------------------------------------------ 1. place ---
 function renderPlace() {
   $('loc-name').value = cfg.location.name;
   $('loc-lat').value = cfg.location.latitude;
@@ -107,7 +159,35 @@ function renderPlace() {
   const zones = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
   fill($('loc-tz'), zones.map((z) => [z, z]), cfg.location.timezone);
 }
+async function search() {
+  const q = $('q').value.trim();
+  const list = $('q-results');
+  $('q-error').hidden = true;
+  if (q.length < 2) { list.hidden = true; return; }
+  try {
+    const { results } = await api(`/geocode?q=${encodeURIComponent(q)}&language=${lang}`);
+    list.replaceChildren(...results.map((r) => {
+      const b = el('button', { type: 'button' }, `${r.name} `, el('small', { textContent: [r.region, r.country && regionName(r.country)].filter(Boolean).join(', ') }));
+      b.addEventListener('click', () => {
+        $('loc-name').value = r.name;
+        $('loc-lat').value = r.latitude;
+        $('loc-lon').value = r.longitude;
+        if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
+        if (r.country && options.countries[r.country]) { $('country').value = r.country; onCountry(); }
+        list.hidden = true;
+        markDirty();
+        refreshNews();
+      });
+      return el('li', {}, b);
+    }));
+    list.hidden = results.length === 0;
+    if (!results.length) { $('q-error').textContent = t('admin.no_result'); $('q-error').hidden = false; }
+  } catch {
+    $('q-error').textContent = t('admin.search_failed'); $('q-error').hidden = false;
+  }
+}
 
+// ------------------------------------------------------------------ 2. region ---
 function renderRegion() {
   const codes = Object.keys(options.countries).sort((a, b) => regionName(a).localeCompare(regionName(b), lang));
   fill($('country'), codes.map((c) => [c, `${regionName(c)} (${c})`]), cfg.country);
@@ -120,10 +200,20 @@ function renderSubdivisions(current) {
   fill($('subdivision'), [['', t('admin.none')], ...subs.map((s) => [s, s])], current);
   $('subdivision').disabled = subs.length === 0;
 }
+function onCountry() {
+  const country = $('country').value;
+  renderSubdivisions('');
+  if (!unitsTouched) $('units').value = IMPERIAL.has(country) ? 'imperial' : 'metric';
+  if (!languageTouched && COUNTRY_LANG[country] && options.languages.includes(COUNTRY_LANG[country])) {
+    $('language').value = COUNTRY_LANG[country];
+    refreshPreview();
+  }
+  refreshNews();
+}
 
+// ------------------------------------------------------------------ 3. look ---
 function renderLook() {
-  const box = $('themes');
-  box.replaceChildren(...options.themes.map((name) => {
+  $('themes').replaceChildren(...options.themes.map((name) => {
     const sw = el('span', { className: 'sw' }, ...(THEME_COLORS[name] || []).map((c) => {
       const i = el('i'); i.style.setProperty('background', c); return i;
     }));
@@ -144,25 +234,27 @@ function renderLook() {
   }));
 }
 
+// ------------------------------------------------------------------ 4. calendar ---
+function renderCalendarGuide() {
+  $('cal-providers').replaceChildren(...CAL_GUIDES.map(([key, name, url]) => el('li', {},
+    el('b', { textContent: name }),
+    el('span', { textContent: t(`admin.cal_${key}`) }),
+    el('a', { href: url(lang), target: '_blank', rel: 'noopener', textContent: t('admin.official_guide') }))));
+}
 function addIcsRow(url = '') {
   const input = el('input', { type: 'url', placeholder: t('admin.ics_placeholder'), value: url, spellcheck: false });
-  const test = el('button', { type: 'button', textContent: t('admin.test') });
+  const [test, msg] = testButton(async () => {
+    const r = await api('/test-ics', { method: 'POST', body: JSON.stringify({ url: input.value.trim() }) });
+    return [r.ok, r.ok ? t('admin.test_ok', { n: r.count, next: r.next.join(' · ') }) : t('admin.test_fail', { err: r.error })];
+  });
   const del = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
-  const msg = el('div', { className: 'msg', hidden: true });
   const row = el('div', { className: 'item ics' }, input, test, del, msg);
   input.addEventListener('input', markDirty);
   del.addEventListener('click', () => { row.remove(); markDirty(); });
-  test.addEventListener('click', async () => {
-    msg.hidden = false; msg.className = 'msg'; msg.textContent = '…';
-    try {
-      const r = await api('/test-ics', { method: 'POST', body: JSON.stringify({ url: input.value.trim() }) });
-      msg.className = `msg ${r.ok ? 'ok' : 'bad'}`;
-      msg.textContent = r.ok ? t('admin.test_ok', { n: r.count, next: r.next.join(' · ') }) : t('admin.test_fail', { err: r.error });
-    } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message; }
-  });
   $('ics-list').append(row);
 }
 
+// ------------------------------------------------------------------ 5. key dates ---
 function addKeyRow(k = { date: '', label: '', kind: 'birth' }) {
   const date = el('input', { value: k.date, placeholder: 'YYYY-MM-DD / MM-DD', pattern: '(\\d{4}-)?\\d{2}-\\d{2}', required: true });
   const label = el('input', { value: k.label, placeholder: t('admin.label'), required: true });
@@ -175,43 +267,98 @@ function addKeyRow(k = { date: '', label: '', kind: 'birth' }) {
   $('key-list').append(row);
 }
 
-function renderLists() {
-  $('ics-list').replaceChildren();
-  $('key-list').replaceChildren();
-  for (const u of cfg.calendar.ics_urls) addIcsRow(u);
-  for (const k of cfg.key_dates) addKeyRow(k);
+// ------------------------------------------------------------------ 6. news ---
+const sourceById = (id) => options.news.find((s) => s.id === id);
+const cityName = () => $('loc-name').value.trim();
+function sourceLabel(id) {
+  if (id === 'city') return t('admin.news_city', { city: cityName() || '…' });
+  return sourceById(id)?.name || id;
 }
-
-// ------------------------------------------------------------------ search ---
-async function search() {
-  const q = $('q').value.trim();
-  const list = $('q-results');
-  $('q-error').hidden = true;
-  if (q.length < 2) { list.hidden = true; return; }
-  try {
-    const { results } = await api(`/geocode?q=${encodeURIComponent(q)}&language=${lang}`);
-    list.replaceChildren(...results.map((r) => {
-      const b = el('button', { type: 'button' }, `${r.name} `, el('small', { textContent: [r.region, r.country].filter(Boolean).join(', ') }));
-      b.addEventListener('click', () => {
-        $('loc-name').value = r.name;
-        $('loc-lat').value = r.latitude;
-        $('loc-lon').value = r.longitude;
-        if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
-        if (r.country && options.countries[r.country]) { $('country').value = r.country; renderSubdivisions(''); onCountry(); }
-        list.hidden = true;
-        markDirty();
-      });
-      return el('li', {}, b);
-    }));
-    list.hidden = results.length === 0;
-    if (!results.length) { $('q-error').textContent = t('admin.no_result'); $('q-error').hidden = false; }
-  } catch (e) {
-    $('q-error').textContent = t('admin.search_failed'); $('q-error').hidden = false;
-  }
+function sourceRow(id, desc = '') {
+  const src = sourceById(id);
+  const box = el('input', { type: 'checkbox', checked: newsSelected.has(id) });
+  box.addEventListener('change', () => {
+    if (box.checked) newsSelected.add(id); else newsSelected.delete(id);
+    markDirty(); renderChips();
+  });
+  const name = el('label', { className: 'check' }, box, el('span', { textContent: sourceLabel(id) }));
+  if (src) name.append(el('span', { className: 'lang', textContent: src.lang }));
+  const [test, msg] = testButton(async () => {
+    const r = await api('/test-feed', { method: 'POST', body: JSON.stringify({ id, city: cityName(), language: $('language').value }) });
+    return [r.ok, r.ok ? t('admin.feed_ok', { n: r.count, first: r.first }) : t('admin.feed_fail', { err: r.error })];
+  });
+  const row = el('div', { className: 'src' }, name, el('span', { className: 'meta', textContent: desc }), test, msg);
+  return row;
 }
-function onCountry() {
-  renderSubdivisions('');
-  if (!unitsTouched) $('units').value = IMPERIAL.has($('country').value) ? 'imperial' : 'metric';
+function renderChips() {
+  const chips = $('news-chips');
+  const ids = [...newsSelected];
+  chips.replaceChildren(...ids.map((id) => {
+    const chip = el('span', { className: 'chip', textContent: sourceLabel(id) });
+    if (!newsAuto) {
+      const x = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
+      x.addEventListener('click', () => { newsSelected.delete(id); markDirty(); renderNewsLists(); renderChips(); });
+      chip.append(x);
+    }
+    return chip;
+  }));
+}
+function renderNewsLists() {
+  const country = $('country').value;
+  const base = $('language').value.split('-')[0];
+  $('news-city').replaceChildren(sourceRow('city', t('admin.news_city_desc')));
+  $('news-country-title').textContent = t('admin.news_country', { country: regionName(country) });
+  let mine = options.news.filter((s) => (s.countries || []).includes(country));
+  const region = (options.regions.africa || []).includes(country) ? 'africa' : (options.regions.latam || []).includes(country) ? 'latam' : null;
+  if (region) mine = mine.concat(options.news.filter((s) => s.region === region));
+  $('news-country').replaceChildren(...(mine.length ? mine.map((s) => sourceRow(s.id)) : [el('p', { className: 'hint', textContent: t('admin.news_none_country') })]));
+  const world = options.news.filter((s) => s.scope === 'world').sort((a, b) => (a.lang !== base) - (b.lang !== base));
+  $('news-world').replaceChildren(...world.filter((s) => s.lang === base || s.lang === 'en').map((s) => sourceRow(s.id)));
+  const other = $('news-other-country').value;
+  $('news-other').replaceChildren(...options.news.filter((s) => other && (s.countries || []).includes(other)).map((s) => sourceRow(s.id)));
+}
+let newsTimer = null;
+function refreshNews() {
+  clearTimeout(newsTimer);
+  newsTimer = setTimeout(async () => {
+    const country = $('country').value;
+    $('news-auto-hint').textContent = t('admin.news_auto_hint', { city: cityName() || '…', country: regionName(country) });
+    if (newsAuto) {
+      try {
+        const q = new URLSearchParams({ country, language: $('language').value, city: cityName() });
+        newsSelected = new Set((await api(`/news-auto?${q}`)).sources);
+      } catch { /* keep the previous preview */ }
+    }
+    $('news-manual').hidden = newsAuto;
+    renderNewsLists();
+    renderChips();
+  }, 200);
+}
+function addFeedRow(url = '') {
+  const input = el('input', { type: 'url', placeholder: t('admin.news_feed_placeholder'), value: url, spellcheck: false });
+  const [test, msg] = testButton(async () => {
+    const r = await api('/test-feed', { method: 'POST', body: JSON.stringify({ url: input.value.trim() }) });
+    return [r.ok, r.ok ? t('admin.feed_ok', { n: r.count, first: r.first }) : t('admin.feed_fail', { err: r.error })];
+  });
+  const del = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
+  const row = el('div', { className: 'item feed' }, input, test, del, msg);
+  input.addEventListener('input', markDirty);
+  del.addEventListener('click', () => { row.remove(); markDirty(); });
+  $('feed-list').append(row);
+}
+function renderNews() {
+  const news = cfg.news || { enabled: true, feeds: [] };
+  $('news-on').checked = news.enabled !== false;
+  newsAuto = news.sources == null;
+  $('news-auto').checked = newsAuto;
+  newsSelected = new Set(news.sources || []);
+  $('news-body').hidden = !$('news-on').checked;
+  const codes = Object.keys(options.countries).filter((c) => options.news.some((s) => (s.countries || []).includes(c)));
+  codes.sort((a, b) => regionName(a).localeCompare(regionName(b), lang));
+  fill($('news-other-country'), [['', t('admin.news_pick_country')], ...codes.map((c) => [c, regionName(c)])], '');
+  $('feed-list').replaceChildren();
+  for (const u of news.feeds || []) addFeedRow(u);
+  refreshNews();
 }
 
 // ------------------------------------------------------------------ save -----
@@ -223,7 +370,7 @@ function collect() {
     theme: cfg.theme,
     mode: cfg.mode,
     location: {
-      name: $('loc-name').value.trim(),
+      name: cityName(),
       latitude: Number($('loc-lat').value),
       longitude: Number($('loc-lon').value),
       timezone: $('loc-tz').value,
@@ -233,6 +380,11 @@ function collect() {
       const [d, l, k] = row.querySelectorAll('input, select');
       return { date: d.value.trim(), label: l.value.trim(), kind: k.value };
     }),
+    news: {
+      enabled: $('news-on').checked,
+      sources: newsAuto ? null : [...newsSelected],
+      feeds: [...$('feed-list').querySelectorAll('input')].map((i) => i.value.trim()).filter(Boolean),
+    },
   };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -241,8 +393,7 @@ function collect() {
 
 async function save(event) {
   event.preventDefault();
-  const form = $('form');
-  if (!form.reportValidity()) return;
+  if (!$('form').reportValidity()) return;
   const state = $('state');
   $('save').disabled = true;
   try {
@@ -256,7 +407,9 @@ async function save(event) {
     dirty = false;
     state.textContent = t('admin.saved');
     state.className = 'ok';
-    cfg = { ...cfg, ...body, mode: cfg.mode, theme: cfg.theme };
+    $('welcome').hidden = true;
+    cfg = { ...cfg, ...body };
+    if (body.language !== lang) { await loadStrings(body.language); translateStatic(); renderAll(); }
     refreshPreview();
   } catch (e) {
     state.textContent = e.status === 409 ? t('admin.demo_readonly') : `${t('admin.error')}: ${e.message}`;
@@ -267,6 +420,14 @@ async function save(event) {
 }
 
 // ------------------------------------------------------------------ boot -----
+function renderAll() {
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews();
+  $('ics-list').replaceChildren();
+  $('key-list').replaceChildren();
+  for (const u of cfg.calendar.ics_urls) addIcsRow(u);
+  for (const k of cfg.key_dates) addKeyRow(k);
+}
+
 async function start() {
   const data = await api('/config');
   cfg = data.config;
@@ -276,7 +437,8 @@ async function start() {
   translateStatic();
   $('gate').hidden = true;
   $('app').hidden = false;
-  renderPlace(); renderRegion(); renderLook(); renderLists();
+  $('welcome').hidden = !data.first_run;
+  renderAll();
   $('pin').placeholder = data.pin_set ? '••••' : '';
   if (!editable) { $('state').textContent = t('admin.demo_readonly'); $('state').className = 'bad'; }
   fitPreview();
@@ -287,14 +449,21 @@ async function boot() {
   await loadStrings(navigator.language || 'en');
   translateStatic();
   $('form').addEventListener('submit', save);
-  $('form').addEventListener('input', (e) => { if (e.target.id === 'units') unitsTouched = true; });
-  $('form').addEventListener('change', (e) => { if (e.target.id !== 'q') markDirty(); });
+  $('form').addEventListener('change', (e) => {
+    if (e.target.id === 'units') unitsTouched = true;
+    if (e.target.id === 'language') { languageTouched = true; refreshPreview(); refreshNews(); }
+    if (e.target.id !== 'q' && e.target.id !== 'news-other-country') markDirty();
+  });
   $('country').addEventListener('change', onCountry);
-  $('language').addEventListener('change', refreshPreviewLang);
+  $('loc-name').addEventListener('change', refreshNews);
   $('q-go').addEventListener('click', search);
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
   $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
+  $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });
+  $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
+  $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
+  $('news-other-country').addEventListener('change', renderNewsLists);
   $('tz-device').addEventListener('click', () => {
     fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), Intl.DateTimeFormat().resolvedOptions().timeZone);
     markDirty();
@@ -305,7 +474,7 @@ async function boot() {
     e.preventDefault();
     pin = $('pin-input').value;
     try { await start(); try { sessionStorage.setItem('beranda-pin', pin); } catch { /* ignore */ } }
-    catch (err) { $('gate-error').textContent = t('admin.pin_wrong'); $('gate-error').hidden = false; }
+    catch { $('gate-error').textContent = t('admin.pin_wrong'); $('gate-error').hidden = false; }
   });
 
   try {
@@ -313,19 +482,15 @@ async function boot() {
     if (status.pin_required && !pin) throw Object.assign(new Error('pin'), { status: 401 });
     await start();
   } catch (err) {
+    $('gate').hidden = false;
     if (err.status === 401) {
       $('gate-label').textContent = t('admin.enter_pin');
       $('gate-btn').textContent = t('admin.unlock');
-      $('gate').hidden = false;
-    } else if (err.status === 403) {
-      $('gate').hidden = false;
-      $('gate-form').replaceChildren(el('p', { className: 'error', textContent: t('admin.forbidden') }));
     } else {
-      $('gate').hidden = false;
-      $('gate-form').replaceChildren(el('p', { className: 'error', textContent: `${t('admin.error')}: ${err.message}` }));
+      const text = err.status === 403 ? t('admin.forbidden') : `${t('admin.error')}: ${err.message}`;
+      $('gate-form').replaceChildren(el('p', { className: 'error', textContent: text }));
     }
   }
 }
-function refreshPreviewLang() { refreshPreview(); }
 
 boot();

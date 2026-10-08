@@ -1,0 +1,85 @@
+{
+  "today": "Oggi",
+  "tomorrow": "Domani",
+  "upcoming": "Prossimamente",
+  "nothing_upcoming": "Niente in programma",
+  "all_day": "tutto il giorno",
+  "loading": "Caricamento…",
+  "demo": "demo",
+  "offline": "non in linea",
+  "no_weather": "Meteo non disponibile",
+  "feels": "percepita",
+  "rain": {
+    "none": "Niente pioggia nelle prossime 2 ore",
+    "starts": "Pioggia tra {min} min",
+    "starts_now": "Inizia a piovere",
+    "stops": "Piove, smette tra {min} min",
+    "long": "Pioggia per più di 2 ore",
+    "now": "ora",
+    "in2h": "+2 h"
+  },
+  "sun": {
+    "rise": "alba",
+    "set": "tramonto"
+  },
+  "season": {
+    "in_days": "cambia tra {n} giorni",
+    "tomorrow": "cambia domani"
+  },
+  "moon": {
+    "new": "Luna nuova",
+    "waxing_crescent": "Luna crescente",
+    "first_quarter": "Primo quarto",
+    "waxing_gibbous": "Gibbosa crescente",
+    "full": "Luna piena",
+    "waning_gibbous": "Gibbosa calante",
+    "last_quarter": "Ultimo quarto",
+    "waning_crescent": "Luna calante",
+    "lit": "{pct} % illuminata",
+    "next_full": "Luna piena {date}",
+    "next_new": "Luna nuova {date}"
+  },
+  "kind": {
+    "holiday": "Festivo",
+    "birth": "Nascita",
+    "death": "Ricordo",
+    "anniversary": "Anniversario",
+    "other": "Data importante"
+  },
+  "seasons": {
+    "spring": "Primavera",
+    "summer": "Estate",
+    "autumn": "Autunno",
+    "winter": "Inverno"
+  },
+  "wmo": {
+    "0": "Sereno",
+    "1": "Prevalentemente sereno",
+    "2": "Parzialmente nuvoloso",
+    "3": "Coperto",
+    "45": "Nebbia",
+    "48": "Nebbia gelata",
+    "51": "Pioviggine leggera",
+    "53": "Pioviggine",
+    "55": "Pioviggine intensa",
+    "56": "Pioviggine gelata",
+    "57": "Pioviggine gelata intensa",
+    "61": "Pioggia leggera",
+    "63": "Pioggia",
+    "65": "Pioggia forte",
+    "66": "Pioggia gelata",
+    "67": "Pioggia gelata forte",
+    "71": "Nevicata leggera",
+    "73": "Neve",
+    "75": "Nevicata forte",
+    "77": "Neve granulosa",
+    "80": "Rovesci leggeri",
+    "81": "Rovesci",
+    "82": "Rovesci forti",
+    "85": "Rovesci di neve",
+    "86": "Forti rovesci di neve",
+    "95": "Temporale",
+    "96": "Temporale con grandine",
+    "99": "Forte temporale con grandine"
+  }
+}

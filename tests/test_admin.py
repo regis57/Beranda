@@ -15,6 +15,7 @@ OUTSIDE = ("8.8.8.8", 5000)
 
 
 def make(tmp_path, client=LOCAL, **kw):
+    kw.setdefault("news_enabled", False)
     cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
     path = tmp_path / "config.toml"
     return TestClient(create_app(cfg, config_path=path), client=client), path
@@ -36,7 +37,11 @@ def test_admin_page_and_options_are_served(tmp_path):
     assert client.get("/admin").status_code == 200
     data = client.get("/api/admin/config").json()
     assert data["editable"] is True and "FR" in data["options"]["countries"]
-    assert data["options"]["themes"] == ["japan", "indonesia", "france"]
+    assert data["options"]["themes"][:3] == ["japan", "indonesia", "france"]
+    assert {"germany", "spain", "italy", "portugal", "brazil"} <= set(data["options"]["themes"])
+    # one entry per country: no three-letter duplicates (FRA) nor aliases (UK)
+    codes = data["options"]["countries"]
+    assert all(len(c) == 2 for c in codes) and "UK" not in codes and "GB" in codes
     assert "server" not in data["config"] and "admin" not in data["config"]
 
 
