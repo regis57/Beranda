@@ -1,0 +1,85 @@
+{
+  "today": "Leo",
+  "tomorrow": "Kesho",
+  "upcoming": "Yanayokuja",
+  "nothing_upcoming": "Hakuna kilichopangwa",
+  "all_day": "siku nzima",
+  "loading": "Inapakia…",
+  "demo": "onyesho",
+  "offline": "nje ya mtandao",
+  "no_weather": "Hali ya hewa haipatikani",
+  "feels": "inavyohisiwa",
+  "rain": {
+    "none": "Hakuna mvua katika saa 2 zijazo",
+    "starts": "Mvua baada ya dakika {min}",
+    "starts_now": "Mvua inaanza",
+    "stops": "Inanyesha, itakoma baada ya dakika {min}",
+    "long": "Mvua kwa zaidi ya saa 2",
+    "now": "sasa",
+    "in2h": "+saa 2"
+  },
+  "sun": {
+    "rise": "macheo",
+    "set": "machweo"
+  },
+  "season": {
+    "in_days": "inabadilika baada ya siku {n}",
+    "tomorrow": "inabadilika kesho"
+  },
+  "moon": {
+    "new": "Mwezi mchanga",
+    "waxing_crescent": "Hilali inayokua",
+    "first_quarter": "Robo ya kwanza",
+    "waxing_gibbous": "Mwezi unaokua",
+    "full": "Mwezi mpevu",
+    "waning_gibbous": "Mwezi unaopungua",
+    "last_quarter": "Robo ya mwisho",
+    "waning_crescent": "Hilali inayopungua",
+    "lit": "{pct} % ina mwanga",
+    "next_full": "Mwezi mpevu {date}",
+    "next_new": "Mwezi mchanga {date}"
+  },
+  "kind": {
+    "holiday": "Sikukuu",
+    "birth": "Kuzaliwa",
+    "death": "Kumbukumbu",
+    "anniversary": "Maadhimisho",
+    "other": "Tarehe muhimu"
+  },
+  "seasons": {
+    "spring": "Majira ya kuchipua",
+    "summer": "Majira ya joto",
+    "autumn": "Majira ya kupukutika",
+    "winter": "Majira ya baridi"
+  },
+  "wmo": {
+    "0": "Anga safi",
+    "1": "Anga safi kiasi",
+    "2": "Mawingu kiasi",
+    "3": "Mawingu mazito",
+    "45": "Ukungu",
+    "48": "Ukungu wa barafu",
+    "51": "Manyunyu hafifu",
+    "53": "Manyunyu",
+    "55": "Manyunyu mazito",
+    "56": "Manyunyu ya barafu",
+    "57": "Manyunyu mazito ya barafu",
+    "61": "Mvua hafifu",
+    "63": "Mvua",
+    "65": "Mvua kubwa",
+    "66": "Mvua ya barafu",
+    "67": "Mvua kubwa ya barafu",
+    "71": "Theluji hafifu",
+    "73": "Theluji",
+    "75": "Theluji nzito",
+    "77": "Chembe za theluji",
+    "80": "Mvua za rasharasha hafifu",
+    "81": "Mvua za rasharasha",
+    "82": "Mvua kubwa za rasharasha",
+    "85": "Rasharasha za theluji",
+    "86": "Rasharasha nzito za theluji",
+    "95": "Radi na ngurumo",
+    "96": "Radi na mvua ya mawe",
+    "99": "Dhoruba kali na mvua ya mawe"
+  }
+}

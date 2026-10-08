@@ -1,0 +1,85 @@
+{
+  "today": "Heute",
+  "tomorrow": "Morgen",
+  "upcoming": "Demnächst",
+  "nothing_upcoming": "Nichts geplant",
+  "all_day": "ganztägig",
+  "loading": "Lädt…",
+  "demo": "Demo",
+  "offline": "offline",
+  "no_weather": "Wetter nicht verfügbar",
+  "feels": "gefühlt",
+  "rain": {
+    "none": "Kein Regen in den nächsten 2 Stunden",
+    "starts": "Regen in {min} Min.",
+    "starts_now": "Es beginnt zu regnen",
+    "stops": "Es regnet, Ende in {min} Min.",
+    "long": "Regen für mehr als 2 Stunden",
+    "now": "jetzt",
+    "in2h": "+2 Std."
+  },
+  "sun": {
+    "rise": "Aufgang",
+    "set": "Untergang"
+  },
+  "season": {
+    "in_days": "wechselt in {n} Tagen",
+    "tomorrow": "wechselt morgen"
+  },
+  "moon": {
+    "new": "Neumond",
+    "waxing_crescent": "Zunehmende Sichel",
+    "first_quarter": "Erstes Viertel",
+    "waxing_gibbous": "Zunehmender Mond",
+    "full": "Vollmond",
+    "waning_gibbous": "Abnehmender Mond",
+    "last_quarter": "Letztes Viertel",
+    "waning_crescent": "Abnehmende Sichel",
+    "lit": "{pct} % beleuchtet",
+    "next_full": "Vollmond {date}",
+    "next_new": "Neumond {date}"
+  },
+  "kind": {
+    "holiday": "Feiertag",
+    "birth": "Geburtstag",
+    "death": "Gedenken",
+    "anniversary": "Jahrestag",
+    "other": "Wichtiges Datum"
+  },
+  "seasons": {
+    "spring": "Frühling",
+    "summer": "Sommer",
+    "autumn": "Herbst",
+    "winter": "Winter"
+  },
+  "wmo": {
+    "0": "Klar",
+    "1": "Überwiegend klar",
+    "2": "Teils bewölkt",
+    "3": "Bedeckt",
+    "45": "Nebel",
+    "48": "Gefrierender Nebel",
+    "51": "Leichter Nieselregen",
+    "53": "Nieselregen",
+    "55": "Starker Nieselregen",
+    "56": "Gefrierender Nieselregen",
+    "57": "Starker gefrierender Nieselregen",
+    "61": "Leichter Regen",
+    "63": "Regen",
+    "65": "Starker Regen",
+    "66": "Gefrierender Regen",
+    "67": "Starker gefrierender Regen",
+    "71": "Leichter Schneefall",
+    "73": "Schneefall",
+    "75": "Starker Schneefall",
+    "77": "Schneegriesel",
+    "80": "Leichte Schauer",
+    "81": "Schauer",
+    "82": "Starke Schauer",
+    "85": "Schneeschauer",
+    "86": "Starke Schneeschauer",
+    "95": "Gewitter",
+    "96": "Gewitter mit Hagel",
+    "99": "Schweres Gewitter mit Hagel"
+  }
+}

@@ -56,6 +56,9 @@ class Config:
     port: int = 8080
     cache_dir: Path = Path.home() / ".cache" / "beranda"
     admin_pin: str = ""  # optional PIN for the admin page; empty = open to the home network
+    news_enabled: bool = True
+    news_sources: tuple[str, ...] | None = None  # None = let Beranda choose (town, country, world)
+    news_feeds: tuple[str, ...] = ()  # the user's own RSS/Atom links
 
     @property
     def week_start(self) -> int:
@@ -80,6 +83,25 @@ def _parse_key_date(raw: dict) -> KeyDate:
     return KeyDate(month=month, day=day, label=str(raw["label"]), kind=kind, year=year)
 
 
+def normalise_language(raw: object) -> str:
+    """'PT_br' -> 'pt-BR', 'FR' -> 'fr'. Anything odd falls back to English."""
+    text = str(raw or "en").strip().replace("_", "-")
+    base, _, region = text.partition("-")
+    base = base.lower()
+    if not base.isalpha() or not 2 <= len(base) <= 3:
+        return "en"
+    if region and region.isalpha() and len(region) == 2:
+        return f"{base}-{region.upper()}"
+    return base
+
+
+def _check_feed(url: str) -> str:
+    url = url.strip()
+    if not url.lower().startswith(("http://", "https://")):
+        raise ValueError(f"a news feed must start with http:// or https://, got {url[:60]!r}")
+    return url
+
+
 def from_dict(data: dict) -> Config:
     """Build a Config from a parsed TOML dict, validating what matters."""
     loc = data.get("location", {})
@@ -101,13 +123,14 @@ def from_dict(data: dict) -> Config:
         raise ValueError("mode must be 'auto', 'light' or 'night'")
 
     server = data.get("server", {})
+    news = data.get("news", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
         location=location,
         country=country,
         subdivision=data.get("subdivision"),
-        language=str(data.get("language", "fr")).lower(),
+        language=normalise_language(data.get("language", "fr")),
         units=units,
         theme=data.get("theme", "japan"),
         mode=mode,
@@ -118,6 +141,9 @@ def from_dict(data: dict) -> Config:
         port=int(server.get("port", 8080)),
         cache_dir=cache_dir,
         admin_pin=str(data.get("admin", {}).get("pin", "")),
+        news_enabled=bool(news.get("enabled", True)),
+        news_sources=None if news.get("sources") is None else tuple(str(x) for x in news["sources"]),
+        news_feeds=tuple(_check_feed(str(u)) for u in news.get("feeds", [])),
     )
 
 
@@ -165,6 +191,10 @@ def to_dict(cfg: Config) -> dict:
         "key_dates": keys,
         "server": {"host": cfg.host, "port": cfg.port},
     }
+    news: dict = {"enabled": cfg.news_enabled, "feeds": list(cfg.news_feeds)}
+    if cfg.news_sources is not None:
+        news["sources"] = list(cfg.news_sources)
+    out["news"] = news
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

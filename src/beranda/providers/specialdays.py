@@ -13,11 +13,31 @@ from ..config import Config
 log = logging.getLogger(__name__)
 
 
+def holiday_language(country: str, language: str) -> str | None:
+    """Pick the holiday-name language closest to the display language.
+
+    `holidays` names its languages 'fr', 'fr_SN', 'pt_BR', 'en_US'... We try the exact code,
+    then the language as spoken in that country, then any variant of the language.
+    None means "the country's own default" (always better than a wrong guess)."""
+    try:
+        supported = holidays.country_holidays(country, years=2000).supported_languages
+    except (NotImplementedError, KeyError, ValueError):
+        return None
+    base, _, region = language.partition("-")
+    wanted = [f"{base}_{region}" if region else base, f"{base}_{country}", base]
+    if base == "en":
+        wanted += ["en_US", "en_GB"]
+    for code in wanted:
+        if code in supported:
+            return code
+    return next((code for code in supported if code.split("_")[0] == base), None)
+
+
 def public_holidays(country: str, subdivision: str | None, language: str, years: list[int]):
     """Return {date: name}. Unknown countries yield an empty dict rather than an error."""
     try:
         return holidays.country_holidays(
-            country, subdiv=subdivision, years=years, language=language
+            country, subdiv=subdivision, years=years, language=holiday_language(country, language)
         )
     except NotImplementedError:
         log.warning("no public holiday data for country %r", country)

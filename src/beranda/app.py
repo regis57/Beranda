@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import calendar as _calendar
 import hashlib
 import logging
@@ -21,15 +22,17 @@ from .admin import router as admin_router
 from .cache import Cache
 from .config import Config
 from .providers import astro as astro_mod
-from .providers import calendar_ics, demo, seasons, specialdays
+from .providers import calendar_ics, demo, news_catalog, seasons, specialdays
+from .providers import news as news_mod
 from .providers import weather as weather_mod
 
 log = logging.getLogger(__name__)
 
 WEB_DIR = Path(__file__).parent / "web"
-THEMES = {"japan", "indonesia", "france"}
+THEMES = set(seasons.THEMES)
 WEATHER_TTL = 15 * 60
 CALENDAR_TTL = 15 * 60
+NEWS_TTL = 30 * 60
 
 # The display loads nothing but its own files. A strict policy keeps a hostile calendar
 # entry or feed from ever running code on the mirror.
@@ -50,6 +53,50 @@ def _window(today: date) -> tuple[date, date]:
     nxt = (first + timedelta(days=32)).replace(day=1)
     last = nxt.replace(day=_calendar.monthrange(nxt.year, nxt.month)[1])
     return first, last
+
+
+def news_plan(cfg: Config) -> list[tuple[str, str, str]]:
+    """(key, display name, url) for every feed to read."""
+    chosen = cfg.news_sources
+    if chosen is None:
+        chosen = tuple(news_catalog.automatic(cfg.country, cfg.language, cfg.location.name))
+    plan = []
+    for source_id in chosen:
+        if source_id == "city":
+            if cfg.location.name:
+                url = news_catalog.city_feed_url(cfg.location.name, cfg.language)
+                plan.append(("city", "", url))  # "": the medium is each article's own site
+        elif source_id in news_catalog.BY_ID:
+            src = news_catalog.BY_ID[source_id]
+            plan.append((source_id, src["name"], src["url"]))
+    for index, url in enumerate(cfg.news_feeds):
+        plan.append((f"feed:{index}", "", url))
+    return plan
+
+
+async def build_news(cfg: Config, cache: Cache, now: datetime, errors: dict, stale: list) -> dict:
+    plan = news_plan(cfg)
+
+    async def one(key: str, name: str, url: str) -> list[dict]:
+        async def load() -> list[dict]:
+            items = news_mod.parse(await news_mod.fetch(url), name)
+            for item in items:
+                if not item["source"]:
+                    item["source"] = item["host"].removeprefix("www.")
+            return items
+
+        digest = hashlib.sha1(url.encode()).hexdigest()[:12]
+        try:
+            items, is_stale = await cache.get(f"news:{digest}", NEWS_TTL, load)
+            if is_stale:
+                stale.append(f"news:{key}")
+            return items
+        except Exception as exc:  # noqa: BLE001 - a dead feed must not blank the screen
+            errors[f"news:{key}"] = type(exc).__name__
+            return []
+
+    results = await asyncio.gather(*(one(*p) for p in plan))
+    return {"items": news_mod.merge(list(results), now), "sources": len(plan)}
 
 
 async def build_state(
@@ -80,7 +127,7 @@ async def build_state(
     # --- agenda ------------------------------------------------------------------
     events: list[dict] = []
     if cfg.demo:
-        events = demo.events(today, _iso_offset(now))
+        events = demo.events(today, _iso_offset(now), cfg.language)
     for index, url in enumerate(cfg.ics_urls):
         digest = hashlib.sha1(url.encode()).hexdigest()[:12]
 
@@ -98,8 +145,16 @@ async def build_state(
             errors[f"calendar:{index}"] = type(exc).__name__
     events.sort(key=lambda e: (e["start"], e["title"]))
 
+    # --- news --------------------------------------------------------------------
+    news = None
+    if cfg.news_enabled:
+        if cfg.demo:
+            news = demo.news(cfg.language, now)
+        else:
+            news = await build_news(cfg, cache, now, errors, stale)
+
     # --- special days ------------------------------------------------------------
-    day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today)) if cfg.demo else cfg
+    day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today, cfg.language)) if cfg.demo else cfg
     days = specialdays.special_days(day_cfg, start, end)
 
     # --- sky & season (all local) --------------------------------------------------
@@ -121,9 +176,10 @@ async def build_state(
         },
         "weather": weather,
         "sky": sky,
-        "season": seasons.current(theme or cfg.theme, today),
+        "season": seasons.current(theme or cfg.theme, today, loc.timezone, loc.latitude),
         "events": events,
         "special_days": days,
+        "news": news,
         "window": {"start": start.isoformat(), "end": end.isoformat()},
         "stale": stale,
         "errors": errors,

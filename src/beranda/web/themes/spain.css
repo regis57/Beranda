@@ -1,0 +1,51 @@
+/* Theme "spain" (Mudéjar): lime-washed wall, terracotta and cobalt, the eight-pointed star
+   of Andalusian tiles. The season block: the season of the year with the refrán of the month. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f6eddf;
+  --ink: #3a1e12;
+  --ink-2: rgba(58, 30, 18, 0.72);
+  --ink-3: rgba(58, 30, 18, 0.48);
+  --line: rgba(58, 30, 18, 0.17);
+  --accent: #b4441f;   /* terracotta */
+  --rain: #23519f;     /* cobalt */
+  --warm: #c8622f;
+  --cool: #4b74b8;
+  --moon-lit: #3a1e12;
+  --moon-dark: rgba(58, 30, 18, 0.09);
+  --ornament: url("/static/themes/estrella.svg");
+}
+
+:root[data-mode="night"] {
+  --bg: #170d0a;
+  --ink: rgba(244, 228, 208, 0.84);
+  --ink-2: rgba(244, 228, 208, 0.58);
+  --ink-3: rgba(244, 228, 208, 0.36);
+  --line: rgba(244, 228, 208, 0.13);
+  --accent: #c6714f;
+  --rain: #7397d4;
+  --warm: #b4664a;
+  --cool: #58739f;
+  --moon-lit: #f4e4d0;
+  --moon-dark: rgba(244, 228, 208, 0.09);
+}
+
+.season {
+  flex: 1 1 0; position: relative; padding: 0.7rem 0.9rem; border-radius: 0.2rem;
+  background: var(--ornament) center / 2.6rem repeat;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.season::after { content: ""; position: absolute; inset: 0; background: var(--bg); opacity: 0.84; }
+.season > * { position: relative; z-index: 1; }
+.season-kanji { font-size: 2.6rem; font-weight: 400; letter-spacing: 0.02em; line-height: 1; }
+.seal { border-radius: 50%; }
+.season-romaji { font-family: var(--f-serif); font-size: 0.95rem; color: var(--ink-2); max-width: none; }
+.season-note { font-variant: small-caps; letter-spacing: 0.06em; }

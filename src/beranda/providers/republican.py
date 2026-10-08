@@ -2,15 +2,15 @@
 
 Every day of the year has a plant, animal or tool as its name ("jour du Raisin"), written by
 Fabre d'Églantine. The year starts on the autumn equinox as seen from Paris (the rule of the
-original decree); we compute that day with Meeus's mean-equinox polynomial, which is within
-about half an hour: only an equinox falling within that margin of Paris midnight could be
-off by one day.
+original decree); we compute that day in providers/equinox.py, good to about half an hour: only an
+equinox within that margin of Paris midnight could land on the wrong day.
 """
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import date, timedelta
+
+from . import equinox
 
 MONTHS = (
     "Vendémiaire", "Brumaire", "Frimaire", "Nivôse", "Pluviôse", "Ventôse",
@@ -43,12 +43,8 @@ DAY_NAMES = tuple(tuple(line.split("|")) for line in _NAMES.strip().splitlines()
 
 
 def autumn_equinox(year: int) -> date:
-    """The calendar day, in Paris, of the September equinox (Meeus ch. 27, mean value)."""
-    y = (year - 2000) / 1000
-    jde = 2451810.21715 + 365242.01767 * y - 0.11575 * y**2 + 0.00337 * y**3 + 0.00078 * y**4
-    # JDE 2451545.0 is 2000-01-01 12:00 TT; TT is about 69 s ahead of UTC.
-    utc = datetime(2000, 1, 1, 12, tzinfo=UTC) + timedelta(days=jde - 2451545.0, seconds=-69)
-    return utc.astimezone(ZoneInfo("Europe/Paris")).date()
+    """The calendar day, in Paris, of the September equinox."""
+    return equinox.local_day(year, "september", "Europe/Paris")
 
 
 def current(today: date) -> dict:

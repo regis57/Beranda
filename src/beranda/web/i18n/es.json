@@ -1,0 +1,85 @@
+{
+  "today": "Hoy",
+  "tomorrow": "Mañana",
+  "upcoming": "Próximamente",
+  "nothing_upcoming": "Nada previsto",
+  "all_day": "todo el día",
+  "loading": "Cargando…",
+  "demo": "demo",
+  "offline": "sin conexión",
+  "no_weather": "Tiempo no disponible",
+  "feels": "sensación",
+  "rain": {
+    "none": "Sin lluvia en las próximas 2 horas",
+    "starts": "Lluvia en {min} min",
+    "starts_now": "Empieza a llover",
+    "stops": "Llueve, para en {min} min",
+    "long": "Lluvia durante más de 2 horas",
+    "now": "ahora",
+    "in2h": "+2 h"
+  },
+  "sun": {
+    "rise": "salida",
+    "set": "puesta"
+  },
+  "season": {
+    "in_days": "cambia en {n} días",
+    "tomorrow": "cambia mañana"
+  },
+  "moon": {
+    "new": "Luna nueva",
+    "waxing_crescent": "Luna creciente",
+    "first_quarter": "Cuarto creciente",
+    "waxing_gibbous": "Gibosa creciente",
+    "full": "Luna llena",
+    "waning_gibbous": "Gibosa menguante",
+    "last_quarter": "Cuarto menguante",
+    "waning_crescent": "Luna menguante",
+    "lit": "{pct} % iluminada",
+    "next_full": "Luna llena {date}",
+    "next_new": "Luna nueva {date}"
+  },
+  "kind": {
+    "holiday": "Festivo",
+    "birth": "Nacimiento",
+    "death": "Recuerdo",
+    "anniversary": "Aniversario",
+    "other": "Fecha clave"
+  },
+  "seasons": {
+    "spring": "Primavera",
+    "summer": "Verano",
+    "autumn": "Otoño",
+    "winter": "Invierno"
+  },
+  "wmo": {
+    "0": "Despejado",
+    "1": "Mayormente despejado",
+    "2": "Parcialmente nublado",
+    "3": "Cubierto",
+    "45": "Niebla",
+    "48": "Niebla helada",
+    "51": "Llovizna ligera",
+    "53": "Llovizna",
+    "55": "Llovizna intensa",
+    "56": "Llovizna helada",
+    "57": "Llovizna helada intensa",
+    "61": "Lluvia ligera",
+    "63": "Lluvia",
+    "65": "Lluvia fuerte",
+    "66": "Lluvia helada",
+    "67": "Lluvia helada fuerte",
+    "71": "Nevada ligera",
+    "73": "Nieve",
+    "75": "Nevada fuerte",
+    "77": "Granizo de nieve",
+    "80": "Chubascos ligeros",
+    "81": "Chubascos",
+    "82": "Chubascos fuertes",
+    "85": "Chubascos de nieve",
+    "86": "Chubascos de nieve fuertes",
+    "95": "Tormenta",
+    "96": "Tormenta con granizo",
+    "99": "Tormenta fuerte con granizo"
+  }
+}

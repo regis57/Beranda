@@ -1,0 +1,85 @@
+{
+  "today": "Vandag",
+  "tomorrow": "Môre",
+  "upcoming": "Binnekort",
+  "nothing_upcoming": "Niks beplan nie",
+  "all_day": "heeldag",
+  "loading": "Laai…",
+  "demo": "demo",
+  "offline": "vanlyn",
+  "no_weather": "Weer nie beskikbaar nie",
+  "feels": "voel soos",
+  "rain": {
+    "none": "Geen reën in die volgende 2 uur nie",
+    "starts": "Reën oor {min} min",
+    "starts_now": "Dit begin reën",
+    "stops": "Dit reën, hou op oor {min} min",
+    "long": "Reën vir meer as 2 uur",
+    "now": "nou",
+    "in2h": "+2 uur"
+  },
+  "sun": {
+    "rise": "sonop",
+    "set": "sononder"
+  },
+  "season": {
+    "in_days": "verander oor {n} dae",
+    "tomorrow": "verander môre"
+  },
+  "moon": {
+    "new": "Nuwemaan",
+    "waxing_crescent": "Groeiende sekel",
+    "first_quarter": "Eerste kwartier",
+    "waxing_gibbous": "Groeiende bolmaan",
+    "full": "Volmaan",
+    "waning_gibbous": "Afnemende bolmaan",
+    "last_quarter": "Laaste kwartier",
+    "waning_crescent": "Afnemende sekel",
+    "lit": "{pct} % verlig",
+    "next_full": "Volmaan {date}",
+    "next_new": "Nuwemaan {date}"
+  },
+  "kind": {
+    "holiday": "Openbare vakansiedag",
+    "birth": "Geboorte",
+    "death": "Herdenking",
+    "anniversary": "Herdenkingsdag",
+    "other": "Belangrike datum"
+  },
+  "seasons": {
+    "spring": "Lente",
+    "summer": "Somer",
+    "autumn": "Herfs",
+    "winter": "Winter"
+  },
+  "wmo": {
+    "0": "Helder",
+    "1": "Grotendeels helder",
+    "2": "Gedeeltelik bewolk",
+    "3": "Oortrokke",
+    "45": "Mis",
+    "48": "Ysmis",
+    "51": "Ligte motreën",
+    "53": "Motreën",
+    "55": "Digte motreën",
+    "56": "Ysige motreën",
+    "57": "Digte ysige motreën",
+    "61": "Ligte reën",
+    "63": "Reën",
+    "65": "Swaar reën",
+    "66": "Ysreën",
+    "67": "Swaar ysreën",
+    "71": "Ligte sneeu",
+    "73": "Sneeu",
+    "75": "Swaar sneeu",
+    "77": "Sneeukorrels",
+    "80": "Ligte buie",
+    "81": "Buie",
+    "82": "Swaar buie",
+    "85": "Sneeubuie",
+    "86": "Swaar sneeubuie",
+    "95": "Donderstorm",
+    "96": "Donderstorm met hael",
+    "99": "Hewige donderstorm met hael"
+  }
+}

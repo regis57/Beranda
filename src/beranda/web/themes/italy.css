@@ -1,0 +1,48 @@
+/* Theme "italy" (Rinascimento): a printed page of a Renaissance book. Serif type, Pompeian
+   red, a thin double frame. The season block: the season with the proverbio of the month. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", "Book Antiqua", Georgia, serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", "Book Antiqua", Georgia, serif;
+  --clock-weight: 200;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f5efe3;
+  --ink: #2b2420;
+  --ink-2: rgba(43, 36, 32, 0.7);
+  --ink-3: rgba(43, 36, 32, 0.46);
+  --line: rgba(43, 36, 32, 0.16);
+  --accent: #a8322d;   /* rosso pompeiano */
+  --rain: #335c8a;
+  --warm: #b8573f;
+  --cool: #6f8fae;
+  --moon-lit: #2b2420;
+  --moon-dark: rgba(43, 36, 32, 0.09);
+}
+
+:root[data-mode="night"] {
+  --bg: #121010;
+  --ink: rgba(240, 230, 214, 0.84);
+  --ink-2: rgba(240, 230, 214, 0.58);
+  --ink-3: rgba(240, 230, 214, 0.36);
+  --line: rgba(240, 230, 214, 0.13);
+  --accent: #bf635a;
+  --rain: #7a9cc6;
+  --warm: #a55e4c;
+  --cool: #58728f;
+  --moon-lit: #f0e6d6;
+  --moon-dark: rgba(240, 230, 214, 0.09);
+}
+
+.date, .now-label { font-family: var(--f-serif); font-style: italic; }
+.season {
+  padding: 0.8rem 1rem; align-items: center;
+  outline: 1px solid var(--line); outline-offset: -4px; border: 1px solid var(--line);
+}
+.season-kanji { font-size: 3rem; font-weight: 400; letter-spacing: 0.04em; line-height: 1; color: var(--accent); }
+.seal { background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; font-weight: 400; }
+.season-name { font-family: var(--f-serif); font-variant: small-caps; letter-spacing: 0.06em; font-size: 1.15rem; }
+.season-romaji { font-family: var(--f-serif); font-style: italic; font-size: 1rem; color: var(--ink-2); max-width: none; }

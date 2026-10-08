@@ -7,6 +7,7 @@ no Google Cloud project, nothing to configure but a link.
 
 from __future__ import annotations
 
+import re
 from datetime import date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
@@ -14,14 +15,26 @@ import httpx
 import recurring_ical_events
 from icalendar import Calendar
 
-USER_AGENT = "Beranda/0.2 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.3 (+https://github.com/regis57/Beranda)"
 MAX_ICS_BYTES = 8 * 1024 * 1024  # a Pi 3B should not be fed a 200 MB calendar
 
 
 def normalise_url(url: str) -> str:
-    """`webcal://` is just https in disguise."""
+    """Accept the links people actually copy, and turn them into the feed address.
+
+    * `webcal://...` is https in disguise.
+    * Nextcloud's public share page `https://cloud/apps/calendar/p/TOKEN` (or the older
+      `.../index.php/apps/calendar/p/TOKEN`) becomes its ICS export
+      `https://cloud/remote.php/dav/public-calendars/TOKEN?export`.
+    """
+    url = url.strip()
     if url.lower().startswith("webcal://"):
-        return "https://" + url[len("webcal://") :]
+        url = "https://" + url[len("webcal://") :]
+    share = re.match(r"^(https?://.+?)(?:/index\.php)?/apps/calendar/p/([A-Za-z0-9]+)", url)
+    if share:
+        return f"{share.group(1)}/remote.php/dav/public-calendars/{share.group(2)}?export"
+    if "/remote.php/dav/public-calendars/" in url and "export" not in url:
+        return url + ("&" if "?" in url else "?") + "export"
     return url
 
 

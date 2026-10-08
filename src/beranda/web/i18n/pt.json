@@ -1,0 +1,85 @@
+{
+  "today": "Hoje",
+  "tomorrow": "Amanhã",
+  "upcoming": "Brevemente",
+  "nothing_upcoming": "Nada previsto",
+  "all_day": "todo o dia",
+  "loading": "A carregar…",
+  "demo": "demo",
+  "offline": "sem ligação",
+  "no_weather": "Meteorologia indisponível",
+  "feels": "sensação",
+  "rain": {
+    "none": "Sem chuva nas próximas 2 horas",
+    "starts": "Chuva dentro de {min} min",
+    "starts_now": "Começa a chover",
+    "stops": "Está a chover, para dentro de {min} min",
+    "long": "Chuva durante mais de 2 horas",
+    "now": "agora",
+    "in2h": "+2 h"
+  },
+  "sun": {
+    "rise": "nascer",
+    "set": "pôr"
+  },
+  "season": {
+    "in_days": "muda dentro de {n} dias",
+    "tomorrow": "muda amanhã"
+  },
+  "moon": {
+    "new": "Lua nova",
+    "waxing_crescent": "Lua crescente",
+    "first_quarter": "Quarto crescente",
+    "waxing_gibbous": "Crescente gibosa",
+    "full": "Lua cheia",
+    "waning_gibbous": "Minguante gibosa",
+    "last_quarter": "Quarto minguante",
+    "waning_crescent": "Lua minguante",
+    "lit": "{pct} % iluminada",
+    "next_full": "Lua cheia {date}",
+    "next_new": "Lua nova {date}"
+  },
+  "kind": {
+    "holiday": "Feriado",
+    "birth": "Nascimento",
+    "death": "Memória",
+    "anniversary": "Aniversário",
+    "other": "Data importante"
+  },
+  "seasons": {
+    "spring": "Primavera",
+    "summer": "Verão",
+    "autumn": "Outono",
+    "winter": "Inverno"
+  },
+  "wmo": {
+    "0": "Céu limpo",
+    "1": "Pouco nublado",
+    "2": "Parcialmente nublado",
+    "3": "Encoberto",
+    "45": "Nevoeiro",
+    "48": "Nevoeiro gelado",
+    "51": "Chuvisco fraco",
+    "53": "Chuvisco",
+    "55": "Chuvisco forte",
+    "56": "Chuvisco gelado",
+    "57": "Chuvisco gelado forte",
+    "61": "Chuva fraca",
+    "63": "Chuva",
+    "65": "Chuva forte",
+    "66": "Chuva gelada",
+    "67": "Chuva gelada forte",
+    "71": "Neve fraca",
+    "73": "Neve",
+    "75": "Neve forte",
+    "77": "Grãos de neve",
+    "80": "Aguaceiros fracos",
+    "81": "Aguaceiros",
+    "82": "Aguaceiros fortes",
+    "85": "Aguaceiros de neve",
+    "86": "Aguaceiros de neve fortes",
+    "95": "Trovoada",
+    "96": "Trovoada com granizo",
+    "99": "Trovoada forte com granizo"
+  }
+}

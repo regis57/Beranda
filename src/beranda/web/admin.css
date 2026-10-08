@@ -69,10 +69,37 @@ button:disabled { opacity: .5; cursor: default; }
 
 @media (max-width: 62rem) {
   .layout { grid-template-columns: minmax(0, 1fr); }
-  .preview { position: static; order: -1; }
+  .preview { position: static; }
 }
 @media (max-width: 36rem) {
   .grid3, .grid2 { grid-template-columns: 1fr; }
   .item.key { grid-template-columns: 1fr 1fr; }
   .item.key input:nth-child(2) { grid-column: 1 / -1; }
 }
+
+/* ---- v0.3: help for beginners, news ------------------------------------------------- */
+h2 { display: flex; align-items: center; gap: .55rem; }
+h3 { margin: .4rem 0 0; font-size: .9rem; font-weight: 600; }
+.num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: .8rem; flex: none; }
+.welcome { border-color: var(--accent); }
+.steps { margin: 0; padding-inline-start: 1.3rem; display: flex; flex-direction: column; gap: .35rem; }
+.help { border-top: 1px dashed var(--line); padding-top: .5rem; font-size: .9rem; }
+.help summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.help p { margin: .5rem 0 0; color: var(--ink-2); }
+.providers { list-style: none; margin: .5rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+.providers li { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .2rem .8rem; }
+.providers b { font-weight: 600; }
+.providers span { color: var(--ink-2); }
+.providers a { grid-column: 2; color: var(--accent); font-size: .85rem; }
+.check { flex-direction: row; align-items: center; gap: .5rem; color: var(--ink); font-size: .95rem; }
+.check input { width: auto; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip { display: inline-flex; align-items: center; gap: .3rem; border: 1px solid var(--line); border-radius: 99px; padding: .15rem .3rem .15rem .65rem; font-size: .85rem; background: var(--field); }
+.chip button { border: 0; padding: 0 .35rem; line-height: 1.2; }
+.src { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .2rem .6rem; align-items: center; padding: .35rem 0; border-bottom: 1px solid var(--line); }
+.src:last-child { border-bottom: 0; }
+.src .meta { color: var(--ink-2); font-size: .8rem; }
+.src .msg { grid-column: 2 / -1; font-size: .82rem; }
+.lang { display: inline-block; font-size: .7rem; border: 1px solid var(--line); border-radius: .25rem; padding: 0 .3rem; margin-inline-start: .35rem; color: var(--ink-2); text-transform: uppercase; }
+.item.feed { grid-template-columns: minmax(0, 1fr) auto auto; }
+@media (max-width: 36rem) { .providers li { grid-template-columns: 1fr; } .providers a { grid-column: 1; } }

@@ -1,0 +1,54 @@
+/* Theme "brazil" (Copacabana): the black and white wave pavement of Rio's promenade, the
+   green and gold of the flag, a sky blue. The season block follows the southern hemisphere
+   ("Primavera" in October) with a ditado popular for the day. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 200;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f4f5ef;
+  --ink: #132a1f;
+  --ink-2: rgba(19, 42, 31, 0.72);
+  --ink-3: rgba(19, 42, 31, 0.48);
+  --line: rgba(19, 42, 31, 0.15);
+  --accent: #0d8a4a;   /* verde */
+  --gold: #e7b400;     /* amarelo */
+  --rain: #1f4aa8;     /* azul */
+  --warm: #e09a12;
+  --cool: #3f74c8;
+  --moon-lit: #132a1f;
+  --moon-dark: rgba(19, 42, 31, 0.08);
+  --ornament: url("/static/themes/calcadao.svg");
+}
+
+:root[data-mode="night"] {
+  --bg: #08130e;
+  --ink: rgba(230, 240, 232, 0.86);
+  --ink-2: rgba(230, 240, 232, 0.6);
+  --ink-3: rgba(230, 240, 232, 0.38);
+  --line: rgba(230, 240, 232, 0.13);
+  --accent: #4fb57f;
+  --gold: #c9a336;
+  --rain: #6f97dc;
+  --warm: #c49340;
+  --cool: #4d72ad;
+  --moon-lit: #e6f0e8;
+  --moon-dark: rgba(230, 240, 232, 0.08);
+}
+
+/* The wave pavement as a band along the top of the season block. */
+.season { flex: 1 1 0; position: relative; padding: 1.5rem 0.2rem 0.4rem; }
+.season::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 0.9rem;
+  background: var(--ornament) left center / 3.2rem 100% repeat-x; opacity: 0.55;
+}
+:root[data-mode="night"] .season::before { opacity: 0.35; filter: invert(1); }
+.season-kanji { font-size: 2.6rem; font-weight: 300; letter-spacing: 0.02em; line-height: 1; color: var(--accent); }
+.seal { background: var(--gold); color: #132a1f; border-radius: 50%; }
+.season-name { font-weight: 600; }
+.season-romaji { font-family: var(--f-serif); font-size: 0.98rem; font-style: italic; color: var(--ink-2); max-width: none; }

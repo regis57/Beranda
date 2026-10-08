@@ -17,6 +17,7 @@ NOW = datetime(2026, 10, 8, 12, 0, tzinfo=ZoneInfo("Europe/Paris"))
 
 
 def make(tmp_path, **kw) -> TestClient:
+    kw.setdefault("news_enabled", False)  # news has its own tests below
     cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
     return TestClient(create_app(cfg, now_fn=lambda: NOW))
 

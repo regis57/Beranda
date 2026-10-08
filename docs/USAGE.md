@@ -1,56 +1,52 @@
 # Using Beranda
 
-## 1. Start it
+Two pages, served by the Pi:
 
-```bash
-pip install -e .
-beranda            # real data, from your config
-beranda --demo     # invented weather and agenda, to try the look
-```
+- `http://<pi-name>.local:8080/` is **the display** (the mirror or tablet shows this one);
+- `http://<pi-name>.local:8080/admin` is **the settings page**, for your phone or computer on the
+  same Wi-Fi. It refuses visitors from the internet.
 
-Open `http://<address-of-the-pi>:8080/` on the mirror's screen (the display) and
-`http://<address-of-the-pi>:8080/admin` on your phone or laptop (the settings).
+## The settings page, box by box
 
-## 2. The settings page (`/admin`)
+![Settings page](screenshots/v0.3.0-admin.png)
 
-![Settings page](screenshots/v0.2.0-admin.png)
+The first time, a short welcome lists the three things to do. Every box has a **Need help?**
+link with the details in plain words.
 
-The page works from any device on your home network. From the internet it answers
-"403": it is not meant to be exposed. Changes are written to `~/.config/beranda/config.toml`
-(readable by you only, because calendar links are secrets) and the display picks them up
-at its next refresh, within a minute. There is no restart.
-
-| Section | What to do |
+| Box | What it does |
 |---|---|
-| **Où êtes-vous ?** | Type a town and press *Search* (needs internet): name, coordinates and time zone fill in, and so does the country. Or type the coordinates by hand. |
-| **Pays et langue** | The country gives the public holidays and the first day of the week; add a region for regional holidays. Language: français, English, 日本語, Bahasa Indonesia. Units switch to °F / mph on their own for the US. |
-| **Apparence** | Pick a theme card (the preview on the right changes at once) and a mode: *Auto* follows the sun, or force light / night. |
-| **Agenda** | Google: Settings of the calendar → *Secret address in iCal format*. iCloud: share the calendar publicly and copy the link. Outlook / Nextcloud: the ICS link. Paste it, press *Test* to see how many events it finds. Read-only. |
-| **Dates qui comptent** | Name, date and kind (birth, remembrance, anniversary, other). `2018-06-02` shows the number of years; `06-02` repeats every year. |
-| **Accès** | Optional PIN. Leave empty to keep the current state. |
+| **1. Where are you?** | Type your town, press *Search*, click the right line: name, position and time zone fill in. Without internet, type latitude and longitude (press and hold on your home in any map app to read them). |
+| **2. Country and language** | The country gives public holidays, the first day of the week and the suggested news; picking it also proposes its language. 13 languages. A region is only needed for regional holidays. |
+| **3. Look** | Eight themes, shown live in the preview. *Auto* switches to night colours after sunset. |
+| **4. Your calendar** | Paste the private link of your calendar and press *Test*. The box *Where do I find this link?* gives the steps for Google, Apple, Outlook, Nextcloud and Proton, each with a link to the official guide in your language. |
+| **5. Dates that matter** | Births, remembrances, anniversaries. `2018-06-02` shows the number of years; `06-02` repeats every year. |
+| **6. News headlines** | On by default with *Choose for me*. Untick it to pick media yourself (your town, your country, international, another country) and add any RSS feed; every line has a *Test* button. |
+| **7. Access** | Optional PIN. |
 
-Press **Enregistrer**. The bar at the bottom says *Modifications non enregistrées* until you do.
+Press **Save**. The display picks the changes up within a minute, without a restart. The page
+writes `~/.config/beranda/config.toml` (readable by you only, because calendar links are secrets).
 
-## 3. The three themes
+## The themes
 
-| Theme | Spirit | Season block |
+| Theme | Spirit | The season block |
 |---|---|---|
 | `japan` | washi paper, vermilion, ink | the 72 micro-seasons (七十二候) |
-| `indonesia` | batik browns, indigo, a faint kawung motif | *pranata mangsa*, the Javanese farmers' calendar (12 mangsa) |
-| `france` | almanac paper, navy, red, a tricolour rule | the French Republican calendar: "16 Vendémiaire, Belle de nuit" |
+| `indonesia` | batik browns, indigo, a faint kawung motif | *pranata mangsa*, the Javanese farmers' calendar |
+| `france` | almanac paper, navy, red, a tricolour rule | the Republican calendar: "16 Vendémiaire, Belle de nuit" |
+| `germany` | Bauhaus: grey sheet, black, red, yellow | the ten phenological seasons of the DWD ("Vollherbst: Eicheln fallen") |
+| `spain` | lime wash, terracotta, cobalt, Mudéjar star | the season and the *refrán* of the month |
+| `italy` | a Renaissance page, Pompeian red | the season and the *proverbio* of the month |
+| `portugal` | azulejos, cobalt on white | the season and the *provérbio* of the month |
+| `brazil` | Copacabana waves, green and gold | the southern-hemisphere season and a *ditado* for every day |
 
-Preview any combination without saving: `/?theme=france&lang=fr&mode=night`.
+Any theme works with any language. Try combinations without saving:
+`/?theme=brazil&lang=pt-BR&mode=night`.
 
-Honest notes: the micro-season and mangsa dates are the commonly published approximations,
-the Republican day names are typed from the historical list; corrections are welcome. The
-mangsa describe Java's monsoon, they are cultural colour, not a forecast.
+Honest notes: micro-season, mangsa and phenological dates are averages that move from year to
+year; Republican day names and proverbs come from tradition and spellings vary. Corrections
+are welcome.
 
-## 4. Without the page
+## Without the settings page
 
 Everything is in `config.toml`; see `config.example.toml`. The page is only a friendlier editor
 for the same file (comments in the file are not kept when the page saves).
-
-## 5. Security in short
-
-`/admin` only accepts local-network addresses, refuses cross-site writes, and can ask for a PIN.
-It is still plain HTTP: do not forward its port on your router.
