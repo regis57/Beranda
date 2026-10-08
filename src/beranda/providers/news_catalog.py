@@ -69,7 +69,6 @@ SOURCES: tuple[dict, ...] = (
     S(id="guardian-uk", name="The Guardian UK", lang="en", scope="national", countries=("GB",), url="https://www.theguardian.com/uk-news/rss"),
     # ---------------------------------------------------------------- Americas ---------
     S(id="npr", name="NPR News", lang="en", scope="national", countries=("US",), url="https://feeds.npr.org/1001/rss.xml"),
-    S(id="cbc", name="CBC News", lang="en", scope="national", countries=("CA",), url="https://www.cbc.ca/cmlink/rss-topstories"),
     S(id="radio-canada", name="Radio-Canada Info", lang="fr", scope="national", countries=("CA",), url="https://ici.radio-canada.ca/rss/4159"),
     S(id="g1", name="g1", lang="pt", scope="national", countries=("BR",), url="https://g1.globo.com/rss/g1/"),
     S(id="agencia-brasil", name="Agência Brasil", lang="pt", scope="national", countries=("BR",), url="https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"),
@@ -80,7 +79,6 @@ SOURCES: tuple[dict, ...] = (
     S(id="eltiempo", name="EL TIEMPO", lang="es", scope="national", countries=("CO",), url="https://www.eltiempo.com/rss/colombia.xml"),
     S(id="elcomercio-pe", name="El Comercio", lang="es", scope="national", countries=("PE",), url="https://elcomercio.pe/arcio/rss/"),
     # ---------------------------------------------------------------- Africa -----------
-    S(id="news24", name="News24", lang="en", scope="national", countries=("ZA",), url="https://feeds.24.com/articles/news24/TopStories/rss"),
     S(id="daily-maverick", name="Daily Maverick", lang="en", scope="national", countries=("ZA",), url="https://www.dailymaverick.co.za/dmrss/"),
     S(id="maroela", name="Maroela Media", lang="af", scope="national", countries=("ZA", "NA"), url="https://maroelamedia.co.za/feed/"),
     S(id="premium-times", name="Premium Times", lang="en", scope="national", countries=("NG",), url="https://www.premiumtimesng.com/feed"),

@@ -434,8 +434,16 @@ function applyTheme() {
   if (!/^[a-z0-9-]+$/.test(name)) return;
   const link = $('theme-css') || document.querySelector('link#theme-css');
   const href = `/static/themes/${name}.css`;
-  if (link && !link.getAttribute('href').endsWith(href)) link.setAttribute('href', href);
+  if (link && !link.getAttribute('href').endsWith(href)) {
+    // A new theme changes the size of the blocks: fit the agenda list again once it applies.
+    link.addEventListener('load', () => renderCalendarDay(), { once: true });
+    link.setAttribute('href', href);
+  }
 }
+
+// Fonts and window size change how many agenda lines fit.
+document.fonts?.ready.then(() => renderCalendarDay());
+window.addEventListener('resize', () => renderCalendarDay());
 
 async function render(online) {
   tz = state.config.location.timezone;

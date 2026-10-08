@@ -92,7 +92,7 @@ Haitian Creole, Guarani, Quechua...) are welcome as contributions: one JSON file
 | Seychelles | SC | en, fr | yes (en_SC) | Monday | regional: BBC News Africa, AllAfrica, The Africa Report |
 | Sierra Leone | SL | en | yes (en_SL) | Monday | regional: BBC News Africa, AllAfrica, The Africa Report |
 | Somalia | SO | ar, en | yes | Monday | regional: BBC News Africa, AllAfrica, AllAfrica (français) |
-| South Africa | ZA | en, af | yes | Sunday | News24, Daily Maverick, Maroela Media |
+| South Africa | ZA | en, af | yes | Sunday | Daily Maverick, Maroela Media |
 | South Sudan | SS | en, ar | yes | Monday | regional: BBC News Africa, AllAfrica, The Africa Report |
 | Sudan | SD | ar, en | yes (ar_SD) | Monday | regional: BBC News Africa, AllAfrica, AllAfrica (français) |
 | São Tomé and Príncipe | ST | pt | yes (pt_ST) | Monday | regional: BBC News Africa, AllAfrica, AllAfrica (français) |

@@ -69,7 +69,7 @@ button:disabled { opacity: .5; cursor: default; }
 
 @media (max-width: 62rem) {
   .layout { grid-template-columns: minmax(0, 1fr); }
-  .preview { position: static; order: -1; }
+  .preview { position: static; }
 }
 @media (max-width: 36rem) {
   .grid3, .grid2 { grid-template-columns: 1fr; }

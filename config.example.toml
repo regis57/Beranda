@@ -3,11 +3,11 @@
 # Every key is optional: the defaults give you a working display for Metz, France.
 
 country = "FR"          # ISO 3166-1 code: drives public holidays, week start and units
-language = "fr"         # fr, en, ja and id are translated; any other code falls back to English
+language = "fr"         # en fr de es it pt pt-BR ja id ar sw am af (others fall back to English)
                         # text, with dates still written in that language
 # subdivision = "57"    # optional region/state for regional public holidays
 # units = "metric"      # metric | imperial (default: imperial in the US, metric elsewhere)
-theme = "japan"         # japan | indonesia | france
+theme = "japan"         # japan indonesia france germany spain italy portugal brazil
 mode = "auto"           # auto (follows the sun) | light | night
 
 [location]
@@ -33,6 +33,13 @@ kind = "birth"
 [server]
 host = "0.0.0.0"
 port = 8080
+
+# News headlines at the bottom of the screen. Leave `sources` out to let Beranda choose
+# (news about your town, two media of your country, one international medium in your language).
+[news]
+enabled = true
+# sources = ["city", "franceinfo", "lemonde", "france24-fr"]   # ids: see the settings page
+# feeds = ["https://example.org/rss"]                           # any RSS or Atom link
 
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]

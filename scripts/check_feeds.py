@@ -14,6 +14,8 @@ import asyncio
 import os
 import sys
 
+import httpx
+
 from beranda.providers import news, news_catalog
 
 
@@ -21,6 +23,12 @@ async def check(source: dict, gate: asyncio.Semaphore) -> tuple[dict, str | None
     async with gate:
         try:
             items = news.parse(await news.fetch(source["url"]), source["name"])
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code == 429 and "gdeltproject" in source["url"]:
+                # GDELT limits each address to one request every few seconds; CI runners share
+                # addresses, a home Pi asking every 30 minutes does not hit this.
+                return source, None, -1
+            return source, f"HTTP {exc.response.status_code}", 0
         except Exception as exc:  # noqa: BLE001
             return source, f"{type(exc).__name__}: {str(exc)[:80]}", 0
     return source, None if items else "no items", len(items)
@@ -37,7 +45,7 @@ async def main(ids: list[str]) -> int:
             failed += 1
             print(f"FAIL  {source['id']:<22} {error}  <{source['url']}>")
         else:
-            print(f"ok    {source['id']:<22} {count:>3} items")
+            print(f"ok    {source['id']:<22} {count if count >= 0 else 'rate-limited, skipped':>3} items")
     print(f"\n{len(results) - failed}/{len(results)} feeds answer.")
     if os.environ.get("GITHUB_ACTIONS"):
         # One annotation each, readable in the pull request without opening the raw log.
