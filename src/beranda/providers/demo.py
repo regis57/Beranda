@@ -153,6 +153,10 @@ _HEADLINES = {
     "ja": ("市立図書館、開館時間を延長", "新しい自転車道、月曜に開通", "秋祭り、週末に来場者数が過去最多", "地域線に夜行列車が復活"),
     "ar": ("مكتبة المدينة تمدد ساعات العمل", "افتتاح مسار الدراجات الجديد يوم الاثنين",
            "معرض الخريف يسجل رقما قياسيا في عدد الزوار", "عودة قطار الليل إلى الخط الإقليمي"),
+    "am": ("የከተማው ቤተ መጻሕፍት የመክፈቻ ሰዓቱን አራዘመ", "አዲሱ የብስክሌት መንገድ ሰኞ ይከፈታል",
+           "የሳምንቱ መጨረሻ ትርኢት ሪከርድ ጎብኚዎችን አስተናገደ", "የምሽት ባቡር ወደ ክልሉ መስመር ተመለሰ"),
+    "af": ("Die stadsbiblioteek verleng sy oopmaaktye", "Nuwe fietsroete open Maandag",
+           "Naweekmark lok rekordgetal besoekers", "Nagtrein keer terug na die streekslyn"),
     "sw": ("Maktaba ya mji yaongeza saa za kufunguliwa", "Njia mpya ya baiskeli kufunguliwa Jumatatu",
            "Maonyesho ya wikendi yavunja rekodi ya wageni", "Treni ya usiku yarejea kwenye njia ya mkoa"),
 }
