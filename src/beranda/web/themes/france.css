@@ -1,0 +1,61 @@
+/* Theme "france" (Almanach): printed paper, navy ink, one red accent and a blue for rain.
+   The season block is the French Republican calendar: "16 Vendémiaire, Belle de nuit",
+   like the page of an almanac. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, "Times New Roman", serif;
+  --clock-weight: 200;
+  --glyph-writing: horizontal-tb;
+}
+
+:root, :root[data-mode="light"] {
+  --bg: #f6f3ec;
+  --ink: #1b2340;
+  --ink-2: rgba(27, 35, 64, 0.7);
+  --ink-3: rgba(27, 35, 64, 0.46);
+  --line: rgba(27, 35, 64, 0.16);
+  --accent: #c8372d;   /* rouge */
+  --rain: #2a4d8f;     /* bleu */
+  --warm: #cf6a4f;
+  --cool: #6f8fc0;
+  --moon-lit: #1b2340;
+  --moon-dark: rgba(27, 35, 64, 0.09);
+}
+
+:root[data-mode="night"] {
+  --bg: #0a0f1e;
+  --ink: rgba(232, 232, 240, 0.84);
+  --ink-2: rgba(232, 232, 240, 0.58);
+  --ink-3: rgba(232, 232, 240, 0.36);
+  --line: rgba(232, 232, 240, 0.13);
+  --accent: #c25a52;
+  --rain: #7a9bd6;
+  --warm: #a9604f;
+  --cool: #5675a8;
+  --moon-lit: #e9e7df;
+  --moon-dark: rgba(232, 232, 240, 0.09);
+}
+
+/* A discreet tricolour under the clock: three short bars. */
+.clock .time::after {
+  content: "";
+  display: block;
+  width: 4.2rem; height: 0.28rem; margin-top: 0.7rem;
+  background: linear-gradient(90deg, var(--rain) 0 33.3%, var(--ink-3) 33.3% 66.6%, var(--accent) 66.6% 100%);
+  border-radius: 1px;
+}
+
+/* Almanac page: double rule above and below the season. */
+.season {
+  padding: 0.8rem 0;
+  border-top: 3px double var(--line);
+  border-bottom: 3px double var(--line);
+  align-items: center;
+}
+.season-kanji { font-size: 3.6rem; font-weight: 400; letter-spacing: 0; line-height: 1; font-variant-numeric: lining-nums; }
+.seal { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 50%; font-weight: 400; }
+.season-name { font-family: var(--f-serif); font-size: 1.1rem; letter-spacing: 0; }
+.season-romaji { font-family: var(--f-serif); font-size: 1rem; font-style: italic; color: var(--ink-2); }
+.season-note { font-variant: small-caps; letter-spacing: 0.08em; }

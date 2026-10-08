@@ -14,7 +14,7 @@ import httpx
 import recurring_ical_events
 from icalendar import Calendar
 
-USER_AGENT = "Beranda/0.1 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.2 (+https://github.com/regis57/Beranda)"
 MAX_ICS_BYTES = 8 * 1024 * 1024  # a Pi 3B should not be fed a 200 MB calendar
 
 

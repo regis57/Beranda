@@ -223,10 +223,17 @@ function renderSky() {
   }
 
   const s = state.season;
-  $('season-kanji').textContent = s.kanji;
-  $('season-name').textContent = s[loadedLang === 'fr' ? 'fr' : 'en'];
-  $('season-romaji').textContent = s.romaji;
-  $('season-next').textContent = s.days_left <= 1 ? t('season.tomorrow') : t('season.in_days', { n: s.days_left });
+  const pick = (o) => (o && (o[loadedLang] || o.en)) || '';
+  $('season').dataset.kind = s.kind;
+  $('season-kanji').textContent = s.glyph;
+  $('season-kanji').lang = s.kind === 'ko' ? 'ja' : loadedLang;
+  $('season-seal').textContent = s.seal;
+  $('season-seal').lang = s.kind === 'ko' ? 'ja' : loadedLang;
+  $('season-name').textContent = pick(s.title);
+  $('season-romaji').textContent = pick(s.sub);
+  $('season-note').textContent = s.note || '';
+  $('season-next').textContent = s.days_left == null ? ''
+    : s.days_left <= 1 ? t('season.tomorrow') : t('season.in_days', { n: s.days_left });
 }
 
 // ---------------------------------------------------------------- calendar --------
@@ -393,7 +400,9 @@ async function render(online) {
 async function refresh() {
   let delay = POLL_MS;
   try {
-    const response = await fetch('/api/state', { cache: 'no-store' });
+    const forced = params.get('theme');
+    const query = forced && /^[a-z0-9-]+$/.test(forced) ? `?theme=${forced}` : '';
+    const response = await fetch(`/api/state${query}`, { cache: 'no-store' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state = await response.json();
     await render(true);

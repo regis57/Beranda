@@ -45,5 +45,73 @@
     "80": "Averses légères", "81": "Averses", "82": "Fortes averses",
     "85": "Averses de neige", "86": "Fortes averses de neige",
     "95": "Orage", "96": "Orage et grêle", "99": "Fort orage et grêle"
+  },
+  "admin": {
+    "title": "Réglages",
+    "open_display": "Ouvrir l'affichage ↗",
+    "place": "Où êtes-vous ?",
+    "place_hint": "La météo, le lever du soleil et la lune utilisent ce lieu. Cherchez une ville, ou saisissez les coordonnées.",
+    "search_placeholder": "Chercher une ville…",
+    "search": "Chercher",
+    "name": "Nom affiché",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "timezone": "Fuseau horaire",
+    "use_device_tz": "Celui de cet appareil",
+    "no_result": "Aucune ville trouvée.",
+    "search_failed": "La recherche demande un accès internet. Vous pouvez saisir les coordonnées.",
+    "region": "Pays et langue",
+    "country": "Pays",
+    "subdivision": "Région (jours fériés)",
+    "language": "Langue",
+    "units": "Unités",
+    "metric": "Métrique (°C, km/h)",
+    "imperial": "Impériales (°F, mph)",
+    "none": "Aucune",
+    "region_hint": "Le pays détermine les jours fériés et le premier jour de la semaine.",
+    "look": "Apparence",
+    "auto": "Auto (suit le soleil)",
+    "light": "Clair",
+    "night": "Nuit",
+    "themes": {
+      "japan": {
+        "name": "Japon",
+        "desc": "Papier washi, vermillon, les 72 micro-saisons."
+      },
+      "indonesia": {
+        "name": "Indonésie",
+        "desc": "Bruns de batik et indigo, calendrier javanais mangsa."
+      },
+      "france": {
+        "name": "France",
+        "desc": "Papier d'almanach, bleu marine et rouge, calendrier républicain."
+      }
+    },
+    "calendar": "Agenda",
+    "calendar_hint": "Collez l'adresse secrète iCal de votre agenda Google, ou le lien d'un agenda iCloud / Outlook. Lecture seule. Traitez ces liens comme des mots de passe.",
+    "ics_placeholder": "https://… .ics",
+    "add": "Ajouter un agenda",
+    "test": "Tester",
+    "remove": "Retirer",
+    "test_ok": "{n} événements dans les 60 prochains jours. {next}",
+    "test_fail": "Lecture impossible ({err}).",
+    "key_dates": "Dates qui comptent",
+    "key_dates_hint": "Naissances, souvenirs, anniversaires. Avec l'année (2018-06-02) l'affichage montre le nombre d'années ; sans (06-02) la date revient chaque année.",
+    "label": "Nom",
+    "add_date": "Ajouter une date",
+    "security": "Accès",
+    "pin": "Code PIN admin (facultatif)",
+    "pin_hint": "Laissez vide pour ne rien changer. Cette page ne s'ouvre que depuis votre réseau local ; un code ajoute un verrou.",
+    "save": "Enregistrer",
+    "saved": "Enregistré. L'affichage se met à jour en moins d'une minute.",
+    "unsaved": "Modifications non enregistrées",
+    "error": "Erreur",
+    "demo_readonly": "Mode démo : vous pouvez regarder, rien n'est enregistré.",
+    "preview": "Aperçu",
+    "preview_hint": "Thème, mode et langue changent en direct ; le reste après l'enregistrement.",
+    "enter_pin": "Saisissez le code PIN admin",
+    "unlock": "Déverrouiller",
+    "pin_wrong": "Code incorrect.",
+    "forbidden": "Ouvrez cette page depuis un appareil du même réseau que le miroir."
   }
 }

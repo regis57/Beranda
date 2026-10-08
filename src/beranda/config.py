@@ -55,6 +55,7 @@ class Config:
     host: str = "0.0.0.0"
     port: int = 8080
     cache_dir: Path = Path.home() / ".cache" / "beranda"
+    admin_pin: str = ""  # optional PIN for the admin page; empty = open to the home network
 
     @property
     def week_start(self) -> int:
@@ -116,6 +117,7 @@ def from_dict(data: dict) -> Config:
         host=server.get("host", "0.0.0.0"),
         port=int(server.get("port", 8080)),
         cache_dir=cache_dir,
+        admin_pin=str(data.get("admin", {}).get("pin", "")),
     )
 
 
@@ -136,3 +138,35 @@ def load(path: Path | None = None) -> Config:
         return Config()
     with open(path, "rb") as fh:
         return from_dict(tomllib.load(fh))
+
+
+DEFAULT_CONFIG_PATH = Path.home() / ".config" / "beranda" / "config.toml"
+
+
+def to_dict(cfg: Config) -> dict:
+    """The inverse of from_dict: what we write back to config.toml."""
+    keys = []
+    for k in cfg.key_dates:
+        date_text = f"{k.year:04d}-{k.month:02d}-{k.day:02d}" if k.year else f"{k.month:02d}-{k.day:02d}"
+        keys.append({"date": date_text, "label": k.label, "kind": k.kind})
+    out: dict = {
+        "country": cfg.country,
+        "language": cfg.language,
+        "units": cfg.units,
+        "theme": cfg.theme,
+        "mode": cfg.mode,
+        "location": {
+            "name": cfg.location.name,
+            "latitude": cfg.location.latitude,
+            "longitude": cfg.location.longitude,
+            "timezone": cfg.location.timezone,
+        },
+        "calendar": {"ics_urls": list(cfg.ics_urls)},
+        "key_dates": keys,
+        "server": {"host": cfg.host, "port": cfg.port},
+    }
+    if cfg.subdivision:
+        out["subdivision"] = cfg.subdivision
+    if cfg.admin_pin:
+        out["admin"] = {"pin": cfg.admin_pin}
+    return out

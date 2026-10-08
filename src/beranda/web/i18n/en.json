@@ -45,5 +45,73 @@
     "80": "Light showers", "81": "Showers", "82": "Heavy showers",
     "85": "Snow showers", "86": "Heavy snow showers",
     "95": "Thunderstorm", "96": "Thunderstorm with hail", "99": "Severe thunderstorm with hail"
+  },
+  "admin": {
+    "title": "Settings",
+    "open_display": "Open the display ↗",
+    "place": "Where are you?",
+    "place_hint": "Weather, sunrise and moon use this place. Search a town, or type the coordinates.",
+    "search_placeholder": "Search a town…",
+    "search": "Search",
+    "name": "Name shown",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "timezone": "Time zone",
+    "use_device_tz": "Use this device's",
+    "no_result": "No town found.",
+    "search_failed": "Search needs internet access. You can type the coordinates instead.",
+    "region": "Country and language",
+    "country": "Country",
+    "subdivision": "Region (holidays)",
+    "language": "Language",
+    "units": "Units",
+    "metric": "Metric (°C, km/h)",
+    "imperial": "Imperial (°F, mph)",
+    "none": "None",
+    "region_hint": "The country sets the public holidays and the first day of the week.",
+    "look": "Look",
+    "auto": "Auto (follows the sun)",
+    "light": "Light",
+    "night": "Night",
+    "themes": {
+      "japan": {
+        "name": "Japan",
+        "desc": "Washi paper, vermilion, the 72 micro-seasons."
+      },
+      "indonesia": {
+        "name": "Indonesia",
+        "desc": "Batik browns and indigo, the Javanese mangsa calendar."
+      },
+      "france": {
+        "name": "France",
+        "desc": "Almanac paper, navy and red, the Republican calendar."
+      }
+    },
+    "calendar": "Agenda",
+    "calendar_hint": "Paste the secret iCal address of your Google calendar, or the link of an iCloud / Outlook calendar. Read-only. Treat these links like passwords.",
+    "ics_placeholder": "https://… .ics",
+    "add": "Add a calendar",
+    "test": "Test",
+    "remove": "Remove",
+    "test_ok": "{n} events in the next 60 days. {next}",
+    "test_fail": "Could not read it ({err}).",
+    "key_dates": "Dates that matter",
+    "key_dates_hint": "Births, remembrances, anniversaries. With a year (2018-06-02) the display shows the number of years; without (06-02) it repeats every year.",
+    "label": "Name",
+    "add_date": "Add a date",
+    "security": "Access",
+    "pin": "Admin PIN (optional)",
+    "pin_hint": "Leave empty to keep it as is. This page only opens from your home network; a PIN adds one more lock.",
+    "save": "Save",
+    "saved": "Saved. The display updates within a minute.",
+    "unsaved": "Unsaved changes",
+    "error": "Error",
+    "demo_readonly": "Demo mode: you can look, nothing is saved.",
+    "preview": "Preview",
+    "preview_hint": "Theme, mode and language update live; the rest after saving.",
+    "enter_pin": "Enter the admin PIN",
+    "unlock": "Unlock",
+    "pin_wrong": "Wrong PIN.",
+    "forbidden": "Open this page from a device on the same network as the mirror."
   }
 }

@@ -3,11 +3,11 @@
 # Every key is optional: the defaults give you a working display for Metz, France.
 
 country = "FR"          # ISO 3166-1 code: drives public holidays, week start and units
-language = "fr"         # fr, en and ja are translated; any other code falls back to English
+language = "fr"         # fr, en, ja and id are translated; any other code falls back to English
                         # text, with dates still written in that language
 # subdivision = "57"    # optional region/state for regional public holidays
 # units = "metric"      # metric | imperial (default: imperial in the US, metric elsewhere)
-theme = "japan"
+theme = "japan"         # japan | indonesia | france
 mode = "auto"           # auto (follows the sun) | light | night
 
 [location]
@@ -33,3 +33,7 @@ kind = "birth"
 [server]
 host = "0.0.0.0"
 port = 8080
+
+# Optional: a PIN for the /admin page. That page only opens from your home network anyway.
+# [admin]
+# pin = "2468"
