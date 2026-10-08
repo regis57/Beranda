@@ -44,8 +44,9 @@ async def main(ids: list[str]) -> int:
         bad = [f"{s['id']}: {e}" for s, e, _ in results if e]
         good = [f"{s['id']} ({n})" for s, e, n in results if not e]
         print(f"::notice title={len(good)} feeds answer::" + ", ".join(good))
-        if bad:
-            print(f"::error title={len(bad)} feeds fail::" + "%0A".join(bad))
+        # GitHub keeps only a few lines per annotation: one annotation per four failures.
+        for i in range(0, len(bad), 4):
+            print(f"::error title=feeds fail ({i + 1}-{min(i + 4, len(bad))} of {len(bad)})::" + "%0A".join(bad[i : i + 4]))
     return 1 if failed else 0
 
 
