@@ -24,7 +24,7 @@ for file in "$requests"/*; do
             install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
             install -m 0755 "$PREFIX/src/system/beranda-tidy" "$PREFIX/bin/beranda-tidy"
             # keep the SD card from filling up (caches, old versions, log size, swap file)
-            PREFIX="$PREFIX" "$PREFIX/bin/beranda-tidy" || true
+            env PREFIX="$PREFIX" "$PREFIX/bin/beranda-tidy" || true
             sed -i "s/^COMMIT=.*/COMMIT=$(git -C "$PREFIX/src" rev-parse --short HEAD)/" /etc/beranda/install.env
             systemctl restart beranda.service
             systemctl try-restart beranda-kiosk.service

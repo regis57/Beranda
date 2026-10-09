@@ -172,7 +172,7 @@ change, or after *Start over*, which brings the port back to 8080). Then, as nee
 ## Help, contribute, support
 
 - **Stuck?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), or [open an issue](https://github.com/regis57/Beranda/issues) and attach the **diagnostic file** (settings page → *Advanced user* → *Download the diagnostic file*; it holds no password or private link).
-- **Contribute**: `pip install -e ".[dev]"`, then `pytest` and `ruff check src tests scripts`. A new language is one JSON file in `src/beranda/web/i18n/`. [Roadmap](docs/ROADMAP.md).
+- **Contribute**: `pip install -e ".[dev]"`, then `pytest` and `ruff check src tests scripts`. A new language is one JSON file in `src/beranda/web/i18n/`. [Roadmap and status](https://github.com/regis57/Beranda/wiki/Roadmap) · [Wiki](https://github.com/regis57/Beranda/wiki).
 - **Support**: Beranda stays free and open source. If it brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.
 
 ## Credits

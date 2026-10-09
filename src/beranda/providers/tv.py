@@ -36,16 +36,16 @@ def _parse_time(raw: str) -> datetime | None:
     m = _TIME.match(raw.strip())
     if not m:
         return None
-    try:
-        naive = datetime.strptime(m.group(1), "%Y%m%d%H%M%S")  # noqa: DTZ007 - made aware just below
+    d = m.group(1)
+    try:  # read as UTC first, then moved by the zone written after it
+        when = datetime(int(d[0:4]), int(d[4:6]), int(d[6:8]), int(d[8:10]), int(d[10:12]), int(d[12:14]), tzinfo=UTC)
     except ValueError:  # 14 digits but not a real date ("...209000"): one bad line must not sink the guide
         return None
     zone = m.group(2)
     if not zone or zone == "Z":
-        return naive.replace(tzinfo=UTC)
+        return when
     sign = 1 if zone[0] == "+" else -1
-    offset = timedelta(hours=int(zone[1:3]), minutes=int(zone[3:5])) * sign
-    return (naive - offset).replace(tzinfo=UTC)
+    return when - timedelta(hours=int(zone[1:3]), minutes=int(zone[3:5])) * sign
 
 
 class _Capped(io.RawIOBase):

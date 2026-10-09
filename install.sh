@@ -165,7 +165,7 @@ fi
 name="$(hostname 2>/dev/null || echo raspberrypi)"
 ip="$(hostname -I 2>/dev/null | awk '{print $1}')"
 # the port saved in the settings page ("Advanced user"), 8080 unless it was changed
-port="$(sed -n '/^\[server\]/,/^\[/{s/^port *= *\([0-9]\{1,5\}\).*/\1/p}' "$CONFDIR/config.toml" 2>/dev/null | head -n 1)"
+port="$(sed -n '/^\[server\]/,/^\[/{s/^port *= *\([0-9]\{1,5\}\).*/\1/p}' "$CONFDIR/config.toml" 2>/dev/null | head -n 1 || true)"
 port="${port:-8080}"
 echo
 say "Beranda is installed."
