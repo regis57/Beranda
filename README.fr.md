@@ -47,7 +47,7 @@ Il faut Python 3.11 ou plus récent. Sans `--demo`, vous avez la vraie météo e
 
 **Il vous faut** : un Raspberry Pi (le 3B+ ou plus récent est le choix confortable ; les modèles
 plus anciens marchent en mode léger, voir les [limites](#ce-que-votre-raspberry-pi-peut-contenir)),
-une carte microSD de 8 Go ou plus, un écran HDMI, et votre téléphone ou ordinateur sur le même Wi-Fi.
+une carte microSD de 8 Go ou plus (16 Go est plus confortable), un écran HDMI, et votre téléphone ou ordinateur sur le même Wi-Fi.
 
 1. **Préparez la carte** avec [Raspberry Pi Imager](https://www.raspberrypi.com/software/) : choisissez
    *Raspberry Pi OS Lite (64-bit)*. Dans la fenêtre de personnalisation, donnez un nom (par exemple
@@ -165,6 +165,7 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 | le redémarrer | `sudo systemctl restart beranda beranda-kiosk` |
 | le mettre à jour ou le réparer (garde vos réglages) | `curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh \| sudo bash` |
 | lire le port utilisé | `sudo grep -A3 '\[server\]' /etc/beranda/config.toml` |
+| libérer de la place sur la carte SD | `sudo apt clean && sudo apt autoremove --purge && sudo journalctl --vacuum-size=50M` |
 
 ## Vie privée
 
