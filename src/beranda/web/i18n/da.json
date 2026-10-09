@@ -81,5 +81,9 @@
     "95": "Tordenvejr",
     "96": "Tordenvejr med hagl",
     "99": "Kraftigt tordenvejr med hagl"
+  },
+  "setup": {
+    "title": "Indstil mig fra din telefon",
+    "text": "Scan koden, eller åbn adressen på en enhed på samme wi-fi:"
   }
 }

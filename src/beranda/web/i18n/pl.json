@@ -81,5 +81,9 @@
     "95": "Burza",
     "96": "Burza z gradem",
     "99": "Silna burza z gradem"
+  },
+  "setup": {
+    "title": "Skonfiguruj mnie z telefonu",
+    "text": "Zeskanuj kod lub otwórz ten adres na urządzeniu w tej samej sieci Wi-Fi:"
   }
 }

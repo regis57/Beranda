@@ -81,5 +81,9 @@
     "95": "Temporale",
     "96": "Temporale con grandine",
     "99": "Forte temporale con grandine"
+  },
+  "setup": {
+    "title": "Configurami dal telefono",
+    "text": "Scansiona questo codice o apri questo indirizzo su un dispositivo collegato allo stesso Wi-Fi:"
   }
 }

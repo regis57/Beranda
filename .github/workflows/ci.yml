@@ -21,3 +21,28 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check src tests scripts
       - run: pytest -q
+
+  # The installer, for real, on a fresh Ubuntu machine with systemd (all but the screen part).
+  installer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck install.sh uninstall.sh system/beranda-action system/beranda-kiosk
+      - run: sudo bash install.sh --source "$PWD" --no-screen
+      - name: The server runs as its own user and answers
+        run: |
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8080/api/health && break; sleep 1; done
+          systemctl is-active beranda.service beranda-actions.path
+          test "$(ps -o user= -C beranda | head -1)" = beranda || ps aux | grep -i beranda
+          curl -fsS http://127.0.0.1:8080/api/state | grep -q '"needed":true'
+      - name: The settings page saves, and a request reaches the root service
+        run: |
+          curl -fsS -X PUT http://127.0.0.1:8080/api/admin/config -H 'content-type: application/json' \
+            -d '{"country":"FR","language":"fr","location":{"name":"Metz","latitude":49.12,"longitude":6.18,"timezone":"Europe/Paris"}}'
+          sudo test -f /etc/beranda/config.toml
+          curl -fsS -X POST http://127.0.0.1:8080/api/admin/system/restart-screen
+          sleep 3
+          test -z "$(sudo ls /var/lib/beranda/requests)"
+          sudo journalctl -u beranda-actions.service --no-pager | grep -q "restarting the screen"
+      - run: beranda doctor || true
+      - run: sudo bash /opt/beranda/src/uninstall.sh --purge && ! systemctl is-active beranda.service

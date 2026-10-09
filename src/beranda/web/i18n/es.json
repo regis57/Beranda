@@ -81,5 +81,9 @@
     "95": "Tormenta",
     "96": "Tormenta con granizo",
     "99": "Tormenta fuerte con granizo"
+  },
+  "setup": {
+    "title": "Configúreme desde su móvil",
+    "text": "Escanee este código o abra esta dirección en un móvil u ordenador conectado a la misma wifi:"
   }
 }

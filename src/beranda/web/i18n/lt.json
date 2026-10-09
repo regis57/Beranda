@@ -81,5 +81,9 @@
     "95": "Perkūnija",
     "96": "Perkūnija su kruša",
     "99": "Stipri perkūnija su kruša"
+  },
+  "setup": {
+    "title": "Nustatykite mane telefonu",
+    "text": "Nuskaitykite kodą arba atidarykite adresą įrenginyje, prijungtame prie to paties „Wi-Fi“:"
   }
 }

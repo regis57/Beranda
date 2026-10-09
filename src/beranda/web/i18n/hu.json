@@ -81,5 +81,9 @@
     "95": "Zivatar",
     "96": "Zivatar jégesővel",
     "99": "Heves zivatar jégesővel"
+  },
+  "setup": {
+    "title": "Állíts be a telefonodról",
+    "text": "Olvasd be a kódot, vagy nyisd meg a címet egy ugyanazon a Wi-Fi-n lévő eszközön:"
   }
 }

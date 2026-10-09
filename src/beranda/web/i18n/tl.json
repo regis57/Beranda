@@ -81,5 +81,9 @@
     "95": "Bagyong may kulog",
     "96": "Bagyong may kulog at yelo",
     "99": "Malakas na bagyong may kulog at yelo"
+  },
+  "setup": {
+    "title": "I-set up ako mula sa iyong telepono",
+    "text": "I-scan ang code na ito, o buksan ang address na ito sa device na nasa parehong Wi-Fi:"
   }
 }

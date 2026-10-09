@@ -81,5 +81,9 @@
     "95": "Grmljavina",
     "96": "Grmljavina s tučom",
     "99": "Jaka grmljavina s tučom"
+  },
+  "setup": {
+    "title": "Postavite me s mobitela",
+    "text": "Skenirajte kod ili otvorite ovu adresu na uređaju u istoj Wi-Fi mreži:"
   }
 }

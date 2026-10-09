@@ -453,6 +453,21 @@ function renderNews() {
   newsTimer = setTimeout(next, NEWS_MS);
 }
 
+// ---------------------------------------------------------------- first start ---------
+function renderSetup() {
+  const setup = state.setup || { needed: false };
+  $('setup').hidden = !setup.needed;
+  if (!setup.needed) return;
+  $('setup-title').textContent = t('setup.title');
+  $('setup-help').textContent = t('setup.text');
+  $('setup-urls').replaceChildren(...setup.urls.map((url) => {
+    const li = document.createElement('li');
+    li.textContent = url.replace(/^https?:\/\//, '');
+    return li;
+  }));
+  if (!$('setup-qr').getAttribute('src')) $('setup-qr').setAttribute('src', '/api/setup-qr.svg');
+}
+
 // ---------------------------------------------------------------- status & loop ------
 function renderStatus(online) {
   const demo = $('badge-demo');
@@ -500,6 +515,8 @@ async function render(online) {
   renderCalendar();
   renderUpcoming();
   renderNews();
+  renderSetup();
+  document.body.dataset.sleep = String(Boolean(state.sleep));
   renderStatus(online);
   document.body.dataset.ready = 'true'; // handy for screenshots and tests
 }

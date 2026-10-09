@@ -120,8 +120,31 @@
         </div>
       </section>
 
+      <section class="card" id="sec-screen">
+        <h2><span class="num">7</span><span data-i18n="admin.screen"></span></h2>
+        <p class="hint" data-i18n="admin.screen_hint"></p>
+        <div class="grid3">
+          <label><span data-i18n="admin.rotate"></span><select id="rotate"></select></label>
+          <label><span data-i18n="admin.off_at"></span><input id="off-at" type="time"></label>
+          <label><span data-i18n="admin.on_at"></span><input id="on-at" type="time"></label>
+        </div>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.screen_help"></p></details>
+      </section>
+
+      <section class="card" id="sec-system">
+        <h2><span class="num">8</span><span data-i18n="admin.system"></span></h2>
+        <p class="hint" id="sys-version"></p>
+        <div class="row wrap" id="sys-buttons">
+          <button type="button" id="sys-check" data-i18n="admin.check_updates"></button>
+          <button type="button" id="sys-update" data-action="update" data-i18n="admin.update_now" hidden></button>
+          <button type="button" id="sys-screen" data-action="restart-screen" data-i18n="admin.restart_screen"></button>
+          <button type="button" id="sys-reboot" data-action="reboot" data-i18n="admin.reboot"></button>
+        </div>
+        <p class="hint" id="sys-message" role="status"></p>
+      </section>
+
       <section class="card" id="sec-sec">
-        <h2><span class="num">7</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">9</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

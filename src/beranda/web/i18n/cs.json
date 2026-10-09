@@ -81,5 +81,9 @@
     "95": "Bouřka",
     "96": "Bouřka s kroupami",
     "99": "Silná bouřka s kroupami"
+  },
+  "setup": {
+    "title": "Nastavte mě z telefonu",
+    "text": "Naskenujte kód nebo otevřete tuto adresu na zařízení ve stejné Wi-Fi:"
   }
 }

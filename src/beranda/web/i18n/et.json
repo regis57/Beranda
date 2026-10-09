@@ -81,5 +81,9 @@
     "95": "Äike",
     "96": "Äike rahega",
     "99": "Tugev äike rahega"
+  },
+  "setup": {
+    "title": "Seadista mind telefonist",
+    "text": "Skanni kood või ava see aadress samas Wi-Fi võrgus olevas seadmes:"
   }
 }

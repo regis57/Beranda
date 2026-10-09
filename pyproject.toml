@@ -27,6 +27,7 @@ dependencies = [
   "astral>=3.2",
   "tomli-w>=1.0",
   "defusedxml>=0.7",
+  "segno>=1.5",
 ]
 
 [project.optional-dependencies]

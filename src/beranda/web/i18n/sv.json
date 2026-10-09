@@ -81,5 +81,9 @@
     "95": "Åska",
     "96": "Åska med hagel",
     "99": "Kraftig åska med hagel"
+  },
+  "setup": {
+    "title": "Ställ in mig från telefonen",
+    "text": "Skanna koden eller öppna adressen på en enhet i samma wifi:"
   }
 }

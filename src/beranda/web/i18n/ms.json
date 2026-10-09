@@ -81,5 +81,9 @@
     "95": "Ribut petir",
     "96": "Ribut petir dengan hujan batu",
     "99": "Ribut petir kuat dengan hujan batu"
+  },
+  "setup": {
+    "title": "Tetapkan saya dari telefon anda",
+    "text": "Imbas kod ini, atau buka alamat ini pada peranti dalam Wi-Fi yang sama:"
   }
 }

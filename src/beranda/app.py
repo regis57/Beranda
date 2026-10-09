@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import calendar as _calendar
 import hashlib
+import io
 import logging
 from collections.abc import Callable
 from dataclasses import replace
@@ -13,10 +14,10 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
-from . import __version__
+from . import __version__, system
 from .admin import Runtime
 from .admin import router as admin_router
 from .cache import Cache
@@ -100,7 +101,7 @@ async def build_news(cfg: Config, cache: Cache, now: datetime, errors: dict, sta
 
 
 async def build_state(
-    cfg: Config, cache: Cache, now: datetime, theme: str | None = None
+    cfg: Config, cache: Cache, now: datetime, theme: str | None = None, setup: dict | None = None
 ) -> dict:
     loc = cfg.location
     today = now.date()
@@ -180,6 +181,10 @@ async def build_state(
         "events": events,
         "special_days": days,
         "news": news,
+        # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
+        "sleep": not system.screen_should_be_on(cfg, now),
+        # First start: the screen shows where to open the settings, with a QR code.
+        "setup": setup or {"needed": False, "urls": []},
         "window": {"start": start.isoformat(), "end": end.isoformat()},
         "stale": stale,
         "errors": errors,
@@ -205,6 +210,30 @@ def create_app(
         response.headers["Referrer-Policy"] = "no-referrer"
         return response
 
+    def setup_info() -> dict:
+        needed = (
+            not runtime.cfg.demo
+            and runtime.config_path is not None
+            and not runtime.config_path.exists()
+        )
+        return {"needed": needed, "urls": system.lan_addresses(runtime.cfg.port) if needed else []}
+
+    @app.get("/api/screen")
+    async def screen() -> dict:
+        """Read every 30 s by the kiosk script on the Pi."""
+        cfg = runtime.cfg
+        return {"on": system.screen_should_be_on(cfg, clock()), "rotate": cfg.screen_rotate}
+
+    @app.get("/api/setup-qr.svg")
+    async def setup_qr() -> Response:
+        import segno
+
+        urls = system.lan_addresses(runtime.cfg.port) or ["http://localhost:8080/admin"]
+        qr = segno.make(urls[-1], error="m")  # the numeric address works even without .local
+        buffer = io.BytesIO()
+        qr.save(buffer, kind="svg", scale=8, border=2, dark="#111111", light="#ffffff", xmldecl=False)
+        return Response(buffer.getvalue(), media_type="image/svg+xml", headers={"Cache-Control": "no-store"})
+
     @app.get("/api/health")
     async def health() -> dict:
         return {"status": "ok", "version": __version__}
@@ -213,7 +242,7 @@ def create_app(
     async def state(theme: str | None = None) -> JSONResponse:
         # `theme` lets the admin preview another theme with its own seasonal calendar.
         theme = theme if theme in THEMES else None
-        data = await build_state(runtime.cfg, cache, clock(), theme)
+        data = await build_state(runtime.cfg, cache, clock(), theme, setup_info())
         return JSONResponse(data, headers={"Cache-Control": "no-store"})
 
     @app.get("/")

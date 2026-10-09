@@ -354,6 +354,57 @@ function renderNews() {
   refreshNews();
 }
 
+// ------------------------------------------------------------------ 7. screen ---
+function renderScreen() {
+  const screen = cfg.screen || { rotate: 0, off: '', on: '' };
+  fill($('rotate'), [0, 90, 180, 270].map((r) => [String(r), t(`admin.rotate_${r}`)]), String(screen.rotate || 0));
+  $('off-at').value = screen.off || '';
+  $('on-at').value = screen.on || '';
+}
+
+// ------------------------------------------------------------------ 8. system ---
+// Buttons that change the Pi ask for a second click instead of a pop-up.
+function armed(button, run) {
+  button.addEventListener('click', async () => {
+    if (!button.classList.contains('confirm')) {
+      const label = button.textContent;
+      button.classList.add('confirm');
+      button.textContent = t('admin.confirm');
+      setTimeout(() => { button.classList.remove('confirm'); button.textContent = label; }, 5000);
+      return;
+    }
+    button.classList.remove('confirm');
+    button.textContent = t(button.dataset.i18n);
+    await run();
+  });
+}
+async function renderSystem() {
+  const msg = $('sys-message');
+  try {
+    const info = await api('/system');
+    $('sys-version').textContent = t('admin.version', { v: info.version }) + (info.commit ? ` (${info.commit})` : '');
+    for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) $(id).disabled = !info.actions;
+    $('sys-screen').hidden = !info.screen;
+    if (!info.installed) msg.textContent = t('admin.not_installed');
+  } catch (e) { msg.textContent = e.message; }
+}
+async function checkUpdates() {
+  const msg = $('sys-message');
+  msg.textContent = '…';
+  try {
+    const r = await api('/system/latest');
+    if (!r.latest) { msg.textContent = t('admin.search_failed'); return; }
+    msg.textContent = r.update_available ? t('admin.update_available', { v: r.latest }) : t('admin.up_to_date');
+    $('sys-update').hidden = !r.update_available;
+  } catch (e) { msg.textContent = e.message; }
+}
+async function systemAction(action) {
+  try {
+    await api(`/system/${action}`, { method: 'POST' });
+    $('sys-message').textContent = t(`admin.requested_${action.replace('-', '_')}`);
+  } catch (e) { $('sys-message').textContent = e.message; }
+}
+
 // ------------------------------------------------------------------ save -----
 function collect() {
   const body = {
@@ -379,6 +430,7 @@ function collect() {
       feeds: [...$('feed-list').querySelectorAll('input')].map((i) => i.value.trim()).filter(Boolean),
     },
   };
+  body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
   return body;
@@ -414,7 +466,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -457,6 +509,8 @@ async function boot() {
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
+  $('sys-check').addEventListener('click', checkUpdates);
+  for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) armed($(id), () => systemAction($(id).dataset.action));
   $('tz-device').addEventListener('click', () => {
     fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), Intl.DateTimeFormat().resolvedOptions().timeZone);
     markDirty();

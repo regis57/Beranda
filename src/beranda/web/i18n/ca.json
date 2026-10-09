@@ -81,5 +81,9 @@
     "95": "Tempesta",
     "96": "Tempesta amb calamarsa",
     "99": "Tempesta forta amb calamarsa"
+  },
+  "setup": {
+    "title": "Configura'm des del mòbil",
+    "text": "Escaneja aquest codi o obre aquesta adreça en un dispositiu connectat a la mateixa wifi:"
   }
 }

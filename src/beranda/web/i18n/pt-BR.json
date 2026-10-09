@@ -29,5 +29,9 @@
     "95": "Tempestade",
     "96": "Tempestade com granizo",
     "99": "Tempestade forte com granizo"
+  },
+  "setup": {
+    "title": "Configure pelo celular",
+    "text": "Escaneie este código ou abra este endereço num aparelho conectado ao mesmo Wi-Fi:"
   }
 }

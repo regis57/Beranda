@@ -81,5 +81,9 @@
     "95": "Onweer",
     "96": "Onweer met hagel",
     "99": "Zwaar onweer met hagel"
+  },
+  "setup": {
+    "title": "Stel me in met je telefoon",
+    "text": "Scan deze code of open dit adres op een apparaat met dezelfde wifi:"
   }
 }

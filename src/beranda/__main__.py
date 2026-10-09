@@ -15,12 +15,19 @@ from .app import create_app
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="beranda", description="Smart mirror dashboard server")
+    parser.add_argument("command", nargs="?", choices=["serve", "doctor"], default="serve",
+                        help="serve (default) or doctor: check the installation")
     parser.add_argument("--config", type=Path, help="path to config.toml")
     parser.add_argument("--demo", action="store_true", help="show invented weather and agenda")
     parser.add_argument("--host", help="address to listen on (default from config)")
     parser.add_argument("--port", type=int, help="port to listen on (default from config)")
     parser.add_argument("--version", action="version", version=f"beranda {__version__}")
     args = parser.parse_args(argv)
+
+    if args.command == "doctor":
+        from .doctor import run
+
+        raise SystemExit(run())
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     config_path = args.config or config.find_config_path() or config.DEFAULT_CONFIG_PATH

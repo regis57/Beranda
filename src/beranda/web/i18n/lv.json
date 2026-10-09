@@ -81,5 +81,9 @@
     "95": "Pērkona negaiss",
     "96": "Negaiss ar krusu",
     "99": "Stiprs negaiss ar krusu"
+  },
+  "setup": {
+    "title": "Iestatiet mani no tālruņa",
+    "text": "Noskenējiet kodu vai atveriet adresi ierīcē tajā pašā Wi-Fi tīklā:"
   }
 }

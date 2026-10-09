@@ -81,5 +81,9 @@
     "95": "Nevihta",
     "96": "Nevihta s točo",
     "99": "Močna nevihta s točo"
+  },
+  "setup": {
+    "title": "Nastavite me s telefonom",
+    "text": "Skenirajte kodo ali odprite ta naslov na napravi v istem omrežju Wi-Fi:"
   }
 }

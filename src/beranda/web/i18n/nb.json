@@ -81,5 +81,9 @@
     "95": "Torden",
     "96": "Torden med hagl",
     "99": "Kraftig torden med hagl"
+  },
+  "setup": {
+    "title": "Sett meg opp fra telefonen",
+    "text": "Skann koden, eller åpne adressen på en enhet på samme wifi:"
   }
 }

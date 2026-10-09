@@ -81,5 +81,9 @@
     "95": "Loraj",
     "96": "Loraj ak grèl",
     "99": "Gwo loraj ak grèl"
+  },
+  "setup": {
+    "title": "Konfigire m ak telefòn ou",
+    "text": "Eskane kòd sa a, oswa louvri adrès sa a sou yon aparèy ki sou menm Wi-Fi a:"
   }
 }

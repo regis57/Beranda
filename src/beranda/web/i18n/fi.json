@@ -81,5 +81,9 @@
     "95": "Ukkosta",
     "96": "Ukkosta ja rakeita",
     "99": "Voimakasta ukkosta ja rakeita"
+  },
+  "setup": {
+    "title": "Määritä minut puhelimella",
+    "text": "Skannaa koodi tai avaa osoite laitteella, joka on samassa wifi-verkossa:"
   }
 }

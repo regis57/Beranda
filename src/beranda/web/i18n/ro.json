@@ -81,5 +81,9 @@
     "95": "Furtună",
     "96": "Furtună cu grindină",
     "99": "Furtună puternică cu grindină"
+  },
+  "setup": {
+    "title": "Configurează-mă de pe telefon",
+    "text": "Scanează codul sau deschide această adresă pe un dispozitiv conectat la aceeași rețea Wi-Fi:"
   }
 }

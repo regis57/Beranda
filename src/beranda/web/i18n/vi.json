@@ -81,5 +81,9 @@
     "95": "Dông",
     "96": "Dông kèm mưa đá",
     "99": "Dông mạnh kèm mưa đá"
+  },
+  "setup": {
+    "title": "Cài đặt từ điện thoại của bạn",
+    "text": "Quét mã này, hoặc mở địa chỉ này trên thiết bị cùng mạng Wi-Fi:"
   }
 }

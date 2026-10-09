@@ -1,0 +1,8 @@
+# Carries out the requests of the settings page. Runs as root, but only ever runs the fixed
+# actions of beranda-action: the web server itself never gets root rights.
+[Unit]
+Description=Beranda requests from the settings page
+
+[Service]
+Type=oneshot
+ExecStart=@PREFIX@/bin/beranda-action

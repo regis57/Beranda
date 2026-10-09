@@ -81,5 +81,9 @@
     "95": "Gewitter",
     "96": "Gewitter mit Hagel",
     "99": "Schweres Gewitter mit Hagel"
+  },
+  "setup": {
+    "title": "Richten Sie mich mit dem Handy ein",
+    "text": "Scannen Sie diesen Code oder öffnen Sie diese Adresse auf einem Gerät im selben WLAN:"
   }
 }
