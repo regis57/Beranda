@@ -25,7 +25,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from . import __version__, system
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics, news_catalog, seasons
+from .providers import calendar_ics, news_catalog, photos, seasons
 from .providers import countries as world
 from .providers import news as news_mod
 
@@ -186,6 +186,11 @@ def router(runtime: Runtime) -> APIRouter:
         except Exception as exc:  # noqa: BLE001 - class name only: the URL is a secret
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "count": len(events), "next": [e["title"] for e in events[:3]]}
+
+    @api.get("/photos-count", dependencies=[Depends(guard)])
+    async def photos_count(folder: str) -> dict:
+        """Live feedback while the user types a folder path, before they save it."""
+        return {"count": len(photos.list_photos(folder))}
 
     @api.get("/system", dependencies=[Depends(guard)])
     async def system_info() -> dict:

@@ -453,6 +453,50 @@ function renderNews() {
   newsTimer = setTimeout(next, NEWS_MS);
 }
 
+// ---------------------------------------------------------------- photo carousel ------
+// Alternates full-screen photo / dashboard, each for `interval` seconds, so a mirror with
+// no folder configured never shows this at all (names stays empty and the timer is skipped).
+let photosTimer = null;
+let photosRunning = false;
+let photosIndex = -1;
+let photosNames = [];
+
+function renderPhotos() {
+  const names = state?.photos?.names || [];
+  if (!names.length) {
+    clearTimeout(photosTimer);
+    photosTimer = null;
+    photosRunning = false;
+    photosNames = [];
+    $('photos').classList.remove('show');
+    $('photos').hidden = true;
+    return;
+  }
+  $('photos').hidden = false;
+  const sameSet = names.length === photosNames.length && names.every((n, i) => n === photosNames[i]);
+  photosNames = names;
+  // The carousel polls every minute like everything else, but its own slideshow timing is
+  // independent: only (re)start it when it isn't running yet, or the folder's contents changed.
+  if (photosRunning && sameSet) return;
+  clearTimeout(photosTimer);
+  photosIndex = -1;
+  photosRunning = true;
+  const seconds = Math.max(5, state?.photos?.interval || 20);
+  const box = $('photos');
+  const img = $('photos-img');
+  const showNext = () => {
+    photosIndex = (photosIndex + 1) % photosNames.length;
+    img.src = `/api/photos/${encodeURIComponent(photosNames[photosIndex])}`;
+    box.classList.add('show');
+    photosTimer = setTimeout(hideAgain, seconds * 1000);
+  };
+  const hideAgain = () => {
+    box.classList.remove('show');
+    photosTimer = setTimeout(showNext, seconds * 1000);
+  };
+  showNext();
+}
+
 // ---------------------------------------------------------------- first start ---------
 function renderSetup() {
   const setup = state.setup || { needed: false, urls: [] };
@@ -516,6 +560,7 @@ async function render(online) {
   renderCalendar();
   renderUpcoming();
   renderNews();
+  renderPhotos();
   renderSetup();
   document.body.dataset.sleep = String(Boolean(state.sleep));
   renderStatus(online);

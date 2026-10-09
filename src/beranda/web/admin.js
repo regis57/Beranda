@@ -354,7 +354,25 @@ function renderNews() {
   refreshNews();
 }
 
-// ------------------------------------------------------------------ 7. screen ---
+// ------------------------------------------------------------------ 7. photos ---
+function renderPhotos() {
+  const photos = cfg.photos || { folder: '', interval: 20 };
+  $('photos-folder').value = photos.folder || '';
+  $('photos-interval').value = photos.interval || 20;
+  refreshPhotosCount();
+}
+let photosCountTimer = null;
+async function refreshPhotosCount() {
+  const folder = $('photos-folder').value.trim();
+  $('photos-count').textContent = folder ? t('admin.photos_checking') : t('admin.photos_none');
+  if (!folder) return;
+  try {
+    const { count } = await api(`/photos-count?folder=${encodeURIComponent(folder)}`);
+    $('photos-count').textContent = count ? t('admin.photos_found', { n: count }) : t('admin.photos_empty');
+  } catch { $('photos-count').textContent = t('admin.photos_empty'); }
+}
+
+// ------------------------------------------------------------------ 8. screen ---
 function renderScreen() {
   const screen = cfg.screen || { rotate: 0, off: '', on: '' };
   fill($('rotate'), [0, 90, 180, 270].map((r) => [String(r), t(`admin.rotate_${r}`)]), String(screen.rotate || 0));
@@ -362,7 +380,7 @@ function renderScreen() {
   $('on-at').value = screen.on || '';
 }
 
-// ------------------------------------------------------------------ 8. system ---
+// ------------------------------------------------------------------ 9. system ---
 // Buttons that change the Pi ask for a second click instead of a pop-up.
 function armed(button, run) {
   button.addEventListener('click', async () => {
@@ -383,7 +401,7 @@ async function renderSystem() {
   try {
     const info = await api('/system');
     $('sys-version').textContent = t('admin.version', { v: info.version }) + (info.commit ? ` (${info.commit})` : '');
-    for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) $(id).disabled = !info.actions;
+    for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) $(id).disabled = !info.actions;
     $('sys-screen').hidden = !info.screen;
     if (!info.installed) msg.textContent = t('admin.not_installed');
   } catch (e) { msg.textContent = e.message; }
@@ -430,6 +448,7 @@ function collect() {
       feeds: [...$('feed-list').querySelectorAll('input')].map((i) => i.value.trim()).filter(Boolean),
     },
   };
+  body.photos = { folder: $('photos-folder').value.trim(), interval: Number($('photos-interval').value) || 20 };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -466,7 +485,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -501,6 +520,10 @@ async function boot() {
   });
   $('country').addEventListener('change', onCountry);
   $('loc-name').addEventListener('change', refreshNews);
+  $('photos-folder').addEventListener('input', () => {
+    clearTimeout(photosCountTimer);
+    photosCountTimer = setTimeout(refreshPhotosCount, 500);
+  });
   $('q-go').addEventListener('click', search);
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
   $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
@@ -510,7 +533,7 @@ async function boot() {
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
   $('sys-check').addEventListener('click', checkUpdates);
-  for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) armed($(id), () => systemAction($(id).dataset.action));
+  for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) armed($(id), () => systemAction($(id).dataset.action));
   $('tz-device').addEventListener('click', () => {
     fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), Intl.DateTimeFormat().resolvedOptions().timeZone);
     markDirty();

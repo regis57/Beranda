@@ -10,6 +10,8 @@ Done:
 - **v0.4**: one-line installer (start at boot, full screen, update and reboot from the settings
   page, screen rotation and night hours, first-start QR code, `beranda doctor`); 48 languages,
   243 countries, 140 news feeds; 15 themes
+- **v0.5**: photo carousel from a local folder, filled with rclone or Syncthing — never a cloud
+  photo account of its own
 
 Next:
 
@@ -17,13 +19,12 @@ Next:
    that installing needs no terminal at all
 2. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3
 3. Settings menu on the Pi itself (raspi-config style)
-4. Photo carousel from a local folder (synced with rclone or Syncthing)
-5. World radio (Radio Browser)
-6. TV prime time from XMLTV files
-7. Blink camera thumbnails
-8. Voice control (local: openWakeWord + Vosk + Piper; Alexa skill / Matter with limits)
-9. Country-specific historical events (Wikidata)
-10. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
+4. World radio (Radio Browser)
+5. TV prime time from XMLTV files
+6. Blink camera thumbnails
+7. Voice control (local: openWakeWord + Vosk + Piper; Alexa skill / Matter with limits)
+8. Country-specific historical events (Wikidata)
+9. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
 
 ## What we won't do, and why
 

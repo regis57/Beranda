@@ -62,6 +62,9 @@ class Config:
     screen_rotate: int = 0  # 0, 90, 180 or 270 degrees (applied by the kiosk on the Pi)
     screen_off: str = ""  # "23:00": turn the screen off at night ("" = never)
     screen_on: str = ""  # "06:30": and back on in the morning
+    photos_folder: str = ""  # local folder of pictures ("" = carousel disabled); fill it with
+    # rclone or Syncthing so photos from a phone or a cloud account land here on their own
+    photos_interval: int = 20  # seconds a photo stays full-screen before the dashboard returns
 
     @property
     def week_start(self) -> int:
@@ -105,6 +108,13 @@ def _check_feed(url: str) -> str:
     return url
 
 
+def _check_interval(value: object, minimum: int, default: int) -> int:
+    seconds = int(value if value is not None else default)
+    if seconds < minimum:
+        raise ValueError(f"interval must be at least {minimum} seconds, got {seconds}")
+    return seconds
+
+
 def _check_rotate(value: object) -> int:
     rotate = int(value or 0)
     if rotate not in {0, 90, 180, 270}:
@@ -145,6 +155,7 @@ def from_dict(data: dict) -> Config:
     server = data.get("server", {})
     news = data.get("news", {})
     screen = data.get("screen", {})
+    photos = data.get("photos", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -168,6 +179,8 @@ def from_dict(data: dict) -> Config:
         screen_rotate=_check_rotate(screen.get("rotate", 0)),
         screen_off=_check_hhmm(screen.get("off", "")),
         screen_on=_check_hhmm(screen.get("on", "")),
+        photos_folder=str(photos.get("folder", "")).strip(),
+        photos_interval=_check_interval(photos.get("interval"), 5, Config.photos_interval),
     )
 
 
@@ -220,6 +233,7 @@ def to_dict(cfg: Config) -> dict:
         news["sources"] = list(cfg.news_sources)
     out["news"] = news
     out["screen"] = {"rotate": cfg.screen_rotate, "off": cfg.screen_off, "on": cfg.screen_on}
+    out["photos"] = {"folder": cfg.photos_folder, "interval": cfg.photos_interval}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

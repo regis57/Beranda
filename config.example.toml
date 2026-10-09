@@ -41,6 +41,13 @@ enabled = true
 # sources = ["city", "franceinfo", "lemonde", "france24-fr"]   # ids: see the settings page
 # feeds = ["https://example.org/rss"]                           # any RSS or Atom link
 
+# Photo carousel: a local folder, shown full-screen in alternation with the dashboard. Fill
+# it with rclone (Google Drive, Dropbox, OneDrive, iCloud shared albums...) or Syncthing
+# (your phone's camera roll) — Beranda only reads what's already there.
+# [photos]
+# folder = "/home/pi/Pictures/beranda"
+# interval = 20   # seconds each photo stays on screen
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"

@@ -224,6 +224,15 @@ body {
 .setup p { font-size: 0.95rem; color: var(--ink-2); line-height: 1.4; }
 .setup ul { list-style: none; margin-top: 0.6rem; font-size: 1.15rem; color: var(--accent); font-variant-numeric: tabular-nums; }
 
+/* ---- photo carousel: full-screen, fades in/out, alternates with the dashboard --------- */
+.photos {
+  position: fixed; inset: 0; z-index: 20; background: #000;
+  opacity: 0; transition: opacity 1.2s ease; pointer-events: none;
+}
+.photos.show { opacity: 1; }
+.photos-img { width: 100%; height: 100%; object-fit: cover; }
+body[data-sleep="true"] .photos { opacity: 0; }
+
 /* ---- night hours: the screen goes dark (on the Pi the HDMI output is also turned off) -- */
 body[data-sleep="true"] { background: #000; }
 body[data-sleep="true"] .board, body[data-sleep="true"] .setup { opacity: 0; }
