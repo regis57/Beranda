@@ -93,7 +93,7 @@
   "restart_screen": "Reiniciar a tela",
   "reboot": "Reiniciar o Raspberry Pi",
   "factory_reset": "Recomeçar do zero",
-  "factory_reset_help": "Apaga todas as configurações (país, idioma, tema, calendário, PIN…) e deixa o Beranda exatamente como na primeira inicialização, com a tela de boas-vindas para configurar tudo de novo. As fotos e os dados já baixados (tempo, programação de TV…) não são afetados.",
+  "factory_reset_help": "Apaga todas as suas configurações e deixa o Beranda como no primeiro dia. Suas fotos ficam.",
   "confirm": "Clique de novo para confirmar",
   "not_installed": "Instalado manualmente: estes botões só funcionam depois de instalar com install.sh (veja o README).",
   "requested_update": "Atualizando… a página volta em um ou dois minutos.",
