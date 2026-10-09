@@ -97,3 +97,24 @@ def test_ics_events_flow_through_and_the_secret_url_never_leaks(tmp_path):
     assert bad.status_code == 200
     assert "SECRET-TOKEN-123" not in json.dumps(bad.json())
     assert bad.json()["errors"]["calendar:0"] == "ConnectError"
+
+
+def test_photos_are_listed_and_served_from_their_own_folder(tmp_path):
+    folder = tmp_path / "pictures"
+    folder.mkdir()
+    (folder / "beach.jpg").write_bytes(b"fake-jpeg-bytes")
+    client = make(tmp_path, demo=True, photos_folder=str(folder), photos_interval=7)
+
+    state = client.get("/api/state").json()
+    assert state["photos"] == {"names": ["beach.jpg"], "interval": 7}
+
+    served = client.get("/api/photos/beach.jpg")
+    assert served.status_code == 200 and served.content == b"fake-jpeg-bytes"
+
+    assert client.get("/api/photos/../config.toml").status_code == 404
+    assert client.get("/api/photos/missing.jpg").status_code == 404
+
+
+def test_no_photos_folder_means_an_empty_carousel(tmp_path):
+    state = make(tmp_path, demo=True).get("/api/state").json()
+    assert state["photos"] == {"names": [], "interval": 20}

@@ -152,3 +152,21 @@ def test_ics_test_reports_events_and_never_echoes_the_secret(tmp_path):
     respx.get(secret).mock(side_effect=httpx.ConnectError(f"cannot reach {secret}"))
     bad = client.post("/api/admin/test-ics", json={"url": secret}).json()
     assert bad == {"ok": False, "error": "ConnectError"}
+
+
+def test_photos_count_gives_live_feedback_while_typing(tmp_path):
+    folder = tmp_path / "pics"
+    folder.mkdir()
+    (folder / "a.jpg").write_bytes(b"x")
+    (folder / "b.png").write_bytes(b"x")
+    client, _ = make(tmp_path)
+    assert client.get("/api/admin/photos-count", params={"folder": str(folder)}).json() == {"count": 2}
+    assert client.get("/api/admin/photos-count", params={"folder": str(tmp_path / "nope")}).json() == {"count": 0}
+
+
+def test_photos_settings_round_trip(tmp_path):
+    client, path = make(tmp_path)
+    body = valid_body(photos={"folder": "/home/pi/pictures", "interval": 30})
+    assert client.put("/api/admin/config", json=body).json() == {"saved": True, "path": str(path)}
+    saved = tomllib.loads(path.read_text())
+    assert saved["photos"] == {"folder": "/home/pi/pictures", "interval": 30}

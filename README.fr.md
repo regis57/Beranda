@@ -7,7 +7,7 @@ plus récent** : l'heure, la météo et la pluie chez vous, la lune, votre agend
 et les dates qui comptent, et une ligne de titres d'actualité. Clair le jour, sombre la nuit.
 Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
 
-> **État : alpha (v0.4).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
+> **État : alpha (v0.5).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
 > neuve avec systemd ; la partie plein écran n'a pas encore été essayée sur un vrai Raspberry Pi.
 > Si vous l'essayez, dites-nous comment ça s'est passé dans une « issue ».
 > 🇬🇧 [Read in English](README.md)
@@ -42,6 +42,11 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
 - **Fait pour le mur** : fonctionne en hauteur (portrait) ou en largeur, éteint l'écran la nuit,
   affiche un QR code pour le régler depuis votre téléphone au premier démarrage.
 - **Une page de réglages** pour votre téléphone, en mots simples, avec de l'aide pas à pas.
+- **Carrousel photo** : pointez-le vers un dossier sur le Pi et il affiche ces photos en plein
+  écran, en alternance avec le tableau de bord. Remplissez le dossier avec
+  [rclone](https://rclone.org) (Google Drive, Dropbox, OneDrive, albums partagés iCloud et bien
+  d'autres) ou [Syncthing](https://syncthing.net) (la pellicule de votre téléphone) — Beranda ne
+  fait que lire ce qui s'y trouve déjà, sans jamais avoir son propre compte dans le cloud.
 
 ## L'essayer sur votre ordinateur (2 minutes)
 

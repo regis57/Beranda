@@ -23,7 +23,7 @@ from .admin import router as admin_router
 from .cache import Cache
 from .config import Config
 from .providers import astro as astro_mod
-from .providers import calendar_ics, demo, news_catalog, seasons, specialdays
+from .providers import calendar_ics, demo, news_catalog, photos, seasons, specialdays
 from .providers import news as news_mod
 from .providers import weather as weather_mod
 
@@ -158,6 +158,9 @@ async def build_state(
     day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today, cfg.language)) if cfg.demo else cfg
     days = specialdays.special_days(day_cfg, start, end)
 
+    # --- photo carousel (local folder, filled by rclone/Syncthing, nothing fetched here) ---
+    photo_names = photos.list_photos(cfg.photos_folder)
+
     # --- sky & season (all local) --------------------------------------------------
     sky = astro_mod.astro(now, loc.latitude, loc.longitude, loc.timezone)
     mode = cfg.mode if cfg.mode != "auto" else ("night" if sky["night"] else "light")
@@ -181,6 +184,7 @@ async def build_state(
         "events": events,
         "special_days": days,
         "news": news,
+        "photos": {"names": photo_names, "interval": cfg.photos_interval},
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.
@@ -233,6 +237,13 @@ def create_app(
         buffer = io.BytesIO()
         qr.save(buffer, kind="svg", scale=8, border=2, dark="#111111", light="#ffffff", xmldecl=False)
         return Response(buffer.getvalue(), media_type="image/svg+xml", headers={"Cache-Control": "no-store"})
+
+    @app.get("/api/photos/{name}")
+    async def photo(name: str) -> FileResponse:
+        path = photos.resolve(runtime.cfg.photos_folder, name)
+        if path is None:
+            return JSONResponse({"detail": "not found"}, status_code=404)
+        return FileResponse(path, headers={"Cache-Control": "no-store"})
 
     @app.get("/api/health")
     async def health() -> dict:

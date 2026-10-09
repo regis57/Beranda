@@ -6,7 +6,7 @@ A dashboard for a smart mirror or an old tablet, made for a **Raspberry Pi 3B+ o
 clock, local weather and rain, moon, your calendar, holidays and dates that matter, and a line
 of news headlines. Light by day, dark at night. Free: no account, no subscription, no paid API.
 
-> **Status: alpha (v0.4).** The installer is tested automatically on a fresh Debian-family
+> **Status: alpha (v0.5).** The installer is tested automatically on a fresh Debian-family
 > machine with systemd; the full-screen part has not been tried on a real Raspberry Pi yet.
 > If you try it, please tell us how it went in an issue.
 > 🇫🇷 [Lire en français](README.fr.md)
@@ -41,6 +41,11 @@ public holidays are real.* [All screenshots](docs/screenshots/)
 - **Made for a wall**: works upright (portrait) or sideways, turns the screen off at night,
   shows a QR code to set it up from your phone the first time.
 - **A settings page** for your phone, in plain words, with step-by-step help.
+- **Photo carousel**: point it at a folder on the Pi and it shows those pictures full-screen,
+  alternating with the dashboard. Fill the folder with [rclone](https://rclone.org) (Google
+  Drive, Dropbox, OneDrive, iCloud shared albums and many more) or
+  [Syncthing](https://syncthing.net) (your phone's camera roll) — Beranda only ever reads
+  what's already there, no cloud account of its own.
 
 ## Try it on your computer (2 minutes)
 
@@ -79,15 +84,19 @@ HDMI, and a phone or computer on the same Wi-Fi.
 
 That's it: Beranda starts by itself at every boot, full screen. From the settings page you can
 later **update** it, **restart the screen**, **restart the Pi**, **turn the picture** for a
-screen hung upright and **turn the screen off at night**.
+screen hung upright, **turn the screen off at night**, and, at the bottom of the page,
+**start over from scratch** — it erases every setting and brings back the first-run welcome
+screen, without touching your photos or anything already downloaded (weather, TV guide…). That
+last one is handy while you're trying Beranda out, or before handing it to someone else.
 
 <details><summary>What the installer does, and options</summary>
 
 It installs Python, the Noto fonts (for every script), Cage and Chromium (the full-screen
 browser); creates a `beranda` user that runs everything (never root); puts Beranda in
 `/opt/beranda` and your settings in `/etc/beranda`; and installs three services: the server,
-the full-screen screen, and a small root service that only carries out the three requests of
-the settings page (update, restart the screen, reboot). Run the line again to repair or update.
+the full-screen screen, and a small root service that only carries out the four requests of
+the settings page (update, restart the screen, reboot, start over from scratch). Run the line
+again to repair or update.
 
 Options go after `bash -s --`, for example `... | sudo bash -s -- --no-screen`:
 `--no-screen` (server only, to show it on a tablet or another device), `--hostname kitchen`
