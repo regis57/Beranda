@@ -8,11 +8,12 @@ PREFIX="/opt/beranda"
 # shellcheck source=/dev/null
 [ -f /etc/beranda/install.env ] && source /etc/beranda/install.env
 
-for unit in beranda-voice.service beranda-kiosk.service beranda.service beranda-actions.path beranda-actions.service; do
+for unit in beranda-voice.service beranda-wifi-setup.service beranda-kiosk.service beranda.service beranda-actions.path beranda-actions.service; do
     systemctl disable --now "$unit" 2>/dev/null || true
     rm -f "/etc/systemd/system/$unit"
 done
 systemctl daemon-reload
+rm -f /etc/NetworkManager/dnsmasq-shared.d/beranda-captive.conf
 rm -rf "$PREFIX" /usr/local/bin/beranda
 if [ "$PURGE" = 1 ]; then
     rm -rf /etc/beranda /var/lib/beranda

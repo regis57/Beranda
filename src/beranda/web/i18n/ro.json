@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Configurează-mă de pe telefon",
-    "text": "Scanează codul sau deschide această adresă pe un dispozitiv conectat la aceeași rețea Wi-Fi:"
+    "text": "Scanează codul sau deschide această adresă pe un dispozitiv conectat la aceeași rețea Wi-Fi:",
+    "wifi_title": "Încă nu ai Wi-Fi? Conectează-te la al meu",
+    "wifi_text": "Scanează acest cod cu telefonul pentru a te conecta la rețeaua Wi-Fi \"{ssid}\", apoi urmează pagina care se deschide pentru a-ți alege propriul Wi-Fi."
   }
 }

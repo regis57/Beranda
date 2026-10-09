@@ -1,0 +1,45 @@
+# Builds a ready-to-flash Beranda image with pi-gen (the same tool Raspberry Pi OS itself is
+# built with) and uploads it as a workflow artifact. Not run automatically on every push: it
+# needs a privileged container and takes well over an hour (pi-gen's own estimate), so it only
+# runs when someone asks for it. See pi-gen/README.md for what the image is and how to flash it.
+name: Build Raspberry Pi image
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # pi-gen needs real root inside the runner (loop devices, chroot, binfmt for arm emulation).
+    permissions:
+      contents: read
+    steps:
+      - name: Check out Beranda
+        uses: actions/checkout@v4
+        with:
+          path: beranda
+
+      - name: Check out pi-gen
+        uses: actions/checkout@v4
+        with:
+          repository: RPi-Distro/pi-gen
+          path: pi-gen
+
+      - name: Drop in Beranda's own pi-gen stage
+        run: |
+          cp -r beranda/pi-gen/stage-beranda pi-gen/stage-beranda
+          cp beranda/pi-gen/config pi-gen/config
+
+      - name: Build the image
+        working-directory: pi-gen
+        env:
+          BERANDA_SRC: ${{ github.workspace }}/beranda
+        run: ./build-docker.sh
+
+      - name: Upload the image
+        uses: actions/upload-artifact@v4
+        with:
+          name: beranda-image
+          path: pi-gen/deploy/*.img.xz
+          retention-days: 14
+          if-no-files-found: error

@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Iga diyaari taleefankaaga",
-    "text": "Sawir koodhkan, ama ka fur cinwaankan taleefan ama kombuyuutar ku xidhan Wi-Fi-ga isku mid ah:"
+    "text": "Sawir koodhkan, ama ka fur cinwaankan taleefan ama kombuyuutar ku xidhan Wi-Fi-ga isku mid ah:",
+    "wifi_title": "Weli ma haysatid Wi-Fi? Ku biir tayda",
+    "wifi_text": "Iskaan garee koodkan taleefankaaga si aad ugu biirto shabakadda Wi-Fi \"{ssid}\", ka dibna raac boggii furmaya si aad u dooratid Wi-Fi-gaaga."
   }
 }

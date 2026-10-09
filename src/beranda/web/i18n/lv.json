@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Iestatiet mani no tālruņa",
-    "text": "Noskenējiet kodu vai atveriet adresi ierīcē tajā pašā Wi-Fi tīklā:"
+    "text": "Noskenējiet kodu vai atveriet adresi ierīcē tajā pašā Wi-Fi tīklā:",
+    "wifi_title": "Vēl nav Wi-Fi? Pievienojieties manam",
+    "wifi_text": "Skenējiet šo kodu ar tālruni, lai pievienotos Wi-Fi tīklam \"{ssid}\", tad atvērtajā lapā izvēlieties savu Wi-Fi."
   }
 }

@@ -36,6 +36,19 @@ def test_screen_hours_within_a_day_and_disabled():
     assert system.screen_should_be_on(Config(), at(3))  # nothing set: always on
 
 
+def test_wifi_setup_status_reads_the_file_the_root_service_writes(tmp_path, monkeypatch):
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(tmp_path / "missing.json"))
+    assert system.wifi_setup_status() is None  # not installed, or no hotspot up right now
+
+    status = tmp_path / "wifi-setup.json"
+    status.write_text('{"ssid": "Beranda setup", "open": true}')
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(status))
+    assert system.wifi_setup_status() == {"ssid": "Beranda setup", "open": True}
+
+    status.write_text("not json")
+    assert system.wifi_setup_status() is None  # never crash the dashboard over a bad file
+
+
 def test_screen_settings_are_validated_and_saved():
     cfg = config.from_dict({"screen": {"rotate": 90, "off": "23:00", "on": "6:30"}})
     assert (cfg.screen_rotate, cfg.screen_off, cfg.screen_on) == (90, "23:00", "06:30")
@@ -70,6 +83,36 @@ def test_demo_never_shows_the_setup_card(tmp_path):
     cfg = replace(Config(), cache_dir=tmp_path, demo=True, news_enabled=False)
     client = TestClient(create_app(cfg, config_path=tmp_path / "none.toml"))
     assert client.get("/api/state").json()["setup"]["needed"] is False
+
+
+def test_no_network_at_all_shows_the_wifi_join_card(tmp_path, monkeypatch):
+    status = tmp_path / "wifi-setup.json"
+    status.write_text('{"ssid": "Beranda setup", "open": true}')
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(status))
+    cfg = replace(Config(), cache_dir=tmp_path / "c", news_enabled=False)
+    client = TestClient(create_app(cfg, config_path=tmp_path / "config.toml"))
+    setup = client.get("/api/state").json()["setup"]
+    assert setup["needed"] is True
+    assert setup["wifi"] == {"ssid": "Beranda setup", "open": True}
+    svg = client.get("/api/setup-wifi-qr.svg")
+    assert svg.status_code == 200 and svg.text.startswith("<svg")
+
+
+def test_demo_never_shows_the_wifi_card_either(tmp_path, monkeypatch):
+    status = tmp_path / "wifi-setup.json"
+    status.write_text('{"ssid": "Beranda setup", "open": true}')
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(status))
+    cfg = replace(Config(), cache_dir=tmp_path, demo=True, news_enabled=False)
+    client = TestClient(create_app(cfg, config_path=tmp_path / "none.toml"))
+    assert client.get("/api/state").json()["setup"]["wifi"] is None
+
+
+def test_no_wifi_setup_status_file_means_no_wifi_card(tmp_path, monkeypatch):
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(tmp_path / "missing.json"))
+    cfg = replace(Config(), cache_dir=tmp_path / "c", news_enabled=False)
+    client = TestClient(create_app(cfg, config_path=tmp_path / "config.toml"))
+    setup = client.get("/api/state").json()["setup"]
+    assert setup["wifi"] is None
 
 
 def _installed(tmp_path, monkeypatch):

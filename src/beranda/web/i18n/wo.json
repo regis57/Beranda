@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Jubbanti ma ci sa telefon",
-    "text": "Nataal kodu bii, walla ubbi adrees bii ci telefon walla ordinatër bu ci réseau Wi-Fi bi:"
+    "text": "Nataal kodu bii, walla ubbi adrees bii ci telefon walla ordinatër bu ci réseau Wi-Fi bi:",
+    "wifi_title": "Amoul Wi-Fi? Dugg ci sama réseau",
+    "wifi_text": "Scanal kàrt bii ak telefon bi ngir dugg ci réseau Wi-Fi \"{ssid}\", bu ko defee topp xët bi di ubbiku ngir tànn sa Wi-Fi."
   }
 }

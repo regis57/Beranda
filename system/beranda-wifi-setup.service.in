@@ -1,0 +1,22 @@
+# Beranda Wi-Fi setup: if the Pi boots with no network at all, briefly becomes its own open
+# Wi-Fi access point ("Beranda setup") so the first Wi-Fi can be chosen from a phone, with no
+# keyboard, monitor or terminal plugged into the Pi. Runs once per boot and exits on its own
+# once a connection exists; only written by install.sh --with-wifi-setup. Needs root, unlike
+# the main Beranda server, because only root can create a Wi-Fi access point.
+[Unit]
+Description=Beranda Wi-Fi setup (access point if no network is found)
+After=NetworkManager.service
+Wants=NetworkManager.service
+Before=beranda.service
+
+[Service]
+Type=simple
+Environment=BERANDA_WIFI_STATUS=@STATEDIR@/wifi-setup.json
+ExecStart=@PREFIX@/venv/bin/beranda-wifi-setup
+Restart=on-failure
+RestartSec=10
+# Hardening: still needs real root (nmcli, iptables-free dnsmasq config, binding port 80), so
+# this is the one Beranda service NOT sandboxed with ProtectSystem=strict.
+
+[Install]
+WantedBy=multi-user.target

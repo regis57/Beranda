@@ -22,14 +22,16 @@ Done:
   woven into the news ticker
 - **v0.10**: 9 more languages (Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian,
   Quechua), 57 in all
+- **v0.11**: Wi-Fi setup with no keyboard (`install.sh --with-wifi-setup`: an open "Beranda
+  setup" network and a one-page picker if the Pi boots with no network at all) and a pi-gen
+  build definition + CI workflow for a ready-to-flash image with it already built in
 
 Next:
 
-1. Wi-Fi setup without a keyboard (captive portal) and a ready-to-flash image (pi-gen), so
-   that installing needs no terminal at all
-2. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3
-3. Settings menu on the Pi itself (raspi-config style)
-4. Blink camera thumbnails
+1. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3 - also the
+   only way to really try v0.11's Wi-Fi setup and build and flash its image
+2. Settings menu on the Pi itself (raspi-config style)
+3. Blink camera thumbnails
 
 ## What we won't do, and why
 

@@ -1,0 +1,15 @@
+# Example pi-gen build configuration for a ready-to-flash Beranda image.
+# Copy this file to pi-gen's own top level as "config" (or pass -c <this file> to build.sh),
+# then build with pi-gen itself - see pi-gen/README.md in this repository for the full steps.
+
+IMG_NAME="beranda"
+# Keep the base system small: no desktop, just enough Debian to run Beranda full screen.
+DEPLOY_COMPRESSION="xz"
+LOCALE_DEFAULT="en_GB.UTF-8"
+TARGET_HOSTNAME="beranda"
+KEYBOARD_KEYMAP="gb"
+KEYBOARD_LAYOUT="English (UK)"
+# Build only the stages Beranda actually needs: pi-gen's own minimal boot (stage0), basic
+# OS (stage1), "Lite" (stage2, no desktop), then this repository's own stage. No official
+# desktop stage (stage3+) is built, which keeps the image small and the boot time short.
+STAGE_LIST="stage0 stage1 stage2 stage-beranda"

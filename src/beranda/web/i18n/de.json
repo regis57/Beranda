@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Richten Sie mich mit dem Handy ein",
-    "text": "Scannen Sie diesen Code oder öffnen Sie diese Adresse auf einem Gerät im selben WLAN:"
+    "text": "Scannen Sie diesen Code oder öffnen Sie diese Adresse auf einem Gerät im selben WLAN:",
+    "wifi_title": "Noch kein WLAN? Verbinde dich mit meinem",
+    "wifi_text": "Scanne diesen Code, um mit deinem Handy das WLAN-Netzwerk \"{ssid}\" zu verbinden, und folge dann der Seite, die sich öffnet, um dein eigenes WLAN auszuwählen."
   }
 }

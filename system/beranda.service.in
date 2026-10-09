@@ -1,8 +1,12 @@
 # Beranda web server: the display page and the settings page, on port 8080.
+#
+# Deliberately does NOT "Wants=" network-online.target: Beranda already copes with having no
+# network (cached data, a demo mode, and - when installed with --with-wifi-setup - a screen
+# that shows a Wi-Fi network to join). Waiting for a network that may never come would only
+# delay the screen that tells you how to give it one.
 [Unit]
 Description=Beranda dashboard server
 After=network-online.target
-Wants=network-online.target
 
 [Service]
 User=@USER@
@@ -10,6 +14,7 @@ Group=@USER@
 Environment=BERANDA_CONFIG=@CONFDIR@/config.toml
 Environment=BERANDA_REQUESTS=@STATEDIR@/requests
 Environment=BERANDA_INSTALL_INFO=@CONFDIR@/install.env
+Environment=BERANDA_WIFI_STATUS=@STATEDIR@/wifi-setup.json
 ExecStart=@PREFIX@/venv/bin/beranda
 Restart=always
 RestartSec=3

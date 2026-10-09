@@ -98,6 +98,13 @@ Arrêtez avec Ctrl+C. Sans `--demo`, vous avez la vraie météo et votre agenda.
 5. **Le régler depuis votre téléphone** : l'écran affiche une adresse et un QR code. Scannez-le,
    ou ouvrez `http://beranda.local:8080/admin`, et suivez les trois étapes en haut de la page.
 
+Pas d'ordinateur pour personnaliser la carte, ou vous préférez éviter de taper le mot de passe
+Wi-Fi dans Imager ? Ajoutez `--with-wifi-setup` à la ligne d'installation ci-dessus (étape 4) :
+si le Pi démarre un jour sans Wi-Fi et sans câble réseau, il propose son propre réseau Wi-Fi
+« Beranda setup » pour choisir le vrai depuis votre téléphone, sans aucun terminal. Voir
+[`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md). Une [image prête à flasher](pi-gen/README.md) avec
+cela déjà intégré est également en préparation.
+
 C'est tout : Beranda démarre tout seul à chaque allumage, en plein écran. Depuis la page de
 réglages vous pourrez ensuite **mettre à jour**, **redémarrer l'écran**, **redémarrer le Pi**,
 **tourner l'image** pour un écran accroché en hauteur et **éteindre l'écran la nuit**.
@@ -113,7 +120,9 @@ ou mettre à jour.
 
 Les options se placent après `bash -s --`, par exemple `... | sudo bash -s -- --no-screen` :
 `--no-screen` (serveur seul, pour l'afficher sur une tablette ou un autre appareil),
-`--hostname cuisine` (renomme le Pi : `http://cuisine.local:8080/admin`), `--branch NOM`, `--dry-run`.
+`--hostname cuisine` (renomme le Pi : `http://cuisine.local:8080/admin`), `--with-wifi-setup`
+(propose un réseau Wi-Fi à rejoindre si aucun n'est encore réglé - voir
+[`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md)), `--branch NOM`, `--dry-run`.
 
 Un souci ? `beranda doctor` vérifie tout et dit quoi corriger.
 Pour le retirer : `sudo /opt/beranda/src/uninstall.sh` (ajoutez `--purge` pour effacer aussi vos réglages).

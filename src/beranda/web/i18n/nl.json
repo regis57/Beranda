@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Stel me in met je telefoon",
-    "text": "Scan deze code of open dit adres op een apparaat met dezelfde wifi:"
+    "text": "Scan deze code of open dit adres op een apparaat met dezelfde wifi:",
+    "wifi_title": "Nog geen wifi? Maak verbinding met de mijne",
+    "wifi_text": "Scan deze code om met je telefoon verbinding te maken met het wifi-netwerk \"{ssid}\", en volg daarna de pagina die opent om je eigen wifi te kiezen."
   }
 }

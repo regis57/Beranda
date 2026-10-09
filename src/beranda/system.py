@@ -8,6 +8,7 @@ carries it out. Only four names are understood.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import socket
@@ -60,6 +61,17 @@ def requests_dir() -> Path | None:
         return None
     path = Path(raw)
     return path if path.is_dir() and os.access(path, os.W_OK) else None
+
+
+def wifi_setup_status() -> dict | None:
+    """What the optional beranda-wifi-setup service wrote: the open setup network's name, while
+    it is up. None once a real connection exists (the file is removed) or the service was never
+    installed at all."""
+    raw = os.environ.get("BERANDA_WIFI_STATUS", "/var/lib/beranda/wifi-setup.json")
+    try:
+        return json.loads(Path(raw).read_text())
+    except (OSError, ValueError):
+        return None
 
 
 def request_action(action: str) -> None:

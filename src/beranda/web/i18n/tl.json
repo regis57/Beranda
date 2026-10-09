@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "I-set up ako mula sa iyong telepono",
-    "text": "I-scan ang code na ito, o buksan ang address na ito sa device na nasa parehong Wi-Fi:"
+    "text": "I-scan ang code na ito, o buksan ang address na ito sa device na nasa parehong Wi-Fi:",
+    "wifi_title": "Wala ka pang Wi-Fi? Sumali sa akin",
+    "wifi_text": "I-scan ang code na ito gamit ang iyong telepono para sumali sa Wi-Fi network na \"{ssid}\", pagkatapos sundan ang pahinang bubukas para piliin ang sarili mong Wi-Fi."
   }
 }

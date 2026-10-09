@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Seadista mind telefonist",
-    "text": "Skanni kood või ava see aadress samas Wi-Fi võrgus olevas seadmes:"
+    "text": "Skanni kood või ava see aadress samas Wi-Fi võrgus olevas seadmes:",
+    "wifi_title": "Veel pole Wi-Fit? Liitu minu võrguga",
+    "wifi_text": "Skanni see kood telefoniga, et liituda Wi-Fi võrguga \"{ssid}\", ja järgi seejärel avanevat lehte, et valida oma Wi-Fi."
   }
 }
