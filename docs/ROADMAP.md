@@ -51,6 +51,8 @@ Done:
   language of the page
 - **v0.14.1**: fix - choosing a town in the settings page filled in coordinates the form then
   refused (too many decimals), so the page could not be saved
+- **v0.14.2**: fix - choosing a new town in the settings page now also replaces the weather
+  warnings area (it kept the old town's) and says that the region was reset
 
 Next:
 

@@ -189,6 +189,7 @@ async function search() {
   const q = $('q').value.trim();
   const list = $('q-results');
   $('q-error').hidden = true;
+  $('q-note').hidden = true;
   if (q.length < 2) { list.hidden = true; return; }
   try {
     const { results } = await api(`/geocode?q=${encodeURIComponent(q)}&language=${lang}`);
@@ -198,10 +199,14 @@ async function search() {
         $('loc-name').value = r.name;
         $('loc-lat').value = Math.round(r.latitude * 1e4) / 1e4;  // 4 decimals = about 10 m, plenty
         $('loc-lon').value = Math.round(r.longitude * 1e4) / 1e4;
-        if (r.area && !$('w-area').value.trim()) $('w-area').value = r.area;  // a good first guess for weather warnings
+        // A new town: everything that belonged to the old one is replaced, never kept by mistake.
+        $('w-area').value = r.area || '';  // area of the weather warnings (the new town's county / region)
+        $('w-area-msg').textContent = '';
         if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
         if (r.country && options.countries[r.country]) { $('country').value = r.country; onCountry(); }
         list.hidden = true;
+        $('q-note').textContent = t('admin.city_changed');  // the region was reset: say so
+        $('q-note').hidden = false;
         markDirty();
         refreshNews();
       });

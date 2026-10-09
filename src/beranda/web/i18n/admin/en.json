@@ -297,5 +297,6 @@
   "reset_prompt": "To start again from zero, type the word “{word}” below.",
   "reset_word": "yes",
   "reset_confirm": "Yes, erase everything",
-  "reset_cancel": "Cancel"
+  "reset_cancel": "Cancel",
+  "city_changed": "New town chosen. The region (regional holidays) and the warnings area were reset to match it: check boxes 2 and 4."
 }

@@ -297,5 +297,6 @@
   "reset_prompt": "Per ricominciare da zero, scriva qui sotto la parola «{word}».",
   "reset_word": "sì",
   "reset_confirm": "Sì, cancella tutto",
-  "reset_cancel": "Annulla"
+  "reset_cancel": "Annulla",
+  "city_changed": "Nuova città scelta. La regione (festività regionali) e la zona delle allerte sono state reimpostate: controlli i riquadri 2 e 4."
 }

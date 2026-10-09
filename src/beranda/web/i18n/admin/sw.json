@@ -297,5 +297,6 @@
   "reset_prompt": "Ili kuanza upya kabisa, andika neno «{word}» hapa chini.",
   "reset_word": "ndiyo",
   "reset_confirm": "Ndiyo, futa kila kitu",
-  "reset_cancel": "Ghairi"
+  "reset_cancel": "Ghairi",
+  "city_changed": "Mji mpya umechaguliwa. Mkoa (sikukuu za mkoa) na eneo la maonyo vimewekwa upya: angalia visanduku 2 na 4."
 }

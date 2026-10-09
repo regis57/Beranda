@@ -297,5 +297,6 @@
   "reset_prompt": "Untuk mulai dari nol, ketik kata “{word}” di bawah.",
   "reset_word": "ya",
   "reset_confirm": "Ya, hapus semuanya",
-  "reset_cancel": "Batal"
+  "reset_cancel": "Batal",
+  "city_changed": "Kota baru dipilih. Wilayah (hari libur daerah) dan wilayah peringatan sudah direset: periksa kotak 2 dan 4."
 }
