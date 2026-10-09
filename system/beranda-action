@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Run the requests left by the settings page in the requests folder. Only these words are
-# understood: update, restart-screen, reboot. Anything else is deleted and ignored.
+# understood: update, restart-screen, reboot, reset. Anything else is deleted and ignored.
 set -euo pipefail
 
 # shellcheck source=/dev/null
-source /etc/beranda/install.env  # PREFIX, BRANCH, USER, STATEDIR
+source /etc/beranda/install.env  # PREFIX, BRANCH, USER, CONFDIR, STATEDIR
+CONFDIR="${CONFDIR:-/etc/beranda}"  # older installs predate this line in install.env
 
 requests="$STATEDIR/requests"
 log() { echo "beranda-action: $*"; }
@@ -32,6 +33,11 @@ for file in "$requests"/*; do
         reboot)
             log "rebooting"
             systemctl reboot
+            ;;
+        reset)
+            log "resetting to factory settings"
+            rm -f -- "$CONFDIR/config.toml"
+            systemctl restart beranda.service
             ;;
         *)
             log "ignored unknown request: $action"
