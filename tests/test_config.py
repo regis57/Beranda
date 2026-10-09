@@ -38,6 +38,8 @@ def test_from_dict_full():
         {"key_dates": [{"date": "banana", "label": "x"}]},
         {"key_dates": [{"date": "03-14", "label": "x", "kind": "party"}]},
         {"radio": {"stations": [{"uuid": "u1", "name": "x", "url": "not-a-url"}]}},
+        {"tv": {"url": "not-a-url"}},
+        {"tv": {"prime_start": "25:99"}},
     ],
 )
 def test_invalid_values_are_rejected(bad):
@@ -60,6 +62,20 @@ def test_radio_defaults_and_round_trip():
     assert cfg.radio_stations[0].name == "France Musique"
     assert cfg.radio_volume == 100
     assert config.to_dict(cfg)["radio"]["stations"][0]["uuid"] == "u1"
+
+
+def test_tv_defaults_and_round_trip():
+    cfg = config.Config()
+    assert cfg.tv_xmltv_url == "" and cfg.tv_channels == ()
+    assert cfg.tv_prime_start == "20:00" and cfg.tv_prime_end == "23:00"
+
+    cfg = config.from_dict(
+        {"tv": {"url": "https://example.org/guide.xml", "channels": ["c1", "c2"], "prime_start": "19:30", "prime_end": "0:15"}}
+    )
+    assert cfg.tv_xmltv_url == "https://example.org/guide.xml"
+    assert cfg.tv_channels == ("c1", "c2")
+    assert cfg.tv_prime_start == "19:30" and cfg.tv_prime_end == "00:15"
+    assert config.to_dict(cfg)["tv"]["channels"] == ["c1", "c2"]
 
 
 def test_load_reads_toml(tmp_path):

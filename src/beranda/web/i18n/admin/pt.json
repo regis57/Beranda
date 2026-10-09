@@ -199,5 +199,15 @@
   "requested_update": "A atualizar… a página volta dentro de um ou dois minutos.",
   "requested_restart_screen": "O ecrã está a reiniciar.",
   "requested_reboot": "O Raspberry Pi está a reiniciar. Volte a esta página daqui a um minuto.",
-  "requested_reset": "A repor… o Beranda reinicia com as definições originais. Recarregue esta página dentro de alguns segundos."
+  "requested_reset": "A repor… o Beranda reinicia com as definições originais. Recarregue esta página dentro de alguns segundos.",
+  "tv": "TV",
+  "tv_hint": "Indique ao Beranda um guia de TV (formato XMLTV) e escolha os canais dos quais quer ver a programação do horário nobre. O Beranda só lê o guia que lhe indicar — nunca recolhe nem hospeda um guia sozinho.",
+  "tv_url_ph": "https://.../guide.xml (ou .xml.gz)",
+  "tv_find": "Encontrar canais",
+  "tv_ok": "Encontrado(s) {n} canal(is). Marque os que quer mostrar.",
+  "tv_fail": "Não foi possível ler esse guia ({err}).",
+  "tv_none": "Ainda sem canais — cole acima o endereço de um guia e clique em «Encontrar canais».",
+  "tv_prime_start": "O horário nobre começa",
+  "tv_prime_end": "O horário nobre termina",
+  "tv_help": "Um guia XMLTV é um ficheiro simples que alguns operadores de TV e projetos comunitários (como o iptv-org/epg) publicam gratuitamente, com o que passa e quando. Peça o seu ao seu operador de TV, ou procure por «XMLTV» com o nome do seu país. Cole o endereço, clique em «Encontrar canais», marque os que vê e o painel mostrará a sua programação nas horas que definir."
 }

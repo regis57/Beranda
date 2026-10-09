@@ -442,6 +442,49 @@ async function refreshRadioStatus() {
   renderRadioFavorites();
 }
 
+// ------------------------------------------------------------------ 9. tv ---
+// The guide is only ever read, never stored: "find channels" fetches it once so the user
+// can tick the ones they want; the names we got back are kept just so ticks keep their labels.
+let tvChannels = [];
+let tvSelected = new Set();
+
+function renderTvChips() {
+  $('tv-channels').replaceChildren(...tvChannels.map((c) => {
+    const box = el('input', { type: 'checkbox', checked: tvSelected.has(c.id) });
+    box.addEventListener('change', () => {
+      if (box.checked) tvSelected.add(c.id); else tvSelected.delete(c.id);
+      markDirty();
+    });
+    return el('label', { className: 'check chip' }, box, el('span', { textContent: c.name }));
+  }));
+  $('tv-empty').hidden = tvChannels.length > 0;
+}
+
+async function tvFind() {
+  const url = $('tv-url').value.trim();
+  if (!url) return;
+  $('tv-message').textContent = t('admin.loading');
+  try {
+    const r = await api('/test-tv', { method: 'POST', body: JSON.stringify({ url }) });
+    if (!r.ok) { $('tv-message').textContent = t('admin.tv_fail', { err: r.error }); return; }
+    tvChannels = r.channels;
+    $('tv-message').textContent = t('admin.tv_ok', { n: r.channels.length });
+    renderTvChips();
+    markDirty();
+  } catch (e) { $('tv-message').textContent = e.message; }
+}
+
+function renderTv() {
+  const tv = cfg.tv || { url: '', channels: [], prime_start: '20:00', prime_end: '23:00' };
+  $('tv-url').value = tv.url || '';
+  $('tv-start').value = tv.prime_start || '20:00';
+  $('tv-end').value = tv.prime_end || '23:00';
+  tvSelected = new Set(tv.channels || []);
+  // Until "find channels" is used again, show the saved ids as their own label.
+  tvChannels = [...tvSelected].map((id) => ({ id, name: id }));
+  renderTvChips();
+}
+
 // ------------------------------------------------------------------ 9. screen ---
 function renderScreen() {
   const screen = cfg.screen || { rotate: 0, off: '', on: '' };
@@ -520,6 +563,12 @@ function collect() {
   };
   body.photos = { folder: $('photos-folder').value.trim(), interval: Number($('photos-interval').value) || 20 };
   body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
+  body.tv = {
+    url: $('tv-url').value.trim(),
+    channels: [...tvSelected],
+    prime_start: $('tv-start').value,
+    prime_end: $('tv-end').value,
+  };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -556,7 +605,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -601,6 +650,7 @@ async function boot() {
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
   $('radio-go').addEventListener('click', radioSearch);
   $('radio-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); radioSearch(); } });
+  $('tv-find').addEventListener('click', tvFind);
   $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
   $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });

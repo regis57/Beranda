@@ -152,8 +152,25 @@
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.radio_help"></p></details>
       </section>
 
+      <section class="card" id="sec-tv">
+        <h2><span class="num">9</span><span data-i18n="admin.tv"></span></h2>
+        <p class="hint" data-i18n="admin.tv_hint"></p>
+        <div class="row wrap">
+          <input id="tv-url" type="text" inputmode="url" spellcheck="false" data-ph="admin.tv_url_ph">
+          <button type="button" id="tv-find" data-i18n="admin.tv_find"></button>
+        </div>
+        <p class="hint" id="tv-message" role="status"></p>
+        <p class="hint" id="tv-empty" data-i18n="admin.tv_none"></p>
+        <div class="chips" id="tv-channels" aria-live="polite"></div>
+        <div class="grid3">
+          <label><span data-i18n="admin.tv_prime_start"></span><input id="tv-start" type="time"></label>
+          <label><span data-i18n="admin.tv_prime_end"></span><input id="tv-end" type="time"></label>
+        </div>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.tv_help"></p></details>
+      </section>
+
       <section class="card" id="sec-screen">
-        <h2><span class="num">9</span><span data-i18n="admin.screen"></span></h2>
+        <h2><span class="num">10</span><span data-i18n="admin.screen"></span></h2>
         <p class="hint" data-i18n="admin.screen_hint"></p>
         <div class="grid3">
           <label><span data-i18n="admin.rotate"></span><select id="rotate"></select></label>
@@ -164,7 +181,7 @@
       </section>
 
       <section class="card" id="sec-system">
-        <h2><span class="num">10</span><span data-i18n="admin.system"></span></h2>
+        <h2><span class="num">11</span><span data-i18n="admin.system"></span></h2>
         <p class="hint" id="sys-version"></p>
         <div class="row wrap" id="sys-buttons">
           <button type="button" id="sys-check" data-i18n="admin.check_updates"></button>
@@ -178,7 +195,7 @@
       </section>
 
       <section class="card" id="sec-sec">
-        <h2><span class="num">11</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">12</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

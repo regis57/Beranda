@@ -25,6 +25,7 @@ from .config import Config
 from .providers import astro as astro_mod
 from .providers import calendar_ics, demo, news_catalog, photos, seasons, specialdays
 from .providers import news as news_mod
+from .providers import tv as tv_mod
 from .providers import weather as weather_mod
 
 log = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ THEMES = set(seasons.THEMES)
 WEATHER_TTL = 15 * 60
 CALENDAR_TTL = 15 * 60
 NEWS_TTL = 30 * 60
+TV_TTL = 3 * 60 * 60  # XMLTV guides are usually refreshed by their publisher a few times a day
 
 # The display loads nothing but its own files. A strict policy keeps a hostile calendar
 # entry or feed from ever running code on the mirror.
@@ -54,6 +56,18 @@ def _window(today: date) -> tuple[date, date]:
     nxt = (first + timedelta(days=32)).replace(day=1)
     last = nxt.replace(day=_calendar.monthrange(nxt.year, nxt.month)[1])
     return first, last
+
+
+def _prime_window(now: datetime, start_hhmm: str, end_hhmm: str) -> tuple[datetime, datetime]:
+    """Today's prime-time window, in `now`'s own timezone. An end not after the start means
+    it runs past midnight (e.g. 20:00 -> 00:30), so we push it a day later."""
+    start_h, start_m = (int(x) for x in start_hhmm.split(":"))
+    end_h, end_m = (int(x) for x in end_hhmm.split(":"))
+    start = now.replace(hour=start_h, minute=start_m, second=0, microsecond=0)
+    end = now.replace(hour=end_h, minute=end_m, second=0, microsecond=0)
+    if end <= start:
+        end += timedelta(days=1)
+    return start, end
 
 
 def news_plan(cfg: Config) -> list[tuple[str, str, str]]:
@@ -161,6 +175,35 @@ async def build_state(
     # --- photo carousel (local folder, filled by rclone/Syncthing, nothing fetched here) ---
     photo_names = photos.list_photos(cfg.photos_folder)
 
+    # --- TV prime time (read-only: the user's own XMLTV guide, never scraped by us) -----
+    tv = None
+    if cfg.tv_xmltv_url and cfg.tv_channels:
+        digest = hashlib.sha1(cfg.tv_xmltv_url.encode()).hexdigest()[:12]
+        channel_ids = set(cfg.tv_channels)
+        prime_start, prime_end = _prime_window(now, cfg.tv_prime_start, cfg.tv_prime_end)
+
+        async def load_tv() -> list[dict]:
+            raw = await tv_mod.download(cfg.tv_xmltv_url)
+            found = tv_mod.programmes(raw, channel_ids, prime_start, prime_end)
+            tz = ZoneInfo(loc.timezone)
+            return [
+                {
+                    "channel": item["channel"],
+                    "title": item["title"],
+                    "start": item["start"].astimezone(tz).strftime("%H:%M"),
+                    "stop": item["stop"].astimezone(tz).strftime("%H:%M"),
+                }
+                for item in found
+            ]
+
+        try:
+            got, is_stale = await cache.get(f"tv:{digest}:{today}", TV_TTL, load_tv)
+            tv = {"programmes": got}
+            if is_stale:
+                stale.append("tv")
+        except Exception as exc:  # noqa: BLE001 - a dead guide must not blank the screen
+            errors["tv"] = type(exc).__name__
+
     # --- sky & season (all local) --------------------------------------------------
     sky = astro_mod.astro(now, loc.latitude, loc.longitude, loc.timezone)
     mode = cfg.mode if cfg.mode != "auto" else ("night" if sky["night"] else "light")
@@ -185,6 +228,7 @@ async def build_state(
         "special_days": days,
         "news": news,
         "photos": {"names": photo_names, "interval": cfg.photos_interval},
+        "tv": tv,
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.

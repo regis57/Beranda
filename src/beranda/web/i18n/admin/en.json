@@ -199,5 +199,15 @@
   "requested_update": "Updating… the page will come back in a minute or two.",
   "requested_restart_screen": "The screen is restarting.",
   "requested_reboot": "The Raspberry Pi is restarting. Come back to this page in a minute.",
-  "requested_reset": "Resetting… Beranda is restarting with its original settings. Reload this page in a few seconds."
+  "requested_reset": "Resetting… Beranda is restarting with its original settings. Reload this page in a few seconds.",
+  "tv": "TV",
+  "tv_hint": "Point Beranda at a TV guide (XMLTV format) and pick which channels to show prime time for. Beranda only ever reads the guide you give it — it never scrapes or hosts one itself.",
+  "tv_url_ph": "https://.../guide.xml (or .xml.gz)",
+  "tv_find": "Find channels",
+  "tv_ok": "Found {n} channel(s). Tick the ones to show.",
+  "tv_fail": "Could not read that guide ({err}).",
+  "tv_none": "No channels yet — paste a guide address above and press “Find channels”.",
+  "tv_prime_start": "Prime time starts",
+  "tv_prime_end": "Prime time ends",
+  "tv_help": "An XMLTV guide is a plain file some TV providers and community projects (such as iptv-org/epg) publish for free, listing what is on and when. Ask your TV provider for theirs, or search “XMLTV” plus your country's name. Paste its address, press “Find channels”, tick the ones you watch, and the dashboard will show what's on them during the hours you set."
 }
