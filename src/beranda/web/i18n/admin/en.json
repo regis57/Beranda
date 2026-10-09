@@ -298,5 +298,20 @@
   "reset_word": "yes",
   "reset_confirm": "Yes, erase everything",
   "reset_cancel": "Cancel",
-  "city_changed": "New town chosen. The region (regional holidays) and the warnings area were reset to match it: check boxes 2 and 4."
+  "city_changed": "New town chosen. The region (regional holidays) and the warnings area were reset to match it: check boxes 2 and 4.",
+  "limit_reached": "Maximum reached: {n} {what} on this device. Remove one to add another.",
+  "limit_calendars": "calendars",
+  "limit_news_sources": "news sources",
+  "limit_tv_channels": "TV channels",
+  "limit_radio_stations": "radio stations",
+  "limit_key_dates": "dates",
+  "limit_photos": "photos",
+  "limit_voice_commands": "voice phrases",
+  "device_line": "Your device: {device} · {mem} GB of memory. Limits adapted to it: “{profile}” profile.",
+  "device_other": "this computer",
+  "profile_lite": "light",
+  "profile_standard": "standard",
+  "profile_comfort": "comfortable",
+  "profile_plus": "comfortable +",
+  "profile_max": "maximum"
 }

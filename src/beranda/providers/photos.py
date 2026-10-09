@@ -27,7 +27,7 @@ from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 import httpx
 
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-MAX_PHOTOS = 500  # a Pi 3B's SD card, not a photo library: keep the listing light
+MAX_PHOTOS = 500  # the default; the real maximum depends on the computer (see limits.py)
 MAX_UPLOAD_BYTES = 15 * 1024 * 1024  # one picture; phone photos are typically 2-6 MB
 MAX_DROPBOX_BYTES = 400 * 1024 * 1024  # the whole shared folder, as one download
 DROPBOX_PREFIX = "dropbox-"  # synced files are tagged so a re-sync never touches your uploads
@@ -56,7 +56,7 @@ def effective_folder(configured: str) -> Path:
     return Path(configured).expanduser() if configured.strip() else default_folder()
 
 
-def list_photos(folder: str | Path) -> list[str]:
+def list_photos(folder: str | Path, limit: int = MAX_PHOTOS) -> list[str]:
     """File names (not paths) of the pictures in `folder`, sorted, newest first.
 
     An empty or missing folder returns an empty list rather than raising: the photo tile is
@@ -69,7 +69,7 @@ def list_photos(folder: str | Path) -> list[str]:
         return []
     files = [f for f in path.iterdir() if f.is_file() and f.suffix.lower() in EXTENSIONS]
     files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
-    return [f.name for f in files[:MAX_PHOTOS]]
+    return [f.name for f in files[:limit]]
 
 
 def resolve(folder: str | Path, name: str) -> Path | None:
@@ -147,7 +147,7 @@ def dropbox_download_url(link: str) -> str:
     return urlunparse(parsed._replace(scheme="https", query=urlencode(query)))
 
 
-async def sync_dropbox(link: str, folder: Path) -> dict:
+async def sync_dropbox(link: str, folder: Path, limit: int = MAX_PHOTOS) -> dict:
     """Copy the pictures of a Dropbox shared folder into `folder` (tagged `dropbox-`).
 
     Pictures that were removed from the Dropbox folder are removed here too, but only the
@@ -168,10 +168,10 @@ async def sync_dropbox(link: str, folder: Path) -> dict:
                     raise PhotoError("big", "that Dropbox folder is too big (400 MB at most)")
                 tmp.write(chunk)
         tmp.seek(0)
-        return extract_zip(tmp, folder)
+        return extract_zip(tmp, folder, limit)
 
 
-def extract_zip(fileobj, folder: Path) -> dict:
+def extract_zip(fileobj, folder: Path, limit: int = MAX_PHOTOS) -> dict:
     """Copy the pictures inside a .zip into `folder`, one at a time (kind to a Pi's memory).
 
     Files get the `dropbox-` tag; tagged files that are no longer in the zip are removed.
@@ -187,7 +187,7 @@ def extract_zip(fileobj, folder: Path) -> dict:
     with archive:
         infos = [i for i in archive.infolist() if not i.is_dir() and Path(i.filename).suffix.lower() in EXTENSIONS]
         infos.sort(key=lambda i: i.date_time, reverse=True)
-        for info in infos[:MAX_PHOTOS]:
+        for info in infos[:limit]:
             name = DROPBOX_PREFIX + safe_name(info.filename)
             if info.file_size > MAX_UPLOAD_BYTES or name in kept:
                 continue

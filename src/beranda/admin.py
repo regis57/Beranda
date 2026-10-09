@@ -26,6 +26,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from . import __version__, system
 from . import config as config_mod
+from . import limits as limits_mod
 from .config import Config
 from .providers import alerts, calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
 from .providers import countries as world
@@ -60,7 +61,7 @@ class Runtime:
         """Copy the shared Dropbox folder into the photo folder and remember how it went."""
         when = datetime.now(UTC).isoformat(timespec="seconds")
         try:
-            result = await photos.sync_dropbox(self.cfg.photos_dropbox_url, self.photo_folder)
+            result = await photos.sync_dropbox(self.cfg.photos_dropbox_url, self.photo_folder, self.cfg.limits.photos)
             self.dropbox = {"ok": True, "at": when, **result}
         except photos.PhotoError as exc:  # bad link, too big, not a folder: the page words it
             self.dropbox = {"ok": False, "at": when, "error": str(exc), "code": exc.code}
@@ -148,6 +149,7 @@ def router(runtime: Runtime) -> APIRouter:
         return {
             "config": data,
             "pin_set": bool(cfg.admin_pin),
+            "limits": {**vars(cfg.limits), "device": limits_mod.device()[0], "memory_gb": limits_mod.device()[1]},
             "editable": runtime.config_path is not None,
             # first visit: no config file yet, the page shows a short welcome
             "first_run": runtime.config_path is not None and not runtime.config_path.exists(),
@@ -173,6 +175,9 @@ def router(runtime: Runtime) -> APIRouter:
     async def put_config(body: dict) -> dict:
         if runtime.config_path is None:
             raise HTTPException(409, "nowhere to save the settings")
+        over = limits_mod.too_many(body, runtime.cfg.limits)
+        if over:
+            raise HTTPException(422, f"invalid settings: {over}")
         merged = dict(body)
         merged["server"] = {"host": runtime.cfg.host, "port": runtime.cfg.port}
         if "pin" in merged:  # "" clears, a string sets, absent keeps
@@ -246,7 +251,8 @@ def router(runtime: Runtime) -> APIRouter:
     async def photos_list() -> dict:
         return {
             "folder": str(runtime.photo_folder),
-            "names": photos.list_photos(runtime.photo_folder),
+            "names": photos.list_photos(runtime.photo_folder, runtime.cfg.limits.photos),
+            "max": runtime.cfg.limits.photos,
             "dropbox": runtime.dropbox,
         }
 
@@ -262,6 +268,9 @@ def router(runtime: Runtime) -> APIRouter:
             if size > photos.MAX_UPLOAD_BYTES:
                 raise HTTPException(413, "that picture is too big (15 MB at most)")
             chunks.append(chunk)
+        room = runtime.cfg.limits.photos
+        if len(photos.list_photos(runtime.photo_folder, room)) >= room:
+            raise HTTPException(409, f"the photo frame is full ({room} pictures on this device)")
         try:
             saved = photos.save(runtime.photo_folder, name, b"".join(chunks))
         except photos.PhotoError as exc:
@@ -285,7 +294,7 @@ def router(runtime: Runtime) -> APIRouter:
     @api.get("/photos-count", dependencies=[Depends(guard)])
     async def photos_count(folder: str = "") -> dict:
         """Live feedback while the user types a folder path, before they save it."""
-        return {"count": len(photos.list_photos(photos.effective_folder(folder)))}
+        return {"count": len(photos.list_photos(photos.effective_folder(folder), runtime.cfg.limits.photos))}
 
     @api.get("/radio-search", dependencies=[Depends(guard)])
     async def radio_search(country: str = "", language: str = "", name: str = "") -> dict:

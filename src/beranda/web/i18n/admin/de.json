@@ -298,5 +298,20 @@
   "reset_word": "ja",
   "reset_confirm": "Ja, alles löschen",
   "reset_cancel": "Abbrechen",
-  "city_changed": "Neue Stadt gewählt. Region (regionale Feiertage) und Warngebiet wurden zurückgesetzt: bitte Felder 2 und 4 prüfen."
+  "city_changed": "Neue Stadt gewählt. Region (regionale Feiertage) und Warngebiet wurden zurückgesetzt: bitte Felder 2 und 4 prüfen.",
+  "limit_reached": "Maximum erreicht: {n} {what} auf diesem Gerät. Entfernen Sie eins, um ein anderes hinzuzufügen.",
+  "limit_calendars": "Kalender",
+  "limit_news_sources": "Nachrichtenquellen",
+  "limit_tv_channels": "TV-Sender",
+  "limit_radio_stations": "Radiosender",
+  "limit_key_dates": "Daten",
+  "limit_photos": "Fotos",
+  "limit_voice_commands": "Sprachsätze",
+  "device_line": "Ihr Gerät: {device} · {mem} GB Speicher. Angepasste Grenzen: Profil „{profile}“.",
+  "device_other": "dieser Computer",
+  "profile_lite": "leicht",
+  "profile_standard": "standard",
+  "profile_comfort": "komfortabel",
+  "profile_plus": "komfortabel +",
+  "profile_max": "maximal"
 }

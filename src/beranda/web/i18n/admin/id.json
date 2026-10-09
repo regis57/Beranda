@@ -298,5 +298,20 @@
   "reset_word": "ya",
   "reset_confirm": "Ya, hapus semuanya",
   "reset_cancel": "Batal",
-  "city_changed": "Kota baru dipilih. Wilayah (hari libur daerah) dan wilayah peringatan sudah direset: periksa kotak 2 dan 4."
+  "city_changed": "Kota baru dipilih. Wilayah (hari libur daerah) dan wilayah peringatan sudah direset: periksa kotak 2 dan 4.",
+  "limit_reached": "Batas maksimum tercapai: {n} {what} pada perangkat ini. Hapus satu untuk menambah yang lain.",
+  "limit_calendars": "kalender",
+  "limit_news_sources": "sumber berita",
+  "limit_tv_channels": "saluran TV",
+  "limit_radio_stations": "stasiun radio",
+  "limit_key_dates": "tanggal",
+  "limit_photos": "foto",
+  "limit_voice_commands": "frasa suara",
+  "device_line": "Perangkat Anda: {device} · memori {mem} GB. Batas disesuaikan: profil “{profile}”.",
+  "device_other": "komputer ini",
+  "profile_lite": "ringan",
+  "profile_standard": "standar",
+  "profile_comfort": "nyaman",
+  "profile_plus": "nyaman +",
+  "profile_max": "maksimum"
 }

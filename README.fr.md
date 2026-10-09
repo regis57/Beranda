@@ -2,209 +2,172 @@
 
 *Beranda* veut dire « véranda » en indonésien : un endroit calme pour voir sa journée d'un coup d'œil.
 
-Un tableau de bord pour miroir connecté ou vieille tablette, fait pour un **Raspberry Pi 3B+ ou
-plus récent** : l'heure, la météo et la pluie chez vous, la lune, votre agenda, les jours fériés
-et les dates qui comptent, et une ligne de titres d'actualité. Clair le jour, sombre la nuit.
-Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
-
-> **État : alpha (v0.9).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
-> neuve avec systemd ; la partie plein écran n'a pas encore été essayée sur un vrai Raspberry Pi.
-> Si vous l'essayez, dites-nous comment ça s'est passé dans une « issue ».
-> 🇬🇧 [Read in English](README.md)
+**Transformez un Raspberry Pi et n'importe quel écran, ou une vieille tablette, en miroir connecté
+ou en affichage mural** : l'heure, la météo, votre agenda, l'actualité, vos photos, la radio et la
+télé de ce soir. Clair le jour, sombre la nuit. **Gratuit** : pas de compte, pas d'abonnement,
+aucun service payant.
 
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
-*Beranda reste libre et gratuit. Si vous aimez ce qu'il apporte à votre mur, un café est toujours le bienvenu.*
+[![Licence : MIT](https://img.shields.io/badge/licence-MIT-blue)](#licence)
+🇬🇧 [Read in English](README.md)
+
+![Beranda la nuit](docs/screenshots/v0.14.0-display-night.png)
 
 | | |
 |---|---|
-| ![Japon](docs/screenshots/v0.12.0-japan-light.png) | ![Chine, nuit](docs/screenshots/v0.12.0-china-night.png) |
-| ![Afrique (swahili)](docs/screenshots/v0.12.0-africa-light.png) | ![Monde arabe (de droite à gauche)](docs/screenshots/v0.12.0-arab-light.png) |
-| ![Amérique du Nord](docs/screenshots/v0.12.0-america-light.png) | ![Créole (créole haïtien)](docs/screenshots/v0.12.0-creole-light.png) |
+| ![Japon](docs/screenshots/v0.14.0-theme-japan.png) | ![Chine, nuit](docs/screenshots/v0.14.0-theme-china.png) |
+| ![Afrique, en swahili](docs/screenshots/v0.14.0-theme-africa.png) | ![Monde arabe, de droite à gauche](docs/screenshots/v0.14.0-theme-arab.png) |
 
-*Les captures utilisent des données de démonstration : météo, agenda et titres sont inventés ;
-la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les captures](docs/screenshots/)
+*Les captures utilisent des données de démonstration (météo, agenda et titres sont inventés).
+15 thèmes, 57 langues, 243 pays. [Tout voir](docs/COUNTRIES.md).*
 
-## Ce que vous obtenez
+## Ce que vous voyez à l'écran
 
-- **L'heure et la date** dans votre langue.
-- **La météo** : maintenant, la pluie dans les deux prochaines heures, les prévisions à 7 jours (Open-Meteo, gratuit).
-- **Graphique sur 24 heures** (v0.14) : la courbe de température du jour à venir avec la pluie,
-  le vent et les nuits grisées, à côté du cadre photo, plus **qualité de l'air, UV et pollens**
-  en petits points de couleur (Open-Meteo / Copernicus CAMS ; pollens seulement en Europe, en saison).
-- **Alertes météo de votre zone** (facultatif, désactivé par défaut) : les vigilances officielles
-  (vent, orages, canicule...) d'une quarantaine de pays d'Europe et d'Israël, via
-  [MeteoAlarm](https://meteoalarm.org). Indiquez votre zone dans les réglages et touchez Tester.
-- **Éphéméride** : la fête du jour dans 19 pays, la durée du jour (et le gain ou la perte depuis
-  hier), et le calendrier local de votre pays (hégirien, persan, hébraïque, ère bouddhiste, ère
-  japonaise avec rokuyō, lunaire chinois, pasaran javanais...).
-- **Une deuxième horloge** (facultatif) : une petite heure d'ailleurs, sous la date.
-- **Chaque extra est facultatif** : la carte « Extras de l'écran principal » des réglages active
-  ou retire chacun d'eux.
-- **La lune et le soleil** : phase de la lune, lever et coucher du soleil, tout est calculé sur le Pi.
-- **Le calendrier** : votre agenda Google, Apple, Outlook, Nextcloud ou Proton (en lecture seule),
-  les jours fériés de votre pays et vos propres dates (naissances, souvenirs, anniversaires).
-- **L'actualité** : une ligne de titres en bas de l'écran. L'actualité de votre ville, les médias
-  de votre pays, un média international dans votre langue, ou n'importe quel flux RSS.
-- **15 thèmes**, chacun avec sa façon de raconter la saison : Japon (72 micro-saisons), Chine
-  (24 termes solaires et date lunaire), Inde (ṛtu et tithi), Monde arabe (date de l'hégire),
-  Afrique (un proverbe swahili par jour), Indonésie (mangsa javanais), Océanie (saisons
-  tahitiennes des Pléiades), Créole (carême ou hivernage, un proverbe créole), Amérique du Nord
-  (noms des pleines lunes), France (calendrier républicain), Allemagne (saisons de la nature),
-  Espagne, Italie et Portugal (proverbe du mois), Brésil (dicton du jour, saisons de l'hémisphère sud).
-- **57 langues** pour l'écran, dont l'arabe, l'hébreu, le persan et l'ourdou écrits de droite à
-  gauche ; **243 pays et territoires** avec leurs jours fériés, leur premier jour de la semaine
-  et leurs médias. [Tous les pays, toutes les langues](docs/COUNTRIES.md).
-- **Fait pour le mur** : fonctionne en hauteur (portrait) ou en largeur, éteint l'écran la nuit,
-  affiche un QR code pour le régler depuis votre téléphone au premier démarrage.
-- **Une page de réglages** pour votre téléphone, en mots simples, avec de l'aide pas à pas.
-- **Cadre photo** : un petit cadre sur l'écran principal. Dans la page de réglages, touchez
-  « Ajouter des photos » et choisissez des images depuis votre téléphone ou votre ordinateur
-  (le sélecteur du téléphone propose aussi Google Photos, iCloud ou Google Drive) ; ou collez le
-  lien d'un dossier partagé [Dropbox](https://www.dropbox.com) et Beranda le suit. Rien à
-  taper, aucun dossier à trouver : Beranda garde le sien.
-- **Radio du monde** : cherchez parmi les quelque 50 000 stations gratuites de
-  [Radio Browser](https://www.radio-browser.info), sans compte, et enregistrez vos favorites
-  depuis la page de réglages. Un cadre radio sur l'écran principal joue le son **sur la
-  tablette qui affiche Beranda**, avec un curseur de volume tactile (et un bouton « Écouter »
-  dans les réglages pour tester).
-- **Programme TV du soir** : ce qui passe à partir de 20 h pendant 3 heures (heure locale) sur
-  les chaînes que vous choisissez. La page de réglages propose des guides gratuits pour votre
-  pays (testés en direct) — vous n'avez qu'à choisir les chaînes. Beranda ne fait que lire un
-  guide ; il n'en héberge ni n'en récupère jamais lui-même.
-- **Contrôle par la voix (facultatif)** : un bouton micro sur l'écran ; dites la météo, l'heure,
-  « mets France Inter », « station suivante », « plus fort », « stop » — et apprenez-lui vos propres
-  phrases depuis les réglages ([mode d'emploi, langues et phrases](docs/VOICE.fr.md)). C'est le micro de la **tablette** qui est utilisé, via Chrome
-  ou Edge (qui envoient le son à leur propre service de reconnaissance vocale), et la tablette lit
-  la réponse à voix haute. Les navigateurs n'autorisent le micro que sur les pages « sécurisées » :
-  la page de réglages explique le réglage Chrome à faire une fois sur un réseau domestique.
-- **Ce jour-là** : quelques événements de la date du jour dans l'histoire, tirés de
-  [Wikipédia](https://www.wikipedia.org) dans votre langue — donc liés à votre région du monde.
+| | |
+|---|---|
+| **L'heure et la météo** | Horloge, date, météo du moment, pluie dans les 2 prochaines heures, prévisions à 7 jours et graphique sur 24 heures (température, pluie, vent, nuits). Phase de la lune, lever et coucher du soleil. |
+| **Votre quotidien** | Votre agenda (Google, Apple, Outlook, Nextcloud, Proton), les jours fériés de votre pays, anniversaires et dates qui comptent, vos photos en diaporama. |
+| **Le monde** | Titres de l'actualité, radio du monde (50 000 stations), programme TV de ce soir, « Ce jour-là » dans l'histoire. |
+| **Petits plus** | Qualité de l'air, UV et pollens · vigilances météo officielles de votre zone · fête du jour, durée du jour et calendrier de votre pays (hégirien, lunaire chinois, ère japonaise...) · une petite deuxième horloge. **Chacun peut être désactivé.** |
+| **Mains libres** | Commande vocale facultative avec le micro de la tablette : « quel temps fait-il », « mets France Inter », « station suivante ». [Mode d'emploi](docs/VOICE.fr.md) |
+| **Fait pour un mur** | En hauteur ou en largeur, écran éteint la nuit, et chaque thème raconte la saison à la façon de sa culture. |
 
-## L'essayer sur votre ordinateur (2 minutes)
-
-Il faut Python 3.11 ou plus récent.
+## Essayer en 2 minutes, sur votre ordinateur
 
 ```bash
-git clone https://github.com/regis57/Beranda.git
-cd Beranda
-python3 -m venv .venv && . .venv/bin/activate
-pip install .
+git clone https://github.com/regis57/Beranda.git && cd Beranda
+python3 -m venv .venv && . .venv/bin/activate && pip install .
 beranda --demo
 ```
 
-Ouvrez <http://localhost:8080> pour l'affichage et <http://localhost:8080/admin> pour les réglages.
-Arrêtez avec Ctrl+C. Sans `--demo`, vous avez la vraie météo et votre agenda.
+Ouvrez <http://localhost:8080> (l'affichage) et <http://localhost:8080/admin> (les réglages).
+Il faut Python 3.11 ou plus récent. Sans `--demo`, vous avez la vraie météo et votre agenda.
 
-## L'installer sur un Raspberry Pi (une seule ligne)
+## L'installer sur un Raspberry Pi
 
-**Ce qu'il faut** : un Raspberry Pi 3B+ ou plus récent, une carte microSD (8 Go ou plus), un
-écran HDMI, et un téléphone ou un ordinateur sur le même Wi-Fi.
+**Il vous faut** : un Raspberry Pi (le 3B+ ou plus récent est le choix confortable ; les modèles
+plus anciens marchent en mode léger, voir les [limites](#ce-que-votre-raspberry-pi-peut-contenir)),
+une carte microSD de 8 Go ou plus, un écran HDMI, et votre téléphone ou ordinateur sur le même Wi-Fi.
 
-1. **Préparer la carte.** Installez [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
-   sur votre ordinateur et choisissez *Raspberry Pi OS Lite (64-bit)*. Quand Imager propose de
-   personnaliser le système, donnez un nom au Pi (par exemple `beranda`), le nom et le mot de
-   passe de votre Wi-Fi, un nom d'utilisateur et un mot de passe, et activez SSH.
-   [Guide officiel](https://www.raspberrypi.com/documentation/computers/getting-started.html).
-2. **Démarrer le Pi** avec la carte et l'écran branchés, attendez deux minutes.
-3. **Vous y connecter** depuis votre ordinateur : ouvrez un terminal (sous Windows : *PowerShell*)
-   et tapez `ssh votre-utilisateur@beranda.local`.
-   [Guide officiel](https://www.raspberrypi.com/documentation/computers/remote-access.html).
-4. **Installer Beranda** en collant cette ligne (5 à 15 minutes sur un Pi 3) :
+1. **Préparez la carte** avec [Raspberry Pi Imager](https://www.raspberrypi.com/software/) : choisissez
+   *Raspberry Pi OS Lite (64-bit)*. Dans la fenêtre de personnalisation, donnez un nom (par exemple
+   `beranda`), votre Wi-Fi, un utilisateur et un mot de passe, et activez SSH.
+2. **Branchez l'écran et la carte**, allumez, attendez deux minutes.
+3. **Ouvrez un terminal** sur votre ordinateur (sous Windows : *PowerShell*) et tapez
+   `ssh votre-utilisateur@beranda.local`.
+4. **Collez cette ligne** (5 à 15 minutes sur un Pi 3) :
    ```bash
    curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh | sudo bash
    ```
-5. **Le régler depuis votre téléphone** : l'écran affiche une adresse et un QR code. Scannez-le,
-   ou ouvrez `http://beranda.local:8080/admin`, et suivez les trois étapes en haut de la page.
+5. **Terminez depuis votre téléphone** : l'écran affiche un QR code. Scannez-le, ou ouvrez
+   `http://beranda.local:8080/admin`.
 
-Pas d'ordinateur pour personnaliser la carte, ou vous préférez éviter de taper le mot de passe
-Wi-Fi dans Imager ? Ajoutez `--with-wifi-setup` à la ligne d'installation ci-dessus (étape 4) :
-si le Pi démarre un jour sans Wi-Fi et sans câble réseau, il propose son propre réseau Wi-Fi
-« Beranda setup » pour choisir le vrai depuis votre téléphone, sans aucun terminal. Voir
-[`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md). Une [image prête à flasher](pi-gen/README.md) avec
-cela déjà intégré est également en préparation.
+Beranda démarre ensuite tout seul à chaque allumage, en plein écran. Un souci ? Lancez `beranda doctor`.
+Pas de Wi-Fi à saisir dans Imager ? Ajoutez `--with-wifi-setup` à la ligne d'installation : le Pi
+propose alors son propre réseau « Beranda setup » ([comment ça marche](docs/WIFI_SETUP.md)).
 
-C'est tout : Beranda démarre tout seul à chaque allumage, en plein écran. Depuis la page de
-réglages vous pourrez ensuite **mettre à jour**, **redémarrer l'écran**, **redémarrer le Pi**,
-**tourner l'image** pour un écran accroché en hauteur et **éteindre l'écran la nuit**.
+<details><summary>Une vieille tablette comme écran, options de l'installateur, désinstallation</summary>
 
-<details><summary>Ce que fait l'installateur, et ses options</summary>
-
-Il installe Python, les polices Noto (pour toutes les écritures), Cage et Chromium (le navigateur
-plein écran) ; crée un utilisateur `beranda` qui fait tout tourner (jamais root) ; met Beranda
-dans `/opt/beranda` et vos réglages dans `/etc/beranda` ; et installe trois services : le serveur,
-l'écran plein écran, et un petit service root qui n'exécute que les trois demandes de la page de
-réglages (mise à jour, redémarrage de l'écran, redémarrage du Pi). Relancez la ligne pour réparer
-ou mettre à jour.
+**Tablette ou téléphone comme écran** : installez avec `--no-screen` sur le Pi (ou n'importe quel
+ordinateur), puis ouvrez `http://beranda.local:8080` dans le navigateur de la tablette (Chrome ou Edge
+conseillés) et ajoutez la page à l'écran d'accueil. La radio et la voix utilisent **les haut-parleurs
+et le micro de la tablette**.
 
 Les options se placent après `bash -s --`, par exemple `... | sudo bash -s -- --no-screen` :
-`--no-screen` (serveur seul, pour l'afficher sur une tablette ou un autre appareil),
-`--hostname cuisine` (renomme le Pi : `http://cuisine.local:8080/admin`), `--with-wifi-setup`
-(propose un réseau Wi-Fi à rejoindre si aucun n'est encore réglé - voir
-[`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md)), `--branch NOM`, `--dry-run`.
+`--no-screen`, `--hostname cuisine`, `--with-wifi-setup`, `--branch NOM`, `--dry-run`.
 
-Un souci ? `beranda doctor` vérifie tout et dit quoi corriger.
+L'installateur ajoute Python, des polices pour toutes les écritures, Cage et Chromium (le navigateur
+plein écran), un utilisateur `beranda` (jamais root) et trois services : le serveur, l'affichage plein
+écran, et un petit service root qui ne fait que les quatre boutons de la page de réglages (mise à
+jour, redémarrage de l'écran, redémarrage du Pi, tout recommencer). Relancez la ligne pour mettre à
+jour ou réparer.
+
 Pour le retirer : `sudo /opt/beranda/src/uninstall.sh` (ajoutez `--purge` pour effacer aussi vos réglages).
 </details>
 
-## Relier votre agenda
+## Réglez-le depuis votre téléphone
 
-Beranda lit votre agenda grâce à un **lien** privé (une adresse « iCal » ou « ICS »). Il ne fait
-que lire : il ne modifie jamais rien et ne demande jamais votre mot de passe. Collez le lien dans
-*Réglages → 4. Votre agenda* et appuyez sur **Tester**. La page de réglages montre ces mêmes étapes
-sous la case, avec le guide officiel dans votre langue.
+Ouvrez `http://beranda.local:8080/admin`. Un menu ☰ mène à chaque section ; chacune a un lien
+**Besoin d'aide ?** en mots simples. L'essentiel, dans l'ordre :
+
+1. **Où êtes-vous ?** Tapez votre ville et choisissez-la. Météo, soleil et lune suivent.
+2. **Pays et langue.** Jours fériés, premier jour de la semaine et langue de l'écran.
+3. **Apparence.** Choisissez un thème ; l'aperçu se met à jour en direct.
+4. **Extras de l'écran principal.** Activez ou retirez le graphique, la qualité de l'air, les vigilances, l'éphéméride et la deuxième horloge.
+5. **Agenda, actualité, photos, radio, TV, voix.** Tout est facultatif, chacun dans sa section.
+
+Appuyez sur **Enregistrer** : l'écran suit en moins d'une minute. Détails : [docs/USAGE.md](docs/USAGE.md).
+
+### Relier votre agenda
+
+Beranda lit votre agenda grâce à un **lien** privé (une adresse « iCal / ICS »). Il ne fait que lire,
+ne modifie jamais rien et ne demande jamais votre mot de passe. Collez le lien dans la section
+agenda et appuyez sur **Tester**.
 
 | Agenda | Où trouver le lien | Guide officiel |
 |---|---|---|
-| **Google Agenda** | Sur un ordinateur : ⚙ → Paramètres → à gauche, cliquez sur votre agenda → *Intégrer l'agenda* → copiez *Adresse secrète au format iCal*. | [Aide Google](https://support.google.com/calendar/answer/37648?hl=fr) |
-| **Apple iCloud** | Sur icloud.com/calendar : ⓘ à côté du calendrier → activez *Calendrier public* → *Copier*. | [Aide Apple](https://support.apple.com/fr-fr/guide/icloud/share-a-calendar-mm6b1a9479/icloud) |
-| **Outlook / Microsoft 365** | Outlook sur le web : ⚙ Paramètres → Calendrier → Calendriers partagés → *Publier un calendrier* → choisissez-le → *Publier* → copiez le lien **ICS**. | [Aide Microsoft](https://support.microsoft.com/fr-fr/outlook/share-your-calendar-in-outlook-com) |
-| **Nextcloud** | Application Agenda : menu de l'agenda → *Partager le lien* → copiez. Beranda transforme tout seul le lien de partage en bonne adresse. | [Manuel Nextcloud](https://docs.nextcloud.com/server/stable/user_manual/en/groupware/calendar.html#publishing-a-calendar) |
-| **Proton Calendar** | Offres payantes : Paramètres → Calendriers → votre calendrier → *Partager avec tout le monde* → *Créer un lien* → *Copier le lien*. | [Aide Proton](https://proton.me/support/share-calendar-via-link) |
+| **Google Agenda** | Paramètres → votre agenda → *Intégrer l'agenda* → *Adresse secrète au format iCal* | [aide](https://support.google.com/calendar/answer/37648?hl=fr) |
+| **Apple iCloud** | icloud.com/calendar → ⓘ à côté du calendrier → *Calendrier public* → *Copier* | [aide](https://support.apple.com/fr-fr/guide/icloud/share-a-calendar-mm6b1a9479/icloud) |
+| **Outlook / Microsoft 365** | Paramètres → Calendrier → Calendriers partagés → *Publier un calendrier* → copiez le lien **ICS** | [aide](https://support.microsoft.com/fr-fr/outlook/share-your-calendar-in-outlook-com) |
+| **Nextcloud** | Agenda → *Partager le lien* → copiez (Beranda le convertit) | [manuel](https://docs.nextcloud.com/server/stable/user_manual/en/groupware/calendar.html#publishing-a-calendar) |
+| **Proton Calendar** | Offres payantes : Paramètres → Calendriers → *Partager avec tout le monde* → *Copier le lien* | [aide](https://proton.me/support/share-calendar-via-link) |
 
-**Gardez ce lien pour vous** : toute personne qui l'a peut voir vos rendez-vous. Beranda ne le
-garde que sur le Pi, dans un fichier lisible par vous seul. S'il fuite, créez-en un nouveau depuis
-la même page (l'ancien cesse de marcher). Les liens qui commencent par `webcal://` marchent aussi.
+**Gardez ce lien pour vous** : toute personne qui l'a peut lire vos rendez-vous. Il n'est conservé que
+sur votre Pi. S'il fuite, créez-en un nouveau depuis la même page et l'ancien cesse de marcher.
 
-## Les titres de l'actualité
+### L'actualité
 
-Une ligne en bas de l'écran affiche les derniers titres, un par un, avec le nom du média.
-Seulement des titres : pas d'images, pas de publicité, pas de pistage, pas de compte.
+« Choisir pour moi » (par défaut) prend l'actualité de votre ville, deux médias de votre pays et un
+média international dans votre langue. Ou choisissez parmi 140 flux gratuits de tous les continents,
+ou collez n'importe quel lien RSS. Seulement des titres : pas d'images, pas de publicité, pas de
+pistage. Chaque flux du catalogue est vérifié chaque semaine.
 
-- **« Choisir pour moi »** (par défaut) : l'actualité qui cite votre ville (trouvée par
-  [GDELT](https://www.gdeltproject.org/), un index libre et gratuit de la presse mondiale), deux
-  médias de votre pays et un média international dans votre langue.
-- **Choisir vous-même** parmi 140 flux gratuits de tous les continents : radios et télévisions
-  publiques et grands journaux d'Europe, des Amériques, d'Afrique, d'Asie et d'Océanie, et services internationaux (BBC, DW,
-  France 24, RFI, ONU Info, Al Jazeera...).
-- **Ajouter n'importe quel flux** : la plupart des sites d'information publient un lien RSS (cherchez
-  le logo orange RSS, ou essayez l'adresse du site suivie de `/rss` ou `/feed`). Collez-le et
-  appuyez sur **Tester**.
+## Ce que votre Raspberry Pi peut contenir
 
-Chaque flux du catalogue est vérifié automatiquement chaque semaine.
+Chaque agenda, flux ou chaîne ajouté est un téléchargement de plus à garder en mémoire, et les petites
+cartes en ont peu. Beranda reconnaît votre carte et sa mémoire, et fixe le **maximum** de chaque
+liste (la page de réglages vous le dit quand vous l'atteignez, au lieu de ralentir). Rien à régler.
 
-## Vie privée et sécurité
+| Carte | Mémoire | Profil | Agendas | Sources d'actualité* | Chaînes TV | Stations radio | Dates | Photos | Phrases vocales |
+|---|---|---|---|---|---|---|---|---|---|
+| Pi 2, Zero 2 W | 0,5 – 1 Go | léger | 3 | 8 | 15 | 15 | 100 | 200 | 20 |
+| **Pi 3 / 3B+, Pi 4** | 1 Go | **standard** | 10 | 20 | 40 | 30 | 200 | 500 | 50 |
+| Pi 4, Pi 5 | 2 Go | confortable | 15 | 30 | 60 | 50 | 400 | 800 | 80 |
+| Pi 4, Pi 5, Pi 400 | 4 Go | confortable + | 25 | 50 | 100 | 80 | 800 | 1 500 | 120 |
+| Pi 4, Pi 5 | 8 Go ou plus | maximum | 40 | 80 | 150 | 120 | 1 500 | 3 000 | 200 |
 
-- La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN.
-- Vos réglages restent sur le Pi. Le Pi ne parle qu'aux services que vous utilisez : Open-Meteo
-  (météo), votre agenda, les flux d'actualité choisis, et GDELT si « actualité de ma ville » est
-  activé (il envoie alors le nom de votre ville) ; qualité de l'air, MeteoAlarm et
-  nameday.abalin.net si vous activez ces extras.
-- N'ouvrez pas le port 8080 du Pi vers internet sur votre box.
+*\*médias et vos propres flux RSS ensemble. Un ordinateur qui n'est pas un Raspberry Pi est jugé sur sa mémoire.*
 
-## Pour contribuer
+Ce que **l'écran** affiche est plafonné à part, et le reste défile simplement : 3 titres à la fois
+(un nouveau lot toutes les 12 s), jusqu'à 10 chaînes TV par page, 8 lignes d'agenda, 3 vigilances, 3 pollens.
 
-`pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`.
-Captures : `python scripts/screenshot.py` et `python scripts/screenshot_admin.py`.
-Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/` (et si possible `i18n/admin/`).
-Voir la [feuille de route](docs/ROADMAP.md).
+Ces chiffres sont une estimation prudente, pas un banc d'essai : seules quelques cartes ont été
+essayées par l'auteur. Vous savez mieux ? Forcez un profil dans `config.toml` (`[limits]` /
+`profile = "plus"`) ou dites-nous ce que votre carte a supporté dans une
+[issue](https://github.com/regis57/Beranda/issues).
+
+## Vie privée
+
+- La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN. N'ouvrez pas le port 8080 vers internet.
+- Vos réglages restent sur votre Pi. Il ne parle qu'aux services que vous utilisez : Open-Meteo
+  (météo, air), votre agenda, les flux choisis et, si vous les activez, GDELT (« actualité de ma ville »
+  envoie le nom de votre ville), MeteoAlarm (vigilances), nameday.abalin.net (fêtes), Wikipédia,
+  Radio Browser et votre guide TV.
+- La voix utilise le service de reconnaissance de votre navigateur (Chrome et Edge envoient le son à leur éditeur). Beranda ne garde rien.
+
+## Aide, contribuer, soutenir
+
+- **Bloqué ?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues).
+- **Contribuer** : `pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`. Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/`. [Feuille de route](docs/ROADMAP.md).
+- **Soutenir** : Beranda reste libre et gratuit. S'il égaye votre mur, [un café](https://buymeacoffee.com/regis57) est toujours le bienvenu.
 
 ## Crédits
 
 Météo et qualité de l'air par [Open-Meteo](https://open-meteo.com/) (CC BY 4.0 ; air par
-[Copernicus CAMS](https://atmosphere.copernicus.eu)). Alertes par
-[MeteoAlarm](https://meteoalarm.org). Fêtes par [nameday.abalin.net](https://nameday.abalin.net). Actualité locale par
-[GDELT](https://www.gdeltproject.org/). Jours fériés par la bibliothèque
-[holidays](https://github.com/vacanza/holidays). Les titres appartiennent à leurs éditeurs.
+[Copernicus CAMS](https://atmosphere.copernicus.eu)). Vigilances par [MeteoAlarm](https://meteoalarm.org).
+Fêtes par [nameday.abalin.net](https://nameday.abalin.net). Actualité locale par [GDELT](https://www.gdeltproject.org/).
+Radio par [Radio Browser](https://www.radio-browser.info). « Ce jour-là » par [Wikipédia](https://www.wikipedia.org).
+Jours fériés par la bibliothèque [holidays](https://github.com/vacanza/holidays). Les titres appartiennent à leurs éditeurs.
 
 ## Licence
 

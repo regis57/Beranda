@@ -298,5 +298,20 @@
   "reset_word": "oui",
   "reset_confirm": "Oui, tout effacer",
   "reset_cancel": "Annuler",
-  "city_changed": "Nouvelle ville choisie. La région (jours fériés régionaux) et la zone des alertes ont été remises à jour pour elle : vérifiez les cases 2 et 4."
+  "city_changed": "Nouvelle ville choisie. La région (jours fériés régionaux) et la zone des alertes ont été remises à jour pour elle : vérifiez les cases 2 et 4.",
+  "limit_reached": "Maximum atteint : {n} {what} sur cet appareil. Retirez-en un pour en ajouter un autre.",
+  "limit_calendars": "agendas",
+  "limit_news_sources": "sources d'actualité",
+  "limit_tv_channels": "chaînes TV",
+  "limit_radio_stations": "stations de radio",
+  "limit_key_dates": "dates",
+  "limit_photos": "photos",
+  "limit_voice_commands": "phrases vocales",
+  "device_line": "Votre appareil : {device} · {mem} Go de mémoire. Limites adaptées : profil « {profile} ».",
+  "device_other": "cet ordinateur",
+  "profile_lite": "léger",
+  "profile_standard": "standard",
+  "profile_comfort": "confort",
+  "profile_plus": "confort +",
+  "profile_max": "maximal"
 }
