@@ -297,5 +297,6 @@
   "reset_prompt": "Pour repartir de zéro, écrivez le mot « {word} » ci-dessous.",
   "reset_word": "oui",
   "reset_confirm": "Oui, tout effacer",
-  "reset_cancel": "Annuler"
+  "reset_cancel": "Annuler",
+  "city_changed": "Nouvelle ville choisie. La région (jours fériés régionaux) et la zone des alertes ont été remises à jour pour elle : vérifiez les cases 2 et 4."
 }

@@ -297,5 +297,6 @@
   "reset_prompt": "Para recomeçar do zero, escreva abaixo a palavra «{word}».",
   "reset_word": "sim",
   "reset_confirm": "Sim, apagar tudo",
-  "reset_cancel": "Cancelar"
+  "reset_cancel": "Cancelar",
+  "city_changed": "Nova cidade escolhida. A região (feriados regionais) e a zona de avisos foram repostas: verifique as caixas 2 e 4."
 }

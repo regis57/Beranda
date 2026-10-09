@@ -297,5 +297,6 @@
   "reset_prompt": "Um ganz von vorn zu beginnen, tippen Sie unten das Wort „{word}“.",
   "reset_word": "ja",
   "reset_confirm": "Ja, alles löschen",
-  "reset_cancel": "Abbrechen"
+  "reset_cancel": "Abbrechen",
+  "city_changed": "Neue Stadt gewählt. Region (regionale Feiertage) und Warngebiet wurden zurückgesetzt: bitte Felder 2 und 4 prüfen."
 }
