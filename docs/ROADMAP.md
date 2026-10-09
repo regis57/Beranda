@@ -18,6 +18,8 @@ Done:
   by Beranda)
 - **v0.8**: offline voice control (openWakeWord + Vosk + Piper), a separate opt-in service
   (`install.sh --with-voice`) for the weather, the time, a favourite station and the screen
+- **v0.9**: country-specific historical events ("on this day", free lookup on Wikidata),
+  woven into the news ticker
 
 Next:
 
@@ -26,8 +28,7 @@ Next:
 2. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3
 3. Settings menu on the Pi itself (raspi-config style)
 4. Blink camera thumbnails
-5. Country-specific historical events (Wikidata)
-6. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
+5. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
 
 ## What we won't do, and why
 

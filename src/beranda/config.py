@@ -86,6 +86,7 @@ class Config:
     tv_prime_end: str = "23:00"  # if this is not after the start, it is treated as past midnight
     voice_enabled: bool = False  # the beranda-voice service only acts when this is on
     voice_wake_word: str = voice_mod.DEFAULT_WAKE_WORD  # one of the pretrained wake phrases
+    history_enabled: bool = True  # "on this day" historical events for `country`, from Wikidata
 
     @property
     def week_start(self) -> int:
@@ -200,6 +201,7 @@ def from_dict(data: dict) -> Config:
     radio = data.get("radio", {})
     tv = data.get("tv", {})
     voice = data.get("voice", {})
+    history = data.get("history", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -233,6 +235,7 @@ def from_dict(data: dict) -> Config:
         tv_prime_end=_check_hhmm(tv.get("prime_end")) or Config.tv_prime_end,
         voice_enabled=bool(voice.get("enabled", False)),
         voice_wake_word=voice_mod.check_wake_word(voice.get("wake_word")),
+        history_enabled=bool(history.get("enabled", True)),
     )
 
 
@@ -300,6 +303,7 @@ def to_dict(cfg: Config) -> dict:
         "prime_end": cfg.tv_prime_end,
     }
     out["voice"] = {"enabled": cfg.voice_enabled, "wake_word": cfg.voice_wake_word}
+    out["history"] = {"enabled": cfg.history_enabled}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

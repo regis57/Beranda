@@ -7,7 +7,7 @@ plus récent** : l'heure, la météo et la pluie chez vous, la lune, votre agend
 et les dates qui comptent, et une ligne de titres d'actualité. Clair le jour, sombre la nuit.
 Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
 
-> **État : alpha (v0.8).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
+> **État : alpha (v0.9).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
 > neuve avec systemd ; la partie plein écran n'a pas encore été essayée sur un vrai Raspberry Pi.
 > Si vous l'essayez, dites-nous comment ça s'est passé dans une « issue ».
 > 🇬🇧 [Read in English](README.md)
@@ -59,6 +59,8 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
   envoyé où que ce soit ; cela tourne comme son propre service (`install.sh --with-voice`)
   avec [openWakeWord](https://github.com/dscripka/openWakeWord),
   [Vosk](https://alphacephei.com/vosk/) et [Piper](https://github.com/rhasspy/piper).
+- **Ce jour-là** : événements historiques de votre propre pays, cherchés gratuitement sur
+  [Wikidata](https://www.wikidata.org), mêlés au bandeau d'actualité.
 
 ## L'essayer sur votre ordinateur (2 minutes)
 

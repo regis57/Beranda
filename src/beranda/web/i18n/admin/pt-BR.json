@@ -121,5 +121,7 @@
   "voice_hint": "Um serviço separado, opcional e totalmente offline: uma palavra de ativação e depois uma frase curta (a previsão, a hora, uma rádio favorita, reiniciar a tela). Nada é enviado para lugar nenhum; precisa de um microfone e de uma caixa de som no Pi, e é instalado separadamente (install.sh --with-voice).",
   "voice_enabled": "Ativar o controle por voz",
   "voice_wake_word": "Palavra de ativação",
-  "voice_help": "Diga a palavra de ativação e depois o seu pedido, por exemplo “Hey Jarvis, como está o tempo” ou “Hey Jarvis, toca France Inter”. A palavra de ativação precisa ser uma destas três já prontas — o Beranda não consegue treinar uma personalizada. Este cartão só ativa o recurso e escolhe a palavra de ativação; a escuta em si roda como um programa próprio no Pi, iniciado uma vez com install.sh --with-voice."
+  "voice_help": "Diga a palavra de ativação e depois o seu pedido, por exemplo “Hey Jarvis, como está o tempo” ou “Hey Jarvis, toca France Inter”. A palavra de ativação precisa ser uma destas três já prontas — o Beranda não consegue treinar uma personalizada. Este cartão só ativa o recurso e escolhe a palavra de ativação; a escuta em si roda como um programa próprio no Pi, iniciado uma vez com install.sh --with-voice.",
+  "history_enabled": "Mostrar os acontecimentos históricos de hoje (“nesta data”)",
+  "history_hint": "Uma consulta gratuita à Wikidata para o seu país, armazenada uma vez por dia. Nada sobre você é enviado além do código do seu país e da data de hoje."
 }

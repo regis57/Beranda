@@ -18,6 +18,7 @@ NOW = datetime(2026, 10, 8, 12, 0, tzinfo=ZoneInfo("Europe/Paris"))
 
 def make(tmp_path, **kw) -> TestClient:
     kw.setdefault("news_enabled", False)  # news has its own tests below
+    kw.setdefault("history_enabled", False)  # history has its own tests below
     cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
     return TestClient(create_app(cfg, now_fn=lambda: NOW))
 
@@ -158,3 +159,45 @@ def test_a_broken_tv_guide_does_not_blank_the_screen(tmp_path):
     state = client.get("/api/state").json()
     assert state["tv"] is None
     assert state["errors"]["tv"] == "ConnectError"
+
+
+def test_history_disabled_by_default_in_these_tests(tmp_path):
+    state = make(tmp_path).get("/api/state").json()
+    assert state["history"] == []
+
+
+@respx.mock
+def test_history_is_fetched_for_the_configured_country(tmp_path):
+    from beranda.providers import history
+
+    respx.get(history.SPARQL_URL).mock(
+        side_effect=[
+            httpx.Response(
+                200, json={"results": {"bindings": [{"c": {"value": "http://www.wikidata.org/entity/Q142"}}]}}
+            ),
+            httpx.Response(
+                200,
+                json={
+                    "results": {
+                        "bindings": [
+                            {"eventLabel": {"value": "Bastille Day"}, "date": {"value": "1789-07-14T00:00:00Z"}}
+                        ]
+                    }
+                },
+            ),
+        ]
+    )
+    client = make(tmp_path, history_enabled=True, country="FR")
+    state = client.get("/api/state").json()
+    assert state["history"] == [{"year": 1789, "label": "Bastille Day"}]
+
+
+@respx.mock
+def test_a_broken_history_source_does_not_blank_the_screen(tmp_path):
+    from beranda.providers import history
+
+    respx.get(history.SPARQL_URL).mock(side_effect=httpx.ConnectError("down"))
+    client = make(tmp_path, history_enabled=True)
+    state = client.get("/api/state").json()
+    assert state["history"] == []
+    assert state["errors"]["history"] == "ConnectError"

@@ -214,5 +214,7 @@
   "voice_hint": "A separate, optional, fully offline service: a wake word, then a short sentence (the weather, the time, a favourite station, restarting the screen). Nothing is sent anywhere; it needs a microphone and speaker on the Pi and is installed separately (install.sh --with-voice).",
   "voice_enabled": "Turn on voice control",
   "voice_wake_word": "Wake word",
-  "voice_help": "Say the wake word, then your request, e.g. “Hey Jarvis, what's the weather” or “Hey Jarvis, play France Inter”. The wake word must be one of these three ready-made ones — Beranda cannot train a custom one. This card only turns the feature on and chooses the wake word; the listening itself runs as its own program on the Pi, started once with install.sh --with-voice."
+  "voice_help": "Say the wake word, then your request, e.g. “Hey Jarvis, what's the weather” or “Hey Jarvis, play France Inter”. The wake word must be one of these three ready-made ones — Beranda cannot train a custom one. This card only turns the feature on and chooses the wake word; the listening itself runs as its own program on the Pi, started once with install.sh --with-voice.",
+  "history_enabled": "Show historical events for today ('on this day')",
+  "history_hint": "A free lookup on Wikidata for your country, cached once a day. Nothing about you is sent besides your country code and today's date."
 }

@@ -73,6 +73,11 @@ enabled = true
 # enabled = true
 # wake_word = "hey_jarvis"
 
+# "On this day": historical events for your own country, looked up for free on Wikidata and
+# woven into the news ticker. On by default; set to false to turn it off.
+# [history]
+# enabled = true
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"

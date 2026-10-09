@@ -24,6 +24,7 @@ from .cache import Cache
 from .config import Config
 from .providers import astro as astro_mod
 from .providers import calendar_ics, demo, news_catalog, photos, seasons, specialdays
+from .providers import history as history_mod
 from .providers import news as news_mod
 from .providers import tv as tv_mod
 from .providers import weather as weather_mod
@@ -36,6 +37,7 @@ WEATHER_TTL = 15 * 60
 CALENDAR_TTL = 15 * 60
 NEWS_TTL = 30 * 60
 TV_TTL = 3 * 60 * 60  # XMLTV guides are usually refreshed by their publisher a few times a day
+HISTORY_TTL = 20 * 60 * 60  # "on this day" only changes once a day, by definition
 
 # The display loads nothing but its own files. A strict policy keeps a hostile calendar
 # entry or feed from ever running code on the mirror.
@@ -172,6 +174,20 @@ async def build_state(
     day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today, cfg.language)) if cfg.demo else cfg
     days = specialdays.special_days(day_cfg, start, end)
 
+    # --- "on this day" historical events for the user's own country (Wikidata) ----------
+    history: list[dict] = []
+    if cfg.history_enabled and not cfg.demo:
+
+        async def load_history() -> list[dict]:
+            return await history_mod.fetch(cfg.country, today.month, today.day, cfg.language)
+
+        try:
+            history, is_stale = await cache.get(f"history:{cfg.country}:{today.isoformat()}", HISTORY_TTL, load_history)
+            if is_stale:
+                stale.append("history")
+        except Exception as exc:  # noqa: BLE001 - Wikidata being slow or down must not blank the screen
+            errors["history"] = type(exc).__name__
+
     # --- photo carousel (local folder, filled by rclone/Syncthing, nothing fetched here) ---
     photo_names = photos.list_photos(cfg.photos_folder)
 
@@ -229,6 +245,7 @@ async def build_state(
         "news": news,
         "photos": {"names": photo_names, "interval": cfg.photos_interval},
         "tv": tv,
+        "history": history,
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.

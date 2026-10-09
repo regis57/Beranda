@@ -16,6 +16,7 @@ OUTSIDE = ("8.8.8.8", 5000)
 
 def make(tmp_path, client=LOCAL, **kw):
     kw.setdefault("news_enabled", False)
+    kw.setdefault("history_enabled", False)
     cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
     path = tmp_path / "config.toml"
     return TestClient(create_app(cfg, config_path=path), client=client), path
@@ -263,6 +264,14 @@ def test_voice_settings_round_trip(tmp_path):
     assert client.put("/api/admin/config", json=body).json()["saved"] is True
     saved = tomllib.loads(path.read_text())
     assert saved["voice"] == {"enabled": True, "wake_word": "alexa"}
+
+
+def test_history_settings_round_trip(tmp_path):
+    client, path = make(tmp_path)
+    body = valid_body(history={"enabled": False})
+    assert client.put("/api/admin/config", json=body).json()["saved"] is True
+    saved = tomllib.loads(path.read_text())
+    assert saved["history"] == {"enabled": False}
 
 
 class _FakeProc:

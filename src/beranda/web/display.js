@@ -437,11 +437,16 @@ function tickerItems() {
   const shows = (state?.tv?.programmes || []).map((p) => ({
     source: p.channel, title: p.title, age: `${p.start}–${p.stop}`,
   }));
+  // "On this day": the source column becomes the year it happened (negative = BCE).
+  const onThisDay = (state?.history || []).map((h) => ({
+    source: h.year < 0 ? `${-h.year} BCE` : String(h.year), title: h.label, age: '',
+  }));
   const merged = [];
-  const count = Math.max(news.length, shows.length);
+  const count = Math.max(news.length, shows.length, onThisDay.length);
   for (let i = 0; i < count; i++) {
     if (i < news.length) merged.push(news[i]);
     if (i < shows.length) merged.push(shows[i]);
+    if (i < onThisDay.length) merged.push(onThisDay[i]);
   }
   return merged;
 }

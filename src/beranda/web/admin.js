@@ -352,6 +352,8 @@ function renderNews() {
   $('feed-list').replaceChildren();
   for (const u of news.feeds || []) addFeedRow(u);
   refreshNews();
+  const history = cfg.history || { enabled: true };
+  $('history-on').checked = history.enabled !== false;
 }
 
 // ------------------------------------------------------------------ 7. photos ---
@@ -572,6 +574,7 @@ function collect() {
       feeds: [...$('feed-list').querySelectorAll('input')].map((i) => i.value.trim()).filter(Boolean),
     },
   };
+  body.history = { enabled: $('history-on').checked };
   body.photos = { folder: $('photos-folder').value.trim(), interval: Number($('photos-interval').value) || 20 };
   body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
   body.tv = {
