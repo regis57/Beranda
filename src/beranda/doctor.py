@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import shutil
 import subprocess
 import sys
@@ -53,6 +54,21 @@ def _services() -> list[str]:
     return lines
 
 
+async def _find_server(client: httpx.AsyncClient, skip: int) -> int | None:
+    """Beranda may answer on another port than the one read (changed in the settings, or back to
+    8080 after starting over): look at the usual ones."""
+    for port in (8080, 8081, 8085, 8088, 8000, 8888):
+        if port == skip:
+            continue
+        try:
+            r = await client.get(f"http://127.0.0.1:{port}/api/health", timeout=2)
+            if r.json().get("status") == "ok":
+                return port
+        except (httpx.HTTPError, ValueError):
+            continue
+    return None
+
+
 async def _network(cfg: config.Config) -> list[str]:
     lines = []
     async with httpx.AsyncClient(timeout=8) as client:
@@ -60,7 +76,13 @@ async def _network(cfg: config.Config) -> list[str]:
             r = await client.get(f"http://127.0.0.1:{cfg.port}/api/health")
             lines.append(f"{OK} the Beranda server answers on port {cfg.port} (version {r.json().get('version')})")
         except httpx.HTTPError:
-            lines.append(f"{FAIL} nothing answers on port {cfg.port}. Start it: sudo systemctl start beranda")
+            other = await _find_server(client, cfg.port)
+            if other:
+                lines.append(f"{WARN} the Beranda server answers on port {other}, not {cfg.port}: "
+                             f"open http://<this computer>:{other}/admin")
+            else:
+                lines.append(f"{FAIL} nothing answers on port {cfg.port}. Start it: sudo systemctl start beranda  "
+                             "(then, if it still fails: journalctl -u beranda -n 50)")
         try:
             await client.get("https://api.open-meteo.com/v1/forecast?latitude=0&longitude=0&current=temperature_2m")
             lines.append(f"{OK} internet works (weather service reachable)")
@@ -77,6 +99,17 @@ async def _network(cfg: config.Config) -> list[str]:
     return lines
 
 
+def _unreadable_settings() -> Path | None:
+    """The installer's settings file, when it exists but this user may not read it (it is private)."""
+    folder = Path("/etc/beranda")
+    if folder.is_dir() and not os.access(folder, os.R_OK | os.X_OK):
+        return folder / "config.toml"
+    candidate = folder / "config.toml"
+    if candidate.is_file() and not os.access(candidate, os.R_OK):
+        return candidate
+    return None
+
+
 def run() -> int:
     print(f"Beranda {__version__} — checking this computer\n")
     lines = []
@@ -85,7 +118,11 @@ def run() -> int:
                  + ("" if py >= (3, 11) else ": Beranda needs 3.11 or newer"))
     path = config.find_config_path()
     cfg = config.Config()
-    if path and Path(path).is_file():
+    hidden = _unreadable_settings()
+    if hidden:
+        lines.append(f"{WARN} the settings file {hidden} is private: run  sudo beranda doctor  to check everything "
+                     "(without sudo the port and the calendars cannot be checked)")
+    elif path and Path(path).is_file():
         try:
             cfg = config.load(path)
             lines.append(f"{OK} settings read from {path}: {cfg.location.name}, {cfg.country}, "

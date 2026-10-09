@@ -161,11 +161,14 @@ fi
 # ------------------------------------------------------------------ done ---
 name="$(hostname 2>/dev/null || echo raspberrypi)"
 ip="$(hostname -I 2>/dev/null | awk '{print $1}')"
+# the port saved in the settings page ("Advanced user"), 8080 unless it was changed
+port="$(sed -n '/^\[server\]/,/^\[/{s/^port *= *\([0-9]\{1,5\}\).*/\1/p}' "$CONFDIR/config.toml" 2>/dev/null | head -n 1)"
+port="${port:-8080}"
 echo
 say "Beranda is installed."
 echo "    On your phone or computer (same Wi-Fi), open the settings page:"
-echo "        http://$name.local:8080/admin"
-[ -n "$ip" ] && echo "        or http://$ip:8080/admin"
+echo "        http://$name.local:$port/admin"
+[ -n "$ip" ] && echo "        or http://$ip:$port/admin"
 [ "$SCREEN" = 1 ] && echo "    The screen shows the same address and a QR code until you have saved the settings."
 echo "    Something wrong? Run:  beranda doctor"
 if [ "$WIFI_SETUP" = 1 ]; then
