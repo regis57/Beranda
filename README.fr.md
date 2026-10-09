@@ -69,8 +69,8 @@ propose alors son propre réseau « Beranda setup » ([comment ça marche](docs/
 <details><summary>Une vieille tablette comme écran, options de l'installateur, désinstallation</summary>
 
 **Tablette ou téléphone comme écran** : installez avec `--no-screen` sur le Pi (ou n'importe quel
-ordinateur), puis ouvrez `http://beranda.local:8080` dans le navigateur de la tablette (Chrome ou Edge
-conseillés) et ajoutez la page à l'écran d'accueil. La radio et la voix utilisent **les haut-parleurs
+ordinateur), puis ouvrez `http://beranda.local:8080` dans le navigateur de la tablette (Google Chrome
+conseillé, surtout pour la voix) et ajoutez la page à l'écran d'accueil. La radio et la voix utilisent **les haut-parleurs
 et le micro de la tablette**.
 
 Les options se placent après `bash -s --`, par exemple `... | sudo bash -s -- --no-screen` :
