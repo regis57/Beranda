@@ -1,5 +1,8 @@
+from datetime import datetime
+
 import pytest
 
+from beranda import config
 from beranda.providers import voice
 
 
@@ -38,7 +41,6 @@ def test_parse_intent_of_empty_text_is_nothing():
     assert voice.parse_intent("   ", "fr") is None
 
 
-from datetime import datetime
 from zoneinfo import ZoneInfo
 
 NOW = datetime(2026, 10, 8, 18, 5, tzinfo=ZoneInfo("Europe/Paris"))
@@ -101,3 +103,73 @@ def test_nonsense_gets_a_polite_answer_and_no_action():
 def test_every_spoken_reply_has_the_same_keys_in_every_language():
     english = set(voice._RESPONSES["en"])
     assert all(set(table) == english for table in voice._RESPONSES.values())
+
+
+FAVOURITES = [
+    {"uuid": "a", "name": "France Inter", "url": "http://a"},
+    {"uuid": "b", "name": "Jak 101 FM", "url": "http://b"},
+]
+
+
+def hear(text, language="fr", **kw):
+    return voice.answer(text, language=language, now=NOW, stations=FAVOURITES, weather=None, **kw)
+
+
+@pytest.mark.parametrize(
+    ("text", "language", "intent"),
+    [
+        ("station suivante", "fr", "radio_next"),
+        ("station précédente", "fr", "radio_prev"),
+        ("plus fort", "fr", "volume_up"),
+        ("mets plus fort", "fr", "volume_up"),  # longer than "mets", so it is not a "play" request
+        ("baisse le son", "fr", "volume_down"),
+        ("next station", "en", "radio_next"),
+        ("play next station", "en", "radio_next"),
+        ("quieter", "en", "volume_down"),
+        ("leiser", "de", "volume_down"),
+        ("qu'y a-t-il à la télé", "fr", "tv"),
+    ],
+)
+def test_the_new_builtin_commands(text, language, intent):
+    assert voice.parse_intent(text, language)["intent"] == intent
+
+
+def test_page_actions_for_next_previous_and_volume():
+    assert hear("station suivante")["action"] == {"type": "radio_next"}
+    assert hear("moins fort")["action"] == {"type": "volume_down"}
+
+
+def test_tv_answer_reads_tonights_programmes_or_says_there_are_none():
+    tv = {"status": "ok", "programmes": [{"channel": "France 2", "title": "Journal", "start": "20:00", "stop": "20:45"}]}
+    assert "France 2" in hear("à la télé", tv=tv)["reply"]
+    assert hear("à la télé", tv=None)["reply"] == "Je n'ai aucun programme télé pour ce soir."
+
+
+def test_an_own_phrase_can_just_answer():
+    cmd = config.VoiceCommand(phrase="bonne nuit", action="say", reply="Dors bien")
+    r = hear("Allez, bonne nuit la maison", commands=(cmd,))
+    assert (r["reply"], r["action"]) == ("Dors bien", None)
+
+
+def test_an_own_phrase_can_start_one_chosen_favourite():
+    cmd = config.VoiceCommand(phrase="réveil", action="radio_play", station="b")
+    r = hear("réveil", commands=(cmd,))
+    assert r["action"]["name"] == "Jak 101 FM"
+
+
+def test_an_own_phrase_pointing_to_a_removed_favourite_says_so():
+    cmd = config.VoiceCommand(phrase="réveil", action="radio_play", station="gone")
+    r = hear("réveil", commands=(cmd,))
+    assert r["action"] is None
+    assert "favorites" in r["reply"]
+
+
+def test_own_phrases_beat_the_builtin_ones_and_the_longest_wins():
+    short = config.VoiceCommand(phrase="mets", action="say", reply="court")
+    long = config.VoiceCommand(phrase="mets la météo", action="say", reply="long")
+    assert hear("mets la météo", commands=(short, long))["reply"] == "long"
+
+
+def test_default_commands_follow_the_language_and_fall_back_to_english():
+    assert "météo" in voice.default_commands("fr")["weather"]
+    assert "weather" in voice.default_commands("xx")["weather"]

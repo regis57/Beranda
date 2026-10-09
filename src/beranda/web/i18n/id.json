@@ -91,5 +91,11 @@
   "history_title": "Pada hari ini",
   "radio_error": "Stasiun ini tidak dapat diputar",
   "voice_listening": "Mendengarkan…",
-  "voice_unavailable": "Mikrofon tidak tersedia – lihat pengaturan"
+  "voice_unavailable": "Mikrofon tidak tersedia – lihat pengaturan",
+  "tv_title": "Malam ini di TV",
+  "tv_no_channels": "Pilih saluran TV Anda di pengaturan",
+  "tv_empty": "Tidak ada acara di panduan untuk malam ini",
+  "tv_error": "Panduan TV tidak dapat dijangkau",
+  "radio_prev": "Stasiun sebelumnya",
+  "radio_next": "Stasiun berikutnya"
 }

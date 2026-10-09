@@ -91,5 +91,11 @@
   "history_title": "På den här dagen",
   "radio_error": "Det går inte att spela upp den här kanalen",
   "voice_listening": "Lyssnar…",
-  "voice_unavailable": "Mikrofonen är inte tillgänglig – se inställningarna"
+  "voice_unavailable": "Mikrofonen är inte tillgänglig – se inställningarna",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

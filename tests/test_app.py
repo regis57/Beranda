@@ -171,6 +171,7 @@ def test_tv_prime_time_is_fetched_and_shown_in_local_time(tmp_path):
     state = client.get("/api/state").json()
     # The feed says +0100, but Paris is on summer time (+0200) in October, so local time shifts by an hour.
     assert state["tv"] == {
+        "status": "ok",
         "programmes": [{"channel": "France 2", "title": "Journal", "start": "20:00", "stop": "22:00"}],
         "from": "20:00",
         "to": "23:00",
@@ -183,8 +184,24 @@ def test_a_broken_tv_guide_does_not_blank_the_screen(tmp_path):
     respx.get(guide).mock(side_effect=httpx.ConnectError("down"))
     client = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",))
     state = client.get("/api/state").json()
-    assert state["tv"] is None
+    assert state["tv"]["status"] == "error"
+    assert state["tv"]["programmes"] == []
     assert state["errors"]["tv"] == "ConnectError"
+
+
+def test_a_guide_without_ticked_channels_says_so(tmp_path):
+    client = make(tmp_path, demo=True, tv_xmltv_url="https://example.org/guide.xml", tv_channels=())
+    assert client.get("/api/state").json()["tv"]["status"] == "no_channels"
+
+
+@respx.mock
+def test_a_guide_with_nothing_tonight_says_so(tmp_path):
+    guide = "https://example.org/guide.xml"
+    respx.get(guide).mock(return_value=httpx.Response(200, content=b'<tv><channel id="c1"/></tv>'))
+    client = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",))
+    tv = client.get("/api/state").json()["tv"]
+    assert tv["status"] == "empty"
+    assert tv["programmes"] == []
 
 
 def test_history_disabled_by_default_in_these_tests(tmp_path):

@@ -91,5 +91,11 @@
   "history_title": "በዚህ ቀን",
   "radio_error": "ይህን ጣቢያ ማጫወት አልተቻለም",
   "voice_listening": "እያዳመጥኩ ነው…",
-  "voice_unavailable": "ማይክሮፎን አይገኝም – ቅንብሮችን ይመልከቱ"
+  "voice_unavailable": "ማይክሮፎን አይገኝም – ቅንብሮችን ይመልከቱ",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

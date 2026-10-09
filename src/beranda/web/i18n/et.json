@@ -91,5 +91,11 @@
   "history_title": "Sel päeval",
   "radio_error": "Seda jaama ei saa esitada",
   "voice_listening": "Kuulan…",
-  "voice_unavailable": "Mikrofon pole saadaval – vaata seadeid"
+  "voice_unavailable": "Mikrofon pole saadaval – vaata seadeid",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

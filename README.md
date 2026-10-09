@@ -49,11 +49,12 @@ public holidays are real.* [All screenshots](docs/screenshots/)
   stations, no account, and save favourites from the settings page. A radio box on the main
   screen plays the sound **on the tablet showing Beranda**, with a touch volume slider (and a
   "Play" button in the settings page to test it).
-- **TV tonight**: what is on from 20:00 for the next 3 hours (local time) on the channels you
-  pick. The settings page suggests free guides for your country (tested live) — you only choose
+- **TV tonight**: a box on the screen with the main programme from 20:00 to 23:00 (local time) on
+  each channel you pick. The settings page suggests free guides for your country (tested live) — you only choose
   channels. Beranda only ever reads a guide; it never hosts or scrapes one.
 - **Voice control (optional)**: a microphone button on the screen; say the weather, the time,
-  "play France Inter", "stop". It uses the **tablet's** microphone through Chrome or Edge
+  "play France Inter", "next station", "louder", "stop" - and teach it phrases of your own from the
+  settings page ([step-by-step guide, languages and phrases](docs/VOICE.md)). It uses the **tablet's** microphone through Chrome or Edge
   (which send the sound to their own speech service) and the tablet reads the answer aloud.
   Browsers only allow microphones on "secure" pages: the settings page explains the one-time
   Chrome setting for a home network.

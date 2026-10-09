@@ -91,5 +91,11 @@
   "history_title": "Σαν σήμερα",
   "radio_error": "Δεν είναι δυνατή η αναπαραγωγή αυτού του σταθμού",
   "voice_listening": "Ακούω…",
-  "voice_unavailable": "Το μικρόφωνο δεν είναι διαθέσιμο – δείτε τις ρυθμίσεις"
+  "voice_unavailable": "Το μικρόφωνο δεν είναι διαθέσιμο – δείτε τις ρυθμίσεις",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

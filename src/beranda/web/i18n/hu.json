@@ -91,5 +91,11 @@
   "history_title": "Ezen a napon",
   "radio_error": "Ez az állomás nem játszható le",
   "voice_listening": "Hallgatom…",
-  "voice_unavailable": "A mikrofon nem érhető el – lásd a beállításokat"
+  "voice_unavailable": "A mikrofon nem érhető el – lásd a beállításokat",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

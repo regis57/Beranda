@@ -91,5 +91,11 @@
   "history_title": "A wannan rana",
   "radio_error": "Ba za a iya kunna wannan tasha ba",
   "voice_listening": "Ina saurare…",
-  "voice_unavailable": "Makirufo ba ya samuwa – duba saituna"
+  "voice_unavailable": "Makirufo ba ya samuwa – duba saituna",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

@@ -91,5 +91,11 @@
   "history_title": "On this day",
   "radio_error": "Can't play this station",
   "voice_listening": "Listening…",
-  "voice_unavailable": "Microphone unavailable – see the settings"
+  "voice_unavailable": "Microphone unavailable – see the settings",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

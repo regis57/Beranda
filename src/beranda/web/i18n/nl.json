@@ -91,5 +91,11 @@
   "history_title": "Op deze dag",
   "radio_error": "Deze zender kan niet worden afgespeeld",
   "voice_listening": "Ik luister…",
-  "voice_unavailable": "Microfoon niet beschikbaar – zie de instellingen"
+  "voice_unavailable": "Microfoon niet beschikbaar – zie de instellingen",
+  "tv_title": "Vanavond op tv",
+  "tv_no_channels": "Kies je zenders in de instellingen",
+  "tv_empty": "Niets in de gids voor vanavond",
+  "tv_error": "Tv-gids onbereikbaar",
+  "radio_prev": "Vorige zender",
+  "radio_next": "Volgende zender"
 }

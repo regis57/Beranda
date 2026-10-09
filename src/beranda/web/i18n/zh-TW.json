@@ -48,5 +48,11 @@
   "setup": {
     "title": "用手機完成設定",
     "text": "掃描 QR 碼，或在連接同一個 Wi-Fi 的手機或電腦上開啟這個網址："
-  }
+  },
+  "tv_title": "今晚电视",
+  "tv_no_channels": "请在设置中选择电视频道",
+  "tv_empty": "节目表中没有今晚的节目",
+  "tv_error": "无法连接节目表",
+  "radio_prev": "上一个电台",
+  "radio_next": "下一个电台"
 }

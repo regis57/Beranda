@@ -91,5 +91,11 @@
   "history_title": "Bugün tarihte",
   "radio_error": "Bu istasyon çalınamıyor",
   "voice_listening": "Dinliyorum…",
-  "voice_unavailable": "Mikrofon kullanılamıyor – ayarlara bakın"
+  "voice_unavailable": "Mikrofon kullanılamıyor – ayarlara bakın",
+  "tv_title": "Bu akşam TV'de",
+  "tv_no_channels": "Ayarlardan kanallarınızı seçin",
+  "tv_empty": "Rehberde bu akşam için program yok",
+  "tv_error": "TV rehberine ulaşılamıyor",
+  "radio_prev": "Önceki istasyon",
+  "radio_next": "Sonraki istasyon"
 }

@@ -172,7 +172,12 @@
           <select id="radio-language"></select>
           <button type="button" id="radio-go" data-i18n="admin.search"></button>
         </div>
-        <div id="radio-results" aria-live="polite"></div>
+        <!-- A long list can be folded away with one button, so the page stays short. -->
+        <div class="list-head" id="radio-results-head" hidden>
+          <span id="radio-results-count"></span>
+          <button type="button" id="radio-results-toggle"></button>
+        </div>
+        <div id="radio-results" class="scroll" aria-live="polite"></div>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.radio_help"></p></details>
       </section>
 
@@ -190,7 +195,18 @@
         </div>
         <p class="hint" id="tv-message" role="status"></p>
         <p class="hint" id="tv-empty" data-i18n="admin.tv_none"></p>
-        <div class="chips" id="tv-channels" aria-live="polite"></div>
+        <div class="list-head" id="tv-head" hidden>
+          <span id="tv-count"></span>
+          <button type="button" id="tv-toggle"></button>
+        </div>
+        <div id="tv-tools" hidden>
+          <div class="row wrap">
+            <input id="tv-filter" type="search" data-ph="admin.tv_filter_ph" autocomplete="off">
+            <label class="check"><input type="checkbox" id="tv-only"><span data-i18n="admin.tv_selected_only"></span></label>
+          </div>
+        </div>
+        <div class="chips scroll" id="tv-channels" aria-live="polite"></div>
+        <p class="hint" id="tv-more" hidden></p>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.tv_help"></p></details>
       </section>
 
@@ -199,6 +215,15 @@
         <p class="hint" data-i18n="admin.voice_hint"></p>
         <label class="check"><input type="checkbox" id="voice-on"><span data-i18n="admin.voice_enabled"></span></label>
         <p class="hint" id="voice-check" role="status"></p>
+        <h3 data-i18n="admin.voice_defaults_title"></h3>
+        <details class="help">
+          <summary id="voice-defaults-summary"></summary>
+          <div id="voice-defaults" class="voice-defaults"></div>
+        </details>
+        <h3 data-i18n="admin.voice_own_title"></h3>
+        <p class="hint" data-i18n="admin.voice_own_hint"></p>
+        <div id="voice-commands"></div>
+        <button type="button" id="voice-add" data-i18n="admin.voice_add"></button>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.voice_help"></p></details>
       </section>
 

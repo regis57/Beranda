@@ -91,5 +91,11 @@
   "history_title": "Tego dnia",
   "radio_error": "Nie można odtworzyć tej stacji",
   "voice_listening": "Słucham…",
-  "voice_unavailable": "Mikrofon niedostępny – zobacz ustawienia"
+  "voice_unavailable": "Mikrofon niedostępny – zobacz ustawienia",
+  "tv_title": "Dziś wieczorem w TV",
+  "tv_no_channels": "Wybierz kanały w ustawieniach",
+  "tv_empty": "Brak programów na wieczór w przewodniku",
+  "tv_error": "Przewodnik TV niedostępny",
+  "radio_prev": "Poprzednia stacja",
+  "radio_next": "Następna stacja"
 }

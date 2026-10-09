@@ -91,5 +91,11 @@
   "history_title": "历史上的今天",
   "radio_error": "无法播放此电台",
   "voice_listening": "正在聆听…",
-  "voice_unavailable": "麦克风不可用 – 请查看设置"
+  "voice_unavailable": "麦克风不可用 – 请查看设置",
+  "tv_title": "今晚电视",
+  "tv_no_channels": "请在设置中选择电视频道",
+  "tv_empty": "节目表中没有今晚的节目",
+  "tv_error": "无法连接节目表",
+  "radio_prev": "上一个电台",
+  "radio_next": "下一个电台"
 }

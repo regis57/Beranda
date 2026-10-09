@@ -21,8 +21,8 @@ from defusedxml.ElementTree import iterparse
 USER_AGENT = "Beranda/0.6 (+https://github.com/regis57/Beranda)"
 MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024
 MAX_DECOMPRESSED_BYTES = 60 * 1024 * 1024
-MAX_CHANNELS = 500
-MAX_PROGRAMMES = 200
+MAX_CHANNELS = 3000  # big community guides list well over 500 channels
+MAX_PROGRAMMES = 3000  # a safety net only: ~20 channels x a few shows each is what we actually keep
 
 _TIME = re.compile(r"^(\d{14})\s*(Z|[+-]\d{4})?$")
 
@@ -36,7 +36,10 @@ def _parse_time(raw: str) -> datetime | None:
     m = _TIME.match(raw.strip())
     if not m:
         return None
-    naive = datetime.strptime(m.group(1), "%Y%m%d%H%M%S")  # noqa: DTZ007 - made aware just below
+    try:
+        naive = datetime.strptime(m.group(1), "%Y%m%d%H%M%S")  # noqa: DTZ007 - made aware just below
+    except ValueError:  # 14 digits but not a real date ("...209000"): one bad line must not sink the guide
+        return None
     zone = m.group(2)
     if not zone or zone == "Z":
         return naive.replace(tzinfo=UTC)
@@ -112,3 +115,25 @@ def programmes(xml_bytes: bytes, channel_ids: set[str], start: datetime, end: da
         item["channel"] = names.get(item["channel_id"], item["channel_id"])
     found.sort(key=lambda p: (p["start"], p["channel"]))
     return found
+
+
+def prime_time_picks(found: list[dict], order: list[str], start: datetime, end: datetime) -> list[dict]:
+    """One programme per channel: the one that fills most of the [start, end) evening.
+
+    A guide lists many small shows around 20:00 (news, a quiz...); the one a viewer cares about
+    is the main programme of the evening, i.e. the one on screen for the longest part of the
+    window. Channels come out in the order the user ticked them, so their favourite is first.
+    """
+    best: dict[str, dict] = {}
+    for item in found:
+        overlap = (min(item["stop"], end) - max(item["start"], start)).total_seconds()
+        if overlap <= 0:
+            continue
+        current = best.get(item["channel_id"])
+        if current is None or overlap > current["_overlap"]:
+            best[item["channel_id"]] = {**item, "_overlap": overlap}
+    ranked = [best[cid] for cid in order if cid in best]
+    ranked += [v for cid, v in best.items() if cid not in order]
+    for item in ranked:
+        item.pop("_overlap", None)
+    return ranked

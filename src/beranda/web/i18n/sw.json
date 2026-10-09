@@ -91,5 +91,11 @@
   "history_title": "Siku kama ya leo",
   "radio_error": "Kituo hiki hakiwezi kuchezwa",
   "voice_listening": "Ninasikiliza…",
-  "voice_unavailable": "Maikrofoni haipatikani – angalia mipangilio"
+  "voice_unavailable": "Maikrofoni haipatikani – angalia mipangilio",
+  "tv_title": "Usiku huu kwenye TV",
+  "tv_no_channels": "Chagua vituo vyako vya TV kwenye mipangilio",
+  "tv_empty": "Hakuna kitu kwenye mwongozo wa usiku huu",
+  "tv_error": "Mwongozo wa TV haupatikani",
+  "radio_prev": "Kituo kilichotangulia",
+  "radio_next": "Kituo kinachofuata"
 }

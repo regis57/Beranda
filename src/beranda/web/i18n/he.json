@@ -91,5 +91,11 @@
   "history_title": "ביום הזה",
   "radio_error": "לא ניתן לנגן את התחנה הזו",
   "voice_listening": "מקשיב…",
-  "voice_unavailable": "המיקרופון אינו זמין – ראו את ההגדרות"
+  "voice_unavailable": "המיקרופון אינו זמין – ראו את ההגדרות",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

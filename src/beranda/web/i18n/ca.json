@@ -91,5 +91,11 @@
   "history_title": "Un dia com avui",
   "radio_error": "No es pot reproduir aquesta emissora",
   "voice_listening": "Escoltant…",
-  "voice_unavailable": "Micròfon no disponible – mireu els paràmetres"
+  "voice_unavailable": "Micròfon no disponible – mireu els paràmetres",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

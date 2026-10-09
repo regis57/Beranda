@@ -91,5 +91,11 @@
   "history_title": "Maalintan",
   "radio_error": "Idaacaddan lama daari karo",
   "voice_listening": "Waan dhegaysanayaa…",
-  "voice_unavailable": "Makarafoon lama heli karo – eeg dejinta"
+  "voice_unavailable": "Makarafoon lama heli karo – eeg dejinta",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

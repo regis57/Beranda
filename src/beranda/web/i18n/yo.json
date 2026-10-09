@@ -91,5 +91,11 @@
   "history_title": "Ní ọjọ́ yìí",
   "radio_error": "Kò ṣeé ṣe láti ṣe àgbéjáde ibùdó yìí",
   "voice_listening": "Mo ń gbọ́…",
-  "voice_unavailable": "Gbohungbohun kò sí – wo àwọn ètò"
+  "voice_unavailable": "Gbohungbohun kò sí – wo àwọn ètò",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

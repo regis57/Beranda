@@ -74,6 +74,7 @@ button:disabled { opacity: .5; cursor: default; }
 @media (max-width: 36rem) {
   .grid3, .grid2 { grid-template-columns: 1fr; }
   .item.key { grid-template-columns: 1fr 1fr; }
+  .item.voice { grid-template-columns: 1fr auto; grid-template-areas: "phrase rm" "action action" "extra extra"; }
   .item.key input:nth-child(2) { grid-column: 1 / -1; }
 }
 
@@ -93,6 +94,8 @@ h3 { margin: .4rem 0 0; font-size: .9rem; font-weight: 600; }
 .providers a { grid-column: 2; color: var(--accent); font-size: .85rem; }
 .check { flex-direction: row; align-items: center; gap: .5rem; color: var(--ink); font-size: .95rem; }
 .check input { width: auto; }
+.list-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: .5rem 0 .3rem; font-size: .9rem; }
+.scroll { max-height: 18rem; overflow-y: auto; overscroll-behavior: contain; padding-right: .2rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .4rem; }
 .chip { display: inline-flex; align-items: center; gap: .3rem; border: 1px solid var(--line); border-radius: 99px; padding: .15rem .3rem .15rem .65rem; font-size: .85rem; background: var(--field); }
 .chip button { border: 0; padding: 0 .35rem; line-height: 1.2; }
@@ -102,6 +105,18 @@ h3 { margin: .4rem 0 0; font-size: .9rem; font-weight: 600; }
 .src .msg { grid-column: 2 / -1; font-size: .82rem; }
 .lang { display: inline-block; font-size: .7rem; border: 1px solid var(--line); border-radius: .25rem; padding: 0 .3rem; margin-inline-start: .35rem; color: var(--ink-2); text-transform: uppercase; }
 .item.feed { grid-template-columns: minmax(0, 1fr) auto auto; }
+.item.voice {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  grid-template-areas: "phrase phrase rm" "action extra extra";
+  padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+}
+.item.voice .v-phrase { grid-area: phrase; }
+.item.voice .v-action { grid-area: action; }
+.item.voice .v-extra { grid-area: extra; }
+.item.voice .v-rm { grid-area: rm; }
+.voice-defaults dl { margin: .4rem 0 0; display: grid; grid-template-columns: max-content 1fr; gap: .3rem .9rem; font-size: .88rem; }
+.voice-defaults dt { font-weight: 600; }
+.voice-defaults dd { margin: 0; color: var(--muted, inherit); }
 .item.radio { grid-template-columns: minmax(0, 1fr) auto auto; }
 .volume-row { display: flex; align-items: center; gap: .6rem; margin: .6rem 0; }
 .volume-row input[type="range"] { flex: 1; }

@@ -91,5 +91,11 @@
   "history_title": "ในวันนี้",
   "radio_error": "เล่นสถานีนี้ไม่ได้",
   "voice_listening": "กำลังฟัง…",
-  "voice_unavailable": "ใช้ไมโครโฟนไม่ได้ – ดูที่การตั้งค่า"
+  "voice_unavailable": "ใช้ไมโครโฟนไม่ได้ – ดูที่การตั้งค่า",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

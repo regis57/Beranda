@@ -198,15 +198,22 @@ async def build_state(
     photo_names = photos.list_photos(photos.effective_folder(cfg.photos_folder))
 
     # --- TV prime time (read-only: the user's own XMLTV guide, never scraped by us) -----
+    # `status` tells the screen *why* the TV box may be empty, so it can say so in plain words
+    # instead of staying blank: "no_channels" (a guide is set but no channel ticked yet),
+    # "empty" (the guide has nothing for tonight on those channels), "error" (guide unreachable).
     tv = None
-    if cfg.tv_xmltv_url and cfg.tv_channels:
+    if cfg.tv_xmltv_url and not cfg.tv_channels:
+        tv = {"status": "no_channels", "programmes": [], "from": "", "to": ""}
+    elif cfg.tv_xmltv_url:
         digest = hashlib.sha1(cfg.tv_xmltv_url.encode()).hexdigest()[:12]
         channel_ids = set(cfg.tv_channels)
         prime_start, prime_end = _prime_window(now)
+        window = {"from": prime_start.strftime("%H:%M"), "to": prime_end.strftime("%H:%M")}
 
         async def load_tv() -> list[dict]:
             raw = await tv_mod.download(cfg.tv_xmltv_url)
             found = tv_mod.programmes(raw, channel_ids, prime_start, prime_end)
+            picks = tv_mod.prime_time_picks(found, list(cfg.tv_channels), prime_start, prime_end)
             tz = ZoneInfo(loc.timezone)
             return [
                 {
@@ -215,16 +222,17 @@ async def build_state(
                     "start": item["start"].astimezone(tz).strftime("%H:%M"),
                     "stop": item["stop"].astimezone(tz).strftime("%H:%M"),
                 }
-                for item in found
+                for item in picks
             ]
 
         try:
             got, is_stale = await cache.get(f"tv:{digest}:{prime_start.date()}", TV_TTL, load_tv)
-            tv = {"programmes": got, "from": prime_start.strftime("%H:%M"), "to": prime_end.strftime("%H:%M")}
+            tv = {"status": "ok" if got else "empty", "programmes": got, **window}
             if is_stale:
                 stale.append("tv")
         except Exception as exc:  # noqa: BLE001 - a dead guide must not blank the screen
             errors["tv"] = type(exc).__name__
+            tv = {"status": "error", "programmes": [], **window}
 
     # --- sky & season (all local) --------------------------------------------------
     sky = astro_mod.astro(now, loc.latitude, loc.longitude, loc.timezone)
@@ -369,6 +377,8 @@ def create_app(
             now=now,
             stations=data["radio"]["stations"],
             weather=data["weather"],
+            tv=data["tv"],
+            commands=cfg.voice_commands,
         )
         return JSONResponse(reply, headers={"Cache-Control": "no-store"})
 

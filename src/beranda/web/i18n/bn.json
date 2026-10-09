@@ -91,5 +91,11 @@
   "history_title": "এই দিনে",
   "radio_error": "এই স্টেশনটি চালানো যাচ্ছে না",
   "voice_listening": "শুনছি…",
-  "voice_unavailable": "মাইক্রোফোন নেই – সেটিংস দেখুন"
+  "voice_unavailable": "মাইক্রোফোন নেই – সেটিংস দেখুন",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

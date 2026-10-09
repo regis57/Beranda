@@ -91,5 +91,11 @@
   "history_title": "An diesem Tag",
   "radio_error": "Dieser Sender lässt sich nicht abspielen",
   "voice_listening": "Ich höre zu…",
-  "voice_unavailable": "Mikrofon nicht verfügbar – siehe Einstellungen"
+  "voice_unavailable": "Mikrofon nicht verfügbar – siehe Einstellungen",
+  "tv_title": "Heute Abend im TV",
+  "tv_no_channels": "Wählen Sie Ihre Sender in den Einstellungen",
+  "tv_empty": "Nichts im Programm für heute Abend",
+  "tv_error": "TV-Programm nicht erreichbar",
+  "radio_prev": "Vorheriger Sender",
+  "radio_next": "Nächster Sender"
 }

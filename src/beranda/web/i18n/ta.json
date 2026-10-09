@@ -91,5 +91,11 @@
   "history_title": "இதே நாளில்",
   "radio_error": "இந்த நிலையத்தை இயக்க முடியவில்லை",
   "voice_listening": "கேட்கிறேன்…",
-  "voice_unavailable": "மைக்ரோஃபோன் கிடைக்கவில்லை – அமைப்புகளைப் பார்க்கவும்"
+  "voice_unavailable": "மைக்ரோஃபோன் கிடைக்கவில்லை – அமைப்புகளைப் பார்க்கவும்",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }
