@@ -3,7 +3,7 @@
 The web server never runs anything as root. When the settings page asks for an update, a
 restart of the screen or a reboot, the server only drops a file named after the request in
 the requests folder; a separate root service (beranda-actions, installed by install.sh)
-carries it out. Only three names are understood.
+carries it out. Only four names are understood.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import httpx
 
 from .config import Config
 
-ACTIONS = ("update", "restart-screen", "reboot")
+ACTIONS = ("update", "restart-screen", "reboot", "reset")
 RAW_VERSION_URL = "https://raw.githubusercontent.com/regis57/Beranda/{branch}/src/beranda/__init__.py"
 
 
