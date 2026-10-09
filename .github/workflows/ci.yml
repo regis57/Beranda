@@ -7,15 +7,17 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pinned, not "ubuntu-latest": GitHub retires the previous Ubuntu image from "latest"
+    # on 2026-10-19, and we don't want that switch to silently change what CI tests.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         # 3.11 is what Raspberry Pi OS (Bookworm) ships
         python: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - run: pip install -e ".[dev]"
@@ -24,9 +26,11 @@ jobs:
 
   # The installer, for real, on a fresh Ubuntu machine with systemd (all but the screen part).
   installer:
-    runs-on: ubuntu-latest
+    # Same pin as above, and for the same reason: this job provisions real systemd
+    # units and system users, so it especially shouldn't move to a new OS untested.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: shellcheck install.sh uninstall.sh system/beranda-action system/beranda-kiosk
       - run: sudo bash install.sh --source "$PWD" --no-screen
       - name: The server runs as its own user and answers
