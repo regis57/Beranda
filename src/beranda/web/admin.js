@@ -196,8 +196,8 @@ async function search() {
       const b = el('button', { type: 'button' }, `${r.name} `, el('small', { textContent: [r.region, r.country && regionName(r.country)].filter(Boolean).join(', ') }));
       b.addEventListener('click', () => {
         $('loc-name').value = r.name;
-        $('loc-lat').value = r.latitude;
-        $('loc-lon').value = r.longitude;
+        $('loc-lat').value = Math.round(r.latitude * 1e4) / 1e4;  // 4 decimals = about 10 m, plenty
+        $('loc-lon').value = Math.round(r.longitude * 1e4) / 1e4;
         if (r.area && !$('w-area').value.trim()) $('w-area').value = r.area;  // a good first guess for weather warnings
         if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
         if (r.country && options.countries[r.country]) { $('country').value = r.country; onCountry(); }

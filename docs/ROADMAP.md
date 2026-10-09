@@ -49,6 +49,8 @@ Done:
   calendar of the country) and a small second clock. The settings page gets a ☰ menu to jump to a
   section, and "start again from zero" now needs the word yes (oui, ja, sí...) typed in the
   language of the page
+- **v0.14.1**: fix - choosing a town in the settings page filled in coordinates the form then
+  refused (too many decimals), so the page could not be saved
 
 Next:
 
