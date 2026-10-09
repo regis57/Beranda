@@ -375,5 +375,8 @@
   "voice_err_audio_capture": "Tidak ada mikrofon di perangkat ini. Pasang satu (headset atau webcam bermikrofon), atau pakai tablet.",
   "voice_err_network": "Layanan suara peramban tidak dapat dihubungi: perlu internet (Chrome mengirim suara ke Google, Edge ke Microsoft). Periksa sambungan, atau coba Google Chrome.",
   "voice_err_service_not_allowed": "Peramban ini menolak layanan suaranya di halaman ini. Pakai Google Chrome, dan pastikan layanan suara tidak dimatikan di pengaturannya.",
-  "voice_err_other": "Mikrofon tidak berfungsi ({code}). Unduh berkas diagnostik (Pengguna mahir) dan kirimkan."
+  "voice_err_other": "Mikrofon tidak berfungsi ({code}). Unduh berkas diagnostik (Pengguna mahir) dan kirimkan.",
+  "area_mismatch": "Area ini (“{area}”) tidak cocok dengan kota Anda, {town}, yang areanya “{suggested}”: tidak akan pernah ada peringatan yang tampil.",
+  "area_missing": "Belum ada area. Area {town} adalah “{suggested}”.",
+  "area_use": "Pakai “{suggested}”"
 }

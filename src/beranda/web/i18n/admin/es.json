@@ -375,5 +375,8 @@
   "voice_err_audio_capture": "No se encontró ningún micrófono en este equipo. Conecta uno (unos auriculares o una webcam con micrófono) o usa la tablet.",
   "voice_err_network": "No se puede contactar con el servicio de voz del navegador: necesita internet (Chrome envía la voz a Google, Edge a Microsoft). Revisa la conexión o prueba Google Chrome.",
   "voice_err_service_not_allowed": "Este navegador rechaza su servicio de voz en esta página. Usa Google Chrome y comprueba que los servicios de voz no estén desactivados en sus ajustes.",
-  "voice_err_other": "El micrófono no funcionó ({code}). Descarga el archivo de diagnóstico (Usuario avanzado) y envíalo."
+  "voice_err_other": "El micrófono no funcionó ({code}). Descarga el archivo de diagnóstico (Usuario avanzado) y envíalo.",
+  "area_mismatch": "Esta zona («{area}») no corresponde a tu ciudad, {town}, cuya zona es «{suggested}»: nunca se mostraría ningún aviso.",
+  "area_missing": "Aún no hay zona. La de {town} es «{suggested}».",
+  "area_use": "Usar «{suggested}»"
 }

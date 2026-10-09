@@ -375,5 +375,8 @@
   "voice_err_audio_capture": "Auf diesem Gerät wurde kein Mikrofon gefunden. Schließen Sie eines an (Headset oder Webcam mit Mikrofon) oder nutzen Sie das Tablet.",
   "voice_err_network": "Der Spracherkennungsdienst des Browsers ist nicht erreichbar: Er braucht Internet (Chrome schickt die Stimme an Google, Edge an Microsoft). Prüfen Sie die Verbindung oder versuchen Sie Google Chrome.",
   "voice_err_service_not_allowed": "Dieser Browser verweigert auf dieser Seite seinen Sprachdienst. Nutzen Sie Google Chrome und prüfen Sie, ob Sprachdienste in den Browsereinstellungen ausgeschaltet sind.",
-  "voice_err_other": "Das Mikrofon hat nicht funktioniert ({code}). Laden Sie die Diagnosedatei herunter (Fortgeschrittene) und schicken Sie sie."
+  "voice_err_other": "Das Mikrofon hat nicht funktioniert ({code}). Laden Sie die Diagnosedatei herunter (Fortgeschrittene) und schicken Sie sie.",
+  "area_mismatch": "Dieses Gebiet („{area}“) passt nicht zu Ihrem Ort {town}, dessen Gebiet „{suggested}“ ist: Es würde nie eine Warnung erscheinen.",
+  "area_missing": "Noch kein Gebiet. Das Gebiet von {town} ist „{suggested}“.",
+  "area_use": "„{suggested}“ verwenden"
 }

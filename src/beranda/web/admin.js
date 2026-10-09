@@ -774,6 +774,32 @@ function showWidgetBodies() {
   $('w-alerts-body').hidden = !$('w-alerts').checked;
   $('w-clock2-body').hidden = !$('w-clock2').checked;
 }
+// A warnings area saved for another town (before the town was changed) would silently show
+// "no warning" forever. Look up the saved town once, and if its area is a different one, say so
+// and offer it with one tap.
+const plainName = (text) => String(text).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+async function checkAreaMatchesTown() {
+  if (!$('w-alerts').checked || !cfg.location?.name) return;
+  let results = [];
+  try { ({ results } = await api(`/geocode?q=${encodeURIComponent(cfg.location.name)}&language=${lang}`)); } catch { return; }
+  // the result nearest to the saved coordinates is the saved town (several towns share a name)
+  const near = (r) => Math.hypot(r.latitude - cfg.location.latitude, r.longitude - cfg.location.longitude);
+  const town = results.filter((r) => r.area && near(r) < 0.3).sort((a, b) => near(a) - near(b))[0];
+  const area = $('w-area').value.trim();
+  if (!town || plainName(town.area) === plainName(area)) return;
+  const msg = $('w-area-msg');
+  const use = el('button', { type: 'button', textContent: t('admin.area_use', { suggested: town.area }) });
+  use.addEventListener('click', () => {
+    $('w-area').value = town.area;
+    msg.textContent = '';
+    markDirty();
+  });
+  msg.replaceChildren(
+    area ? t('admin.area_mismatch', { area, town: cfg.location.name, suggested: town.area }) : t('admin.area_missing', { town: cfg.location.name, suggested: town.area }),
+    ' ', use,
+  );
+}
+
 // Ask the warning service once, and say in plain words whether the typed area is understood.
 async function testAlertsArea() {
   const msg = $('w-area-msg');
@@ -1091,7 +1117,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); renderVoice(); renderWidgets(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); renderVoice(); renderWidgets(); checkAreaMatchesTown(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -1174,7 +1200,7 @@ async function boot() {
   $('diag-btn').addEventListener('click', downloadDiagnostics);
   $('voice-test').addEventListener('click', testMicrophone);
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
-  $('w-alerts').addEventListener('change', showWidgetBodies);
+  $('w-alerts').addEventListener('change', () => { showWidgetBodies(); checkAreaMatchesTown(); });
   $('w-clock2').addEventListener('change', showWidgetBodies);
   $('w-area-test').addEventListener('click', testAlertsArea);
   $('w-area').addEventListener('input', () => { areaTyped = true; });
