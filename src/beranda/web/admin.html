@@ -19,8 +19,18 @@
       </button>
       <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></div>
     </div>
-    <a class="link" id="open-display" href="/" target="_blank" rel="noopener"></a>
-    <nav class="menu" id="menu" hidden><ul id="menu-list"></ul></nav>
+    <div class="top-right">
+      <a class="link" id="open-display" href="/" target="_blank" rel="noopener"></a>
+      <!-- A plain link to the author's tip jar. Nothing is loaded from there: the page only opens it when tapped. -->
+      <a class="coffee" id="coffee" href="https://buymeacoffee.com/regis57" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 9h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9zm11 1h1.5a2.5 2.5 0 0 1 0 5H16M8 2.5v3M11.5 2.5v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="coffee-label"></span>
+      </a>
+    </div>
+    <nav class="menu" id="menu" hidden>
+      <ul id="menu-list"></ul>
+      <a class="menu-coffee" href="https://buymeacoffee.com/regis57" target="_blank" rel="noopener noreferrer"><span id="menu-coffee-label"></span><small data-i18n="admin.coffee_hint"></small></a>
+    </nav>
   </header>
 
   <div id="gate" class="gate" hidden>
@@ -285,9 +295,48 @@
           <button type="button" id="sys-update" data-action="update" data-i18n="admin.update_now" hidden></button>
           <button type="button" id="sys-screen" data-action="restart-screen" data-i18n="admin.restart_screen"></button>
           <button type="button" id="sys-reboot" data-action="reboot" data-i18n="admin.reboot"></button>
-          <button type="button" id="sys-reset" data-action="reset" data-i18n="admin.factory_reset"></button>
         </div>
         <p class="hint" id="sys-message" role="status"></p>
+      </section>
+
+      <section class="card" id="sec-sec">
+        <h2><span class="num">14</span><span data-i18n="admin.security"></span></h2>
+        <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
+        <p class="hint" data-i18n="admin.pin_hint"></p>
+      </section>
+
+      <section class="card" id="sec-adv">
+        <h2><span class="num">15</span><span data-i18n="admin.advanced"></span></h2>
+        <p class="hint" data-i18n="admin.advanced_hint"></p>
+
+        <h3 data-i18n="admin.port_title"></h3>
+        <p class="hint" data-i18n="admin.port_hint"></p>
+        <p class="hint"><b id="port-current"></b></p>
+        <div class="impact">
+          <b data-i18n="admin.port_impact_title"></b>
+          <ul>
+            <li data-i18n="admin.port_impact_1"></li>
+            <li data-i18n="admin.port_impact_2"></li>
+            <li data-i18n="admin.port_impact_3"></li>
+            <li data-i18n="admin.port_impact_4"></li>
+            <li data-i18n="admin.port_impact_5"></li>
+          </ul>
+        </div>
+        <div class="row wrap">
+          <label class="narrow"><span data-i18n="admin.port_label"></span>
+            <input id="port-new" type="number" inputmode="numeric" min="1024" max="65535" step="1">
+          </label>
+          <button type="button" id="port-apply" data-i18n="admin.port_apply"></button>
+        </div>
+        <p class="hint" data-i18n="admin.port_range_hint"></p>
+        <p class="hint" id="port-msg" role="status"></p>
+
+        <h3 data-i18n="admin.factory_reset"></h3>
+        <p class="hint" data-i18n="admin.factory_reset_help"></p>
+        <div class="row wrap">
+          <button type="button" id="sys-reset" data-action="reset" data-i18n="admin.factory_reset"></button>
+        </div>
+        <p class="hint" id="adv-message" role="status"></p>
         <!-- Starting again from zero needs more than a second click: type the word "yes" yourself. -->
         <div class="reset-box" id="reset-box" hidden>
           <p id="reset-prompt"></p>
@@ -297,13 +346,6 @@
             <button type="button" id="reset-cancel" data-i18n="admin.reset_cancel"></button>
           </div>
         </div>
-        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.factory_reset_help"></p></details>
-      </section>
-
-      <section class="card" id="sec-sec">
-        <h2><span class="num">14</span><span data-i18n="admin.security"></span></h2>
-        <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
-        <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>
 
       <div class="savebar">

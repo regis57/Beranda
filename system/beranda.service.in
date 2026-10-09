@@ -1,4 +1,4 @@
-# Beranda web server: the display page and the settings page, on port 8080.
+# Beranda web server: the display page and the settings page (port 8080 unless changed in the settings page).
 #
 # Deliberately does NOT "Wants=" network-online.target: Beranda already copes with having no
 # network (cached data, a demo mode, and - when installed with --with-wifi-setup - a screen

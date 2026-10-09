@@ -59,6 +59,10 @@ Done:
   sentence instead of slowing the Pi down, and a hand-edited file is trimmed to fit. The five
   profiles (light, standard, comfortable, comfortable +, maximum) are tabulated in the README and
   can be forced with `[limits] profile` or `BERANDA_PROFILE`. README rewritten around the reader
+- **v0.14.4**: a new "Advanced user" box in the settings page: change the port 8080 (checked to
+  be free, with every consequence spelled out, the screen on the Pi follows by itself, and Beranda
+  falls back to 8080 if the new port cannot be used), and "start over from scratch" moves there.
+  A "Buy me a coffee" button sits in the header and the menu. The usage guide lists all 15 boxes
 
 Next:
 

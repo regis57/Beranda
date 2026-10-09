@@ -393,7 +393,7 @@ def create_app(
     async def setup_qr() -> Response:
         import segno
 
-        urls = system.lan_addresses(runtime.cfg.port) or ["http://localhost:8080/admin"]
+        urls = system.lan_addresses(runtime.cfg.port) or [f"http://localhost:{runtime.cfg.port}/admin"]
         qr = segno.make(urls[-1], error="m")  # the numeric address works even without .local
         buffer = io.BytesIO()
         qr.save(buffer, kind="svg", scale=8, border=2, dark="#111111", light="#ffffff", xmldecl=False)

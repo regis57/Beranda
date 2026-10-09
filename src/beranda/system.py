@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import signal
 import socket
 from datetime import UTC, datetime, time
 from pathlib import Path
@@ -20,6 +21,10 @@ import httpx
 from .config import Config
 
 ACTIONS = ("update", "restart-screen", "reboot", "reset")
+
+DEFAULT_PORT = 8080
+# A program that is not root may only listen on ports from 1024 up (Beranda never runs as root).
+PORT_MIN, PORT_MAX = 1024, 65535
 RAW_VERSION_URL = "https://raw.githubusercontent.com/regis57/Beranda/{branch}/src/beranda/__init__.py"
 
 
@@ -92,6 +97,45 @@ async def latest_version(branch: str = "main") -> str | None:
         return None
     match = re.search(r'__version__\s*=\s*"([^"]+)"', r.text)
     return match.group(1) if match else None
+
+
+def port_is_free(host: str, port: int) -> bool:
+    """True when nothing is listening on that port yet (we try to take it, then let go)."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            s.bind((host or "0.0.0.0", port))
+        except OSError:
+            return False
+    return True
+
+
+def port_problem(port: object, current: int, host: str = "0.0.0.0") -> str | None:
+    """Why this port cannot be used, as a short code the settings page translates; None if fine.
+    Codes: "range" (not a number from 1024 to 65535), "same" (already the one in use) and
+    "busy" (another program is listening there)."""
+    if isinstance(port, bool) or not isinstance(port, int) or not PORT_MIN <= port <= PORT_MAX:
+        return "range"
+    if port == current:
+        return "same"
+    return None if port_is_free(host, port) else "busy"
+
+
+def runs_under_systemd() -> bool:
+    """True when systemd started us (it sets INVOCATION_ID) and will start us again if we stop."""
+    return bool(os.environ.get("INVOCATION_ID")) and bool(install_info())
+
+
+def restart_server_soon(delay: float = 1.5) -> bool:
+    """Stop this server a moment from now so systemd starts it again with the new settings
+    (the answer to the settings page goes out first). Returns False, and does nothing, when
+    nothing would start it again - for instance when you run `beranda` by hand."""
+    if not runs_under_systemd():
+        return False
+    import asyncio
+
+    asyncio.get_running_loop().call_later(delay, os.kill, os.getpid(), signal.SIGTERM)
+    return True
 
 
 def lan_addresses(port: int) -> list[str]:

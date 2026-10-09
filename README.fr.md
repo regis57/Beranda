@@ -95,6 +95,7 @@ Ouvrez `http://beranda.local:8080/admin`. Un menu ☰ mène à chaque section ; 
 3. **Apparence.** Choisissez un thème ; l'aperçu se met à jour en direct.
 4. **Extras de l'écran principal.** Activez ou retirez le graphique, la qualité de l'air, les vigilances, l'éphéméride et la deuxième horloge.
 5. **Agenda, actualité, photos, radio, TV, voix.** Tout est facultatif, chacun dans sa section.
+6. **Utilisateur avancé** (rarement utile). Changer le port `8080` si un autre programme l'utilise déjà, ou repartir de zéro. La page détaille ce qui change avant que vous confirmiez.
 
 Appuyez sur **Enregistrer** : l'écran suit en moins d'une minute. Détails : [docs/USAGE.md](docs/USAGE.md).
 

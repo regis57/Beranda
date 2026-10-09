@@ -38,6 +38,7 @@ for file in "$requests"/*; do
             log "resetting to factory settings"
             rm -f -- "$CONFDIR/config.toml"
             systemctl restart beranda.service
+            systemctl try-restart beranda-kiosk.service  # the port is back to 8080: the screen must follow
             ;;
         *)
             log "ignored unknown request: $action"

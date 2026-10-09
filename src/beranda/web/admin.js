@@ -42,6 +42,7 @@ let lang = 'en';
 let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
 let limits = {};  // the most this computer may hold (see limits.py): calendars, news_sources, tv_channels...
+let currentPort = 8080;  // the port this server listens on (from /system)
 let editable = true;
 let dirty = false;
 let unitsTouched = false;
@@ -81,6 +82,9 @@ function translateStatic() {
   for (const el of document.querySelectorAll('[data-ph]')) el.placeholder = t(el.dataset.ph);
   $('open-display').textContent = t('admin.open_display');
   $('menu-label').textContent = t('admin.menu');
+  $('coffee-label').textContent = t('admin.coffee');
+  $('menu-coffee-label').textContent = `☕ ${t('admin.coffee')}`;
+  $('coffee').title = t('admin.coffee_hint');
   buildMenu();
   document.title = `Beranda · ${t('admin.title')}`;
 }
@@ -801,6 +805,10 @@ async function renderSystem() {
       mem: limits.memory_gb, profile: t(`admin.profile_${limits.profile}`),
     });
     for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) $(id).disabled = !info.actions;
+    currentPort = info.port;
+    $('port-current').textContent = t('admin.port_current', { port: info.port })
+      + (info.saved_port !== info.port ? ` ${t('admin.port_pending', { port: info.saved_port })}` : '');
+    if (!$('port-new').value) $('port-new').placeholder = String(info.port);
     $('sys-screen').hidden = !info.screen;
     if (!info.installed) msg.textContent = t('admin.not_installed');
   } catch (e) { msg.textContent = e.message; }
@@ -826,11 +834,45 @@ function openReset() {
   $('reset-word').focus();
 }
 function closeReset() { $('reset-box').hidden = true; $('reset-word').value = ''; }
-async function systemAction(action, body) {
+async function systemAction(action, body, messageId = 'sys-message') {
   try {
     await api(`/system/${action}`, { method: 'POST', ...(body ? { body: JSON.stringify(body) } : {}) });
-    $('sys-message').textContent = t(`admin.requested_${action.replace('-', '_')}`);
-  } catch (e) { $('sys-message').textContent = e.message; }
+    $(messageId).textContent = t(`admin.requested_${action.replace('-', '_')}`);
+    if (action === 'reset' && currentPort !== 8080) $(messageId).append(' ', t('admin.reset_port_note', { url: addressWithPort(8080) }));
+  } catch (e) { $(messageId).textContent = e.message; }
+}
+
+// ------------------------------------------------------------------ 11. advanced user ---
+// The same address as this page, with another port.
+function addressWithPort(port) {
+  const url = new URL(location.href);
+  url.port = String(port);
+  url.pathname = '/admin';
+  url.search = '';
+  url.hash = '';
+  return url.href;
+}
+async function changePort() {
+  const msg = $('port-msg');
+  const port = Number($('port-new').value);
+  msg.replaceChildren();
+  if (!Number.isInteger(port) || port < 1024 || port > 65535) { msg.textContent = t('admin.port_err_range'); return; }
+  if (port === currentPort) { msg.textContent = t('admin.port_err_same'); return; }
+  msg.textContent = '…';
+  try {
+    const r = await api('/system/port', { method: 'POST', body: JSON.stringify({ port, confirmed: true }) });
+    const address = addressWithPort(r.port);
+    const link = el('a', { href: address, textContent: t('admin.port_open_new') });
+    if (r.restarting) {
+      msg.replaceChildren(t('admin.port_done', { url: address }), ' ', link);
+      setTimeout(() => { location.assign(address); }, 12000);  // the new server needs a few seconds
+    } else {
+      msg.replaceChildren(t('admin.port_done_manual', { url: address }));
+    }
+  } catch (e) {
+    const code = /^port_(range|busy|same)$/.exec(e.message);
+    msg.textContent = code ? t(`admin.port_err_${code[1]}`) : e.message;
+  }
 }
 
 // ------------------------------------------------------------------ save -----
@@ -948,7 +990,7 @@ async function boot() {
   $('form').addEventListener('change', (e) => {
     if (e.target.id === 'units') unitsTouched = true;
     if (e.target.id === 'language') { languageTouched = true; refreshPreview(); refreshNews(); }
-    if (!['q', 'news-other-country', 'reset-word'].includes(e.target.id)) markDirty();
+    if (!['q', 'news-other-country', 'reset-word', 'port-new'].includes(e.target.id)) markDirty();
   });
   $('country').addEventListener('change', onCountry);
   $('loc-name').addEventListener('change', refreshNews);
@@ -984,8 +1026,10 @@ async function boot() {
   $('reset-go').addEventListener('click', async () => {
     if (!resetWordOk()) return;
     closeReset();
-    await systemAction('reset', { confirmed: true });
+    await systemAction('reset', { confirmed: true }, 'adv-message');
   });
+  armed($('port-apply'), changePort);
+  $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
   $('w-alerts').addEventListener('change', showWidgetBodies);
   $('w-clock2').addEventListener('change', showWidgetBodies);
   $('w-area-test').addEventListener('click', testAlertsArea);
