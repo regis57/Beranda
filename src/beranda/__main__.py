@@ -56,12 +56,10 @@ def main(argv: list[str] | None = None) -> None:
             pass
 
     app = create_app(cfg, config_path=config_path)
-    if cfg.https:  # a second, secure address next to the usual one (see tls.py)
-        tls.start(app, cfg.host, cfg.https_port, config_path.parent / "tls")
-    try:
-        uvicorn.run(app, host=cfg.host, port=cfg.port, log_level="info")
-    finally:
-        tls.stop()
+    # One port, two ways in: http:// as always, and https:// for the microphone (see tls.py).
+    server = tls.make_server(uvicorn.Config(app, host=cfg.host, port=cfg.port, log_level="info"),
+                             config_path.parent / "tls")
+    server.run()
 
 
 if __name__ == "__main__":

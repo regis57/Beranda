@@ -123,7 +123,14 @@ def test_a_taken_port_sends_beranda_back_to_8080_instead_of_failing_forever(tmp_
     path = tmp_path / "config.toml"
     path.write_text(f'[server]\nhost = "127.0.0.1"\nport = {busy_port}\n')
     started = {}
-    monkeypatch.setattr(entry.uvicorn, "run", lambda app, **kw: started.update(kw))
+    class FakeServer:
+        def __init__(self, cfg):
+            started["port"] = cfg.port
+
+        def run(self):
+            pass
+
+    monkeypatch.setattr(entry.tls, "make_server", lambda cfg, folder: FakeServer(cfg))
     entry.main(["--config", str(path)])
     assert started["port"] == system.DEFAULT_PORT
     assert tomllib.loads(path.read_text())["server"]["port"] == system.DEFAULT_PORT  # the screen reads it too
@@ -199,56 +206,41 @@ def test_nothing_is_erased_when_the_reset_itself_cannot_follow(tmp_path, monkeyp
 # --- the optional secure (https) address, for the microphone ------------------------------
 
 
-def test_https_settings_round_trip_and_are_only_written_when_on():
-    assert "https" not in config.to_dict(Config())["server"]
-    cfg = config.from_dict({"server": {"https": True, "https_port": 9443}})
-    assert cfg.https and cfg.https_port == 9443
-    assert config.from_dict(config.to_dict(cfg)).https_port == 9443
+def test_one_port_answers_both_http_and_https(tmp_path):
+    """The secure address is the usual one with an "s": same port (see tls.py)."""
+    import ssl
+    import threading
+    import time
+    import urllib.request
 
+    import uvicorn
 
-def test_turning_https_on_makes_the_certificate_saves_and_restarts(tmp_path, monkeypatch):
     from beranda import tls
 
-    made = []
-    monkeypatch.setattr(tls, "ensure_certificate", lambda folder: made.append(folder))
-    monkeypatch.setattr(system, "restart_server_soon", lambda: True)
-    monkeypatch.setattr(system, "port_problem", lambda *a, **k: None)
-    client, path = _client(tmp_path)
-    assert client.post("/api/admin/system/https", json={"enabled": True}).status_code == 400
-    r = client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
-    assert r.status_code == 200 and r.json() == {"https": True, "port": 8443, "restarting": True}
-    assert made == [tmp_path / "tls"]
-    server = tomllib.loads(path.read_text())["server"]
-    assert server["https"] is True and server["https_port"] == 8443
-    info = client.get("/api/admin/system").json()["https"]
-    assert info["enabled"] is True and info["port"] == 8443
-    assert client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True}).json()["detail"] == "https_same"
-    assert client.post("/api/admin/system/https", json={"enabled": False, "confirmed": True}).json()["https"] is False
-    assert "https" not in tomllib.loads(path.read_text())["server"]
-
-
-def test_https_says_why_it_cannot_be_turned_on(tmp_path, monkeypatch):
-    from beranda import tls
-
-    def no_openssl(folder):
-        raise tls.TlsError("no_openssl")
-
-    monkeypatch.setattr(tls, "ensure_certificate", no_openssl)
-    client, path = _client(tmp_path)
-    r = client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
-    assert r.status_code == 422 and r.json()["detail"] == "https_no_openssl"
-    assert not path.exists()  # nothing saved, nothing restarted
-
-
-def test_the_https_port_cannot_be_taken_by_the_normal_one(tmp_path, monkeypatch):
-    from beranda import tls
-
-    monkeypatch.setattr(tls, "ensure_certificate", lambda folder: None)
-    monkeypatch.setattr(system, "restart_server_soon", lambda: True)
+    if not tls.openssl_available():
+        pytest.skip("needs the openssl tool")
     client, _ = _client(tmp_path)
-    client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
-    r = client.post("/api/admin/system/port", json={"port": 8443, "confirmed": True})
-    assert r.status_code == 422 and r.json()["detail"] == "port_busy"
+    port = free_port()
+    server = tls.make_server(uvicorn.Config(client.app, host="127.0.0.1", port=port, log_level="warning"), tmp_path / "tls")
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
+    for _ in range(100):
+        if server.started:
+            break
+        time.sleep(0.05)
+    try:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        plain = urllib.request.urlopen(f"http://127.0.0.1:{port}/api/health", timeout=5).read()
+        secure = urllib.request.urlopen(f"https://127.0.0.1:{port}/api/health", context=ctx, timeout=5).read()
+        assert b'"ok"' in plain and b'"ok"' in secure
+        assert tls.available()
+        with socket.create_connection(("127.0.0.1", port)):  # a browser's idle spare connection...
+            assert urllib.request.urlopen(f"http://127.0.0.1:{port}/api/health", timeout=5).status == 200  # ...blocks nobody
+    finally:
+        server.should_exit = True
+        thread.join(10)
 
 
 @pytest.mark.skipif(not __import__("shutil").which("openssl"), reason="needs the openssl tool")

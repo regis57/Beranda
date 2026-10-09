@@ -28,7 +28,7 @@ dark at night. **Free**: no account, no subscription, no paid service.
 | **Your life** | Your calendar (Google, Apple, Outlook, Nextcloud, Proton), public holidays of your country, birthdays and dates that matter, your photos as a slideshow. |
 | **The world** | News headlines, world radio (50,000 stations), tonight's TV, "On this day" in history. |
 | **Handy extras** | Air quality, UV and pollen · official weather warnings for your area · name day, length of the day and your country's own calendar (Hijri, Chinese lunar, Japanese era...) · a small second clock. **Each one can be switched off.** |
-| **Hands-free** | Optional voice control from the tablet's microphone: "what's the weather", "play France Inter", "next station". Works from a computer too, with a one-click secure address. [How to use it](docs/VOICE.md) |
+| **Hands-free** | Optional voice control from the tablet's microphone: "what's the weather", "play France Inter", "next station". Works from a computer too: just open `https://` instead of `http://`. [How to use it](docs/VOICE.md) |
 | **Made for a wall** | Works upright or sideways, turns the screen off at night, and each theme tells the season in its own culture. |
 
 ## Start in 2 minutes, on your computer
@@ -140,6 +140,25 @@ What the **screen** shows is capped separately, and the rest simply rotates: 3 h
 These numbers are a careful estimate, not a benchmark: only some boards have been tried by the author.
 You know better? Force a profile in `config.toml` (`[limits]` / `profile = "plus"`) or tell us what
 your board handled in an [issue](https://github.com/regis57/Beranda/issues).
+
+## If the settings page does not answer
+
+From a computer on the same Wi-Fi, connect to the Pi and let Beranda check itself:
+
+```bash
+ssh your-user@beranda.local
+sudo beranda doctor
+```
+
+It says what is wrong and on which address Beranda really answers (for example after a port
+change, or after *Start over*, which brings the port back to 8080). Then, as needed:
+
+| To... | Type |
+|---|---|
+| see whether it runs, and why it stopped | `sudo systemctl status beranda` then `sudo journalctl -u beranda -n 50` |
+| restart it | `sudo systemctl restart beranda beranda-kiosk` |
+| update or repair it (keeps your settings) | `curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh \| sudo bash` |
+| read the port it uses | `sudo grep -A3 '\[server\]' /etc/beranda/config.toml` |
 
 ## Privacy
 
