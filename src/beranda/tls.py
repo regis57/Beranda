@@ -1,12 +1,13 @@
-"""An optional secure (HTTPS) address, so a computer's browser allows the microphone.
+"""A secure (https) address on the SAME port, so a browser allows the microphone.
 
-Browsers only give the microphone to "secure" pages: https://, or localhost. Beranda's usual
-address, http://beranda.local:8080, is neither. When this is switched on in the settings page
-("Advanced user"), Beranda also answers on https://beranda.local:8443 with a certificate it made
-itself. Because no official authority signed it, the browser warns once ("your connection is
-not private"): the person clicks "Advanced" then "Continue". Nothing leaves the home network.
+Browsers only give the microphone to "secure" pages: https://, or localhost. So Beranda answers
+both ways on its one port: http://rp4.local:8080 as always, and https://rp4.local:8080 (same
+address, with an "s"). It looks at the first byte each visitor sends: a secure connection
+always starts with byte 0x16, plain http never does.
 
-The usual http address keeps working exactly as before (the screen on the Pi uses it).
+The certificate is made by Beranda itself (with the openssl tool). No official authority signed
+it, so the browser warns once ("your connection is not private"): choose "Advanced", then
+"Continue". Nothing leaves the home network.
 """
 
 from __future__ import annotations
@@ -18,7 +19,6 @@ import os
 import shutil
 import socket
 import subprocess
-import threading
 import time
 from pathlib import Path
 
@@ -104,38 +104,117 @@ def valid_ip(text: str) -> bool:
     return True
 
 
-_server = None  # the second server, while it runs
-_thread: threading.Thread | None = None
 
-
-def is_running() -> bool:
-    return bool(_server is not None and getattr(_server, "started", False))
-
-
-def start(app, host: str, port: int, folder: Path) -> bool:
-    """Start answering on the secure port in a background thread (same app, same rules).
-    Returns False, and Beranda carries on with plain http only, if that cannot be done."""
-    global _server, _thread
-    import uvicorn
+def ssl_context(folder: Path):
+    """The TLS settings for the secure address, or None when no certificate can be made."""
+    import ssl
 
     try:
         cert, key = ensure_certificate(folder)
     except TlsError as exc:
-        log.error("HTTPS is switched on but unavailable (%s); carrying on with http only", exc)
-        return False
-    config = uvicorn.Config(
-        app, host=host, port=port, ssl_certfile=str(cert), ssl_keyfile=str(key),
-        lifespan="off",  # the first server already runs the app's start-up work
-        log_level="warning",
-    )
-    _server = uvicorn.Server(config)
-    _thread = threading.Thread(target=lambda: asyncio.run(_server.serve()), name="beranda-https", daemon=True)
-    _thread.start()
-    return True
+        log.warning("secure address unavailable (%s): http only", exc)
+        return None
+    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ctx.load_cert_chain(str(cert), str(key))
+    return ctx
 
 
-def stop() -> None:
-    if _server is not None:
-        _server.should_exit = True
-    if _thread is not None:
-        _thread.join(3)
+_available = False
+
+
+def available() -> bool:
+    """True when this server also answers https on its port."""
+    return _available
+
+
+class _Listener:
+    """Accepts visitors on the port and gives each one plain http or https, by its first byte."""
+
+    def __init__(self, sock: socket.socket, make_protocol, ctx) -> None:
+        self.sock = sock
+        self.make_protocol = make_protocol
+        self.ctx = ctx
+        self.loop = asyncio.get_running_loop()
+        self.task = self.loop.create_task(self._accept())
+
+    async def _accept(self) -> None:
+        while True:
+            try:
+                conn, _addr = await self.loop.sock_accept(self.sock)
+            except asyncio.CancelledError:
+                raise
+            except OSError:
+                await asyncio.sleep(0.05)
+                continue
+            self.loop.create_task(self._serve(conn))
+
+    async def _first_byte(self, conn: socket.socket) -> bytes:
+        ready = self.loop.create_future()
+        self.loop.add_reader(conn.fileno(), lambda: ready.done() or ready.set_result(None))
+        try:
+            await asyncio.wait_for(ready, timeout=30)  # browsers open spare connections and wait
+        finally:
+            self.loop.remove_reader(conn.fileno())
+        return conn.recv(1, socket.MSG_PEEK)
+
+    async def _serve(self, conn: socket.socket) -> None:
+        conn.setblocking(False)
+        try:
+            first = await self._first_byte(conn)
+            if not first:
+                conn.close()
+                return
+            secure = first == b"\x16" and self.ctx is not None
+            await self.loop.connect_accepted_socket(self.make_protocol, conn, ssl=self.ctx if secure else None)
+        except (TimeoutError, OSError, ConnectionError):
+            conn.close()
+        except Exception:
+            log.debug("connection dropped", exc_info=True)
+            conn.close()
+
+    def close(self) -> None:
+        self.task.cancel()
+        self.sock.close()
+
+    async def wait_closed(self) -> None:
+        return None
+
+
+def make_server(config, cert_folder: Path):
+    """A uvicorn server that answers http AND https on the same port (see the top of this file).
+    If anything about it fails, it quietly behaves like a plain uvicorn server (http only)."""
+    import sys
+
+    import uvicorn
+
+    class DualServer(uvicorn.Server):
+        async def startup(self, sockets=None) -> None:
+            global _available
+            try:
+                make = self.config.http_protocol_class  # uvicorn's own protocol, as in its startup()
+            except AttributeError:
+                return await super().startup(sockets)
+            ctx = await asyncio.to_thread(ssl_context, cert_folder)
+            if ctx is None:
+                return await super().startup(sockets)
+            await self.lifespan.startup()
+            if self.lifespan.should_exit:
+                sys.exit(3)
+            config = self.config
+
+            def protocol():
+                return make(config=config, server_state=self.server_state, app_state=self.lifespan.state)
+
+            try:
+                sock = socket.create_server((config.host, config.port), backlog=config.backlog)
+            except OSError as exc:
+                log.error("cannot listen on port %s: %s", config.port, exc)
+                await self.lifespan.shutdown()
+                sys.exit(3)
+            sock.setblocking(False)
+            self.servers = [_Listener(sock, protocol, ctx)]
+            _available = True
+            log.info("Beranda answers on port %s, with http:// and https://", config.port)
+            self.started = True
+
+    return DualServer(config)

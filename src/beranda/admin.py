@@ -185,10 +185,7 @@ def router(runtime: Runtime) -> APIRouter:
         if over:
             raise HTTPException(422, f"invalid settings: {over}")
         merged = dict(body)
-        merged["server"] = {
-            "host": runtime.cfg.host, "port": runtime.cfg.port,
-            "https": runtime.cfg.https, "https_port": runtime.cfg.https_port,
-        }
+        merged["server"] = {"host": runtime.cfg.host, "port": runtime.cfg.port}
         if "pin" in merged:  # "" clears, a string sets, absent keeps
             merged["admin"] = {"pin": str(merged.pop("pin"))}
         elif runtime.cfg.admin_pin:
@@ -369,12 +366,7 @@ def router(runtime: Runtime) -> APIRouter:
             "screen": info.get("SCREEN", "0") == "1",
             "actions": system.requests_dir() is not None,
             "own_photos": len(photos.list_photos(photos.default_folder(), 100000)),
-            "https": {
-                "enabled": runtime.cfg.https,
-                "port": runtime.cfg.https_port,
-                "running": tls.is_running(),
-                "openssl": tls.openssl_available(),
-            },
+            "https": tls.available(),  # the same port also answers https:// (for the microphone)
             "port": runtime.listening_port,
             "saved_port": runtime.cfg.port,  # differs from "port" until Beranda is restarted
         }
@@ -398,8 +390,6 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(400, "the change must be confirmed")
         port = body.get("port")
         problem = system.port_problem(port, runtime.cfg.port, runtime.cfg.host)
-        if problem is None and runtime.cfg.https and port == runtime.cfg.https_port:
-            problem = "busy"  # that number is the secure address's
         if problem:
             raise HTTPException(422, f"port_{problem}")
         runtime.cfg = replace(runtime.cfg, port=port)
@@ -437,33 +427,6 @@ def router(runtime: Runtime) -> APIRouter:
         name = f"beranda-diagnostic-{now.astimezone().strftime('%Y%m%d-%H%M')}.txt"
         return Response(text, media_type="text/plain; charset=utf-8",
                         headers={"Content-Disposition": f'attachment; filename="{name}"', "Cache-Control": "no-store"})
-
-    @api.post("/system/https", dependencies=[Depends(guard)])
-    async def change_https(body: dict) -> dict:
-        """Switch the secure (https) address on or off. On: a certificate is made now (so a
-        problem is reported before anything restarts), the choice is saved and the server restarts."""
-        if runtime.config_path is None:
-            raise HTTPException(409, "nowhere to save the settings")
-        if body.get("confirmed") is not True or not isinstance(body.get("enabled"), bool):
-            raise HTTPException(400, "the change must be confirmed")
-        enabled = body["enabled"]
-        if enabled == runtime.cfg.https:
-            raise HTTPException(422, "https_same")
-        if enabled:
-            https_port = runtime.cfg.https_port
-            if https_port == runtime.cfg.port:
-                https_port = system.DEFAULT_PORT + 363  # 8443
-            if system.port_problem(https_port, -1, runtime.cfg.host):
-                raise HTTPException(422, "https_busy")
-            try:
-                await asyncio.to_thread(tls.ensure_certificate, runtime.config_path.parent / "tls")
-            except tls.TlsError as exc:
-                raise HTTPException(422, f"https_{exc}") from exc
-            runtime.cfg = replace(runtime.cfg, https=True, https_port=https_port)
-        else:
-            runtime.cfg = replace(runtime.cfg, https=False)
-        write_config(runtime.config_path, runtime.cfg)
-        return {"https": enabled, "port": runtime.cfg.https_port, "restarting": system.restart_server_soon()}
 
     @api.post("/system/{action}", dependencies=[Depends(guard)])
     async def system_action(action: str, body: dict | None = None) -> dict:

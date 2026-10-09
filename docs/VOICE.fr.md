@@ -11,11 +11,10 @@ de la tablette qui affiche Beranda**, jamais ceux du Raspberry Pi.
    reconnaissance vocale aux pages web de la même façon.)
 3. Les navigateurs n'autorisent le micro que sur des pages « sécurisées », et une adresse comme
    `http://192.168.1.20:8080` n'en est pas une. Deux solutions, au choix :
-   - **La plus simple : une adresse sécurisée.** Dans la page de réglages, boîte **15 · Utilisateur
-     avancé**, appuyez sur **Activer le HTTPS**. Beranda répond alors aussi à `https://…:8443`. La
-     première fois, le navigateur prévient que la connexion n'est « pas privée » (le certificat est
-     fabriqué par Beranda lui-même) : choisissez *Paramètres avancés*, puis *Continuer vers le site*.
-     Ouvrez ensuite Beranda depuis cette adresse. Rien ne sort de votre réseau à la maison.
+   - **La plus simple : ajouter un « s ».** Ouvrez Beranda avec `https://` au lieu de `http://`,
+     même adresse et même port (par exemple `https://beranda.local:8080`). La première fois, le
+     navigateur prévient que la connexion n'est « pas privée » (le certificat est fabriqué par
+     Beranda lui-même) : choisissez *Paramètres avancés*, puis *Continuer*. Rien ne sort de votre réseau.
    - **Ou un réglage unique dans Chrome**, sur la tablette ou l'ordinateur : ouvrez
      `chrome://flags/#unsafely-treat-insecure-origin-as-secure`, tapez l'adresse de Beranda (par
      exemple `http://192.168.1.20:8080`), mettez le réglage sur **Enabled** et relancez Chrome.

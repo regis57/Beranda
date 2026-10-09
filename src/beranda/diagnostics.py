@@ -210,7 +210,7 @@ def build(cfg: Config, *, runtime_info: dict, state: dict | None, state_problem:
         f"installed with install.sh: {bool(info)}"),
         f"running for: {int(time.time() - START) // 60} min   demo mode: {cfg.demo}",
         (f"listening on: port {runtime_info.get('port')} (saved: {cfg.port})   "
-        f"https: {'on' if cfg.https else 'off'}{' (running)' if tls.is_running() else ''}"),
+        f"https on the same port: {'yes' if tls.available() else 'no'}"),
         f"settings file: {'found' if runtime_info.get('config_exists') else 'not written yet'}",
         "",
         "== DEVICE ==",

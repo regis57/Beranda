@@ -29,7 +29,7 @@ link with the details in plain words.
 | **12. Screen** | Rotation for a screen hung upright (90° or 270°) or upside down (180°), and the hours to turn it off at night. On the Pi the screen itself switches off; on a tablet the page goes dark. |
 | **13. System** | Version, the board Beranda recognised (and so how much it can hold, see the README), *Check for updates*, *Update now*, *Restart the screen*, *Restart the Raspberry Pi*. Each button asks for a second click. They work when Beranda was installed with `install.sh`. |
 | **14. Access** | Optional PIN. |
-| **15. Advanced user** | Change the **port**, turn on **HTTPS** (for the microphone), download a **diagnostic file** and **start over** (see below). |
+| **15. Advanced user** | Change the **port**, see the **secure address** (for the microphone), download a **diagnostic file** and **start over** (see below). |
 
 ### Advanced user: changing the port
 
@@ -47,13 +47,13 @@ address. If the new port cannot be used when Beranda starts, it goes back to 808
 *Start over from scratch*, in the same box, also brings the port back to 8080 (you must type the
 word "yes" in your language first).
 
-### Advanced user: a secure address for the microphone
+### A secure address for the microphone
 
-Browsers only give the microphone to "secure" pages, and `http://beranda.local:8080` is not one.
-**Turn on HTTPS** adds a second address, `https://beranda.local:8443`, with a certificate Beranda
-makes itself (it needs the `openssl` tool, already on Raspberry Pi OS). The first visit shows a
-"connection not private" warning: choose *Advanced*, then *Continue*. The usual address keeps
-working, and so does the screen on the Pi. Details and the other way (a Chrome setting): [VOICE.md](VOICE.md).
+Browsers only give the microphone to "secure" pages. Beranda answers both ways on its one port:
+`http://beranda.local:8080` as always, and `https://beranda.local:8080` (same address, with an "s"),
+with a certificate it makes itself (it needs the `openssl` tool, already on Raspberry Pi OS). The
+first visit shows a "connection not private" warning: choose *Advanced*, then *Continue*.
+Details and the other way (a Chrome setting): [VOICE.md](VOICE.md).
 
 ### Advanced user: the diagnostic file
 

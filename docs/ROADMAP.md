@@ -73,6 +73,9 @@ Done:
 - **v0.15.1**: the two "start over" buttons say plainly what they erase; after starting over with a
   changed port, the settings page follows Beranda back to 8080 by itself; `beranda doctor` says when
   it needs sudo to read the settings and finds the server on another port; the installer shows the real port
+- **v0.15.2**: the secure address is now simply the usual one with an "s": the same port answers
+  http:// and https:// (no switch, no second port). The README gets a "settings page does not answer"
+  rescue section with the few commands that always work
 
 Next:
 

@@ -85,8 +85,6 @@ class Config:
     demo: bool = False
     host: str = "0.0.0.0"
     port: int = 8080
-    https: bool = False  # also answer on a secure address (https), so a computer's browser allows the microphone
-    https_port: int = 8443
     cache_dir: Path = Path.home() / ".cache" / "beranda"
     admin_pin: str = ""  # optional PIN for the admin page; empty = open to the home network
     news_enabled: bool = True
@@ -302,8 +300,6 @@ def from_dict(data: dict) -> Config:
         demo=bool(data.get("demo", False)),
         host=server.get("host", "0.0.0.0"),
         port=int(server.get("port", 8080)),
-        https=bool(server.get("https", False)),
-        https_port=int(server.get("https_port", 8443)),
         cache_dir=cache_dir,
         admin_pin=str(data.get("admin", {}).get("pin", "")),
         news_enabled=bool(news.get("enabled", True)),
@@ -375,7 +371,7 @@ def to_dict(cfg: Config) -> dict:
         },
         "calendar": {"ics_urls": list(cfg.ics_urls)},
         "key_dates": keys,
-        "server": {"host": cfg.host, "port": cfg.port, **({"https": True, "https_port": cfg.https_port} if cfg.https else {})},
+        "server": {"host": cfg.host, "port": cfg.port},
     }
     news: dict = {"enabled": cfg.news_enabled, "feeds": list(cfg.news_feeds)}
     if cfg.news_sources is not None:

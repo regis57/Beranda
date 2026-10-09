@@ -42,7 +42,7 @@ let lang = 'en';
 let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
 let limits = {};  // the most this computer may hold (see limits.py): calendars, news_sources, tv_channels...
-let httpsInfo = { enabled: false, port: 8443, running: false, openssl: true };  // the secure address (see tls.py)
+let httpsOk = false;  // this same port also answers https:// (see tls.py)
 let currentPort = 8080;  // the port this server listens on (from /system)
 let editable = true;
 let dirty = false;
@@ -844,7 +844,7 @@ async function renderSystem() {
     });
     for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset', 'sys-reset-all']) $(id).disabled = !info.actions;
     currentPort = info.port;
-    httpsInfo = info.https || httpsInfo;
+    httpsOk = info.https === true;
     renderHttps();
     $('port-current').textContent = t('admin.port_current', { port: info.port })
       + (info.saved_port !== info.port ? ` ${t('admin.port_pending', { port: info.saved_port })}` : '');
@@ -901,11 +901,10 @@ async function systemAction(action, body, messageId = 'sys-message') {
 }
 
 // ------------------------------------------------------------------ 11. advanced user ---
-// The secure (https) address of this same page.
+// The secure address is this same address with "https" (same port: see tls.py).
 function httpsAddress() {
   const url = new URL(location.href);
   url.protocol = 'https:';
-  url.port = String(httpsInfo.port);
   url.pathname = '/admin';
   url.search = '';
   url.hash = '';
@@ -913,12 +912,9 @@ function httpsAddress() {
 }
 function renderHttps() {
   const state = $('https-state');
-  const button = $('https-toggle');
-  button.dataset.i18n = httpsInfo.enabled ? 'admin.https_off' : 'admin.https_on';
-  button.textContent = t(button.dataset.i18n);
   state.replaceChildren();
-  if (!httpsInfo.enabled) { state.textContent = t('admin.https_state_off'); return; }
-  if (!httpsInfo.running) { state.textContent = t('admin.https_state_pending'); return; }
+  if (location.protocol === 'https:') { state.textContent = t('admin.https_here'); return; }
+  if (!httpsOk) { state.textContent = t('admin.https_unavailable'); return; }
   state.append(t('admin.https_state_on'), ' ', el('a', { href: httpsAddress(), textContent: httpsAddress() }));
 }
 // The diagnostic file: the server writes it (settings, device, what the display shows, recent log);
@@ -955,23 +951,6 @@ async function downloadDiagnostics() {
     setTimeout(() => URL.revokeObjectURL(link.href), 10000);
     msg.textContent = t('admin.diag_done', { name });
   } catch (e) { msg.textContent = t('admin.diag_failed', { err: e.message }); }
-}
-async function changeHttps() {
-  const msg = $('https-msg');
-  const enable = !httpsInfo.enabled;
-  msg.replaceChildren('…');
-  try {
-    const r = await api('/system/https', { method: 'POST', body: JSON.stringify({ enabled: enable, confirmed: true }) });
-    if (!r.restarting) { msg.textContent = t('admin.https_done_manual'); return; }
-    httpsInfo = { ...httpsInfo, enabled: enable, port: r.port, running: false };
-    if (enable) msg.replaceChildren(t('admin.https_done'), ' ', el('a', { href: httpsAddress(), textContent: t('admin.https_open') }));
-    else msg.textContent = t('admin.https_done_off');
-    renderHttps();
-    setTimeout(() => { renderSystem(); }, 12000);  // the server is back by then: show its real state
-  } catch (e) {
-    const code = /^https_(no_openssl|failed|busy|same)$/.exec(e.message);
-    msg.textContent = code ? t(`admin.https_err_${code[1]}`) : e.message;
-  }
 }
 
 // The same address as this page, with another port.
@@ -1170,7 +1149,6 @@ async function boot() {
     await systemAction('reset', { confirmed: true, erase_data: true, confirmed_twice: true }, 'adv-message');
   });
   armed($('port-apply'), changePort);
-  armed($('https-toggle'), changeHttps);
   $('diag-btn').addEventListener('click', downloadDiagnostics);
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
   $('w-alerts').addEventListener('change', showWidgetBodies);
