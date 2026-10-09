@@ -214,5 +214,7 @@
   "voice_hint": "Layanan terpisah, opsional, dan berjalan sepenuhnya tanpa internet: kata pembangun, lalu kalimat singkat (cuaca, waktu, stasiun favorit, memulai ulang layar). Tidak ada yang dikirim ke mana pun; memerlukan mikrofon dan speaker di Pi, dan dipasang secara terpisah (install.sh --with-voice).",
   "voice_enabled": "Aktifkan kontrol suara",
   "voice_wake_word": "Kata pembangun",
-  "voice_help": "Ucapkan kata pembangun, lalu permintaan Anda, misalnya “Hey Jarvis, bagaimana cuacanya” atau “Hey Jarvis, putar France Inter”. Kata pembangun harus salah satu dari tiga kata siap pakai ini — Beranda tidak dapat melatih kata khusus. Kartu ini hanya mengaktifkan fitur dan memilih kata pembangun; proses mendengarkan sendiri berjalan sebagai program tersendiri di Pi, dijalankan sekali dengan install.sh --with-voice."
+  "voice_help": "Ucapkan kata pembangun, lalu permintaan Anda, misalnya “Hey Jarvis, bagaimana cuacanya” atau “Hey Jarvis, putar France Inter”. Kata pembangun harus salah satu dari tiga kata siap pakai ini — Beranda tidak dapat melatih kata khusus. Kartu ini hanya mengaktifkan fitur dan memilih kata pembangun; proses mendengarkan sendiri berjalan sebagai program tersendiri di Pi, dijalankan sekali dengan install.sh --with-voice.",
+  "history_enabled": "Tampilkan peristiwa sejarah hari ini (“pada hari ini”)",
+  "history_hint": "Pencarian gratis di Wikidata untuk negara Anda, disimpan dalam cache sekali sehari. Tidak ada yang dikirim tentang Anda selain kode negara dan tanggal hari ini."
 }

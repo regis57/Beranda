@@ -214,5 +214,7 @@
   "voice_hint": "Ein separater, optionaler, vollständig offline laufender Dienst: ein Aktivierungswort, dann ein kurzer Satz (das Wetter, die Uhrzeit, ein Lieblingssender, den Bildschirm neu starten). Es wird nichts irgendwohin gesendet; dafür braucht es ein Mikrofon und einen Lautsprecher am Pi, und es wird separat installiert (install.sh --with-voice).",
   "voice_enabled": "Sprachsteuerung einschalten",
   "voice_wake_word": "Aktivierungswort",
-  "voice_help": "Sage das Aktivierungswort, dann deine Anfrage, z. B. „Hey Jarvis, wie ist das Wetter“ oder „Hey Jarvis, spiele France Inter“. Das Aktivierungswort muss eines dieser drei vorgefertigten sein — Beranda kann kein eigenes trainieren. Diese Karte schaltet die Funktion nur ein und wählt das Aktivierungswort; das Zuhören selbst läuft als eigenes Programm auf dem Pi, einmal gestartet mit install.sh --with-voice."
+  "voice_help": "Sage das Aktivierungswort, dann deine Anfrage, z. B. „Hey Jarvis, wie ist das Wetter“ oder „Hey Jarvis, spiele France Inter“. Das Aktivierungswort muss eines dieser drei vorgefertigten sein — Beranda kann kein eigenes trainieren. Diese Karte schaltet die Funktion nur ein und wählt das Aktivierungswort; das Zuhören selbst läuft als eigenes Programm auf dem Pi, einmal gestartet mit install.sh --with-voice.",
+  "history_enabled": "Historische Ereignisse für heute zeigen („an diesem Tag“)",
+  "history_hint": "Eine kostenlose Abfrage bei Wikidata für dein Land, einmal täglich zwischengespeichert. Außer deinem Ländercode und dem heutigen Datum wird nichts über dich gesendet."
 }

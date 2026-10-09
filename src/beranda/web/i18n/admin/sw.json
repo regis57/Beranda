@@ -214,5 +214,7 @@
   "voice_hint": "Huduma tofauti, ya hiari, inayofanya kazi bila mtandao kabisa: neno la kuamsha, kisha sentensi fupi (hali ya hewa, saa, kituo kipendwa, kuanzisha upya skrini). Hakuna kinachotumwa popote; inahitaji maikrofoni na spika kwenye Pi, na husimikwa kando (install.sh --with-voice).",
   "voice_enabled": "Washa udhibiti wa sauti",
   "voice_wake_word": "Neno la kuamsha",
-  "voice_help": "Sema neno la kuamsha kisha ombi lako, kwa mfano “Hey Jarvis, hali ya hewa ikoje” au “Hey Jarvis, cheza France Inter”. Neno la kuamsha lazima liwe mojawapo ya maneno haya matatu yaliyotayarishwa — Beranda haiwezi kufundisha neno lake lenyewe. Kadi hii inawasha tu kipengele na kuchagua neno la kuamsha; kusikiliza halisi kunafanyika kama programu yake tofauti kwenye Pi, inayoanzishwa mara moja kwa install.sh --with-voice."
+  "voice_help": "Sema neno la kuamsha kisha ombi lako, kwa mfano “Hey Jarvis, hali ya hewa ikoje” au “Hey Jarvis, cheza France Inter”. Neno la kuamsha lazima liwe mojawapo ya maneno haya matatu yaliyotayarishwa — Beranda haiwezi kufundisha neno lake lenyewe. Kadi hii inawasha tu kipengele na kuchagua neno la kuamsha; kusikiliza halisi kunafanyika kama programu yake tofauti kwenye Pi, inayoanzishwa mara moja kwa install.sh --with-voice.",
+  "history_enabled": "Onyesha matukio ya kihistoria ya leo (“siku kama hii”)",
+  "history_hint": "Utafutaji wa bure kwenye Wikidata kwa nchi yako, unaohifadhiwa mara moja kwa siku. Hakuna chochote kuhusu wewe kinachotumwa isipokuwa msimbo wa nchi yako na tarehe ya leo."
 }

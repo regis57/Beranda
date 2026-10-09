@@ -88,6 +88,15 @@ def test_voice_defaults_and_round_trip():
     assert config.to_dict(cfg)["voice"] == {"enabled": True, "wake_word": "alexa"}
 
 
+def test_history_defaults_and_round_trip():
+    cfg = config.Config()
+    assert cfg.history_enabled is True
+
+    cfg = config.from_dict({"history": {"enabled": False}})
+    assert cfg.history_enabled is False
+    assert config.to_dict(cfg)["history"] == {"enabled": False}
+
+
 def test_load_reads_toml(tmp_path):
     path = tmp_path / "c.toml"
     path.write_text('country = "JP"\nlanguage = "ja"\n[location]\nname = "Kyoto"\nlatitude = 35.01\nlongitude = 135.77\ntimezone = "Asia/Tokyo"\n')

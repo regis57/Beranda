@@ -6,7 +6,7 @@ A dashboard for a smart mirror or an old tablet, made for a **Raspberry Pi 3B+ o
 clock, local weather and rain, moon, your calendar, holidays and dates that matter, and a line
 of news headlines. Light by day, dark at night. Free: no account, no subscription, no paid API.
 
-> **Status: alpha (v0.8).** The installer is tested automatically on a fresh Debian-family
+> **Status: alpha (v0.9).** The installer is tested automatically on a fresh Debian-family
 > machine with systemd; the full-screen part has not been tried on a real Raspberry Pi yet.
 > If you try it, please tell us how it went in an issue.
 > 🇫🇷 [Lire en français](README.fr.md)
@@ -57,6 +57,8 @@ public holidays are real.* [All screenshots](docs/screenshots/)
   it runs as its own service (`install.sh --with-voice`) using
   [openWakeWord](https://github.com/dscripka/openWakeWord),
   [Vosk](https://alphacephei.com/vosk/) and [Piper](https://github.com/rhasspy/piper).
+- **On this day**: historical events for your own country, looked up for free on
+  [Wikidata](https://www.wikidata.org), woven into the news ticker.
 
 ## Try it on your computer (2 minutes)
 
