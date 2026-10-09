@@ -16,6 +16,16 @@ let loadedLang = null;
 
 const $ = (id) => document.getElementById(id);
 
+// Tell the Pi what went wrong on this screen (a blocked microphone, a script error...), so the
+// diagnostic file made from the settings page shows it. One short line; never anything heard.
+let reported = 0;
+function report(event) {
+  if (++reported > 50) return;  // a page stuck in a loop must not flood the Pi
+  fetch('/api/report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: String(event).slice(0, 200) }) }).catch(() => {});
+}
+window.addEventListener('error', (e) => report(`script error: ${e.message} (${(e.filename || '').split('/').pop()}:${e.lineno})`));
+window.addEventListener('unhandledrejection', (e) => report(`promise rejected: ${e.reason?.message || e.reason}`));
+
 // ---------------------------------------------------------------- i18n -----
 function deepMerge(base, extra) {
   const out = { ...base };
@@ -853,12 +863,17 @@ function toast(text, ms = 6000) {
 async function listen() {
   const mic = $('mic');
   if (mic.classList.contains('listening')) return;
-  if (voice.availability() !== 'ok') { toast(`${t('voice_unavailable')} (${voice.availability()})`, 9000); return; }
+  if (voice.availability() !== 'ok') {
+    toast(`${t('voice_unavailable')} (${voice.availability()})`, 9000);
+    report(`microphone: ${voice.availability()} (secure page: ${window.isSecureContext}, ${location.protocol})`);
+    return;
+  }
   mic.classList.add('listening');
   toast(t('voice_listening'), 0);
   try {
     const heard = await voice.listenOnce(lang);
-    if (!heard) { $('toast').hidden = true; return; }
+    if (!heard) { $('toast').hidden = true; report('microphone: works, but nothing was heard'); return; }
+    report('microphone: ok, a sentence was heard');
     const response = await fetch('/api/voice', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard }),
     });
@@ -876,6 +891,7 @@ async function listen() {
     // microphone blocked, none plugged in, or the browser's speech service unreachable: the short code
     // tells which, and the settings page (Voice control, "Test the microphone") explains it in words
     toast(`${t('voice_unavailable')} (${err.message || err})`, 9000);
+    report(`microphone: ${err.message || err} (secure page: ${window.isSecureContext}, ${location.protocol})`);
     console.warn('voice failed', err);
   } finally {
     mic.classList.remove('listening');
