@@ -137,6 +137,15 @@ def run() -> int:
     info = system.install_info()
     if info:
         lines.append(f"{OK} installed with install.sh in {info.get('PREFIX')} (branch {info.get('BRANCH')}, {info.get('COMMIT')})")
+    try:
+        free_mb = shutil.disk_usage("/").free // 2**20
+        if free_mb < 500:
+            lines.append(f"{WARN} only {free_mb} MB free on the SD card. To free some: sudo apt clean ; "
+                         "sudo journalctl --vacuum-size=50M ; sudo apt autoremove --purge")
+        else:
+            lines.append(f"{OK} {free_mb} MB free on the SD card")
+    except OSError:
+        pass
     urls = system.lan_addresses(cfg.port)
     if urls:
         lines.append(f"{OK} settings page: " + "  or  ".join(urls))

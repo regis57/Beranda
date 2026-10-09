@@ -83,6 +83,9 @@ Done:
   ("does not match your town"), with a one-tap fix (found thanks to the diagnostic file)
 - **v0.15.5**: the screen reports what goes wrong on its side (microphone result, page errors) and the
   diagnostic file shows it, with the browser of that screen
+- **v0.15.7**: tidier on small SD cards: the installer and each update drop the downloaded packages,
+  the pip cache and the old versions' files, and keep the system log under 50 MB; `beranda doctor`
+  shows the free space
 
 Next:
 

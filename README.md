@@ -45,7 +45,7 @@ You need Python 3.11 or newer. Drop `--demo` for your real weather and calendar.
 ## Install it on a Raspberry Pi
 
 **You need**: a Raspberry Pi (3B+ or newer is the comfortable choice; older boards work in
-light mode, see the [limits](#what-your-raspberry-pi-can-hold)), a microSD card of 8 GB or more, a screen with
+light mode, see the [limits](#what-your-raspberry-pi-can-hold)), a microSD card of 8 GB or more (16 GB is more comfortable), a screen with
 HDMI, and your phone or computer on the same Wi-Fi.
 
 1. **Prepare the card** with [Raspberry Pi Imager](https://www.raspberrypi.com/software/): choose
@@ -159,6 +159,7 @@ change, or after *Start over*, which brings the port back to 8080). Then, as nee
 | restart it | `sudo systemctl restart beranda beranda-kiosk` |
 | update or repair it (keeps your settings) | `curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh \| sudo bash` |
 | read the port it uses | `sudo grep -A3 '\[server\]' /etc/beranda/config.toml` |
+| free space on the SD card | `sudo apt clean && sudo apt autoremove --purge && sudo journalctl --vacuum-size=50M` |
 
 ## Privacy
 
