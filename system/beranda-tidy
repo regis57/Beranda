@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Keep a small SD card from filling up. Run as root by the installer and by every update
+# (the "Update" button of the settings page). Safe to run again and again.
+#
+#   - drop the downloaded package files (.deb) once they are installed;
+#   - drop the pip download cache and the files of Beranda's previous versions;
+#   - keep the system log under 50 MB;
+#   - on cards smaller than 32 GB, on Raspberry Pi OS with rpi-swap: keep the swap in compressed
+#     memory only (zram) instead of also reserving a swap file as big as the memory on the card
+#     (1 to 8 GB). The file is removed by rpi-swap itself at the next reboot. Not done if a swap
+#     setting was already chosen by hand.
+set -uo pipefail
+
+PREFIX="${PREFIX:-/opt/beranda}"
+say() { echo "beranda-tidy: $*"; }
+
+apt-get clean 2>/dev/null || true
+rm -rf /root/.cache/pip "$PREFIX/src/build"
+if [ -d "$PREFIX/src/.git" ]; then
+    git -C "$PREFIX/src" reflog expire --expire=now --all 2>/dev/null || true
+    git -C "$PREFIX/src" gc --prune=now --quiet 2>/dev/null || true
+fi
+
+if [ -d /etc/systemd ] && [ ! -f /etc/systemd/journald.conf.d/beranda.conf ]; then
+    install -d -m 0755 /etc/systemd/journald.conf.d
+    printf '# Written by Beranda: keep the system log small on an SD card.\n[Journal]\nSystemMaxUse=50M\n' \
+        > /etc/systemd/journald.conf.d/beranda.conf
+    systemctl restart systemd-journald 2>/dev/null || true
+    say "system log limited to 50 MB"
+fi
+journalctl --vacuum-size=50M >/dev/null 2>&1 || true
+
+# Swap: only with rpi-swap, only on a small card, only if nobody chose a mechanism already.
+size_gb=$(( $(df --output=size -k / 2>/dev/null | tail -n 1 | tr -d ' ' || echo 0) / 1024 / 1024 ))
+if [ -f /etc/rpi/swap.conf ] && [ "$size_gb" -lt 30 ] && [ ! -f /etc/rpi/swap.conf.d/beranda.conf ]; then
+    chosen=$(grep -hs '^[[:space:]]*Mechanism[[:space:]]*=' /etc/rpi/swap.conf /etc/rpi/swap.conf.d/*.conf || true)
+    if [ -z "$chosen" ]; then
+        install -d -m 0755 /etc/rpi/swap.conf.d
+        printf '# Written by Beranda: on a small SD card, swap in compressed memory only (no swap file).\n# Delete this file and reboot to go back to the system default.\n[Main]\nMechanism=zram\n' \
+            > /etc/rpi/swap.conf.d/beranda.conf
+        say "swap set to compressed memory only; the swap file goes away at the next reboot"
+    fi
+fi
+exit 0
