@@ -11,6 +11,9 @@ of news headlines. Light by day, dark at night. Free: no account, no subscriptio
 > If you try it, please tell us how it went in an issue.
 > 🇫🇷 [Lire en français](README.fr.md)
 
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
+*Beranda stays free and open source. If it brightens your wall, a coffee is always welcome.*
+
 | | |
 |---|---|
 | ![Japan](docs/screenshots/v0.12.0-japan-light.png) | ![China, night](docs/screenshots/v0.12.0-china-night.png) |
