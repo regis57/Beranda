@@ -29,7 +29,7 @@ aucun service payant.
 | **Votre quotidien** | Votre agenda (Google, Apple, Outlook, Nextcloud, Proton), les jours fériés de votre pays, anniversaires et dates qui comptent, vos photos en diaporama. |
 | **Le monde** | Titres de l'actualité, radio du monde (50 000 stations), programme TV de ce soir, « Ce jour-là » dans l'histoire. |
 | **Petits plus** | Qualité de l'air, UV et pollens · vigilances météo officielles de votre zone · fête du jour, durée du jour et calendrier de votre pays (hégirien, lunaire chinois, ère japonaise...) · une petite deuxième horloge. **Chacun peut être désactivé.** |
-| **Mains libres** | Commande vocale facultative avec le micro de la tablette : « quel temps fait-il », « mets France Inter », « station suivante ». [Mode d'emploi](docs/VOICE.fr.md) |
+| **Mains libres** | Commande vocale facultative avec le micro de la tablette : « quel temps fait-il », « mets France Inter », « station suivante ». Marche aussi depuis un ordinateur, avec une adresse sécurisée en un clic. [Mode d'emploi](docs/VOICE.fr.md) |
 | **Fait pour un mur** | En hauteur ou en largeur, écran éteint la nuit, et chaque thème raconte la saison à la façon de sa culture. |
 
 ## Essayer en 2 minutes, sur votre ordinateur
@@ -158,7 +158,7 @@ essayées par l'auteur. Vous savez mieux ? Forcez un profil dans `config.toml` (
 
 ## Aide, contribuer, soutenir
 
-- **Bloqué ?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues).
+- **Bloqué ?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues) en joignant le **fichier de diagnostic** (page de réglages → *Utilisateur avancé* → *Télécharger le fichier de diagnostic* ; il ne contient ni mot de passe ni lien privé).
 - **Contribuer** : `pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`. Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/`. [Feuille de route](docs/ROADMAP.md).
 - **Soutenir** : Beranda reste libre et gratuit. S'il égaye votre mur, [un café](https://buymeacoffee.com/regis57) est toujours le bienvenu.
 

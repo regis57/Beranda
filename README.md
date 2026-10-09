@@ -28,7 +28,7 @@ dark at night. **Free**: no account, no subscription, no paid service.
 | **Your life** | Your calendar (Google, Apple, Outlook, Nextcloud, Proton), public holidays of your country, birthdays and dates that matter, your photos as a slideshow. |
 | **The world** | News headlines, world radio (50,000 stations), tonight's TV, "On this day" in history. |
 | **Handy extras** | Air quality, UV and pollen · official weather warnings for your area · name day, length of the day and your country's own calendar (Hijri, Chinese lunar, Japanese era...) · a small second clock. **Each one can be switched off.** |
-| **Hands-free** | Optional voice control from the tablet's microphone: "what's the weather", "play France Inter", "next station". [How to use it](docs/VOICE.md) |
+| **Hands-free** | Optional voice control from the tablet's microphone: "what's the weather", "play France Inter", "next station". Works from a computer too, with a one-click secure address. [How to use it](docs/VOICE.md) |
 | **Made for a wall** | Works upright or sideways, turns the screen off at night, and each theme tells the season in its own culture. |
 
 ## Start in 2 minutes, on your computer
@@ -151,7 +151,7 @@ your board handled in an [issue](https://github.com/regis57/Beranda/issues).
 
 ## Help, contribute, support
 
-- **Stuck?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), or [open an issue](https://github.com/regis57/Beranda/issues).
+- **Stuck?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), or [open an issue](https://github.com/regis57/Beranda/issues) and attach the **diagnostic file** (settings page → *Advanced user* → *Download the diagnostic file*; it holds no password or private link).
 - **Contribute**: `pip install -e ".[dev]"`, then `pytest` and `ruff check src tests scripts`. A new language is one JSON file in `src/beranda/web/i18n/`. [Roadmap](docs/ROADMAP.md).
 - **Support**: Beranda stays free and open source. If it brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.
 

@@ -140,18 +140,15 @@ def restart_server_soon(delay: float = 1.5) -> bool:
 
 def lan_addresses(port: int) -> list[str]:
     """Addresses a phone on the same network can use, best first."""
+    from .tls import lan_ip
+
     urls = []
     host = socket.gethostname()
     if host and host != "localhost":
         urls.append(f"http://{host}.local:{port}/admin")
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            s.connect(("192.0.2.1", 9))  # no packet is sent: this only picks the outgoing interface
-            ip = s.getsockname()[0]
-        if not ip.startswith("127."):
-            urls.append(f"http://{ip}:{port}/admin")
-    except OSError:
-        pass
+    ip = lan_ip()
+    if ip:
+        urls.append(f"http://{ip}:{port}/admin")
     return urls
 
 

@@ -85,6 +85,8 @@ class Config:
     demo: bool = False
     host: str = "0.0.0.0"
     port: int = 8080
+    https: bool = False  # also answer on a secure address (https), so a computer's browser allows the microphone
+    https_port: int = 8443
     cache_dir: Path = Path.home() / ".cache" / "beranda"
     admin_pin: str = ""  # optional PIN for the admin page; empty = open to the home network
     news_enabled: bool = True
@@ -101,6 +103,9 @@ class Config:
     radio_volume: int = 70  # 0-100
     tv_xmltv_url: str = ""  # the user's own XMLTV guide address ("" = TV section disabled)
     tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
+    # The usual name of each ticked channel (some guides only give numbers as ids): (id, name) pairs,
+    # so the settings page can show "TF1" instead of "51767" without downloading the guide again.
+    tv_channel_names: tuple[tuple[str, str], ...] = ()
     # Optional extras on the display, each one switchable on the settings page.
     widget_chart: bool = True  # the 24-hour temperature / rain / wind graph
     widget_air: bool = True  # air quality, UV index and pollen
@@ -238,6 +243,16 @@ def _check_hhmm(value: object) -> str:
     return f"{int(hours):02d}:{int(minutes):02d}"
 
 
+def _channel_names(tv: dict) -> tuple[tuple[str, str], ...]:
+    """The saved names of the ticked TV channels. Only ticked channels keep a name, and a name is
+    only text of a sensible length: the file may have been edited by hand."""
+    wanted = {str(c) for c in tv.get("channels", [])}
+    names = tv.get("names", {})
+    if not isinstance(names, dict):
+        return ()
+    return tuple((str(k), str(v)[:80]) for k, v in names.items() if str(k) in wanted and str(v).strip())
+
+
 def from_dict(data: dict) -> Config:
     """Build a Config from a parsed TOML dict, validating what matters."""
     loc = data.get("location", {})
@@ -287,6 +302,8 @@ def from_dict(data: dict) -> Config:
         demo=bool(data.get("demo", False)),
         host=server.get("host", "0.0.0.0"),
         port=int(server.get("port", 8080)),
+        https=bool(server.get("https", False)),
+        https_port=int(server.get("https_port", 8443)),
         cache_dir=cache_dir,
         admin_pin=str(data.get("admin", {}).get("pin", "")),
         news_enabled=bool(news.get("enabled", True)),
@@ -302,6 +319,7 @@ def from_dict(data: dict) -> Config:
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
         tv_xmltv_url=_check_tv_url(tv.get("url", "")),
         tv_channels=tuple(str(c) for c in tv.get("channels", []))[: cap.tv_channels],
+        tv_channel_names=_channel_names(tv),
         widget_chart=bool(widgets.get("chart", True)),
         widget_air=bool(widgets.get("air", True)),
         widget_alerts=bool(widgets.get("alerts", False)),
@@ -357,7 +375,7 @@ def to_dict(cfg: Config) -> dict:
         },
         "calendar": {"ics_urls": list(cfg.ics_urls)},
         "key_dates": keys,
-        "server": {"host": cfg.host, "port": cfg.port},
+        "server": {"host": cfg.host, "port": cfg.port, **({"https": True, "https_port": cfg.https_port} if cfg.https else {})},
     }
     news: dict = {"enabled": cfg.news_enabled, "feeds": list(cfg.news_feeds)}
     if cfg.news_sources is not None:
@@ -380,6 +398,8 @@ def to_dict(cfg: Config) -> dict:
         "url": cfg.tv_xmltv_url,
         "channels": list(cfg.tv_channels),
     }
+    if cfg.tv_channel_names:
+        out["tv"]["names"] = dict(cfg.tv_channel_names)
     out["voice"] = {
         "enabled": cfg.voice_enabled,
         "commands": [

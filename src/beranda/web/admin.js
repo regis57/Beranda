@@ -42,6 +42,7 @@ let lang = 'en';
 let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
 let limits = {};  // the most this computer may hold (see limits.py): calendars, news_sources, tv_channels...
+let httpsInfo = { enabled: false, port: 8443, running: false, openssl: true };  // the secure address (see tls.py)
 let currentPort = 8080;  // the port this server listens on (from /system)
 let editable = true;
 let dirty = false;
@@ -90,10 +91,18 @@ function translateStatic() {
 }
 
 // ------------------------------------------------------------------ api ----
+// What went wrong on this page lately (kept for the diagnostic file; never anything typed by the person).
+const problems = [];
+function noteProblem(text) { problems.push(`${new Date().toISOString().slice(11, 19)} ${String(text).slice(0, 250)}`); if (problems.length > 30) problems.shift(); }
+window.addEventListener('error', (e) => noteProblem(`script error: ${e.message} (${(e.filename || '').split('/').pop()}:${e.lineno})`));
+window.addEventListener('unhandledrejection', (e) => noteProblem(`promise rejected: ${e.reason?.message || e.reason}`));
+
 async function api(path, opts = {}) {
   const headers = { 'Content-Type': 'application/json', ...(pin ? { 'X-Beranda-Pin': pin } : {}), ...(opts.headers || {}) };
-  const res = await fetch(`/api/admin${path}`, { ...opts, headers });
+  let res;
+  try { res = await fetch(`/api/admin${path}`, { ...opts, headers }); } catch (e) { noteProblem(`${opts.method || 'GET'} ${path.split('?')[0]} failed: ${e.message}`); throw e; }
   if (!res.ok) {
+    noteProblem(`${opts.method || 'GET'} ${path.split('?')[0]} -> HTTP ${res.status}`);
     let detail = '';
     try { detail = (await res.json()).detail || ''; } catch { /* not JSON */ }
     const err = new Error(detail || `HTTP ${res.status}`);
@@ -224,6 +233,7 @@ async function search() {
         $('loc-lon').value = Math.round(r.longitude * 1e4) / 1e4;
         // A new town: everything that belonged to the old one is replaced, never kept by mistake.
         $('w-area').value = r.area || '';  // area of the weather warnings (the new town's county / region)
+        areaTyped = false;
         $('w-area-msg').textContent = '';
         if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
         if (r.country && options.countries[r.country]) { $('country').value = r.country; onCountry(); }
@@ -240,6 +250,18 @@ async function search() {
   } catch {
     $('q-error').textContent = t('admin.search_failed'); $('q-error').hidden = false;
   }
+}
+
+// The town was changed by hand (its name, its coordinates or the country): the warnings area
+// belonged to the old town, so it is emptied rather than kept by mistake. Not done when the
+// area was typed by the person after loading the page (that one is theirs).
+let areaTyped = false;
+function townEditedByHand() {
+  if (areaTyped || !$('w-area').value) return;
+  $('w-area').value = '';
+  $('w-area-msg').textContent = '';
+  $('q-note').textContent = t('admin.area_cleared');
+  $('q-note').hidden = false;
 }
 
 // ------------------------------------------------------------------ 2. region ---
@@ -601,7 +623,7 @@ function renderTvChips() {
       $('tv-count').textContent = t('admin.tv_count', { n: tvChannels.length, k: tvSelected.size });
       markDirty();
     });
-    return el('label', { className: 'check chip' }, box, el('span', { textContent: c.name }));
+    return el('label', { className: 'check chip', title: c.id }, box, el('span', { textContent: c.name }));
   }));
   const more = matching.length - TV_SHOWN_MAX;
   $('tv-more').hidden = more <= 0 || !tvOpen;
@@ -633,7 +655,7 @@ async function tvSuggest() {
   } catch (e) { msg.textContent = e.message; }
 }
 
-async function tvFind() {
+async function tvFind({ quiet = false } = {}) {
   const url = $('tv-url').value.trim();
   if (!url) return;
   $('tv-message').textContent = t('admin.loading');
@@ -646,7 +668,7 @@ async function tvFind() {
     tvSelected = new Set([...tvSelected].filter((id) => known.has(id)));
     $('tv-message').textContent = t('admin.tv_ok', { n: r.channels.length });
     renderTvChips();
-    markDirty();
+    if (!quiet) markDirty();
   } catch (e) { $('tv-message').textContent = e.message; }
 }
 
@@ -657,9 +679,24 @@ function renderTv() {
   const tv = cfg.tv || { url: '', channels: [] };
   $('tv-url').value = tv.url || '';
   tvSelected = new Set(tv.channels || []);
-  // Until "find channels" is used again, show the saved ids as their own label.
-  tvChannels = [...tvSelected].map((id) => ({ id, name: id }));
+  // The names saved with the ticked channels; one that was saved before names existed shows its code
+  // until the guide is read again (done by itself when this box comes into view, see watchTvBox).
+  const saved = tv.names || {};
+  tvChannels = [...tvSelected].map((id) => ({ id, name: saved[id] || id }));
   renderTvChips();
+}
+// A guide saved before channel names were kept: read it once, quietly, when the TV box is looked at,
+// so the ticked channels get their usual names back. (Saving the page then keeps them.)
+let tvWatched = false;
+function watchTvBox() {
+  if (tvWatched || !('IntersectionObserver' in window)) return;
+  tvWatched = true;
+  new IntersectionObserver((entries, observer) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    observer.disconnect();
+    const nameless = tvChannels.some((c) => tvSelected.has(c.id) && c.name === c.id);
+    if (nameless && $('tv-url').value.trim()) tvFind({ quiet: true });
+  }).observe($('sec-tv'));
 }
 
 // ------------------------------------------------------------------ 10. voice ---
@@ -710,7 +747,8 @@ function renderVoice() {
   const voice = cfg.voice || { enabled: false };
   $('voice-on').checked = !!voice.enabled;
   $('voice-check').hidden = !voice.enabled;
-  $('voice-check').textContent = t(`admin.voice_check_${voiceApi.availability()}`);
+  const availability = voiceApi.availability();
+  $('voice-check').textContent = t(`admin.voice_check_${availability}`) + (availability === 'insecure' ? ` ${t('admin.voice_check_tip')}` : '');
   voiceCommands = (voice.commands || []).map((c) => ({ ...c }));
   renderVoiceCommands();
   renderVoiceDefaults();
@@ -806,6 +844,8 @@ async function renderSystem() {
     });
     for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset', 'sys-reset-all']) $(id).disabled = !info.actions;
     currentPort = info.port;
+    httpsInfo = info.https || httpsInfo;
+    renderHttps();
     $('port-current').textContent = t('admin.port_current', { port: info.port })
       + (info.saved_port !== info.port ? ` ${t('admin.port_pending', { port: info.saved_port })}` : '');
     if (!$('port-new').value) $('port-new').placeholder = String(info.port);
@@ -857,6 +897,79 @@ async function systemAction(action, body, messageId = 'sys-message') {
 }
 
 // ------------------------------------------------------------------ 11. advanced user ---
+// The secure (https) address of this same page.
+function httpsAddress() {
+  const url = new URL(location.href);
+  url.protocol = 'https:';
+  url.port = String(httpsInfo.port);
+  url.pathname = '/admin';
+  url.search = '';
+  url.hash = '';
+  return url.href;
+}
+function renderHttps() {
+  const state = $('https-state');
+  const button = $('https-toggle');
+  button.dataset.i18n = httpsInfo.enabled ? 'admin.https_off' : 'admin.https_on';
+  button.textContent = t(button.dataset.i18n);
+  state.replaceChildren();
+  if (!httpsInfo.enabled) { state.textContent = t('admin.https_state_off'); return; }
+  if (!httpsInfo.running) { state.textContent = t('admin.https_state_pending'); return; }
+  state.append(t('admin.https_state_on'), ' ', el('a', { href: httpsAddress(), textContent: httpsAddress() }));
+}
+// The diagnostic file: the server writes it (settings, device, what the display shows, recent log);
+// this page adds what only a browser knows. Downloaded as a text file; nothing is sent anywhere else.
+async function downloadDiagnostics() {
+  const msg = $('diag-msg');
+  msg.textContent = t('admin.diag_working');
+  const client = {
+    user_agent: navigator.userAgent,
+    language: navigator.language,
+    time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    scheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    screen: `${screen.width}x${screen.height}`,
+    viewport: `${window.innerWidth}x${window.innerHeight}`,
+    pixel_ratio: window.devicePixelRatio,
+    secure: window.isSecureContext,
+    speech: Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+    scheme_url: location.protocol.replace(':', ''),
+    port: location.port || (location.protocol === 'https:' ? '443' : '80'),
+    problems,
+  };
+  try {
+    const res = await fetch('/api/admin/diagnostics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(pin ? { 'X-Beranda-Pin': pin } : {}) },
+      body: JSON.stringify({ client }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const name = /filename="([^"]+)"/.exec(res.headers.get('Content-Disposition') || '')?.[1] || 'beranda-diagnostic.txt';
+    const link = el('a', { href: URL.createObjectURL(await res.blob()), download: name });
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+    msg.textContent = t('admin.diag_done', { name });
+  } catch (e) { msg.textContent = t('admin.diag_failed', { err: e.message }); }
+}
+async function changeHttps() {
+  const msg = $('https-msg');
+  const enable = !httpsInfo.enabled;
+  msg.replaceChildren('…');
+  try {
+    const r = await api('/system/https', { method: 'POST', body: JSON.stringify({ enabled: enable, confirmed: true }) });
+    if (!r.restarting) { msg.textContent = t('admin.https_done_manual'); return; }
+    httpsInfo = { ...httpsInfo, enabled: enable, port: r.port, running: false };
+    if (enable) msg.replaceChildren(t('admin.https_done'), ' ', el('a', { href: httpsAddress(), textContent: t('admin.https_open') }));
+    else msg.textContent = t('admin.https_done_off');
+    renderHttps();
+    setTimeout(() => { renderSystem(); }, 12000);  // the server is back by then: show its real state
+  } catch (e) {
+    const code = /^https_(no_openssl|failed|busy|same)$/.exec(e.message);
+    msg.textContent = code ? t(`admin.https_err_${code[1]}`) : e.message;
+  }
+}
+
 // The same address as this page, with another port.
 function addressWithPort(port) {
   const url = new URL(location.href);
@@ -921,7 +1034,10 @@ function collect() {
     dropbox_url: $('photos-dropbox').value.trim(),
   };
   body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
-  body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected] };
+  // Ticked channels keep their usual name, so the next visit shows "TF1" and not "51767".
+  const tvNames = {};
+  for (const c of tvChannels) if (tvSelected.has(c.id) && c.name && c.name !== c.id) tvNames[c.id] = c.name;
+  body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected], names: tvNames };
   body.voice = {
     enabled: $('voice-on').checked,
     commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
@@ -970,7 +1086,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderVoice(); renderWidgets(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); renderVoice(); renderWidgets(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -1006,7 +1122,7 @@ async function boot() {
     if (e.target.id === 'language') { languageTouched = true; refreshPreview(); refreshNews(); }
     if (!['q', 'news-other-country', 'reset-word', 'port-new'].includes(e.target.id)) markDirty();
   });
-  $('country').addEventListener('change', onCountry);
+  $('country').addEventListener('change', () => { townEditedByHand(); onCountry(); });
   $('loc-name').addEventListener('change', refreshNews);
   $('photos-folder').addEventListener('input', () => {
     clearTimeout(photosCountTimer);
@@ -1050,10 +1166,14 @@ async function boot() {
     await systemAction('reset', { confirmed: true, erase_data: true, confirmed_twice: true }, 'adv-message');
   });
   armed($('port-apply'), changePort);
+  armed($('https-toggle'), changeHttps);
+  $('diag-btn').addEventListener('click', downloadDiagnostics);
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
   $('w-alerts').addEventListener('change', showWidgetBodies);
   $('w-clock2').addEventListener('change', showWidgetBodies);
   $('w-area-test').addEventListener('click', testAlertsArea);
+  $('w-area').addEventListener('input', () => { areaTyped = true; });
+  for (const id of ['loc-name', 'loc-lat', 'loc-lon']) $(id).addEventListener('change', townEditedByHand);
   $('w-clock2-tz').addEventListener('input', () => { $('w-clock2-err').hidden = true; });
   $('menu-btn').addEventListener('click', toggleMenu);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('menu').hidden) { closeMenu(); $('menu-btn').focus(); } });

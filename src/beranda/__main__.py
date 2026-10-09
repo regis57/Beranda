@@ -9,7 +9,7 @@ from pathlib import Path
 
 import uvicorn
 
-from . import __version__, config, system
+from . import __version__, config, system, tls
 from .admin import write_config
 from .app import create_app
 
@@ -55,7 +55,13 @@ def main(argv: list[str] | None = None) -> None:
         except OSError:
             pass
 
-    uvicorn.run(create_app(cfg, config_path=config_path), host=cfg.host, port=cfg.port, log_level="info")
+    app = create_app(cfg, config_path=config_path)
+    if cfg.https:  # a second, secure address next to the usual one (see tls.py)
+        tls.start(app, cfg.host, cfg.https_port, config_path.parent / "tls")
+    try:
+        uvicorn.run(app, host=cfg.host, port=cfg.port, log_level="info")
+    finally:
+        tls.stop()
 
 
 if __name__ == "__main__":

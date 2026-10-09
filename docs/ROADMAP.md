@@ -66,6 +66,10 @@ Done:
 - **v0.14.5**: "Start over and erase photos and data" next to "Start over from scratch": it also
   deletes the photos of Beranda's own photo frame and everything downloaded, and asks twice (the typed
   word, then a last reminder listing what will go)
+- **v0.15.0**: three fixes and two tools. The warnings area is emptied when the town is changed by hand
+  (name, coordinates or country); ticked TV channels keep their usual names instead of showing guide
+  numbers; and in "Advanced user": an optional secure address (HTTPS, a certificate made by Beranda) so
+  a computer's browser allows the microphone, and a diagnostic file to download for bug reports (no secret inside)
 
 Next:
 
