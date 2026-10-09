@@ -176,7 +176,7 @@ async def build_state(
         },
         "weather": weather,
         "sky": sky,
-        "season": seasons.current(theme or cfg.theme, today, loc.timezone, loc.latitude),
+        "season": seasons.current(theme or cfg.theme, today, loc.timezone, loc.latitude, now),
         "events": events,
         "special_days": days,
         "news": news,

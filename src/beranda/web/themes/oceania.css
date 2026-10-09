@@ -1,0 +1,38 @@
+/* Theme "oceania" (Tapa & lagoon): tapa bark-cloth browns, lagoon turquoise, coral. The
+   season block follows the Tahitian year of the Pleiades (Matari'i i ni'a / i raro). */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 200;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #f0f5f1; --ink: #0f2e33; --ink-2: rgba(15, 46, 51, 0.72); --ink-3: rgba(15, 46, 51, 0.48);
+  --line: rgba(15, 46, 51, 0.15); --accent: #d9634b; --tapa: #7a4a2a; --rain: #128a95;
+  --warm: #e07a52; --cool: #3fa6b0; --moon-lit: #0f2e33; --moon-dark: rgba(15, 46, 51, 0.08);
+  --ornament: url("/static/themes/tapa.svg");
+}
+:root[data-mode="night"] {
+  --bg: #04161b; --ink: rgba(222, 242, 240, 0.86); --ink-2: rgba(222, 242, 240, 0.6); --ink-3: rgba(222, 242, 240, 0.38);
+  --line: rgba(222, 242, 240, 0.13); --accent: #e08a74; --tapa: #a07455; --rain: #4fbcc4;
+  --warm: #c77a60; --cool: #3d8f97; --moon-lit: #def2f0; --moon-dark: rgba(222, 242, 240, 0.08);
+}
+.season { flex: 1 1 0; position: relative; padding: 0.8rem 0.9rem 0.8rem 1.5rem; align-items: center; }
+.season::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0.6rem;
+  background: var(--ornament) center top / 0.6rem auto repeat-y; }
+/* The seven stars of the Pleiades. */
+.season-kanji { width: 4rem; height: 4rem; flex: none; border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, var(--accent) 0.18rem, transparent 0.2rem),
+    radial-gradient(circle at 48% 22%, var(--accent) 0.14rem, transparent 0.16rem),
+    radial-gradient(circle at 62% 35%, var(--accent) 0.2rem, transparent 0.22rem),
+    radial-gradient(circle at 42% 48%, var(--accent) 0.13rem, transparent 0.15rem),
+    radial-gradient(circle at 70% 58%, var(--accent) 0.16rem, transparent 0.18rem),
+    radial-gradient(circle at 28% 62%, var(--accent) 0.12rem, transparent 0.14rem),
+    radial-gradient(circle at 55% 72%, var(--accent) 0.14rem, transparent 0.16rem),
+    var(--moon-dark); }
+.seal { display: none; }
+.season-name { font-family: var(--f-serif); font-size: 1.25rem; font-style: italic; color: var(--rain); }
+.season-romaji { font-style: normal; color: var(--ink-2); max-width: none; }

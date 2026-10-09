@@ -1,0 +1,85 @@
+{
+  "today": "Vandaag",
+  "tomorrow": "Morgen",
+  "upcoming": "Binnenkort",
+  "nothing_upcoming": "Niets gepland",
+  "all_day": "hele dag",
+  "loading": "Laden…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Weer niet beschikbaar",
+  "feels": "voelt als",
+  "rain": {
+    "none": "Geen regen in de komende 2 uur",
+    "starts": "Regen over {min} min",
+    "starts_now": "Het begint te regenen",
+    "stops": "Het regent, droog over {min} min",
+    "long": "Regen voor meer dan 2 uur",
+    "now": "nu",
+    "in2h": "+2 u"
+  },
+  "moon": {
+    "new": "Nieuwe maan",
+    "waxing_crescent": "Wassende sikkel",
+    "first_quarter": "Eerste kwartier",
+    "waxing_gibbous": "Wassende maan",
+    "full": "Volle maan",
+    "waning_gibbous": "Afnemende maan",
+    "last_quarter": "Laatste kwartier",
+    "waning_crescent": "Afnemende sikkel",
+    "lit": "{pct} % verlicht",
+    "next_full": "Volle maan {date}",
+    "next_new": "Nieuwe maan {date}"
+  },
+  "sun": {
+    "rise": "zon op",
+    "set": "zon onder"
+  },
+  "season": {
+    "in_days": "wisselt over {n} dagen",
+    "tomorrow": "wisselt morgen"
+  },
+  "kind": {
+    "holiday": "Feestdag",
+    "birth": "Geboorte",
+    "death": "Herdenking",
+    "anniversary": "Jubileum",
+    "other": "Belangrijke datum"
+  },
+  "seasons": {
+    "spring": "Lente",
+    "summer": "Zomer",
+    "autumn": "Herfst",
+    "winter": "Winter"
+  },
+  "wmo": {
+    "0": "Onbewolkt",
+    "1": "Overwegend helder",
+    "2": "Half bewolkt",
+    "3": "Bewolkt",
+    "45": "Mist",
+    "48": "Aanvriezende mist",
+    "51": "Lichte motregen",
+    "53": "Motregen",
+    "55": "Dichte motregen",
+    "56": "IJzel (motregen)",
+    "57": "Zware ijzel (motregen)",
+    "61": "Lichte regen",
+    "63": "Regen",
+    "65": "Zware regen",
+    "66": "IJzel",
+    "67": "Zware ijzel",
+    "71": "Lichte sneeuw",
+    "73": "Sneeuw",
+    "75": "Zware sneeuw",
+    "77": "Korrelsneeuw",
+    "80": "Lichte buien",
+    "81": "Buien",
+    "82": "Zware buien",
+    "85": "Sneeuwbuien",
+    "86": "Zware sneeuwbuien",
+    "95": "Onweer",
+    "96": "Onweer met hagel",
+    "99": "Zwaar onweer met hagel"
+  }
+}

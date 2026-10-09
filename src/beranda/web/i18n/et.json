@@ -1,0 +1,85 @@
+{
+  "today": "Täna",
+  "tomorrow": "Homme",
+  "upcoming": "Tulemas",
+  "nothing_upcoming": "Midagi pole plaanitud",
+  "all_day": "terve päev",
+  "loading": "Laadimine…",
+  "demo": "demo",
+  "offline": "võrguühenduseta",
+  "no_weather": "Ilm pole saadaval",
+  "feels": "tundub",
+  "rain": {
+    "none": "Järgmise 2 tunni jooksul vihma ei tule",
+    "starts": "Vihm {min} min pärast",
+    "starts_now": "Hakkab sadama",
+    "stops": "Sajab, lõpeb {min} min pärast",
+    "long": "Vihm üle 2 tunni",
+    "now": "nüüd",
+    "in2h": "+2 t"
+  },
+  "moon": {
+    "new": "Noorkuu",
+    "waxing_crescent": "Kasvav sirp",
+    "first_quarter": "Esimene veerand",
+    "waxing_gibbous": "Kasvav kuu",
+    "full": "Täiskuu",
+    "waning_gibbous": "Kahanev kuu",
+    "last_quarter": "Viimane veerand",
+    "waning_crescent": "Kahanev sirp",
+    "lit": "Valgustatud {pct} %",
+    "next_full": "Täiskuu {date}",
+    "next_new": "Noorkuu {date}"
+  },
+  "sun": {
+    "rise": "päikesetõus",
+    "set": "päikeseloojang"
+  },
+  "season": {
+    "in_days": "vahetub {n} päeva pärast",
+    "tomorrow": "vahetub homme"
+  },
+  "kind": {
+    "holiday": "Püha",
+    "birth": "Sünnipäev",
+    "death": "Mälestuspäev",
+    "anniversary": "Aastapäev",
+    "other": "Oluline kuupäev"
+  },
+  "seasons": {
+    "spring": "Kevad",
+    "summer": "Suvi",
+    "autumn": "Sügis",
+    "winter": "Talv"
+  },
+  "wmo": {
+    "0": "Selge",
+    "1": "Enamasti selge",
+    "2": "Vahelduv pilvisus",
+    "3": "Pilves",
+    "45": "Udu",
+    "48": "Härmatisega udu",
+    "51": "Nõrk uduvihm",
+    "53": "Uduvihm",
+    "55": "Tihe uduvihm",
+    "56": "Jäätuv uduvihm",
+    "57": "Tugev jäätuv uduvihm",
+    "61": "Nõrk vihm",
+    "63": "Vihm",
+    "65": "Tugev vihm",
+    "66": "Jäävihm",
+    "67": "Tugev jäävihm",
+    "71": "Nõrk lumesadu",
+    "73": "Lumesadu",
+    "75": "Tugev lumesadu",
+    "77": "Lumeterad",
+    "80": "Nõrgad hoovihmad",
+    "81": "Hoovihmad",
+    "82": "Tugevad hoovihmad",
+    "85": "Lumehood",
+    "86": "Tugevad lumehood",
+    "95": "Äike",
+    "96": "Äike rahega",
+    "99": "Tugev äike rahega"
+  }
+}

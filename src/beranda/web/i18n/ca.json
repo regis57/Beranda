@@ -1,0 +1,85 @@
+{
+  "today": "Avui",
+  "tomorrow": "Demà",
+  "upcoming": "Properament",
+  "nothing_upcoming": "Res previst",
+  "all_day": "tot el dia",
+  "loading": "Carregant…",
+  "demo": "demo",
+  "offline": "sense connexió",
+  "no_weather": "Temps no disponible",
+  "feels": "sensació",
+  "rain": {
+    "none": "Sense pluja les properes 2 hores",
+    "starts": "Pluja d'aquí a {min} min",
+    "starts_now": "Comença a ploure",
+    "stops": "Plou, para d'aquí a {min} min",
+    "long": "Pluja durant més de 2 hores",
+    "now": "ara",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Lluna nova",
+    "waxing_crescent": "Lluna creixent",
+    "first_quarter": "Quart creixent",
+    "waxing_gibbous": "Gibosa creixent",
+    "full": "Lluna plena",
+    "waning_gibbous": "Gibosa minvant",
+    "last_quarter": "Quart minvant",
+    "waning_crescent": "Lluna minvant",
+    "lit": "{pct} % il·luminada",
+    "next_full": "Lluna plena {date}",
+    "next_new": "Lluna nova {date}"
+  },
+  "sun": {
+    "rise": "sortida",
+    "set": "posta"
+  },
+  "season": {
+    "in_days": "canvia d'aquí a {n} dies",
+    "tomorrow": "canvia demà"
+  },
+  "kind": {
+    "holiday": "Festiu",
+    "birth": "Naixement",
+    "death": "Record",
+    "anniversary": "Aniversari",
+    "other": "Data clau"
+  },
+  "seasons": {
+    "spring": "Primavera",
+    "summer": "Estiu",
+    "autumn": "Tardor",
+    "winter": "Hivern"
+  },
+  "wmo": {
+    "0": "Cel serè",
+    "1": "Majoritàriament serè",
+    "2": "Parcialment ennuvolat",
+    "3": "Cobert",
+    "45": "Boira",
+    "48": "Boira gebradora",
+    "51": "Plugim feble",
+    "53": "Plugim",
+    "55": "Plugim intens",
+    "56": "Plugim gelat",
+    "57": "Plugim gelat intens",
+    "61": "Pluja feble",
+    "63": "Pluja",
+    "65": "Pluja forta",
+    "66": "Pluja gelada",
+    "67": "Pluja gelada forta",
+    "71": "Neu feble",
+    "73": "Neu",
+    "75": "Neu forta",
+    "77": "Neu granulada",
+    "80": "Ruixats febles",
+    "81": "Ruixats",
+    "82": "Ruixats forts",
+    "85": "Ruixats de neu",
+    "86": "Ruixats de neu forts",
+    "95": "Tempesta",
+    "96": "Tempesta amb calamarsa",
+    "99": "Tempesta forta amb calamarsa"
+  }
+}

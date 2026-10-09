@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brasil",
       "desc": "Ombak Copacabana, hijau dan emas, pepatah setiap hari."
+    },
+    "africa": {
+      "name": "Afrika",
+      "desc": "Kain bogolan dan kente, satu peribahasa Swahili setiap hari."
+    },
+    "arab": {
+      "name": "Arab",
+      "desc": "Bintang zellige zamrud dan emas, tanggal Hijriah."
+    },
+    "america": {
+      "name": "Amerika Utara",
+      "desc": "Poster taman nasional, nama-nama bulan purnama."
+    },
+    "india": {
+      "name": "India",
+      "desc": "Marigold dan nila, musim (ṛtu) dan hari bulan (tithi)."
+    },
+    "china": {
+      "name": "Tiongkok",
+      "desc": "Kertas beras dan pernis merah, 24 terma matahari dan tanggal Imlek."
+    },
+    "oceania": {
+      "name": "Oseania",
+      "desc": "Tapa dan laguna, musim Tahiti menurut bintang Pleiades."
+    },
+    "creole": {
+      "name": "Kreol",
+      "desc": "Kain madras, musim kemarau atau hujan, peribahasa Kreol."
     }
   },
   "calendar": "Kalender Anda",

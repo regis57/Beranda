@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brésil",
       "desc": "Vagues de Copacabana, vert et or, un dicton chaque jour."
+    },
+    "africa": {
+      "name": "Afrique",
+      "desc": "Bogolan et kente, un proverbe swahili chaque jour."
+    },
+    "arab": {
+      "name": "Monde arabe",
+      "desc": "Étoiles de zellige émeraude et or, la date de l'hégire."
+    },
+    "america": {
+      "name": "Amérique du Nord",
+      "desc": "Affiches des parcs nationaux, les noms des pleines lunes."
+    },
+    "india": {
+      "name": "Inde",
+      "desc": "Souci et indigo, la saison (ṛtu) et le jour lunaire (tithi)."
+    },
+    "china": {
+      "name": "Chine",
+      "desc": "Papier de riz et laque rouge, les 24 termes solaires et la date lunaire."
+    },
+    "oceania": {
+      "name": "Océanie",
+      "desc": "Tapa et lagon, les saisons tahitiennes des Pléiades."
+    },
+    "creole": {
+      "name": "Créole",
+      "desc": "Madras, carême ou hivernage, un proverbe créole."
     }
   },
   "calendar": "Votre agenda",

@@ -1,0 +1,85 @@
+{
+  "today": "I dag",
+  "tomorrow": "I morgen",
+  "upcoming": "Snart",
+  "nothing_upcoming": "Ingenting planlagt",
+  "all_day": "hele dagen",
+  "loading": "Laster…",
+  "demo": "demo",
+  "offline": "frakoblet",
+  "no_weather": "Været er ikke tilgjengelig",
+  "feels": "føles som",
+  "rain": {
+    "none": "Ingen regn de neste 2 timene",
+    "starts": "Regn om {min} min",
+    "starts_now": "Det begynner å regne",
+    "stops": "Det regner, stopper om {min} min",
+    "long": "Regn i mer enn 2 timer",
+    "now": "nå",
+    "in2h": "+2 t"
+  },
+  "moon": {
+    "new": "Nymåne",
+    "waxing_crescent": "Voksende månesigd",
+    "first_quarter": "Første kvarter",
+    "waxing_gibbous": "Voksende måne",
+    "full": "Fullmåne",
+    "waning_gibbous": "Minkende måne",
+    "last_quarter": "Siste kvarter",
+    "waning_crescent": "Minkende månesigd",
+    "lit": "{pct} % opplyst",
+    "next_full": "Fullmåne {date}",
+    "next_new": "Nymåne {date}"
+  },
+  "sun": {
+    "rise": "soloppgang",
+    "set": "solnedgang"
+  },
+  "season": {
+    "in_days": "skifter om {n} dager",
+    "tomorrow": "skifter i morgen"
+  },
+  "kind": {
+    "holiday": "Helligdag",
+    "birth": "Fødselsdag",
+    "death": "Minnedag",
+    "anniversary": "Jubileum",
+    "other": "Viktig dato"
+  },
+  "seasons": {
+    "spring": "Vår",
+    "summer": "Sommer",
+    "autumn": "Høst",
+    "winter": "Vinter"
+  },
+  "wmo": {
+    "0": "Klarvær",
+    "1": "Stort sett klart",
+    "2": "Delvis skyet",
+    "3": "Overskyet",
+    "45": "Tåke",
+    "48": "Underkjølt tåke",
+    "51": "Lett yr",
+    "53": "Yr",
+    "55": "Tett yr",
+    "56": "Underkjølt yr",
+    "57": "Kraftig underkjølt yr",
+    "61": "Lett regn",
+    "63": "Regn",
+    "65": "Kraftig regn",
+    "66": "Underkjølt regn",
+    "67": "Kraftig underkjølt regn",
+    "71": "Lett snø",
+    "73": "Snø",
+    "75": "Kraftig snø",
+    "77": "Kornsnø",
+    "80": "Lette byger",
+    "81": "Byger",
+    "82": "Kraftige byger",
+    "85": "Snøbyger",
+    "86": "Kraftige snøbyger",
+    "95": "Torden",
+    "96": "Torden med hagl",
+    "99": "Kraftig torden med hagl"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "today": "Dnes",
+  "tomorrow": "Zajtra",
+  "upcoming": "Čoskoro",
+  "nothing_upcoming": "Nič naplánované",
+  "all_day": "celý deň",
+  "loading": "Načítava sa…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Počasie nie je k dispozícii",
+  "feels": "pocitovo",
+  "rain": {
+    "none": "Žiadny dážď v najbližších 2 hodinách",
+    "starts": "Dážď o {min} min",
+    "starts_now": "Začína pršať",
+    "stops": "Prší, prestane o {min} min",
+    "long": "Dážď dlhšie ako 2 hodiny",
+    "now": "teraz",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Nov",
+    "waxing_crescent": "Dorastajúci kosák",
+    "first_quarter": "Prvá štvrť",
+    "waxing_gibbous": "Dorastajúci mesiac",
+    "full": "Spln",
+    "waning_gibbous": "Cúvajúci mesiac",
+    "last_quarter": "Posledná štvrť",
+    "waning_crescent": "Cúvajúci kosák",
+    "lit": "Osvetlené {pct} %",
+    "next_full": "Spln {date}",
+    "next_new": "Nov {date}"
+  },
+  "sun": {
+    "rise": "východ",
+    "set": "západ"
+  },
+  "season": {
+    "in_days": "zmena o {n} dní",
+    "tomorrow": "zmena zajtra"
+  },
+  "kind": {
+    "holiday": "Sviatok",
+    "birth": "Narodeniny",
+    "death": "Spomienka",
+    "anniversary": "Výročie",
+    "other": "Dôležitý dátum"
+  },
+  "seasons": {
+    "spring": "Jar",
+    "summer": "Leto",
+    "autumn": "Jeseň",
+    "winter": "Zima"
+  },
+  "wmo": {
+    "0": "Jasno",
+    "1": "Takmer jasno",
+    "2": "Polojasno",
+    "3": "Zamračené",
+    "45": "Hmla",
+    "48": "Mrznúca hmla",
+    "51": "Slabé mrholenie",
+    "53": "Mrholenie",
+    "55": "Silné mrholenie",
+    "56": "Mrznúce mrholenie",
+    "57": "Silné mrznúce mrholenie",
+    "61": "Slabý dážď",
+    "63": "Dážď",
+    "65": "Silný dážď",
+    "66": "Mrznúci dážď",
+    "67": "Silný mrznúci dážď",
+    "71": "Slabé sneženie",
+    "73": "Sneženie",
+    "75": "Silné sneženie",
+    "77": "Snehové zrná",
+    "80": "Slabé prehánky",
+    "81": "Prehánky",
+    "82": "Silné prehánky",
+    "85": "Snehové prehánky",
+    "86": "Silné snehové prehánky",
+    "95": "Búrka",
+    "96": "Búrka s krupobitím",
+    "99": "Silná búrka s krupobitím"
+  }
+}

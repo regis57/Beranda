@@ -1,0 +1,85 @@
+{
+  "today": "Dnes",
+  "tomorrow": "Zítra",
+  "upcoming": "Brzy",
+  "nothing_upcoming": "Nic naplánováno",
+  "all_day": "celý den",
+  "loading": "Načítání…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Počasí není k dispozici",
+  "feels": "pocitově",
+  "rain": {
+    "none": "Žádný déšť v příštích 2 hodinách",
+    "starts": "Déšť za {min} min",
+    "starts_now": "Začíná pršet",
+    "stops": "Prší, skončí za {min} min",
+    "long": "Déšť déle než 2 hodiny",
+    "now": "teď",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Nov",
+    "waxing_crescent": "Dorůstající srpek",
+    "first_quarter": "První čtvrť",
+    "waxing_gibbous": "Dorůstající měsíc",
+    "full": "Úplněk",
+    "waning_gibbous": "Couvající měsíc",
+    "last_quarter": "Poslední čtvrť",
+    "waning_crescent": "Couvající srpek",
+    "lit": "Osvětleno {pct} %",
+    "next_full": "Úplněk {date}",
+    "next_new": "Nov {date}"
+  },
+  "sun": {
+    "rise": "východ",
+    "set": "západ"
+  },
+  "season": {
+    "in_days": "změna za {n} dní",
+    "tomorrow": "změna zítra"
+  },
+  "kind": {
+    "holiday": "Svátek",
+    "birth": "Narozeniny",
+    "death": "Výročí úmrtí",
+    "anniversary": "Výročí",
+    "other": "Důležité datum"
+  },
+  "seasons": {
+    "spring": "Jaro",
+    "summer": "Léto",
+    "autumn": "Podzim",
+    "winter": "Zima"
+  },
+  "wmo": {
+    "0": "Jasno",
+    "1": "Skoro jasno",
+    "2": "Polojasno",
+    "3": "Zataženo",
+    "45": "Mlha",
+    "48": "Mrznoucí mlha",
+    "51": "Slabé mrholení",
+    "53": "Mrholení",
+    "55": "Silné mrholení",
+    "56": "Mrznoucí mrholení",
+    "57": "Silné mrznoucí mrholení",
+    "61": "Slabý déšť",
+    "63": "Déšť",
+    "65": "Silný déšť",
+    "66": "Mrznoucí déšť",
+    "67": "Silný mrznoucí déšť",
+    "71": "Slabé sněžení",
+    "73": "Sněžení",
+    "75": "Silné sněžení",
+    "77": "Sněhová zrna",
+    "80": "Slabé přeháňky",
+    "81": "Přeháňky",
+    "82": "Silné přeháňky",
+    "85": "Sněhové přeháňky",
+    "86": "Silné sněhové přeháňky",
+    "95": "Bouřka",
+    "96": "Bouřka s kroupami",
+    "99": "Silná bouřka s kroupami"
+  }
+}

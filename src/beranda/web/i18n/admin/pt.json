@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brasil",
       "desc": "Ondas de Copacabana, verde e ouro, um ditado por dia."
+    },
+    "africa": {
+      "name": "África",
+      "desc": "Bogolan e kente, um provérbio suaíli por dia."
+    },
+    "arab": {
+      "name": "Mundo árabe",
+      "desc": "Estrelas de zellige em esmeralda e ouro, a data da Hégira."
+    },
+    "america": {
+      "name": "América do Norte",
+      "desc": "Cartazes dos parques nacionais, os nomes das luas cheias."
+    },
+    "india": {
+      "name": "Índia",
+      "desc": "Calêndula e índigo, a estação (ṛtu) e o dia lunar (tithi)."
+    },
+    "china": {
+      "name": "China",
+      "desc": "Papel de arroz e laca vermelha, os 24 termos solares e a data lunar."
+    },
+    "oceania": {
+      "name": "Oceânia",
+      "desc": "Tapa e lagoa, as estações taitianas das Plêiades."
+    },
+    "creole": {
+      "name": "Crioulo",
+      "desc": "Madras, estação seca ou das chuvas, um provérbio crioulo."
     }
   },
   "calendar": "O seu calendário",

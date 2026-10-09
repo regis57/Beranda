@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brasilien",
       "desc": "Copacabana-Wellen, Grün und Gold, jeden Tag ein Sprichwort."
+    },
+    "africa": {
+      "name": "Afrika",
+      "desc": "Bogolan und Kente, jeden Tag ein Sprichwort auf Swahili."
+    },
+    "arab": {
+      "name": "Arabische Welt",
+      "desc": "Zellige-Sterne in Smaragd und Gold, das Datum nach der Hidschra."
+    },
+    "america": {
+      "name": "Nordamerika",
+      "desc": "Nationalpark-Plakate, die Namen der Vollmonde."
+    },
+    "india": {
+      "name": "Indien",
+      "desc": "Ringelblume und Indigo, Jahreszeit (ṛtu) und Mondtag (tithi)."
+    },
+    "china": {
+      "name": "China",
+      "desc": "Reispapier und roter Lack, die 24 Sonnenperioden und das Mondkalenderdatum."
+    },
+    "oceania": {
+      "name": "Ozeanien",
+      "desc": "Tapa und Lagune, die tahitischen Jahreszeiten der Plejaden."
+    },
+    "creole": {
+      "name": "Kreolisch",
+      "desc": "Madras-Karo, Trocken- oder Regenzeit, ein kreolisches Sprichwort."
     }
   },
   "calendar": "Ihr Kalender",

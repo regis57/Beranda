@@ -1,0 +1,33 @@
+/* Theme "creole" (Madras): the checked cotton of the Antilles, Guiana and Réunion,
+   yellow, orange, red and green on cream. The season block: carême or hivernage (or the
+   austral seasons) and a Haitian Creole proverb of the day. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #fdf6e6; --ink: #2a1a12; --ink-2: rgba(42, 26, 18, 0.72); --ink-3: rgba(42, 26, 18, 0.48);
+  --line: rgba(42, 26, 18, 0.16); --accent: #d8431b; --gold: #f2b705; --green: #2f8f46; --rain: #1d6fb8;
+  --warm: #e2701d; --cool: #4b8fd0; --moon-lit: #2a1a12; --moon-dark: rgba(42, 26, 18, 0.08);
+}
+:root[data-mode="night"] {
+  --bg: #120d08; --ink: rgba(250, 236, 214, 0.86); --ink-2: rgba(250, 236, 214, 0.6); --ink-3: rgba(250, 236, 214, 0.38);
+  --line: rgba(250, 236, 214, 0.13); --accent: #d9764f; --gold: #c9a23a; --green: #4f9a63; --rain: #6aa0d4;
+  --warm: #c3743e; --cool: #4f7fae; --moon-lit: #faecd6; --moon-dark: rgba(250, 236, 214, 0.08);
+}
+/* Madras: two crossing stripe patterns, drawn by the browser, no image needed. */
+.season-kanji { width: 4.2rem; height: 4.2rem; flex: none; border-radius: 0.3rem;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 0.5rem, rgba(47, 143, 70, 0.55) 0.5rem 0.75rem, transparent 0.75rem 1.4rem, rgba(216, 67, 27, 0.65) 1.4rem 1.6rem),
+    repeating-linear-gradient(0deg, var(--gold) 0 0.6rem, #e9842a 0.6rem 0.8rem, var(--gold) 0.8rem 1.3rem, var(--accent) 1.3rem 1.55rem); }
+:root[data-mode="night"] .season-kanji { opacity: 0.75; }
+.season { flex: 1 1 0; align-items: center; }
+.seal { background: var(--green); color: var(--bg); border-radius: 50%; }
+.season-name { font-weight: 600; }
+.season-romaji { font-family: var(--f-serif); font-size: 1.05rem; color: var(--accent); max-width: none; }
+.season-note { font-style: italic; }
+.clock .date { color: var(--green); }

@@ -1,0 +1,85 @@
+{
+  "today": "Šiandien",
+  "tomorrow": "Rytoj",
+  "upcoming": "Netrukus",
+  "nothing_upcoming": "Nieko nesuplanuota",
+  "all_day": "visą dieną",
+  "loading": "Įkeliama…",
+  "demo": "demo",
+  "offline": "neprisijungta",
+  "no_weather": "Orai nepasiekiami",
+  "feels": "jutiminė",
+  "rain": {
+    "none": "Lietaus nebus artimiausias 2 valandas",
+    "starts": "Lietus po {min} min",
+    "starts_now": "Pradeda lyti",
+    "stops": "Lyja, nustos po {min} min",
+    "long": "Lis ilgiau nei 2 valandas",
+    "now": "dabar",
+    "in2h": "+2 val."
+  },
+  "moon": {
+    "new": "Jaunatis",
+    "waxing_crescent": "Priešpilnio pjautuvas",
+    "first_quarter": "Priešpilnis",
+    "waxing_gibbous": "Augantis mėnulis",
+    "full": "Pilnatis",
+    "waning_gibbous": "Dylantis mėnulis",
+    "last_quarter": "Delčia",
+    "waning_crescent": "Dylantis pjautuvas",
+    "lit": "Apšviesta {pct} %",
+    "next_full": "Pilnatis {date}",
+    "next_new": "Jaunatis {date}"
+  },
+  "sun": {
+    "rise": "saulėtekis",
+    "set": "saulėlydis"
+  },
+  "season": {
+    "in_days": "keisis po {n} d.",
+    "tomorrow": "keisis rytoj"
+  },
+  "kind": {
+    "holiday": "Šventė",
+    "birth": "Gimtadienis",
+    "death": "Atminimas",
+    "anniversary": "Sukaktis",
+    "other": "Svarbi data"
+  },
+  "seasons": {
+    "spring": "Pavasaris",
+    "summer": "Vasara",
+    "autumn": "Ruduo",
+    "winter": "Žiema"
+  },
+  "wmo": {
+    "0": "Giedra",
+    "1": "Daugiausia giedra",
+    "2": "Mažai debesuota",
+    "3": "Debesuota",
+    "45": "Rūkas",
+    "48": "Šerkšnas rūkas",
+    "51": "Silpna dulksna",
+    "53": "Dulksna",
+    "55": "Tanki dulksna",
+    "56": "Lijundrinė dulksna",
+    "57": "Stipri lijundrinė dulksna",
+    "61": "Silpnas lietus",
+    "63": "Lietus",
+    "65": "Smarkus lietus",
+    "66": "Lijundra",
+    "67": "Stipri lijundra",
+    "71": "Silpnas sniegas",
+    "73": "Sniegas",
+    "75": "Smarkus sniegas",
+    "77": "Sniego kruopos",
+    "80": "Silpni liūtys",
+    "81": "Liūtys",
+    "82": "Smarkios liūtys",
+    "85": "Sniego gūsiai",
+    "86": "Smarkūs sniego gūsiai",
+    "95": "Perkūnija",
+    "96": "Perkūnija su kruša",
+    "99": "Stipri perkūnija su kruša"
+  }
+}

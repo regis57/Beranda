@@ -1,0 +1,30 @@
+/* Theme "arab" (Zellige): ivory plaster, emerald and gold, the eight-pointed star of
+   Andalusian and Maghrebi tilework. The season block shows the Hijri date. */
+
+:root {
+  --f-sans: "Noto Sans Arabic", "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-display: "Noto Naskh Arabic", "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --f-serif: "Noto Naskh Arabic", "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 400;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #f5f0e6; --ink: #13292a; --ink-2: rgba(19, 41, 42, 0.72); --ink-3: rgba(19, 41, 42, 0.48);
+  --line: rgba(19, 41, 42, 0.16); --accent: #0f6e62; --gold: #b8862b; --rain: #1f4f86;
+  --warm: #c07a35; --cool: #4f7fb0; --moon-lit: #13292a; --moon-dark: rgba(19, 41, 42, 0.08);
+  --ornament: url("/static/themes/zellige.svg");
+}
+:root[data-mode="night"] {
+  --bg: #08130f; --ink: rgba(236, 228, 210, 0.86); --ink-2: rgba(236, 228, 210, 0.6); --ink-3: rgba(236, 228, 210, 0.38);
+  --line: rgba(236, 228, 210, 0.13); --accent: #4fa592; --gold: #b99550; --rain: #7097cc;
+  --warm: #b0804a; --cool: #4d7099; --moon-lit: #ece4d2; --moon-dark: rgba(236, 228, 210, 0.08);
+}
+.season { flex: 1 1 0; position: relative; padding: 0.9rem 1rem; align-items: center;
+  background: var(--ornament) center / 3rem repeat; border-radius: 0.3rem 0.3rem 3rem 3rem / 0.3rem 0.3rem 1.6rem 1.6rem;
+  box-shadow: inset 0 0 0 1px var(--gold); }
+.season::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--bg); opacity: 0.84; }
+.season > * { position: relative; z-index: 1; }
+.season-kanji { font-family: var(--f-serif); font-size: 3.4rem; font-weight: 400; line-height: 1; color: var(--accent); letter-spacing: 0; }
+.seal { background: transparent; color: var(--gold); font-size: 1.3rem; }
+.season-name { font-family: var(--f-serif); font-size: 1.2rem; }
+.season-romaji { font-family: var(--f-serif); font-style: normal; font-size: 1.15rem; color: var(--gold); max-width: none; }

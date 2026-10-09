@@ -1,0 +1,85 @@
+{
+  "today": "Bugün",
+  "tomorrow": "Yarın",
+  "upcoming": "Yakında",
+  "nothing_upcoming": "Planlanmış bir şey yok",
+  "all_day": "tüm gün",
+  "loading": "Yükleniyor…",
+  "demo": "demo",
+  "offline": "çevrimdışı",
+  "no_weather": "Hava durumu yok",
+  "feels": "hissedilen",
+  "rain": {
+    "none": "Önümüzdeki 2 saat yağmur yok",
+    "starts": "{min} dk sonra yağmur",
+    "starts_now": "Yağmur başlıyor",
+    "stops": "Yağmur yağıyor, {min} dk sonra dinecek",
+    "long": "2 saatten uzun yağmur",
+    "now": "şimdi",
+    "in2h": "+2 sa"
+  },
+  "moon": {
+    "new": "Yeni ay",
+    "waxing_crescent": "Büyüyen hilal",
+    "first_quarter": "İlk dördün",
+    "waxing_gibbous": "Büyüyen ay",
+    "full": "Dolunay",
+    "waning_gibbous": "Küçülen ay",
+    "last_quarter": "Son dördün",
+    "waning_crescent": "Küçülen hilal",
+    "lit": "%{pct} aydınlık",
+    "next_full": "Dolunay {date}",
+    "next_new": "Yeni ay {date}"
+  },
+  "sun": {
+    "rise": "gün doğumu",
+    "set": "gün batımı"
+  },
+  "season": {
+    "in_days": "{n} gün sonra değişir",
+    "tomorrow": "yarın değişir"
+  },
+  "kind": {
+    "holiday": "Resmî tatil",
+    "birth": "Doğum günü",
+    "death": "Anma",
+    "anniversary": "Yıl dönümü",
+    "other": "Önemli tarih"
+  },
+  "seasons": {
+    "spring": "İlkbahar",
+    "summer": "Yaz",
+    "autumn": "Sonbahar",
+    "winter": "Kış"
+  },
+  "wmo": {
+    "0": "Açık",
+    "1": "Çoğunlukla açık",
+    "2": "Parçalı bulutlu",
+    "3": "Kapalı",
+    "45": "Sis",
+    "48": "Kırağılı sis",
+    "51": "Hafif çisenti",
+    "53": "Çisenti",
+    "55": "Yoğun çisenti",
+    "56": "Donan çisenti",
+    "57": "Yoğun donan çisenti",
+    "61": "Hafif yağmur",
+    "63": "Yağmur",
+    "65": "Şiddetli yağmur",
+    "66": "Donan yağmur",
+    "67": "Şiddetli donan yağmur",
+    "71": "Hafif kar",
+    "73": "Kar",
+    "75": "Yoğun kar",
+    "77": "Kar taneleri",
+    "80": "Hafif sağanak",
+    "81": "Sağanak",
+    "82": "Şiddetli sağanak",
+    "85": "Kar sağanağı",
+    "86": "Yoğun kar sağanağı",
+    "95": "Gök gürültülü fırtına",
+    "96": "Dolu ile fırtına",
+    "99": "Şiddetli dolu fırtınası"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "today": "Danes",
+  "tomorrow": "Jutri",
+  "upcoming": "Kmalu",
+  "nothing_upcoming": "Nič načrtovanega",
+  "all_day": "ves dan",
+  "loading": "Nalaganje…",
+  "demo": "demo",
+  "offline": "brez povezave",
+  "no_weather": "Vreme ni na voljo",
+  "feels": "občutek",
+  "rain": {
+    "none": "Brez dežja v naslednjih 2 urah",
+    "starts": "Dež čez {min} min",
+    "starts_now": "Začenja deževati",
+    "stops": "Dežuje, preneha čez {min} min",
+    "long": "Dež več kot 2 uri",
+    "now": "zdaj",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Mlaj",
+    "waxing_crescent": "Naraščajoči srp",
+    "first_quarter": "Prvi krajec",
+    "waxing_gibbous": "Naraščajoča luna",
+    "full": "Ščip",
+    "waning_gibbous": "Pojemajoča luna",
+    "last_quarter": "Zadnji krajec",
+    "waning_crescent": "Pojemajoči srp",
+    "lit": "Osvetljeno {pct} %",
+    "next_full": "Ščip {date}",
+    "next_new": "Mlaj {date}"
+  },
+  "sun": {
+    "rise": "vzhod",
+    "set": "zahod"
+  },
+  "season": {
+    "in_days": "menja se čez {n} dni",
+    "tomorrow": "menja se jutri"
+  },
+  "kind": {
+    "holiday": "Praznik",
+    "birth": "Rojstni dan",
+    "death": "Spomin",
+    "anniversary": "Obletnica",
+    "other": "Pomemben datum"
+  },
+  "seasons": {
+    "spring": "Pomlad",
+    "summer": "Poletje",
+    "autumn": "Jesen",
+    "winter": "Zima"
+  },
+  "wmo": {
+    "0": "Jasno",
+    "1": "Pretežno jasno",
+    "2": "Delno oblačno",
+    "3": "Oblačno",
+    "45": "Megla",
+    "48": "Zmrzujoča megla",
+    "51": "Rahlo rosenje",
+    "53": "Rosenje",
+    "55": "Močno rosenje",
+    "56": "Zmrzujoče rosenje",
+    "57": "Močno zmrzujoče rosenje",
+    "61": "Rahel dež",
+    "63": "Dež",
+    "65": "Močan dež",
+    "66": "Zmrzujoč dež",
+    "67": "Močan zmrzujoč dež",
+    "71": "Rahlo sneženje",
+    "73": "Sneženje",
+    "75": "Močno sneženje",
+    "77": "Zrnat sneg",
+    "80": "Rahle plohe",
+    "81": "Plohe",
+    "82": "Močne plohe",
+    "85": "Snežne plohe",
+    "86": "Močne snežne plohe",
+    "95": "Nevihta",
+    "96": "Nevihta s točo",
+    "99": "Močna nevihta s točo"
+  }
+}

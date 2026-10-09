@@ -1,0 +1,85 @@
+{
+  "today": "Hari ini",
+  "tomorrow": "Esok",
+  "upcoming": "Akan datang",
+  "nothing_upcoming": "Tiada rancangan",
+  "all_day": "sepanjang hari",
+  "loading": "Memuatkan…",
+  "demo": "demo",
+  "offline": "luar talian",
+  "no_weather": "Cuaca tidak tersedia",
+  "feels": "terasa",
+  "rain": {
+    "none": "Tiada hujan dalam 2 jam akan datang",
+    "starts": "Hujan dalam {min} min",
+    "starts_now": "Hujan mula turun",
+    "stops": "Sedang hujan, berhenti dalam {min} min",
+    "long": "Hujan lebih 2 jam",
+    "now": "sekarang",
+    "in2h": "+2 jam"
+  },
+  "moon": {
+    "new": "Anak bulan",
+    "waxing_crescent": "Bulan sabit awal",
+    "first_quarter": "Separuh awal",
+    "waxing_gibbous": "Bulan mengembang",
+    "full": "Bulan purnama",
+    "waning_gibbous": "Bulan menyusut",
+    "last_quarter": "Separuh akhir",
+    "waning_crescent": "Bulan sabit akhir",
+    "lit": "{pct}% bercahaya",
+    "next_full": "Bulan purnama {date}",
+    "next_new": "Anak bulan {date}"
+  },
+  "sun": {
+    "rise": "matahari terbit",
+    "set": "matahari terbenam"
+  },
+  "season": {
+    "in_days": "bertukar dalam {n} hari",
+    "tomorrow": "bertukar esok"
+  },
+  "kind": {
+    "holiday": "Cuti umum",
+    "birth": "Hari jadi",
+    "death": "Kenangan",
+    "anniversary": "Ulang tahun",
+    "other": "Tarikh penting"
+  },
+  "seasons": {
+    "spring": "Musim bunga",
+    "summer": "Musim panas",
+    "autumn": "Musim luruh",
+    "winter": "Musim sejuk"
+  },
+  "wmo": {
+    "0": "Cerah",
+    "1": "Kebanyakan cerah",
+    "2": "Separa berawan",
+    "3": "Mendung",
+    "45": "Kabus",
+    "48": "Kabus beku",
+    "51": "Gerimis ringan",
+    "53": "Gerimis",
+    "55": "Gerimis lebat",
+    "56": "Gerimis beku",
+    "57": "Gerimis beku lebat",
+    "61": "Hujan renyai",
+    "63": "Hujan",
+    "65": "Hujan lebat",
+    "66": "Hujan beku",
+    "67": "Hujan beku lebat",
+    "71": "Salji ringan",
+    "73": "Salji",
+    "75": "Salji lebat",
+    "77": "Butiran salji",
+    "80": "Hujan rintik-rintik",
+    "81": "Hujan sekejap",
+    "82": "Hujan sekejap lebat",
+    "85": "Salji sekejap",
+    "86": "Salji sekejap lebat",
+    "95": "Ribut petir",
+    "96": "Ribut petir dengan hujan batu",
+    "99": "Ribut petir kuat dengan hujan batu"
+  }
+}

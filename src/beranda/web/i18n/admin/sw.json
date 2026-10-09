@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brazili",
       "desc": "Mawimbi ya Copacabana, kijani na dhahabu, msemo kila siku."
+    },
+    "africa": {
+      "name": "Afrika",
+      "desc": "Bogolan na kente, methali ya Kiswahili kila siku."
+    },
+    "arab": {
+      "name": "Kiarabu",
+      "desc": "Nyota za zellige za zumaridi na dhahabu, tarehe ya Hijria."
+    },
+    "america": {
+      "name": "Amerika Kaskazini",
+      "desc": "Mabango ya hifadhi za taifa, majina ya mwezi mpevu."
+    },
+    "india": {
+      "name": "India",
+      "desc": "Marigold na nili, msimu (ṛtu) na siku ya mwezi (tithi)."
+    },
+    "china": {
+      "name": "Uchina",
+      "desc": "Karatasi ya mchele na rangi nyekundu, vipindi 24 vya jua na tarehe ya mwezi."
+    },
+    "oceania": {
+      "name": "Oceania",
+      "desc": "Tapa na ziwa, misimu ya Tahiti ya kilimia."
+    },
+    "creole": {
+      "name": "Krioli",
+      "desc": "Kitambaa cha madras, kiangazi au masika, methali ya Krioli."
     }
   },
   "calendar": "Kalenda yako",

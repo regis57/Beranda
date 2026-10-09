@@ -1,0 +1,85 @@
+{
+  "today": "Ma",
+  "tomorrow": "Holnap",
+  "upcoming": "Hamarosan",
+  "nothing_upcoming": "Nincs semmi tervezve",
+  "all_day": "egész nap",
+  "loading": "Betöltés…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Az időjárás nem érhető el",
+  "feels": "hőérzet",
+  "rain": {
+    "none": "Nem esik a következő 2 órában",
+    "starts": "Eső {min} perc múlva",
+    "starts_now": "Elkezd esni",
+    "stops": "Esik, {min} perc múlva eláll",
+    "long": "Több mint 2 órán át esik",
+    "now": "most",
+    "in2h": "+2 ó"
+  },
+  "moon": {
+    "new": "Újhold",
+    "waxing_crescent": "Növekvő sarló",
+    "first_quarter": "Első negyed",
+    "waxing_gibbous": "Növekvő hold",
+    "full": "Telihold",
+    "waning_gibbous": "Fogyó hold",
+    "last_quarter": "Utolsó negyed",
+    "waning_crescent": "Fogyó sarló",
+    "lit": "{pct} %-ban megvilágított",
+    "next_full": "Telihold {date}",
+    "next_new": "Újhold {date}"
+  },
+  "sun": {
+    "rise": "napkelte",
+    "set": "napnyugta"
+  },
+  "season": {
+    "in_days": "{n} nap múlva vált",
+    "tomorrow": "holnap vált"
+  },
+  "kind": {
+    "holiday": "Ünnepnap",
+    "birth": "Születésnap",
+    "death": "Emléknap",
+    "anniversary": "Évforduló",
+    "other": "Fontos dátum"
+  },
+  "seasons": {
+    "spring": "Tavasz",
+    "summer": "Nyár",
+    "autumn": "Ősz",
+    "winter": "Tél"
+  },
+  "wmo": {
+    "0": "Derült",
+    "1": "Többnyire derült",
+    "2": "Részben felhős",
+    "3": "Borult",
+    "45": "Köd",
+    "48": "Zúzmarás köd",
+    "51": "Gyenge szitálás",
+    "53": "Szitálás",
+    "55": "Erős szitálás",
+    "56": "Ónos szitálás",
+    "57": "Erős ónos szitálás",
+    "61": "Gyenge eső",
+    "63": "Eső",
+    "65": "Heves eső",
+    "66": "Ónos eső",
+    "67": "Erős ónos eső",
+    "71": "Gyenge havazás",
+    "73": "Havazás",
+    "75": "Erős havazás",
+    "77": "Hódara",
+    "80": "Gyenge zápor",
+    "81": "Zápor",
+    "82": "Erős zápor",
+    "85": "Hózápor",
+    "86": "Erős hózápor",
+    "95": "Zivatar",
+    "96": "Zivatar jégesővel",
+    "99": "Heves zivatar jégesővel"
+  }
+}

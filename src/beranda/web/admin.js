@@ -11,25 +11,17 @@ const THEME_COLORS = {
   italy: ['#f5efe3', '#a8322d', '#335c8a', '#2b2420'],
   portugal: ['#f5f7fa', '#1d4fb0', '#2f86c9', '#102a5c'],
   brazil: ['#f4f5ef', '#0d8a4a', '#e7b400', '#1f4aa8'],
+  africa: ['#efe3cd', '#e2a414', '#2e7a3a', '#b8281c'],
+  arab: ['#f5f0e6', '#0f6e62', '#b8862b', '#13292a'],
+  america: ['#f2e8d2', '#c4512a', '#2f5d3a', '#2b5c8a'],
+  india: ['#fbf3e2', '#e0700c', '#b3236a', '#2a1b45'],
+  china: ['#f5efe2', '#b3261e', '#b28a36', '#1d1a18'],
+  oceania: ['#f0f5f1', '#d9634b', '#128a95', '#7a4a2a'],
+  creole: ['#fdf6e6', '#f2b705', '#d8431b', '#2f8f46'],
 };
 const KINDS = ['birth', 'death', 'anniversary', 'other'];
 const IMPERIAL = new Set(['US', 'LR', 'MM']);
 const RTL = new Set(['ar', 'fa', 'he', 'ur']);
-
-// The language Beranda suggests when you pick a country (you can always change it).
-const COUNTRY_LANG = {
-  FR: 'fr', BE: 'fr', LU: 'fr', MC: 'fr', CH: 'fr', CA: 'en', HT: 'fr',
-  DE: 'de', AT: 'de', LI: 'de', ES: 'es', IT: 'it', SM: 'it', VA: 'it', PT: 'pt', BR: 'pt-BR',
-  JP: 'ja', ID: 'id',
-  AR: 'es', BO: 'es', CL: 'es', CO: 'es', CR: 'es', CU: 'es', DO: 'es', EC: 'es', SV: 'es', GT: 'es',
-  HN: 'es', MX: 'es', NI: 'es', PA: 'es', PY: 'es', PE: 'es', PR: 'es', UY: 'es', VE: 'es', GQ: 'es',
-  BJ: 'fr', BF: 'fr', BI: 'fr', CM: 'fr', CF: 'fr', TD: 'fr', KM: 'fr', CG: 'fr', CD: 'fr', CI: 'fr',
-  DJ: 'fr', GA: 'fr', GN: 'fr', MG: 'fr', ML: 'fr', NE: 'fr', RW: 'fr', SN: 'fr', TG: 'fr', SC: 'fr',
-  DZ: 'ar', EG: 'ar', LY: 'ar', MA: 'ar', MR: 'ar', SD: 'ar', TN: 'ar', SO: 'ar', EH: 'ar',
-  SA: 'ar', AE: 'ar', QA: 'ar', KW: 'ar', BH: 'ar', OM: 'ar', JO: 'ar', LB: 'ar', IQ: 'ar', SY: 'ar', YE: 'ar', PS: 'ar',
-  KE: 'sw', TZ: 'sw', UG: 'en', ET: 'am', ZA: 'en', NA: 'en',
-  AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt',
-};
 
 // Official help pages, opened in the reader's language when the site offers it.
 const MS_LOCALE = { fr: 'fr-fr', de: 'de-de', es: 'es-es', it: 'it-it', pt: 'pt-pt', 'pt-BR': 'pt-br', ja: 'ja-jp', id: 'id-id', ar: 'ar-sa' };
@@ -44,7 +36,7 @@ const CAL_GUIDES = [
 
 let strings = {};
 let lang = 'en';
-let options = { countries: {}, languages: [], themes: [], news: [], regions: {} };
+let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
 let editable = true;
 let dirty = false;
@@ -204,8 +196,9 @@ function onCountry() {
   const country = $('country').value;
   renderSubdivisions('');
   if (!unitsTouched) $('units').value = IMPERIAL.has(country) ? 'imperial' : 'metric';
-  if (!languageTouched && COUNTRY_LANG[country] && options.languages.includes(COUNTRY_LANG[country])) {
-    $('language').value = COUNTRY_LANG[country];
+  const suggested = (options.country_languages[country] || [])[0];
+  if (!languageTouched && suggested && options.languages.includes(suggested)) {
+    $('language').value = suggested;
     refreshPreview();
   }
   refreshNews();
@@ -309,7 +302,7 @@ function renderNewsLists() {
   $('news-city').replaceChildren(sourceRow('city', t('admin.news_city_desc')));
   $('news-country-title').textContent = t('admin.news_country', { country: regionName(country) });
   let mine = options.news.filter((s) => (s.countries || []).includes(country));
-  const region = (options.regions.africa || []).includes(country) ? 'africa' : (options.regions.latam || []).includes(country) ? 'latam' : null;
+  const region = options.region_of[country];
   if (region) mine = mine.concat(options.news.filter((s) => s.region === region));
   $('news-country').replaceChildren(...(mine.length ? mine.map((s) => sourceRow(s.id)) : [el('p', { className: 'hint', textContent: t('admin.news_none_country') })]));
   const world = options.news.filter((s) => s.scope === 'world').sort((a, b) => (a.lang !== base) - (b.lang !== base));

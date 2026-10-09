@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brasile",
       "desc": "Onde di Copacabana, verde e oro, un detto ogni giorno."
+    },
+    "africa": {
+      "name": "Africa",
+      "desc": "Bogolan e kente, un proverbio swahili ogni giorno."
+    },
+    "arab": {
+      "name": "Mondo arabo",
+      "desc": "Stelle di zellige smeraldo e oro, la data dell'Egira."
+    },
+    "america": {
+      "name": "Nord America",
+      "desc": "Manifesti dei parchi nazionali, i nomi delle lune piene."
+    },
+    "india": {
+      "name": "India",
+      "desc": "Calendula e indaco, la stagione (ṛtu) e il giorno lunare (tithi)."
+    },
+    "china": {
+      "name": "Cina",
+      "desc": "Carta di riso e lacca rossa, i 24 termini solari e la data lunare."
+    },
+    "oceania": {
+      "name": "Oceania",
+      "desc": "Tapa e laguna, le stagioni tahitiane delle Pleiadi."
+    },
+    "creole": {
+      "name": "Creolo",
+      "desc": "Madras, stagione secca o delle piogge, un proverbio creolo."
     }
   },
   "calendar": "Il suo calendario",

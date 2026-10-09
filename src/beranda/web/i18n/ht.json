@@ -1,0 +1,85 @@
+{
+  "today": "Jodi a",
+  "tomorrow": "Demen",
+  "upcoming": "Talè",
+  "nothing_upcoming": "Anyen pa planifye",
+  "all_day": "tout jounen",
+  "loading": "N ap chaje…",
+  "demo": "demo",
+  "offline": "pa konekte",
+  "no_weather": "Pa gen enfòmasyon sou tan an",
+  "feels": "santi tankou",
+  "rain": {
+    "none": "Pa gen lapli pou 2 èdtan k ap vini yo",
+    "starts": "Lapli nan {min} minit",
+    "starts_now": "Lapli kòmanse tonbe",
+    "stops": "Lapli ap tonbe, l ap sispann nan {min} minit",
+    "long": "Lapli pou plis pase 2 èdtan",
+    "now": "kounye a",
+    "in2h": "+2 è"
+  },
+  "moon": {
+    "new": "Lalin nouvo",
+    "waxing_crescent": "Kwasan k ap grandi",
+    "first_quarter": "Premye katye",
+    "waxing_gibbous": "Lalin k ap grandi",
+    "full": "Lalin plen",
+    "waning_gibbous": "Lalin k ap diminye",
+    "last_quarter": "Dènye katye",
+    "waning_crescent": "Kwasan k ap diminye",
+    "lit": "{pct} % klere",
+    "next_full": "Lalin plen {date}",
+    "next_new": "Lalin nouvo {date}"
+  },
+  "sun": {
+    "rise": "solèy leve",
+    "set": "solèy kouche"
+  },
+  "season": {
+    "in_days": "ap chanje nan {n} jou",
+    "tomorrow": "ap chanje demen"
+  },
+  "kind": {
+    "holiday": "Jou ferye",
+    "birth": "Anivèsè nesans",
+    "death": "Souvni",
+    "anniversary": "Anivèsè",
+    "other": "Dat enpòtan"
+  },
+  "seasons": {
+    "spring": "Prentan",
+    "summer": "Ete",
+    "autumn": "Otòn",
+    "winter": "Ivè"
+  },
+  "wmo": {
+    "0": "Syèl klè",
+    "1": "Prèske klè",
+    "2": "Kèk nwaj",
+    "3": "Syèl kouvri",
+    "45": "Bwouya",
+    "48": "Bwouya glase",
+    "51": "Ti farinay",
+    "53": "Farinay",
+    "55": "Gwo farinay",
+    "56": "Farinay glase",
+    "57": "Gwo farinay glase",
+    "61": "Ti lapli",
+    "63": "Lapli",
+    "65": "Gwo lapli",
+    "66": "Lapli glase",
+    "67": "Gwo lapli glase",
+    "71": "Ti nèj",
+    "73": "Nèj",
+    "75": "Gwo nèj",
+    "77": "Grenn nèj",
+    "80": "Ti avès",
+    "81": "Avès",
+    "82": "Gwo avès",
+    "85": "Avès nèj",
+    "86": "Gwo avès nèj",
+    "95": "Loraj",
+    "96": "Loraj ak grèl",
+    "99": "Gwo loraj ak grèl"
+  }
+}
