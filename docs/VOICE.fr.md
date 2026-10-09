@@ -222,6 +222,11 @@ Actions possibles : `radio_play`, `radio_stop`, `radio_next`, `radio_prev`, `vol
 
 ## Si ça ne marche pas
 
+Commencez par ouvrir la page de réglages **dans le même navigateur**, boîte **Contrôle par la
+voix**, et appuyez sur **Tester le micro sur cet appareil** : elle dit en mots simples ce qui
+bloque (autorisation refusée, aucun micro branché, service vocal du navigateur injoignable…) et
+quoi faire.
+
 - **Pas de bouton micro à l'écran** : la case de l'étape 1 n'est pas cochée, ou Enregistrer n'a pas
   été pressé. Le bouton n'existe que lorsque la voix est enregistrée comme activée ; il apparaît
   alors dans la minute (rechargez l'écran pour le voir tout de suite).
