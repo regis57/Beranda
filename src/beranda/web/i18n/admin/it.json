@@ -366,5 +366,14 @@
   "diag_done": "Fatto: il file «{name}» è stato scaricato.",
   "diag_failed": "Non è stato possibile creare il file ({err}).",
   "https_here": "✔ Sei sull'indirizzo sicuro: qui il microfono è consentito.",
-  "https_unavailable": "L'indirizzo sicuro non è disponibile su questo dispositivo (manca lo strumento «openssl»: sudo apt install openssl, poi riavvia Beranda)."
+  "https_unavailable": "L'indirizzo sicuro non è disponibile su questo dispositivo (manca lo strumento «openssl»: sudo apt install openssl, poi riavvia Beranda).",
+  "voice_test": "Prova il microfono su questo dispositivo",
+  "voice_test_listening": "Parla adesso…",
+  "voice_test_ok": "✔ Funziona. Sentito: «{text}»",
+  "voice_test_silence": "Il microfono funziona ma non ha sentito nulla. Riprova, un po' più vicino.",
+  "voice_err_not_allowed": "Il microfono è bloccato per questa pagina. Clicca l'icona a sinistra della barra degli indirizzi (lucchetto o «Non sicuro»), imposta Microfono su Consenti e ricarica la pagina. Controlla anche che Windows/macOS permetta al browser di usare il microfono.",
+  "voice_err_audio_capture": "Nessun microfono trovato su questo dispositivo. Collegane uno (cuffie o webcam con microfono) oppure usa il tablet.",
+  "voice_err_network": "Il servizio vocale del browser non è raggiungibile: serve internet (Chrome manda la voce a Google, Edge a Microsoft). Controlla la connessione o prova Google Chrome.",
+  "voice_err_service_not_allowed": "Questo browser rifiuta il suo servizio vocale su questa pagina. Usa Google Chrome e controlla che i servizi vocali non siano disattivati nelle impostazioni.",
+  "voice_err_other": "Il microfono non ha funzionato ({code}). Scarica il file di diagnostica (Utente esperto) e invialo."
 }

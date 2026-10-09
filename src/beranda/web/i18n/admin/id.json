@@ -366,5 +366,14 @@
   "diag_done": "Selesai: berkas “{name}” telah diunduh.",
   "diag_failed": "Berkas tidak dapat dibuat ({err}).",
   "https_here": "✔ Anda berada di alamat aman: mikrofon diizinkan di sini.",
-  "https_unavailable": "Alamat aman tidak tersedia di perangkat ini (alat “openssl” tidak ada: sudo apt install openssl, lalu mulai ulang Beranda)."
+  "https_unavailable": "Alamat aman tidak tersedia di perangkat ini (alat “openssl” tidak ada: sudo apt install openssl, lalu mulai ulang Beranda).",
+  "voice_test": "Uji mikrofon di perangkat ini",
+  "voice_test_listening": "Bicaralah sekarang…",
+  "voice_test_ok": "✔ Berhasil. Terdengar: “{text}”",
+  "voice_test_silence": "Mikrofon berfungsi tetapi tidak mendengar apa pun. Coba lagi, sedikit lebih dekat.",
+  "voice_err_not_allowed": "Mikrofon diblokir untuk halaman ini. Klik ikon di kiri bilah alamat (gembok atau “Tidak aman”), setel Mikrofon ke Izinkan, lalu muat ulang halaman. Periksa juga bahwa Windows/macOS mengizinkan peramban memakai mikrofon.",
+  "voice_err_audio_capture": "Tidak ada mikrofon di perangkat ini. Pasang satu (headset atau webcam bermikrofon), atau pakai tablet.",
+  "voice_err_network": "Layanan suara peramban tidak dapat dihubungi: perlu internet (Chrome mengirim suara ke Google, Edge ke Microsoft). Periksa sambungan, atau coba Google Chrome.",
+  "voice_err_service_not_allowed": "Peramban ini menolak layanan suaranya di halaman ini. Pakai Google Chrome, dan pastikan layanan suara tidak dimatikan di pengaturannya.",
+  "voice_err_other": "Mikrofon tidak berfungsi ({code}). Unduh berkas diagnostik (Pengguna mahir) dan kirimkan."
 }

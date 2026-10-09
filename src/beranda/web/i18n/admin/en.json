@@ -366,5 +366,14 @@
   "diag_done": "Done: the file “{name}” was downloaded.",
   "diag_failed": "The file could not be made ({err}).",
   "https_here": "✔ You are on the secure address: the microphone is allowed here.",
-  "https_unavailable": "The secure address is not available on this device (the “openssl” tool is missing: sudo apt install openssl, then restart Beranda)."
+  "https_unavailable": "The secure address is not available on this device (the “openssl” tool is missing: sudo apt install openssl, then restart Beranda).",
+  "voice_test": "Test the microphone on this device",
+  "voice_test_listening": "Speak now…",
+  "voice_test_ok": "✔ It works. Heard: “{text}”",
+  "voice_test_silence": "The microphone works but heard nothing. Try again, a little closer.",
+  "voice_err_not_allowed": "The microphone is blocked for this page. Click the icon on the left of the address bar (padlock or “Not secure”), set Microphone to Allow, then reload the page. Also check that Windows/macOS lets the browser use the microphone.",
+  "voice_err_audio_capture": "No microphone was found on this device. Plug one in (a headset or a webcam with a microphone), or use the tablet.",
+  "voice_err_network": "The browser's speech service cannot be reached: it needs the internet (Chrome sends the voice to Google, Edge to Microsoft). Check the connection, or try Google Chrome.",
+  "voice_err_service_not_allowed": "This browser refuses its speech service on this page. Use Google Chrome, and check that speech services are not turned off in the browser's settings.",
+  "voice_err_other": "The microphone did not work ({code}). Download the diagnostic file (Advanced user) and send it."
 }

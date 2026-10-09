@@ -853,7 +853,7 @@ function toast(text, ms = 6000) {
 async function listen() {
   const mic = $('mic');
   if (mic.classList.contains('listening')) return;
-  if (voice.availability() !== 'ok') { toast(t('voice_unavailable'), 9000); return; }
+  if (voice.availability() !== 'ok') { toast(`${t('voice_unavailable')} (${voice.availability()})`, 9000); return; }
   mic.classList.add('listening');
   toast(t('voice_listening'), 0);
   try {
@@ -873,7 +873,9 @@ async function listen() {
     if (answer.action?.type === 'volume_up') nudgeVolume(15);
     if (answer.action?.type === 'volume_down') nudgeVolume(-15);
   } catch (err) {
-    toast(t('voice_unavailable'), 9000);  // microphone blocked, or the browser's speech service is unreachable
+    // microphone blocked, none plugged in, or the browser's speech service unreachable: the short code
+    // tells which, and the settings page (Voice control, "Test the microphone") explains it in words
+    toast(`${t('voice_unavailable')} (${err.message || err})`, 9000);
     console.warn('voice failed', err);
   } finally {
     mic.classList.remove('listening');

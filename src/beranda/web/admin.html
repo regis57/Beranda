@@ -263,6 +263,11 @@
         <label class="check"><input type="checkbox" id="voice-on"><span data-i18n="admin.voice_enabled"></span></label>
         <p class="hint" data-i18n="admin.voice_save_note"></p>
         <p class="hint" id="voice-check" role="status"></p>
+        <!-- Try the microphone right here, in this browser: says in plain words what blocks it, if anything. -->
+        <div class="row wrap">
+          <button type="button" id="voice-test" data-i18n="admin.voice_test"></button>
+        </div>
+        <p class="hint" id="voice-test-msg" role="status"></p>
         <h3 data-i18n="admin.voice_defaults_title"></h3>
         <details class="help">
           <summary id="voice-defaults-summary"></summary>

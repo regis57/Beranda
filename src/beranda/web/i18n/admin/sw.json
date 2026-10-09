@@ -366,5 +366,14 @@
   "diag_done": "Imekamilika: faili “{name}” imepakuliwa.",
   "diag_failed": "Faili haikuweza kutengenezwa ({err}).",
   "https_here": "✔ Uko kwenye anwani salama: maikrofoni inaruhusiwa hapa.",
-  "https_unavailable": "Anwani salama haipatikani kwenye kifaa hiki (zana ya “openssl” haipo: sudo apt install openssl, kisha anzisha Beranda upya)."
+  "https_unavailable": "Anwani salama haipatikani kwenye kifaa hiki (zana ya “openssl” haipo: sudo apt install openssl, kisha anzisha Beranda upya).",
+  "voice_test": "Jaribu maikrofoni kwenye kifaa hiki",
+  "voice_test_listening": "Ongea sasa…",
+  "voice_test_ok": "✔ Inafanya kazi. Imesikia: “{text}”",
+  "voice_test_silence": "Maikrofoni inafanya kazi lakini haikusikia chochote. Jaribu tena, karibu kidogo.",
+  "voice_err_not_allowed": "Maikrofoni imezuiwa kwa ukurasa huu. Bofya alama iliyo kushoto mwa upau wa anwani (kufuli au “Si salama”), weka Maikrofoni kuwa Ruhusu, kisha pakia ukurasa upya. Hakikisha pia Windows/macOS inaruhusu kivinjari kutumia maikrofoni.",
+  "voice_err_audio_capture": "Hakuna maikrofoni iliyopatikana kwenye kifaa hiki. Chomeka moja (vifaa vya kichwa au kamera ya wavuti yenye maikrofoni), au tumia kompyuta kibao.",
+  "voice_err_network": "Huduma ya sauti ya kivinjari haipatikani: inahitaji intaneti (Chrome hutuma sauti kwa Google, Edge kwa Microsoft). Kagua muunganisho, au jaribu Google Chrome.",
+  "voice_err_service_not_allowed": "Kivinjari hiki kinakataa huduma yake ya sauti kwenye ukurasa huu. Tumia Google Chrome, na hakikisha huduma za sauti hazijazimwa kwenye mipangilio yake.",
+  "voice_err_other": "Maikrofoni haikufanya kazi ({code}). Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume."
 }

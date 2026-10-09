@@ -366,5 +366,14 @@
   "diag_done": "Feito: o ficheiro «{name}» foi descarregado.",
   "diag_failed": "Não foi possível criar o ficheiro ({err}).",
   "https_here": "✔ Está no endereço seguro: aqui o microfone é permitido.",
-  "https_unavailable": "O endereço seguro não está disponível neste aparelho (falta a ferramenta «openssl»: sudo apt install openssl e reinicie o Beranda)."
+  "https_unavailable": "O endereço seguro não está disponível neste aparelho (falta a ferramenta «openssl»: sudo apt install openssl e reinicie o Beranda).",
+  "voice_test": "Testar o microfone neste aparelho",
+  "voice_test_listening": "Fale agora…",
+  "voice_test_ok": "✔ Funciona. Ouvido: «{text}»",
+  "voice_test_silence": "O microfone funciona mas não ouviu nada. Tente outra vez, um pouco mais perto.",
+  "voice_err_not_allowed": "O microfone está bloqueado para esta página. Clique no ícone à esquerda da barra de endereço (cadeado ou «Não seguro»), ponha Microfone em Permitir e recarregue a página. Verifique também se o Windows/macOS deixa o navegador usar o microfone.",
+  "voice_err_audio_capture": "Não foi encontrado nenhum microfone neste aparelho. Ligue um (auscultadores ou webcam com microfone) ou use o tablet.",
+  "voice_err_network": "O serviço de voz do navegador não está acessível: precisa de internet (o Chrome envia a voz à Google, o Edge à Microsoft). Verifique a ligação ou experimente o Google Chrome.",
+  "voice_err_service_not_allowed": "Este navegador recusa o seu serviço de voz nesta página. Use o Google Chrome e verifique se os serviços de voz não estão desativados nas definições.",
+  "voice_err_other": "O microfone não funcionou ({code}). Descarregue o ficheiro de diagnóstico (Utilizador avançado) e envie-o."
 }
