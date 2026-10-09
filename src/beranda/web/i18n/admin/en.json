@@ -337,5 +337,17 @@
   "reset_port_note": "The address goes back to {url}",
   "coffee": "Buy me a coffee",
   "coffee_hint": "Beranda is free. If it brightens your wall, a coffee is always welcome.",
-  "port_pending": "Saved: {port}, it applies after Beranda restarts."
+  "port_pending": "Saved: {port}, it applies after Beranda restarts.",
+  "factory_reset_all": "Start over and erase photos and data",
+  "factory_reset_all_help": "Same as above, and also deletes the photos of Beranda's own photo frame and everything downloaded so far (weather, news, calendars, TV guide…). The downloads come back by themselves when needed; the photos do not. Photos kept in a folder you chose yourself are never touched.",
+  "reset_continue": "Continue",
+  "reset_all_title": "Last reminder before erasing",
+  "reset_all_intro": "You are about to erase for good:",
+  "reset_all_settings": "all your settings (country, language, theme, calendar links, PIN…)",
+  "reset_all_photos": "the photos of the photo frame ({count}): they cannot be recovered",
+  "reset_all_data": "the weather, news, calendars and TV guide already downloaded (they will be downloaded again later)",
+  "reset_all_final_note": "This cannot be undone. Beranda then restarts as on its first day.",
+  "reset_all_back": "No, keep everything",
+  "reset_all_go": "Yes, erase everything for good",
+  "requested_reset_all": "Erasing… Beranda is restarting as new. Reload this page in a few seconds."
 }

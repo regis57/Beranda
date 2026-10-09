@@ -337,5 +337,17 @@
   "reset_port_note": "Die Adresse lautet wieder {url}",
   "coffee": "Spendiere mir einen Kaffee",
   "coffee_hint": "Beranda ist kostenlos. Wenn es Ihre Wand verschönert, freue ich mich über einen Kaffee.",
-  "port_pending": "Gespeichert: {port}, gilt nach einem Neustart von Beranda."
+  "port_pending": "Gespeichert: {port}, gilt nach einem Neustart von Beranda.",
+  "factory_reset_all": "Ganz neu anfangen und Fotos und Daten löschen",
+  "factory_reset_all_help": "Wie oben, und löscht zusätzlich die Fotos des Beranda-Bilderrahmens und alles bisher Heruntergeladene (Wetter, Nachrichten, Kalender, TV-Programm …). Die Downloads kommen bei Bedarf von selbst wieder, die Fotos nicht. Fotos in einem Ordner, den Sie selbst gewählt haben, bleiben immer unberührt.",
+  "reset_continue": "Weiter",
+  "reset_all_title": "Letzte Erinnerung vor dem Löschen",
+  "reset_all_intro": "Sie sind dabei, endgültig zu löschen:",
+  "reset_all_settings": "alle Ihre Einstellungen (Land, Sprache, Design, Kalenderlinks, PIN …)",
+  "reset_all_photos": "die Fotos des Bilderrahmens ({count}): sie lassen sich nicht wiederherstellen",
+  "reset_all_data": "das bereits heruntergeladene Wetter, die Nachrichten, Kalender und das TV-Programm (sie werden später neu geladen)",
+  "reset_all_final_note": "Das lässt sich nicht rückgängig machen. Danach startet Beranda neu wie am ersten Tag.",
+  "reset_all_back": "Nein, alles behalten",
+  "reset_all_go": "Ja, alles endgültig löschen",
+  "requested_reset_all": "Löschen läuft … Beranda startet neu wie am ersten Tag. Laden Sie diese Seite in einigen Sekunden neu."
 }

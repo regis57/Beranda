@@ -128,3 +128,69 @@ def test_a_taken_port_sends_beranda_back_to_8080_instead_of_failing_forever(tmp_
     assert started["port"] == system.DEFAULT_PORT
     assert tomllib.loads(path.read_text())["server"]["port"] == system.DEFAULT_PORT  # the screen reads it too
     assert config.load(path).port == system.DEFAULT_PORT
+
+
+# --- start over, with or without erasing the photos and the downloaded data -----------------
+
+
+def _install_like(tmp_path, monkeypatch):
+    """A folder for the requests (as the installer makes), a photo folder, a cache with files in it."""
+    requests = tmp_path / "requests"
+    requests.mkdir()
+    photos = tmp_path / "photos"
+    photos.mkdir()
+    for name in ("a.jpg", "b.png", "c.jpg.part"):
+        (photos / name).write_bytes(b"x")
+    (photos / "notes.txt").write_text("not a picture")
+    own = tmp_path / "my-own-folder"  # a folder the person chose: never emptied
+    own.mkdir()
+    (own / "keep.jpg").write_bytes(b"x")
+    monkeypatch.setenv("BERANDA_REQUESTS", str(requests))
+    monkeypatch.setenv("BERANDA_PHOTOS", str(photos))
+    cache = tmp_path / "c"
+    cache.mkdir(exist_ok=True)
+    (cache / "weather.json").write_text("{}")
+    (cache / "tv_x.json").write_text("{}")
+    return requests, photos, own, cache
+
+
+def test_the_plain_reset_leaves_photos_and_downloads_alone(tmp_path, monkeypatch):
+    requests, photos, _, cache = _install_like(tmp_path, monkeypatch)
+    client, _ = _client(tmp_path)
+    assert client.post("/api/admin/system/reset", json={}).status_code == 400
+    assert client.post("/api/admin/system/reset", json={"confirmed": True}).json() == {"requested": "reset"}
+    assert [p.name for p in requests.iterdir()] == ["reset"]
+    assert len(list(photos.iterdir())) == 4 and len(list(cache.iterdir())) == 2
+
+
+def test_erasing_photos_and_data_must_be_confirmed_a_second_time(tmp_path, monkeypatch):
+    requests, photos, _, cache = _install_like(tmp_path, monkeypatch)
+    client, _ = _client(tmp_path)
+    r = client.post("/api/admin/system/reset", json={"confirmed": True, "erase_data": True})
+    assert r.status_code == 400
+    assert len(list(photos.iterdir())) == 4 and len(list(cache.iterdir())) == 2 and not list(requests.iterdir())
+
+
+def test_erasing_photos_and_data_removes_only_pictures_and_downloads(tmp_path, monkeypatch):
+    requests, photos, own, cache = _install_like(tmp_path, monkeypatch)
+    client, _ = _client(tmp_path)
+    assert client.get("/api/admin/system").json()["own_photos"] == 2
+    r = client.post(
+        "/api/admin/system/reset", json={"confirmed": True, "erase_data": True, "confirmed_twice": True}
+    )
+    assert r.status_code == 200 and r.json()["erased"] == {"photos": 3, "downloads": 2}
+    assert [p.name for p in photos.iterdir()] == ["notes.txt"]  # pictures and half-downloads only
+    assert (own / "keep.jpg").exists()  # a folder chosen by the person is never emptied
+    assert not list(cache.iterdir())
+    assert [p.name for p in requests.iterdir()] == ["reset"]
+
+
+def test_nothing_is_erased_when_the_reset_itself_cannot_follow(tmp_path, monkeypatch):
+    _, photos, _, cache = _install_like(tmp_path, monkeypatch)
+    monkeypatch.delenv("BERANDA_REQUESTS")  # not installed with install.sh
+    client, _ = _client(tmp_path)
+    r = client.post(
+        "/api/admin/system/reset", json={"confirmed": True, "erase_data": True, "confirmed_twice": True}
+    )
+    assert r.status_code == 409
+    assert len(list(photos.iterdir())) == 4 and len(list(cache.iterdir())) == 2

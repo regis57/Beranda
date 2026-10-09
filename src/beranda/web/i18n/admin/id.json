@@ -337,5 +337,17 @@
   "reset_port_note": "Alamat kembali menjadi {url}",
   "coffee": "Traktir saya kopi",
   "coffee_hint": "Beranda gratis. Jika ia mempercantik dinding Anda, secangkir kopi selalu diterima dengan senang hati.",
-  "port_pending": "Tersimpan: {port}, berlaku setelah Beranda dimulai ulang."
+  "port_pending": "Tersimpan: {port}, berlaku setelah Beranda dimulai ulang.",
+  "factory_reset_all": "Mulai dari awal dan hapus foto serta data",
+  "factory_reset_all_help": "Sama seperti di atas, dan juga menghapus foto di bingkai foto Beranda serta semua yang sudah diunduh (cuaca, berita, kalender, jadwal TV…). Unduhan kembali sendiri saat diperlukan; foto tidak. Foto di folder yang Anda pilih sendiri tidak pernah disentuh.",
+  "reset_continue": "Lanjutkan",
+  "reset_all_title": "Pengingat terakhir sebelum menghapus",
+  "reset_all_intro": "Anda akan menghapus untuk selamanya:",
+  "reset_all_settings": "semua pengaturan Anda (negara, bahasa, tema, tautan kalender, PIN…)",
+  "reset_all_photos": "foto di bingkai foto ({count}): tidak dapat dipulihkan",
+  "reset_all_data": "cuaca, berita, kalender, dan jadwal TV yang sudah diunduh (akan diunduh lagi nanti)",
+  "reset_all_final_note": "Ini tidak dapat dibatalkan. Beranda lalu mulai ulang seperti hari pertama.",
+  "reset_all_back": "Tidak, simpan semuanya",
+  "reset_all_go": "Ya, hapus semuanya selamanya",
+  "requested_reset_all": "Menghapus… Beranda dimulai ulang seperti baru. Muat ulang halaman ini dalam beberapa detik."
 }

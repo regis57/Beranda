@@ -47,6 +47,18 @@ address. If the new port cannot be used when Beranda starts, it goes back to 808
 *Start over from scratch*, in the same box, also brings the port back to 8080 (you must type the
 word "yes" in your language first).
 
+### Advanced user: starting over
+
+Two buttons, side by side in the same box:
+
+- **Start over from scratch** erases your settings only. Your photos and what was already
+  downloaded (weather, news, TV guide...) stay.
+- **Start over and erase photos and data** also deletes the pictures of Beranda's own photo frame
+  and everything downloaded. It asks twice: you type the word "yes" in your language, then a last
+  reminder lists everything that will go (with the number of photos, which cannot be recovered)
+  and the safe choice, *No, keep everything*, is the one highlighted. Photos in a folder you chose
+  yourself are never touched.
+
 Press **Save**. The display picks the changes up within a minute, without a restart. The page
 writes `~/.config/beranda/config.toml` (readable by you only, because calendar links are secrets).
 

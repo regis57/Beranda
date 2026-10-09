@@ -52,6 +52,7 @@ class Runtime:
     config_path: Path | None  # None: nowhere to save (demo mode)
     dropbox: dict = field(default_factory=dict)  # result of the last Dropbox copy, for the page
     _tasks: set = field(default_factory=set)
+    cache: object | None = None  # the downloaded-data cache (set by create_app), emptied by "erase data"
     listening_port: int = field(init=False, default=0)  # the port this server really listens on
 
     def __post_init__(self) -> None:
@@ -363,6 +364,7 @@ def router(runtime: Runtime) -> APIRouter:
             "branch": info.get("BRANCH", "main"),
             "screen": info.get("SCREEN", "0") == "1",
             "actions": system.requests_dir() is not None,
+            "own_photos": len(photos.list_photos(photos.default_folder(), 100000)),
             "port": runtime.listening_port,
             "saved_port": runtime.cfg.port,  # differs from "port" until Beranda is restarted
         }
@@ -404,15 +406,29 @@ def router(runtime: Runtime) -> APIRouter:
     async def system_action(action: str, body: dict | None = None) -> dict:
         # Wiping every setting must be asked for on purpose: the settings page only sends
         # "confirmed" after the person typed the word "yes" (in their language) themselves.
-        if action == "reset" and (body or {}).get("confirmed") is not True:
+        body = body or {}
+        if action == "reset" and body.get("confirmed") is not True:
             raise HTTPException(400, "the reset must be confirmed")
+        erased = None
+        if action == "reset" and body.get("erase_data") is True:
+            # Also erasing the photos and the downloaded data is asked for twice by the page.
+            if body.get("confirmed_twice") is not True:
+                raise HTTPException(400, "erasing the data must be confirmed a second time")
+            if system.requests_dir() is None:  # check first: nothing is erased if the reset cannot follow
+                raise HTTPException(409, "not installed with install.sh")
+            erased = {
+                # only Beranda's own photo folder: a folder the person chose themselves is never emptied
+                "photos": photos.clear(photos.default_folder()),
+                "downloads": runtime.cache.clear() if runtime.cache is not None else 0,
+            }
+            runtime.dropbox = {}
         try:
             system.request_action(action)
         except ValueError as exc:
             raise HTTPException(404, str(exc)) from exc
         except RuntimeError as exc:
             raise HTTPException(409, str(exc)) from exc
-        return {"requested": action}
+        return {"requested": action, **({"erased": erased} if erased else {})}
 
     @api.get("/news-auto", dependencies=[Depends(guard)])
     async def news_auto(country: str, language: str, city: str = "") -> dict:

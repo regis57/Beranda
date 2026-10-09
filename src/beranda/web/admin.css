@@ -167,3 +167,4 @@ button.danger:disabled { background: transparent; color: var(--ink-2); border-co
 /* "Advanced user": what changes is spelled out in a framed box before the button. */
 .impact { border: 1.5px solid var(--line); border-inline-start: 4px solid var(--accent); border-radius: .5rem; padding: .7rem .9rem; font-size: .9rem; }
 .impact ul { margin: .4rem 0 0; padding-inline-start: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+.reset-box ul { margin: 0; padding-inline-start: 1.2rem; display: flex; flex-direction: column; gap: .25rem; font-size: .95rem; }

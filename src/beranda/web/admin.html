@@ -336,6 +336,12 @@
         <div class="row wrap">
           <button type="button" id="sys-reset" data-action="reset" data-i18n="admin.factory_reset"></button>
         </div>
+
+        <h3 data-i18n="admin.factory_reset_all"></h3>
+        <p class="hint" data-i18n="admin.factory_reset_all_help"></p>
+        <div class="row wrap">
+          <button type="button" id="sys-reset-all" data-action="reset" data-i18n="admin.factory_reset_all"></button>
+        </div>
         <p class="hint" id="adv-message" role="status"></p>
         <!-- Starting again from zero needs more than a second click: type the word "yes" yourself. -->
         <div class="reset-box" id="reset-box" hidden>
@@ -344,6 +350,21 @@
             <input id="reset-word" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="reset-prompt">
             <button type="button" class="danger" id="reset-go" disabled data-i18n="admin.reset_confirm"></button>
             <button type="button" id="reset-cancel" data-i18n="admin.reset_cancel"></button>
+          </div>
+        </div>
+        <!-- Erasing the photos and downloads too: after the typed word, one more reminder of everything that will go. -->
+        <div class="reset-box" id="reset-final" role="alertdialog" aria-labelledby="reset-final-title" hidden>
+          <p><b id="reset-final-title" data-i18n="admin.reset_all_title"></b></p>
+          <p data-i18n="admin.reset_all_intro"></p>
+          <ul>
+            <li data-i18n="admin.reset_all_settings"></li>
+            <li id="reset-final-photos"></li>
+            <li data-i18n="admin.reset_all_data"></li>
+          </ul>
+          <p data-i18n="admin.reset_all_final_note"></p>
+          <div class="row wrap">
+            <button type="button" id="reset-final-back" data-i18n="admin.reset_all_back"></button>
+            <button type="button" class="danger" id="reset-final-go" data-i18n="admin.reset_all_go"></button>
           </div>
         </div>
       </section>

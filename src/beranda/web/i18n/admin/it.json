@@ -337,5 +337,17 @@
   "reset_port_note": "L'indirizzo torna {url}",
   "coffee": "Offrimi un caffè",
   "coffee_hint": "Beranda è gratis. Se ti rallegra la parete, un caffè è sempre gradito.",
-  "port_pending": "Salvata: {port}, varrà dopo il riavvio di Beranda."
+  "port_pending": "Salvata: {port}, varrà dopo il riavvio di Beranda.",
+  "factory_reset_all": "Ricomincia da zero e cancella foto e dati",
+  "factory_reset_all_help": "Come sopra, e cancella anche le foto della cornice di Beranda e tutto ciò che è stato scaricato finora (meteo, notizie, calendari, programmi TV…). I download tornano da soli quando servono; le foto no. Le foto conservate in una cartella scelta da te non vengono mai toccate.",
+  "reset_continue": "Continua",
+  "reset_all_title": "Ultimo promemoria prima di cancellare",
+  "reset_all_intro": "Stai per cancellare definitivamente:",
+  "reset_all_settings": "tutte le tue impostazioni (paese, lingua, tema, link dei calendari, PIN…)",
+  "reset_all_photos": "le foto della cornice ({count}): non si potranno recuperare",
+  "reset_all_data": "meteo, notizie, calendari e programmi TV già scaricati (verranno scaricati di nuovo più tardi)",
+  "reset_all_final_note": "Non si può annullare. Poi Beranda riparte come il primo giorno.",
+  "reset_all_back": "No, tieni tutto",
+  "reset_all_go": "Sì, cancella tutto per sempre",
+  "requested_reset_all": "Cancellazione in corso… Beranda riparte da zero. Ricarica questa pagina tra qualche secondo."
 }

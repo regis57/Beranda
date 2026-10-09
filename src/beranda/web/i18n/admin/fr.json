@@ -337,5 +337,17 @@
   "reset_port_note": "L'adresse redevient {url}",
   "coffee": "Offrez-moi un café",
   "coffee_hint": "Beranda est gratuit. S'il égaye votre mur, un café est toujours le bienvenu.",
-  "port_pending": "Enregistré : {port}, il s'appliquera au redémarrage de Beranda."
+  "port_pending": "Enregistré : {port}, il s'appliquera au redémarrage de Beranda.",
+  "factory_reset_all": "Repartir de zéro et effacer photos et données",
+  "factory_reset_all_help": "Comme ci-dessus, et supprime aussi les photos du cadre photo de Beranda et tout ce qui a été téléchargé jusqu'ici (météo, actualité, agendas, programme TV…). Les téléchargements reviennent d'eux-mêmes en cas de besoin ; les photos, non. Les photos gardées dans un dossier que vous avez choisi vous-même ne sont jamais touchées.",
+  "reset_continue": "Continuer",
+  "reset_all_title": "Dernier rappel avant d'effacer",
+  "reset_all_intro": "Vous allez effacer définitivement :",
+  "reset_all_settings": "tous vos réglages (pays, langue, thème, liens d'agenda, PIN…)",
+  "reset_all_photos": "les photos du cadre photo ({count}) : elles ne pourront pas être récupérées",
+  "reset_all_data": "la météo, l'actualité, les agendas et le programme TV déjà téléchargés (ils seront retéléchargés plus tard)",
+  "reset_all_final_note": "Cette action est irréversible. Beranda redémarre ensuite comme au premier jour.",
+  "reset_all_back": "Non, tout garder",
+  "reset_all_go": "Oui, tout effacer définitivement",
+  "requested_reset_all": "Effacement en cours… Beranda redémarre à neuf. Rechargez cette page dans quelques secondes."
 }

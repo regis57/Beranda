@@ -337,5 +337,17 @@
   "reset_port_note": "Anwani inarudi kuwa {url}",
   "coffee": "Nunulie kahawa",
   "coffee_hint": "Beranda ni bure. Ikipendezesha ukuta wako, kikombe cha kahawa hukaribishwa kila wakati.",
-  "port_pending": "Imehifadhiwa: {port}, itatumika Beranda ikianza upya."
+  "port_pending": "Imehifadhiwa: {port}, itatumika Beranda ikianza upya.",
+  "factory_reset_all": "Anza tena na ufute picha na data",
+  "factory_reset_all_help": "Kama hapo juu, na pia hufuta picha za fremu ya picha ya Beranda na kila kilichopakuliwa hadi sasa (hali ya hewa, habari, kalenda, ratiba ya TV…). Vilivyopakuliwa hurudi vyenyewe vinapohitajika; picha hazirudi. Picha zilizo kwenye folda uliyochagua mwenyewe haziguswi kamwe.",
+  "reset_continue": "Endelea",
+  "reset_all_title": "Ukumbusho wa mwisho kabla ya kufuta",
+  "reset_all_intro": "Unakaribia kufuta milele:",
+  "reset_all_settings": "mipangilio yako yote (nchi, lugha, mandhari, viungo vya kalenda, PIN…)",
+  "reset_all_photos": "picha za fremu ya picha ({count}): haziwezi kurejeshwa",
+  "reset_all_data": "hali ya hewa, habari, kalenda na ratiba ya TV vilivyokwisha pakuliwa (vitapakuliwa tena baadaye)",
+  "reset_all_final_note": "Hili haliwezi kutenduliwa. Kisha Beranda huanza upya kama siku ya kwanza.",
+  "reset_all_back": "Hapana, weka vyote",
+  "reset_all_go": "Ndiyo, futa vyote milele",
+  "requested_reset_all": "Inafuta… Beranda inaanza upya kama mpya. Pakia ukurasa huu upya baada ya sekunde chache."
 }
