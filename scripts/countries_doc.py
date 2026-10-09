@@ -27,6 +27,8 @@ LANGUAGE_NAMES = {
     "zh": "Chinese (simplified)", "zh-TW": "Chinese (traditional)", "ja": "Japanese",
     "ko": "Korean", "th": "Thai", "vi": "Vietnamese", "ms": "Malay", "id": "Indonesian",
     "tl": "Filipino", "sw": "Swahili", "am": "Amharic", "af": "Afrikaans", "ht": "Haitian Creole",
+    "ha": "Hausa", "yo": "Yoruba", "zu": "Zulu", "so": "Somali", "mg": "Malagasy", "wo": "Wolof",
+    "ta": "Tamil", "ty": "Tahitian", "qu": "Quechua",
 }
 RTL = {"ar", "he", "fa", "ur"}
 # Countries the holidays library does not name (territories) or names awkwardly.
@@ -109,10 +111,9 @@ def main() -> None:
         "Brazilian Portuguese, Indonesian, Arabic and Swahili; for the other languages it shows",
         "English while the screen speaks your language.",
         "",
-        "Not translated yet (contributions welcome, one JSON file each): Hausa, Yoruba, Zulu,",
-        "Somali, Malagasy, Kinyarwanda, Wolof, Tamil, Nepali, Khmer, Lao, Burmese, Sinhala,",
-        "Georgian, Armenian, Azerbaijani, Kazakh, Uzbek, Mongolian, Albanian, Macedonian,",
-        "Icelandic, Irish, Maltese, Māori, Tahitian, Samoan, Tongan, Fijian, Quechua, Guarani.",
+        "Not translated yet (contributions welcome, one JSON file each): Kinyarwanda, Nepali,",
+        "Khmer, Lao, Burmese, Sinhala, Georgian, Armenian, Azerbaijani, Kazakh, Uzbek, Mongolian,",
+        "Albanian, Macedonian, Icelandic, Irish, Maltese, Māori, Samoan, Tongan, Fijian, Guarani.",
         "",
     ]
     for region in REGION_ORDER:

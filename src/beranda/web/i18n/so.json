@@ -1,0 +1,89 @@
+{
+  "today": "Maanta",
+  "tomorrow": "Berri",
+  "upcoming": "Soo socota",
+  "nothing_upcoming": "Wax lama qorsheynin",
+  "all_day": "maalin oo dhan",
+  "loading": "Soo rarid…",
+  "demo": "tusaale",
+  "offline": "khadka internetka ma jiro",
+  "no_weather": "Cimilada lama helin",
+  "feels": "waxay u dareemaysaa",
+  "rain": {
+    "none": "Roob lagama filayo labada saacadood ee soo socda",
+    "starts": "Roobku wuxuu bilaabmayaa {min} daqiiqo kadib",
+    "starts_now": "Roobku wuu bilaabmay",
+    "stops": "Roob bay ku jirtaa, way joojinaysaa {min} daqiiqo kadib",
+    "long": "Roob in ka badan laba saacadood",
+    "now": "hadda",
+    "in2h": "+2 saac"
+  },
+  "moon": {
+    "new": "Dayax cusub",
+    "waxing_crescent": "Dayaxu wuu kordhayaa (yar)",
+    "first_quarter": "Rubuc kowaad",
+    "waxing_gibbous": "Dayaxu wuu kordhayaa (ku dhawaad buuxa)",
+    "full": "Dayax buuxa",
+    "waning_gibbous": "Dayaxu wuu yaraanayaa (ku dhawaad buuxa)",
+    "last_quarter": "Rubuc dambe",
+    "waning_crescent": "Dayaxu wuu yaraanayaa (yar)",
+    "lit": "{pct}% iftiimay",
+    "next_full": "Dayax buuxa {date}",
+    "next_new": "Dayax cusub {date}"
+  },
+  "sun": {
+    "rise": "qorrax ka soo bax",
+    "set": "qorrax dhac"
+  },
+  "season": {
+    "in_days": "wuu is beddelayaa {n} maalmood kadib",
+    "tomorrow": "wuu is beddelayaa berri"
+  },
+  "kind": {
+    "holiday": "Fasax",
+    "birth": "Dhalasho",
+    "death": "Xusuusin",
+    "anniversary": "Sannad-guurad",
+    "other": "Taariikh muhiim ah"
+  },
+  "wmo": {
+    "0": "Cirku waa nadiif",
+    "1": "Inta badan nadiif",
+    "2": "Daruur qaar ka mid ah",
+    "3": "Daruur qaro",
+    "45": "Ceeryaamo",
+    "48": "Ceeryaamo qabow",
+    "51": "Roob yar oo khafiif ah",
+    "53": "Roob khafiif",
+    "55": "Roob khafiif oo culus",
+    "56": "Khafiif qabow",
+    "57": "Khafiif qabow oo culus",
+    "61": "Roob yar",
+    "63": "Roob",
+    "65": "Roob culus",
+    "66": "Roob qabow",
+    "67": "Roob qabow oo culus",
+    "71": "Baraf yar",
+    "73": "Baraf",
+    "75": "Baraf culus",
+    "77": "Baraf jajaban",
+    "80": "Roob degdeg ah oo yar",
+    "81": "Roob degdeg ah",
+    "82": "Roob degdeg ah oo culus",
+    "85": "Baraf degdeg ah",
+    "86": "Baraf degdeg ah oo culus",
+    "95": "Duufaan onkod leh",
+    "96": "Duufaan onkod iyo baraf leh",
+    "99": "Duufaan daran oo onkod iyo baraf leh"
+  },
+  "seasons": {
+    "spring": "Gu'",
+    "summer": "Xagaa",
+    "autumn": "Dayr",
+    "winter": "Jiilaal"
+  },
+  "setup": {
+    "title": "Iga diyaari taleefankaaga",
+    "text": "Sawir koodhkan, ama ka fur cinwaankan taleefan ama kombuyuutar ku xidhan Wi-Fi-ga isku mid ah:"
+  }
+}

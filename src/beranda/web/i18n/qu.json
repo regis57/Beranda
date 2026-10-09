@@ -1,0 +1,89 @@
+{
+  "today": "Kunan",
+  "tomorrow": "Paqarin",
+  "upcoming": "Hamuqkuna",
+  "nothing_upcoming": "Mana imapas kachkanchu",
+  "all_day": "tukuy p'unchaw",
+  "loading": "Apachkan…",
+  "demo": "rikuchiy",
+  "offline": "mana internetpi",
+  "no_weather": "Mana willakuyninta tarikunchu",
+  "feels": "kaqlla hina",
+  "rain": {
+    "none": "Qaya iskay horasta mana parachunkuchu",
+    "starts": "{min} minutupi para qallarinqa",
+    "starts_now": "Para qallarin",
+    "stops": "Parashan, {min} minutupi tanin",
+    "long": "Iskay horaspi astawan para",
+    "now": "kunan",
+    "in2h": "+2 hora"
+  },
+  "moon": {
+    "new": "Musuq killa",
+    "waxing_crescent": "Killa wiñashan (huch'uy)",
+    "first_quarter": "Ñawpaq kuska",
+    "waxing_gibbous": "Killa wiñashan (hunt'ananpaq)",
+    "full": "Hunt'a killa",
+    "waning_gibbous": "Killa pisiyashan (hunt'ananpaq)",
+    "last_quarter": "Qhepa kuska",
+    "waning_crescent": "Killa pisiyashan (huch'uy)",
+    "lit": "{pct}% k'anchasqa",
+    "next_full": "Hunt'a killa {date}",
+    "next_new": "Musuq killa {date}"
+  },
+  "sun": {
+    "rise": "inti llipiy",
+    "set": "inti haykuy"
+  },
+  "season": {
+    "in_days": "{n} p'unchaykunapi tikrakunqa",
+    "tomorrow": "paqarin tikrakunqa"
+  },
+  "kind": {
+    "holiday": "Samay p'unchay",
+    "birth": "Paqariy",
+    "death": "Yuyariy",
+    "anniversary": "Watantin raymi",
+    "other": "Allin p'unchay"
+  },
+  "wmo": {
+    "0": "Ch'uya hawa pacha",
+    "1": "Aswan ch'uya",
+    "2": "Huk chhika phuyu",
+    "3": "Phuyusqa",
+    "45": "Phara",
+    "48": "Chiri phara",
+    "51": "Huch'uy para",
+    "53": "Qhara para",
+    "55": "Sinchi qhara para",
+    "56": "Chiri qhara para",
+    "57": "Sinchi chiri qhara para",
+    "61": "Huch'uy para",
+    "63": "Para",
+    "65": "Sinchi para",
+    "66": "Chiri para",
+    "67": "Sinchi chiri para",
+    "71": "Huch'uy riti'i",
+    "73": "Riti'i",
+    "75": "Sinchi riti'i",
+    "77": "Riti'i muruchakuna",
+    "80": "Utqhay huch'uy para",
+    "81": "Utqhay para",
+    "82": "Utqhay sinchi para",
+    "85": "Utqhay riti'i",
+    "86": "Utqhay sinchi riti'i",
+    "95": "Qaqya wayra",
+    "96": "Qaqya riti'iwan",
+    "99": "Sinchi qaqya riti'iwan"
+  },
+  "seasons": {
+    "spring": "Pachallanta",
+    "summer": "Rupay pacha",
+    "autumn": "Sara tarpuy pacha",
+    "winter": "Chiri pacha"
+  },
+  "setup": {
+    "title": "Celularniykimanta allichay",
+    "text": "Kay código watuy, utaq kay direcciónta kichay huk celular utaq computadorapi, kikin Wi-Fi-pi kashanman:"
+  }
+}

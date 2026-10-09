@@ -1,0 +1,89 @@
+{
+  "today": "Namuhla",
+  "tomorrow": "Kusasa",
+  "upcoming": "Okuzayo",
+  "nothing_upcoming": "Akukho okuhleliwe",
+  "all_day": "usuku lonke",
+  "loading": "Iyalayisha…",
+  "demo": "ukubonisa",
+  "offline": "akuxhunyiwe",
+  "no_weather": "Isimo sezulu asitholakali",
+  "feels": "kuzizwa kungathi",
+  "rain": {
+    "none": "Akukho mvula emahoreni amabili ezayo",
+    "starts": "Izoqala ukuna emaminithini {min}",
+    "starts_now": "Imvula iqalile",
+    "stops": "Iyana, izoma emaminithini {min}",
+    "long": "Imvula engaphezu kwamahora amabili",
+    "now": "manje",
+    "in2h": "+amahora 2"
+  },
+  "moon": {
+    "new": "Inyanga entsha",
+    "waxing_crescent": "Inyanga ikhula (incane)",
+    "first_quarter": "Ingxenye yokuqala",
+    "waxing_gibbous": "Inyanga ikhula (cishe igcwele)",
+    "full": "Inyanga igcwele",
+    "waning_gibbous": "Inyanga incipha (cishe igcwele)",
+    "last_quarter": "Ingxenye yokugcina",
+    "waning_crescent": "Inyanga incipha (incane)",
+    "lit": "{pct}% ikhanya",
+    "next_full": "Inyanga igcwele {date}",
+    "next_new": "Inyanga entsha {date}"
+  },
+  "sun": {
+    "rise": "ukushona kwelanga kuvela",
+    "set": "ilanga lishona"
+  },
+  "season": {
+    "in_days": "izoshintsha ngezinsuku {n}",
+    "tomorrow": "izoshintsha kusasa"
+  },
+  "kind": {
+    "holiday": "Iholidi",
+    "birth": "Usuku lokuzalwa",
+    "death": "Isikhumbuzo",
+    "anniversary": "Usuku lokukhumbula",
+    "other": "Usuku olubalulekile"
+  },
+  "wmo": {
+    "0": "Isibhakabhaka esicwebile",
+    "1": "Sicwebile ikakhulukazi",
+    "2": "Amafu ambalwa",
+    "3": "Kunamafu amanyama",
+    "45": "Inkungu",
+    "48": "Inkungu ebandayo",
+    "51": "Imvula encane",
+    "53": "Imvula",
+    "55": "Imvula enkulu",
+    "56": "Imvula ebandayo",
+    "57": "Imvula ebandayo enkulu",
+    "61": "Imvula encane",
+    "63": "Imvula",
+    "65": "Imvula enkulu",
+    "66": "Imvula eqandisa",
+    "67": "Imvula eqandisa enkulu",
+    "71": "Iqhwa elincane",
+    "73": "Iqhwa",
+    "75": "Iqhwa elikhulu",
+    "77": "Okusanele kweqhwa",
+    "80": "Imvula emfushane encane",
+    "81": "Imvula emfushane",
+    "82": "Imvula emfushane enkulu",
+    "85": "Iqhwa elimfushane",
+    "86": "Iqhwa elimfushane elikhulu",
+    "95": "Isiphepho sombane",
+    "96": "Isiphepho sombane neqhwa",
+    "99": "Isiphepho esikhulu sombane neqhwa"
+  },
+  "seasons": {
+    "spring": "Intwasahlobo",
+    "summer": "Ihlobo",
+    "autumn": "Ikwindla",
+    "winter": "Ubusika"
+  },
+  "setup": {
+    "title": "Ngilungise ngefoni yakho",
+    "text": "Skena lekhodi, noma uvule leli khelo kuma-foni noma ikhompyutha ekuWi-Fi efanayo:"
+  }
+}

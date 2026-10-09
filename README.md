@@ -35,7 +35,7 @@ public holidays are real.* [All screenshots](docs/screenshots/)
   seasons of the Pleiades), Creole (carême or hivernage, a Creole proverb), North America
   (full-moon names), France (Republican calendar), Germany (seasons of nature), Spain, Italy and
   Portugal (proverb of the month), Brazil (saying of the day, southern seasons).
-- **48 languages** for the screen, including Arabic, Hebrew, Persian and Urdu written right to
+- **57 languages** for the screen, including Arabic, Hebrew, Persian and Urdu written right to
   left; **243 countries and territories** with their holidays, first day of the week and news.
   [Every country, every language](docs/COUNTRIES.md).
 - **Made for a wall**: works upright (portrait) or sideways, turns the screen off at night,

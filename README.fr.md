@@ -36,7 +36,7 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
   tahitiennes des Pléiades), Créole (carême ou hivernage, un proverbe créole), Amérique du Nord
   (noms des pleines lunes), France (calendrier républicain), Allemagne (saisons de la nature),
   Espagne, Italie et Portugal (proverbe du mois), Brésil (dicton du jour, saisons de l'hémisphère sud).
-- **48 langues** pour l'écran, dont l'arabe, l'hébreu, le persan et l'ourdou écrits de droite à
+- **57 langues** pour l'écran, dont l'arabe, l'hébreu, le persan et l'ourdou écrits de droite à
   gauche ; **243 pays et territoires** avec leurs jours fériés, leur premier jour de la semaine
   et leurs médias. [Tous les pays, toutes les langues](docs/COUNTRIES.md).
 - **Fait pour le mur** : fonctionne en hauteur (portrait) ou en largeur, éteint l'écran la nuit,
