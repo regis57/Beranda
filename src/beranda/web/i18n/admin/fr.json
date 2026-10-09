@@ -375,5 +375,8 @@
   "voice_err_audio_capture": "Aucun micro n'a été trouvé sur cet appareil. Branchez-en un (casque ou webcam avec micro), ou utilisez la tablette.",
   "voice_err_network": "Le service de reconnaissance vocale du navigateur est injoignable : il a besoin d'internet (Chrome envoie la voix à Google, Edge à Microsoft). Vérifiez la connexion, ou essayez Google Chrome.",
   "voice_err_service_not_allowed": "Ce navigateur refuse son service vocal sur cette page. Utilisez Google Chrome, et vérifiez que les services vocaux ne sont pas désactivés dans ses paramètres.",
-  "voice_err_other": "Le micro n'a pas fonctionné ({code}). Téléchargez le fichier de diagnostic (Utilisateur avancé) et envoyez-le."
+  "voice_err_other": "Le micro n'a pas fonctionné ({code}). Téléchargez le fichier de diagnostic (Utilisateur avancé) et envoyez-le.",
+  "area_mismatch": "Cette zone (« {area} ») ne correspond pas à votre ville, {town}, dont la zone est « {suggested} » : aucune alerte ne s'afficherait jamais.",
+  "area_missing": "Pas encore de zone. Celle de {town} est « {suggested} ».",
+  "area_use": "Utiliser « {suggested} »"
 }

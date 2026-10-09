@@ -79,6 +79,8 @@ Done:
 - **v0.15.3**: "Test the microphone on this device" in the Voice control box says in plain words what
   blocks it (blocked permission, no microphone, speech service unreachable...); the screen's message
   adds a short reason code
+- **v0.15.4**: a warnings area saved for another town is spotted when the settings page opens
+  ("does not match your town"), with a one-tap fix (found thanks to the diagnostic file)
 
 Next:
 

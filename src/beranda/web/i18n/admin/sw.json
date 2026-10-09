@@ -375,5 +375,8 @@
   "voice_err_audio_capture": "Hakuna maikrofoni iliyopatikana kwenye kifaa hiki. Chomeka moja (vifaa vya kichwa au kamera ya wavuti yenye maikrofoni), au tumia kompyuta kibao.",
   "voice_err_network": "Huduma ya sauti ya kivinjari haipatikani: inahitaji intaneti (Chrome hutuma sauti kwa Google, Edge kwa Microsoft). Kagua muunganisho, au jaribu Google Chrome.",
   "voice_err_service_not_allowed": "Kivinjari hiki kinakataa huduma yake ya sauti kwenye ukurasa huu. Tumia Google Chrome, na hakikisha huduma za sauti hazijazimwa kwenye mipangilio yake.",
-  "voice_err_other": "Maikrofoni haikufanya kazi ({code}). Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume."
+  "voice_err_other": "Maikrofoni haikufanya kazi ({code}). Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume.",
+  "area_mismatch": "Eneo hili (“{area}”) halilingani na mji wako, {town}, ambao eneo lake ni “{suggested}”: hakuna tahadhari ingeonekana kamwe.",
+  "area_missing": "Bado hakuna eneo. Eneo la {town} ni “{suggested}”.",
+  "area_use": "Tumia “{suggested}”"
 }
