@@ -85,6 +85,15 @@ enabled = true
 # [history]
 # enabled = true
 
+# Small extras on the main screen. Each one can be switched off (all are also in the settings page).
+# [widgets]
+# chart = true            # the 24-hour graph next to the photos
+# air = true              # air quality, UV and pollen (Open-Meteo, Copernicus CAMS)
+# ephemeris = true        # name day, length of the day, local calendar of your country
+# alerts = false          # official weather warnings (MeteoAlarm, about 38 European countries + Israel)
+# alerts_area = "Moselle" # your area, as the warning service names it; use "Test" in the settings page
+# second_clock = ""       # e.g. "Asia/Tokyo": a small second clock under the date
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"

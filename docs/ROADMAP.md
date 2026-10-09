@@ -42,6 +42,13 @@ Done:
   main thread, the too-heavy xmltvfr.fr "complete" file is replaced by its TNT and France files,
   the TV box pages through more channels; news shows 3 headlines at once; clock and weather
   are a little smaller; photo and radio share their row 65/35
+- **v0.14**: the empty middle of the screen is used: your photo and a 24-hour graph (temperature,
+  rain, wind, nights) side by side, with air quality / UV / pollen below; clock and weather sit side by
+  side on top. New optional extras (each one can be switched off in the settings page): official
+  weather warnings for your area (MeteoAlarm), an ephemeris (name day, length of the day, local
+  calendar of the country) and a small second clock. The settings page gets a ☰ menu to jump to a
+  section, and "start again from zero" now needs the word yes (oui, ja, sí...) typed in the
+  language of the page
 
 Next:
 

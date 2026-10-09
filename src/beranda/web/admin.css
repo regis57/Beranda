@@ -10,7 +10,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif; }
 [hidden] { display: none !important; }
-.top { display: flex; justify-content: space-between; align-items: center; padding: .8rem clamp(1rem, 3vw, 2rem); border-bottom: 1px solid var(--line); }
+.top { position: sticky; top: 0; z-index: 20; background: var(--bg); display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .6rem clamp(1rem, 3vw, 2rem); border-bottom: 1px solid var(--line); }
+.top-left { display: flex; align-items: center; gap: .9rem; min-width: 0; }
+.card, .welcome { scroll-margin-top: 4.5rem; }
 .brand { display: flex; align-items: center; gap: .6rem; font-size: 1.1rem; }
 .brand span { color: var(--ink-2); font-size: .8rem; }
 .link { color: var(--accent); text-decoration: none; font-size: .95rem; }
@@ -135,3 +137,20 @@ button.confirm { border-color: var(--err); color: var(--err); }
 .narrow { max-width: 12rem; }
 
 .card > button { align-self: flex-start; }
+
+/* ---- the burger menu: jump straight to a section --------------------------------------- */
+.burger { display: inline-flex; align-items: center; gap: .45rem; padding: .4rem .7rem; }
+.burger[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+.menu { position: absolute; top: 100%; inset-inline-start: clamp(1rem, 3vw, 2rem); width: min(22rem, calc(100vw - 2rem)); max-height: calc(100vh - 5rem); max-height: calc(100dvh - 5rem); overflow-y: auto; overscroll-behavior: contain; background: var(--card); border: 1px solid var(--line); border-radius: .6rem; box-shadow: 0 .6rem 2rem rgba(0, 0, 0, .18); margin-top: .3rem; padding: .3rem; }
+.menu ul { list-style: none; margin: 0; padding: 0; }
+.menu a { display: flex; align-items: center; gap: .7rem; padding: .6rem .7rem; border-radius: .4rem; color: var(--ink); text-decoration: none; }
+.menu a:hover, .menu a:focus-visible { background: var(--bg); }
+.menu .num { width: 1.6rem; height: 1.6rem; }
+@media (max-width: 36rem) { .brand b { display: none; } .menu { inset-inline-start: .5rem; } }
+
+/* ---- starting again from zero: type the word to confirm ------------------------------------- */
+.reset-box { border: 1.5px solid var(--err); border-radius: .5rem; padding: .8rem; display: flex; flex-direction: column; gap: .6rem; }
+.reset-box p { margin: 0; font-size: .95rem; }
+.reset-box input { max-width: 12rem; font-size: 1.1rem; }
+button.danger { background: var(--err); border-color: var(--err); color: var(--accent-ink); font-weight: 600; }
+button.danger:disabled { background: transparent; color: var(--ink-2); border-color: var(--line); }

@@ -3,7 +3,7 @@
   "open_display": "Abrir a tela ↗",
   "welcome_title": "Bem-vindo! Três passos e pronto",
   "welcome_1": "Digite sua cidade no quadro 1 e escolha-a na lista.",
-  "welcome_2": "Opcional: cole o link da sua agenda no quadro 4 (a ajuda logo abaixo mostra onde encontrá-lo).",
+  "welcome_2": "Opcional: cole o link da sua agenda no quadro 5 (a ajuda logo abaixo mostra onde encontrá-lo).",
   "welcome_3": "Toque em Salvar no fim da página. O espelho se atualiza em menos de um minuto.",
   "place": "Onde você está?",
   "place_help": "Digite o nome da sua cidade, toque em Buscar e clique na linha certa (o estado ajuda a diferenciar nomes iguais). Nome, posição e fuso horário se preenchem sozinhos. Se a busca não funcionar, digite você mesmo a latitude e a longitude: no Google Maps ou no Mapas da Apple, mantenha o dedo pressionado sobre a sua casa e os dois números aparecem.",
@@ -106,5 +106,6 @@
   "tv_ok": "Encontrado(s) {n} canal(is). Marque os que quer mostrar.",
   "tv_fail": "Não foi possível ler esse guia ({err}).",
   "tv_none": "Ainda sem canais — cole acima o endereço de um guia e clique em “Encontrar canais”.",
-  "voice": "Controle por voz"
+  "voice": "Controle por voz",
+  "reset_prompt": "Para recomeçar do zero, digite abaixo a palavra «{word}»."
 }

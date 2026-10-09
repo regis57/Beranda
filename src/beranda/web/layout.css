@@ -5,10 +5,20 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
 
+:root {
+  /* traffic-light colours for air quality, UV, pollen and warnings (green, yellow, orange, red, purple) */
+  --lvl-1: #4f9d69; --lvl-2: #d2a31b; --lvl-3: #e07b24; --lvl-4: #d0453b; --lvl-5: #8e3f86;
+}
 html {
   /* One knob scales the whole board: ~16px at 1280x800, ~23px at 1920x1080. */
   font-size: clamp(12px, 0.8vw + 0.7vh, 26px);
   background: var(--bg);
+}
+
+/* A very wide screen (a 16:9 TV) is short for its width: scale by the height a bit more so the
+   middle zone (photo / graph) keeps room. */
+@media (min-aspect-ratio: 17/10) {
+  html { font-size: clamp(12px, 0.45vw + 1.05vh, 26px); }
 }
 
 body {
@@ -29,21 +39,31 @@ body {
   height: 100vh;
   height: 100dvh;
   padding: clamp(1rem, 3.4vmin, 2.6rem) clamp(1.4rem, 4.6vmin, 3.6rem);
-  gap: 1.2rem clamp(2rem, 5.5vw, 5.5rem);
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1.2rem clamp(1.6rem, 3.2vw, 3.6rem);
+  /* clock and weather side by side on top, the big photo / graph zone in the middle (it takes
+     the space left), the week and the news below; the side column runs down the whole right. */
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 0.75fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   grid-template-areas:
-    "clock side"
-    "now   side"
-    "week  side"
-    "news  side";
+    "clock   now  side"
+    "feature feature side"
+    "week    week side"
+    "news    news side";
+}
+/* Without the middle zone (no photo, graph or air widget) the top row takes the room instead. */
+.board:has(.feature[hidden]) {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "clock now  side"
+    "week  week side"
+    "news  news side";
 }
 
 /* ---- clock ------------------------------------------------------------------ */
 .clock { grid-area: clock; }
 .time {
   font-family: var(--f-display);
-  font-size: 6.6rem;
+  font-size: 6rem;
   font-weight: var(--clock-weight, 100);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -59,18 +79,30 @@ body {
   color: var(--ink-2);
 }
 .date::first-letter { text-transform: uppercase; }
+.clock2 { margin-top: 0.35rem; font-size: 0.95rem; letter-spacing: 0.05em; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.clock2 b { font-weight: 400; color: var(--ink-2); }
+
+/* weather warnings: one coloured pill per warning, under the date */
+.alerts { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+.alert { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.2rem 0.7rem 0.2rem 0.5rem; border-radius: 99px; font-size: 0.9rem; letter-spacing: 0.03em; border: 1.5px solid var(--lvl); }
+.alert::before { content: ""; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--lvl); }
+.alert.l1 { --lvl: var(--lvl-2); }
+.alert.l2 { --lvl: var(--lvl-3); }
+.alert.l3 { --lvl: var(--lvl-4); }
+.alert-note { font-size: 0.85rem; color: var(--ink-3); letter-spacing: 0.04em; }
 
 /* ---- weather now -------------------------------------------------------------- */
-.now { grid-area: now; display: flex; flex-direction: column; justify-content: center; gap: 1rem; min-height: 0; }
-.now-row { display: flex; align-items: center; gap: 1.3rem; }
+.now { grid-area: now; display: flex; flex-direction: column; justify-content: flex-start; gap: 0.8rem; min-height: 0; }
+.now-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 1.1rem; }
 .now-icon { width: 4.2rem; height: 4.2rem; color: var(--ink); flex: none; }
 .now-icon svg { width: 100%; height: 100%; }
-.now-temp { font-family: var(--f-display); font-size: 5rem; font-weight: var(--clock-weight, 100); line-height: 1; letter-spacing: -0.03em; }
+.now-temp { font-family: var(--f-display); font-size: 4.6rem; font-weight: var(--clock-weight, 100); line-height: 1; letter-spacing: -0.03em; }
 .now-unit { font-size: 1.8rem; vertical-align: top; position: relative; top: 0.45rem; margin-left: 0.15rem; color: var(--ink-2); font-weight: 300; letter-spacing: 0; }
 .now-label { font-size: 1.45rem; font-weight: 300; letter-spacing: 0.03em; }
 .now-detail { margin-top: 0.3rem; font-size: 1rem; color: var(--ink-2); letter-spacing: 0.05em; }
 
 .rain { max-width: 34rem; }
+.now.has-chart .rain-bars, .now.has-chart .rain-scale { display: none; }  /* the 24 h graph shows the rain already */
 .rain-bars { display: flex; align-items: flex-end; gap: 0.35rem; height: 2.4rem; border-bottom: 1px solid var(--line); }
 .rain-bars .bar {
   flex: 1;
@@ -84,6 +116,32 @@ body {
 .rain-scale { display: flex; justify-content: space-between; margin-top: 0.3rem; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--ink-3); }
 .rain-text { margin-top: 0.5rem; font-size: 1.05rem; color: var(--ink-2); letter-spacing: 0.04em; }
 
+/* ---- the big middle zone: photo + 24 h graph, air / UV / pollen below ------------------------- */
+.feature { grid-area: feature; display: flex; flex-direction: column; gap: 0.9rem; min-height: 9.5rem; min-width: 0; }
+.feature-row { flex: 1 1 0; min-height: 0; display: flex; gap: 1.2rem; }
+.feature-row:not(:has(> :not([hidden]))) { display: none; }
+.feature .phototile { flex: 1 1 0; height: auto; align-self: stretch; }
+.chart { flex: 1.25 1 0; min-width: 0; display: flex; flex-direction: column; }
+.chart-title { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+.chart-plot { flex: 1 1 0; min-height: 0; position: relative; }
+.chart-plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.chart text { font-family: var(--f-sans); fill: var(--ink-3); }
+.chart .c-night { fill: var(--ink); opacity: 0.07; }
+.chart .c-grid { stroke: var(--line); stroke-width: 1; }
+.chart .c-rain { fill: var(--rain); opacity: 0.85; }
+.chart .c-line { fill: none; stroke: var(--warm); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .c-dot { fill: var(--bg); stroke: var(--warm); stroke-width: 2; }
+.chart .c-now { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 4; }
+.chart .c-temp { fill: var(--ink); font-weight: 400; }
+.chart .c-wind { fill: var(--ink-3); }
+
+.air { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem; flex: none; }
+.air-tile { display: flex; align-items: baseline; gap: 0.5rem; font-size: 0.95rem; white-space: nowrap; }
+.air-tile::before { content: ""; align-self: center; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--lvl, var(--line)); flex: none; }
+.air-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.air-value { font-size: 1.15rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+.air-word { color: var(--ink-2); }
+
 /* ---- 7-day forecast ----------------------------------------------------------- */
 .week { grid-area: week; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.4rem; padding-top: 0.7rem; border-top: 1px solid var(--line); }
 .day { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
@@ -93,7 +151,7 @@ body {
 .day-icon { width: 2rem; height: 2rem; color: var(--ink); }
 .day-icon svg { width: 100%; height: 100%; }
 .day-hi { font-size: 1.15rem; font-weight: 300; font-variant-numeric: tabular-nums; }
-.day-track { position: relative; width: 2px; height: 2.8rem; background: var(--line); border-radius: 1px; }
+.day-track { position: relative; width: 2px; height: 2.2rem; background: var(--line); border-radius: 1px; }
 .day-range {
   position: absolute; left: -1px; width: 4px; border-radius: 2px;
   top: calc(var(--top, 0) * 1%); height: calc(var(--len, 10) * 1%);
@@ -144,6 +202,12 @@ body {
 .sky.no-season .moon-svg { grid-row: 1 / span 3; width: 5.2rem; height: 5.2rem; }
 .sky.no-season .sun { justify-content: flex-start; margin-top: 0; }
 
+/* ---- ephemeris: name day, length of the day, local calendar ---------------------------------- */
+.eph-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem; color: var(--ink-2); letter-spacing: 0.02em; }
+.eph-list li { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eph-list .k { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-inline-end: 0.5rem; }
+.eph-list .delta { color: var(--ink-3); }
+
 /* ---- "On this day" ----------------------------------------------------------------- */
 .facts-title { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.55rem; }
 .facts-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -185,7 +249,7 @@ body {
 .widgets { display: flex; gap: 1rem; align-items: stretch; flex: none; }
 .widgets:empty, .widgets:not(:has(:not([hidden]))) { display: none; }
 .phototile {
-  position: relative; flex: 65 1 0; min-width: 0; height: 8.5rem; align-self: flex-start;  /* the photo takes ~65% of the row, the radio ~35% */
+  position: relative; min-width: 0; margin: 0;
   border-radius: 0.5rem; overflow: hidden; background: var(--line);
 }
 .phototile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; }
@@ -193,7 +257,7 @@ body {
 body[data-sleep="true"] .phototile img { opacity: 0; }
 
 .radio {
-  flex: 35 1 0; min-width: 14.5rem; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
+  flex: 1 1 auto; min-width: 14.5rem; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
   gap: 0.2rem 0.7rem; padding: 0.7rem 0.8rem; border: 1px solid var(--line); border-radius: 0.5rem;
 }
 .radio .round { grid-column: 1; grid-row: 1; }
@@ -242,7 +306,7 @@ body[data-sleep="true"] .phototile img { opacity: 0; }
 .news-title { flex: 1 1 auto; min-width: 0; font-size: 1.02rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .news-age { flex: none; font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; }
 
-.status { grid-area: 4 / 2 / 5 / 3; z-index: 1; justify-self: end; align-self: end; display: flex; gap: 0.9rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
+.status { grid-area: 4 / 3 / 5 / 4; z-index: 1; justify-self: end; align-self: end; display: flex; gap: 0.9rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
 .badge { padding: 0.12rem 0.5rem; border: 1px solid currentColor; border-radius: 99px; }
 .place { opacity: 0.9; }
 
@@ -253,9 +317,12 @@ body[data-sleep="true"] .phototile img { opacity: 0; }
     height: auto; min-height: 100vh;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
-    grid-template-areas: "clock" "now" "week" "news" "side" "status";
+    grid-template-areas: "clock" "now" "feature" "week" "news" "side" "status";
     gap: 1.6rem;
   }
+  .board:has(.feature[hidden]) { grid-template-areas: "clock" "now" "week" "news" "side" "status"; grid-template-rows: none; }
+  .feature { min-height: 0; }
+  .feature-row { flex: none; height: clamp(12rem, 34vh, 22rem); }
   .side { border-left: none; padding-left: 0; padding-bottom: 0; border-top: 1px solid var(--line); padding-top: 1.6rem; }
   .status { grid-area: status; }
   .time { font-size: 5.6rem; }
@@ -266,22 +333,37 @@ body[data-sleep="true"] .phototile img { opacity: 0; }
    The agenda takes the space left and drops the lines that would not fit. */
 @media (max-aspect-ratio: 3/4) and (min-height: 900px) {
   body { overflow: hidden; }
+  /* clock and weather side by side (as on a wide screen) to save height; the side column takes what is left */
   .board {
     height: 100vh; height: 100dvh; min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "clock now" "feature feature" "week week" "news news" "side side" "status status";
   }
+  .board:has(.feature[hidden]) {
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "clock now" "week week" "news news" "side side" "status status";
+  }
+  .feature-row { height: 10rem; flex: none; }
+  /* the date and the second clock share a line */
+  .clock { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 1.2rem; }
+  .clock .time, .clock .alerts { flex-basis: 100%; }
+  .clock .date, .clock .clock2 { margin-top: 0.4rem; }
+  .alerts { margin-top: 0.5rem; }
   .side {
     min-height: 0; display: grid; gap: 1.4rem 2.4rem;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto;
   }
   .sky { grid-column: 1; grid-row: 1; }
   .facts { grid-column: 2; grid-row: 1; }
-  .upcoming { grid-column: 1 / -1; grid-row: 2; min-height: 0; padding-top: 0.4rem; }
+  .eph { grid-column: 1 / -1; grid-row: 2; }
+  .eph-list { flex-direction: row; flex-wrap: wrap; gap: 0.3rem 1.6rem; }
+  .upcoming { grid-column: 1 / -1; grid-row: 3; min-height: 0; padding-top: 0.4rem; }
   /* Tonight's TV sits beside the agenda when there is one (the agenda takes the full width otherwise). */
-  .tv { grid-column: 2; grid-row: 2; min-height: 0; overflow: hidden; padding-top: 0.4rem; }
+  .tv { grid-column: 2; grid-row: 3; min-height: 0; overflow: hidden; padding-top: 0.4rem; }
   .side:has(.tv:not([hidden])) .upcoming { grid-column: 1; }
   .tv-row { grid-template-columns: 5.2rem 2.8rem minmax(0, 1fr); }
-  .widgets { grid-column: 1 / -1; grid-row: 3; }
+  .widgets { grid-column: 1 / -1; grid-row: 4; }
   .now { gap: 1.2rem; }
 }
 

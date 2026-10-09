@@ -31,6 +31,7 @@ def build_params(latitude: float, longitude: float, units: str) -> dict:
             "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,"
             "weather_code,wind_speed_10m,wind_direction_10m,is_day"
         ),
+        "hourly": "temperature_2m,precipitation,wind_speed_10m",
         "minutely_15": "precipitation",
         "forecast_minutely_15": RAIN_WINDOW + 4,
         "daily": (
@@ -75,6 +76,33 @@ def _rain(payload: dict, now_local: str) -> dict:
     }
 
 
+HOURLY_COUNT = 24
+
+
+def _hourly(payload: dict, now_local: str) -> list[dict]:
+    """The next 24 hours, one entry per hour starting with the current one (for the graph)."""
+    block = payload.get("hourly") or {}
+    times = block.get("time") or []
+    if not times:
+        return []
+    this_hour = now_local[:13]  # "2026-10-09T21"
+    start = next((i for i, t in enumerate(times) if t[:13] >= this_hour), 0)
+    out = []
+    for i in range(start, min(start + HOURLY_COUNT, len(times))):
+        temp = (block.get("temperature_2m") or [None] * len(times))[i]
+        if temp is None:
+            continue
+        out.append(
+            {
+                "time": times[i],
+                "temp": round(temp, 1),
+                "precip": round(float((block.get("precipitation") or [0] * len(times))[i] or 0.0), 2),
+                "wind": round(float((block.get("wind_speed_10m") or [0] * len(times))[i] or 0.0)),
+            }
+        )
+    return out
+
+
 def parse(payload: dict, units: str = "metric") -> dict:
     """Normalise an Open-Meteo response to what the display needs."""
     cur = payload["current"]
@@ -109,6 +137,7 @@ def parse(payload: dict, units: str = "metric") -> dict:
             "precip": cur["precipitation"],
         },
         "rain": _rain(payload, cur["time"]),
+        "hourly": _hourly(payload, cur["time"]),
         "daily": days,
         "units": _units(units),
         "fetched_at": datetime.now().astimezone().isoformat(timespec="seconds"),

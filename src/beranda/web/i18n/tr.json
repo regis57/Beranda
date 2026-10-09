@@ -97,5 +97,71 @@
   "tv_empty": "Rehberde bu akşam için program yok",
   "tv_error": "TV rehberine ulaşılamıyor",
   "radio_prev": "Önceki istasyon",
-  "radio_next": "Sonraki istasyon"
+  "radio_next": "Sonraki istasyon",
+  "chart": {
+    "title": "Next 24 h: temperature, rain, wind ({wind})"
+  },
+  "air": {
+    "aqi": "Air",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Good",
+      "1": "Fair",
+      "2": "Moderate",
+      "3": "Poor",
+      "4": "Very poor",
+      "5": "Extremely poor"
+    },
+    "uv_level": {
+      "0": "Low",
+      "1": "Moderate",
+      "2": "High",
+      "3": "Very high",
+      "4": "Extreme"
+    },
+    "pollen_level": {
+      "1": "Low",
+      "2": "Moderate",
+      "3": "High",
+      "4": "Very high"
+    },
+    "kind": {
+      "alder": "Alder",
+      "birch": "Birch",
+      "grass": "Grass",
+      "mugwort": "Mugwort",
+      "olive": "Olive",
+      "ragweed": "Ragweed"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Thunderstorms",
+      "flood": "Flood",
+      "avalanche": "Avalanche",
+      "fire": "Wildfire",
+      "coastal": "Coastal",
+      "snow_ice": "Snow / ice",
+      "fog": "Fog",
+      "wind": "Wind",
+      "rain": "Rain",
+      "heat": "Heat",
+      "cold": "Cold",
+      "other": "Warning"
+    },
+    "level": {
+      "1": "yellow",
+      "2": "orange",
+      "3": "red"
+    },
+    "no_area": "Weather warnings: type your area in the settings",
+    "unsupported": "Weather warnings: not available for this country",
+    "error": "Weather warnings unreachable",
+    "quiet": "No weather warning"
+  },
+  "eph": {
+    "nameday": "Name day",
+    "daylight": "Daylight",
+    "calendar": "Calendar"
+  }
 }

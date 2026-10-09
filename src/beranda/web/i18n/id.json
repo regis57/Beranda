@@ -97,5 +97,71 @@
   "tv_empty": "Tidak ada acara di panduan untuk malam ini",
   "tv_error": "Panduan TV tidak dapat dijangkau",
   "radio_prev": "Stasiun sebelumnya",
-  "radio_next": "Stasiun berikutnya"
+  "radio_next": "Stasiun berikutnya",
+  "chart": {
+    "title": "24 jam ke depan: suhu, hujan, angin ({wind})"
+  },
+  "air": {
+    "aqi": "Udara",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Baik",
+      "1": "Cukup",
+      "2": "Sedang",
+      "3": "Buruk",
+      "4": "Sangat buruk",
+      "5": "Sangat berbahaya"
+    },
+    "uv_level": {
+      "0": "Rendah",
+      "1": "Sedang",
+      "2": "Tinggi",
+      "3": "Sangat tinggi",
+      "4": "Ekstrem"
+    },
+    "pollen_level": {
+      "1": "Rendah",
+      "2": "Sedang",
+      "3": "Tinggi",
+      "4": "Sangat tinggi"
+    },
+    "kind": {
+      "alder": "Alder",
+      "birch": "Birch",
+      "grass": "Rumput",
+      "mugwort": "Mugwort",
+      "olive": "Zaitun",
+      "ragweed": "Ragweed"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Badai petir",
+      "flood": "Banjir",
+      "avalanche": "Longsor salju",
+      "fire": "Kebakaran hutan",
+      "coastal": "Pesisir",
+      "snow_ice": "Salju / es",
+      "fog": "Kabut",
+      "wind": "Angin",
+      "rain": "Hujan",
+      "heat": "Panas",
+      "cold": "Dingin",
+      "other": "Peringatan"
+    },
+    "level": {
+      "1": "kuning",
+      "2": "oranye",
+      "3": "merah"
+    },
+    "no_area": "Peringatan cuaca: isi wilayah Anda di pengaturan",
+    "unsupported": "Peringatan cuaca: tidak tersedia untuk negara ini",
+    "error": "Peringatan cuaca tidak dapat dijangkau",
+    "quiet": "Tidak ada peringatan cuaca"
+  },
+  "eph": {
+    "nameday": "Hari nama",
+    "daylight": "Siang hari",
+    "calendar": "Kalender"
+  }
 }
