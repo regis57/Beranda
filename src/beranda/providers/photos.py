@@ -137,6 +137,24 @@ def delete(folder: Path, name: str) -> bool:
     return True
 
 
+def clear(folder: Path) -> int:
+    """Delete every picture (and half-downloaded one) directly inside `folder`; how many went.
+    Only picture files are touched, never other files or sub-folders."""
+    path = Path(folder).expanduser()
+    if not path.is_dir():
+        return 0
+    removed = 0
+    for item in path.iterdir():
+        name = item.name.lower()
+        if item.is_file() and (item.suffix.lower() in EXTENSIONS or name.endswith(".part")):
+            try:
+                item.unlink()
+                removed += 1
+            except OSError:
+                pass
+    return removed
+
+
 def dropbox_download_url(link: str) -> str:
     """Turn a Dropbox shared-folder link into the address that downloads it as one .zip."""
     parsed = urlparse(link.strip())

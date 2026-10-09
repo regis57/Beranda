@@ -337,5 +337,17 @@
   "reset_port_note": "O endereço volta a ser {url}",
   "coffee": "Ofereça-me um café",
   "coffee_hint": "O Beranda é gratuito. Se alegra a sua parede, um café é sempre bem-vindo.",
-  "port_pending": "Guardada: {port}, vale depois de reiniciar o Beranda."
+  "port_pending": "Guardada: {port}, vale depois de reiniciar o Beranda.",
+  "factory_reset_all": "Recomeçar do zero e apagar fotografias e dados",
+  "factory_reset_all_help": "Como acima, e apaga também as fotografias da moldura do Beranda e tudo o que foi descarregado até agora (meteorologia, notícias, calendários, programação de TV…). As transferências voltam sozinhas quando forem precisas; as fotografias não. As fotografias guardadas numa pasta que escolheu nunca são tocadas.",
+  "reset_continue": "Continuar",
+  "reset_all_title": "Último aviso antes de apagar",
+  "reset_all_intro": "Vai apagar para sempre:",
+  "reset_all_settings": "todas as suas definições (país, idioma, tema, ligações de calendário, PIN…)",
+  "reset_all_photos": "as fotografias da moldura ({count}): não será possível recuperá-las",
+  "reset_all_data": "a meteorologia, as notícias, os calendários e a programação de TV já descarregados (serão descarregados de novo mais tarde)",
+  "reset_all_final_note": "Não se pode desfazer. Depois o Beranda reinicia como no primeiro dia.",
+  "reset_all_back": "Não, manter tudo",
+  "reset_all_go": "Sim, apagar tudo para sempre",
+  "requested_reset_all": "A apagar… O Beranda está a reiniciar como novo. Recarregue esta página dentro de alguns segundos."
 }

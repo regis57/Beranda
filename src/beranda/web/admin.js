@@ -804,7 +804,7 @@ async function renderSystem() {
       device: limits.device ? limits.device.replace(/ Rev [\d.]+$/, '') : t('admin.device_other'),
       mem: limits.memory_gb, profile: t(`admin.profile_${limits.profile}`),
     });
-    for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) $(id).disabled = !info.actions;
+    for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset', 'sys-reset-all']) $(id).disabled = !info.actions;
     currentPort = info.port;
     $('port-current').textContent = t('admin.port_current', { port: info.port })
       + (info.saved_port !== info.port ? ` ${t('admin.port_pending', { port: info.saved_port })}` : '');
@@ -826,18 +826,32 @@ async function checkUpdates() {
 // The word that confirms a reset: "yes" in the language of the page (no accents or capitals needed).
 const plain = (text) => String(text).normalize('NFD').replace(/\p{M}/gu, '').trim().toLowerCase();
 function resetWordOk() { return plain($('reset-word').value) === plain(t('admin.reset_word')); }
-function openReset() {
+let resetAll = false;  // false: settings only. true: also the photos and the downloaded data (asked twice)
+function openReset(all) {
+  resetAll = all;
+  closeFinal();
   $('reset-box').hidden = false;
   $('reset-prompt').textContent = t('admin.reset_prompt', { word: t('admin.reset_word') });
   $('reset-word').value = '';
+  $('reset-go').textContent = t(all ? 'admin.reset_continue' : 'admin.reset_confirm');
   $('reset-go').disabled = true;
   $('reset-word').focus();
 }
+// The second reminder, only for "erase the photos and data too": says what will go, with the real number of photos.
+async function openFinal() {
+  let count = 0;
+  try { count = (await api('/system')).own_photos || 0; } catch { /* the reminder is shown anyway */ }
+  $('reset-final-photos').textContent = t('admin.reset_all_photos', { count });
+  $('reset-final').hidden = false;
+  $('reset-final-back').focus();  // the safe choice has the focus
+}
+function closeFinal() { $('reset-final').hidden = true; }
 function closeReset() { $('reset-box').hidden = true; $('reset-word').value = ''; }
 async function systemAction(action, body, messageId = 'sys-message') {
   try {
     await api(`/system/${action}`, { method: 'POST', ...(body ? { body: JSON.stringify(body) } : {}) });
-    $(messageId).textContent = t(`admin.requested_${action.replace('-', '_')}`);
+    const wiping = action === 'reset' && body && body.erase_data;
+    $(messageId).textContent = t(`admin.requested_${action.replace('-', '_')}${wiping ? '_all' : ''}`);
     if (action === 'reset' && currentPort !== 8080) $(messageId).append(' ', t('admin.reset_port_note', { url: addressWithPort(8080) }));
   } catch (e) { $(messageId).textContent = e.message; }
 }
@@ -1019,14 +1033,21 @@ async function boot() {
   $('sys-check').addEventListener('click', checkUpdates);
   for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) armed($(id), () => systemAction($(id).dataset.action));
   // Starting again from zero: no double-click shortcut, the word has to be typed.
-  $('sys-reset').addEventListener('click', openReset);
+  $('sys-reset').addEventListener('click', () => openReset(false));
+  $('sys-reset-all').addEventListener('click', () => openReset(true));
   $('reset-word').addEventListener('input', () => { $('reset-go').disabled = !resetWordOk(); });
   $('reset-word').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('reset-go').click(); } });
   $('reset-cancel').addEventListener('click', closeReset);
   $('reset-go').addEventListener('click', async () => {
     if (!resetWordOk()) return;
     closeReset();
+    if (resetAll) { await openFinal(); return; }  // second warning before anything is erased
     await systemAction('reset', { confirmed: true }, 'adv-message');
+  });
+  $('reset-final-back').addEventListener('click', closeFinal);
+  $('reset-final-go').addEventListener('click', async () => {
+    closeFinal();
+    await systemAction('reset', { confirmed: true, erase_data: true, confirmed_twice: true }, 'adv-message');
   });
   armed($('port-apply'), changePort);
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });

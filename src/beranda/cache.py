@@ -26,6 +26,22 @@ class Cache:
         except OSError as exc:  # read-only SD card, etc.: degrade to memory only
             log.warning("cache directory unusable (%s); using memory only", exc)
 
+    def clear(self) -> int:
+        """Forget everything downloaded so far (memory and disk); how many files were deleted.
+        The next screen refresh fetches it all again."""
+        self._memory.clear()
+        removed = 0
+        try:
+            for item in self.directory.glob("*.json"):
+                try:
+                    item.unlink()
+                    removed += 1
+                except OSError:
+                    pass
+        except OSError:
+            pass
+        return removed
+
     def _path(self, key: str) -> Path:
         return self.directory / (re.sub(r"[^A-Za-z0-9_.-]", "_", key) + ".json")
 

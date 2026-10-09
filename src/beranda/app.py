@@ -352,6 +352,7 @@ def create_app(
     runtime = Runtime(cfg=cfg, config_path=config_path)
     clock = now_fn or (lambda: datetime.now(ZoneInfo(runtime.cfg.location.timezone)))
     cache = Cache(cfg.cache_dir)
+    runtime.cache = cache
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):

@@ -337,5 +337,17 @@
   "reset_port_note": "La dirección vuelve a ser {url}",
   "coffee": "Invítame a un café",
   "coffee_hint": "Beranda es gratis. Si alegra tu pared, un café siempre es bienvenido.",
-  "port_pending": "Guardado: {port}, se aplicará al reiniciar Beranda."
+  "port_pending": "Guardado: {port}, se aplicará al reiniciar Beranda.",
+  "factory_reset_all": "Empezar de cero y borrar fotos y datos",
+  "factory_reset_all_help": "Igual que lo anterior, y además borra las fotos del marco de fotos de Beranda y todo lo descargado hasta ahora (tiempo, noticias, calendarios, programación de TV…). Las descargas vuelven solas cuando hacen falta; las fotos, no. Las fotos guardadas en una carpeta que elegiste tú nunca se tocan.",
+  "reset_continue": "Continuar",
+  "reset_all_title": "Último aviso antes de borrar",
+  "reset_all_intro": "Vas a borrar para siempre:",
+  "reset_all_settings": "todos tus ajustes (país, idioma, tema, enlaces de calendario, PIN…)",
+  "reset_all_photos": "las fotos del marco de fotos ({count}): no se podrán recuperar",
+  "reset_all_data": "el tiempo, las noticias, los calendarios y la programación de TV ya descargados (se volverán a descargar más tarde)",
+  "reset_all_final_note": "No se puede deshacer. Después Beranda se reinicia como el primer día.",
+  "reset_all_back": "No, conservar todo",
+  "reset_all_go": "Sí, borrar todo para siempre",
+  "requested_reset_all": "Borrando… Beranda se reinicia como nuevo. Recarga esta página en unos segundos."
 }

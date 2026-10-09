@@ -63,6 +63,9 @@ Done:
   be free, with every consequence spelled out, the screen on the Pi follows by itself, and Beranda
   falls back to 8080 if the new port cannot be used), and "start over from scratch" moves there.
   A "Buy me a coffee" button sits in the header and the menu. The usage guide lists all 15 boxes
+- **v0.14.5**: "Start over and erase photos and data" next to "Start over from scratch": it also
+  deletes the photos of Beranda's own photo frame and everything downloaded, and asks twice (the typed
+  word, then a last reminder listing what will go)
 
 Next:
 
