@@ -892,7 +892,11 @@ async function systemAction(action, body, messageId = 'sys-message') {
     await api(`/system/${action}`, { method: 'POST', ...(body ? { body: JSON.stringify(body) } : {}) });
     const wiping = action === 'reset' && body && body.erase_data;
     $(messageId).textContent = t(`admin.requested_${action.replace('-', '_')}${wiping ? '_all' : ''}`);
-    if (action === 'reset' && currentPort !== 8080) $(messageId).append(' ', t('admin.reset_port_note', { url: addressWithPort(8080) }));
+    if (action === 'reset' && currentPort !== 8080) {
+      // Starting over brings the port back to 8080: follow it, or this page would be left behind.
+      $(messageId).append(' ', t('admin.reset_port_note', { url: addressWithPort(8080) }));
+      setTimeout(() => { location.assign(addressWithPort(8080)); }, 15000);
+    }
   } catch (e) { $(messageId).textContent = e.message; }
 }
 

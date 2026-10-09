@@ -70,6 +70,9 @@ Done:
   (name, coordinates or country); ticked TV channels keep their usual names instead of showing guide
   numbers; and in "Advanced user": an optional secure address (HTTPS, a certificate made by Beranda) so
   a computer's browser allows the microphone, and a diagnostic file to download for bug reports (no secret inside)
+- **v0.15.1**: the two "start over" buttons say plainly what they erase; after starting over with a
+  changed port, the settings page follows Beranda back to 8080 by itself; `beranda doctor` says when
+  it needs sudo to read the settings and finds the server on another port; the installer shows the real port
 
 Next:
 
