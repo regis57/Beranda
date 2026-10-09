@@ -118,3 +118,8 @@ def test_photos_are_listed_and_served_from_their_own_folder(tmp_path):
 def test_no_photos_folder_means_an_empty_carousel(tmp_path):
     state = make(tmp_path, demo=True).get("/api/state").json()
     assert state["photos"] == {"names": [], "interval": 20}
+
+
+def test_state_reports_nothing_playing_by_default(tmp_path):
+    state = make(tmp_path, demo=True).get("/api/state").json()
+    assert state["radio"] == {"playing": False, "station": None, "volume": 70}

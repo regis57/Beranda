@@ -131,8 +131,29 @@
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.photos_help"></p></details>
       </section>
 
+      <section class="card" id="sec-radio">
+        <h2><span class="num">8</span><span data-i18n="admin.radio"></span></h2>
+        <p class="hint" data-i18n="admin.radio_hint"></p>
+        <h3 data-i18n="admin.radio_favorites"></h3>
+        <div id="radio-list"></div>
+        <p class="hint" id="radio-empty" data-i18n="admin.radio_none"></p>
+        <label class="volume-row"><span data-i18n="admin.radio_volume"></span>
+          <input id="radio-volume" type="range" min="0" max="100" step="5">
+        </label>
+        <p class="hint" id="radio-now" role="status"></p>
+        <h3 data-i18n="admin.radio_search"></h3>
+        <div class="row wrap">
+          <input id="radio-q" type="text" data-ph="admin.radio_search_ph">
+          <select id="radio-country"></select>
+          <select id="radio-language"></select>
+          <button type="button" id="radio-go" data-i18n="admin.search"></button>
+        </div>
+        <div id="radio-results" aria-live="polite"></div>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.radio_help"></p></details>
+      </section>
+
       <section class="card" id="sec-screen">
-        <h2><span class="num">8</span><span data-i18n="admin.screen"></span></h2>
+        <h2><span class="num">9</span><span data-i18n="admin.screen"></span></h2>
         <p class="hint" data-i18n="admin.screen_hint"></p>
         <div class="grid3">
           <label><span data-i18n="admin.rotate"></span><select id="rotate"></select></label>
@@ -143,7 +164,7 @@
       </section>
 
       <section class="card" id="sec-system">
-        <h2><span class="num">9</span><span data-i18n="admin.system"></span></h2>
+        <h2><span class="num">10</span><span data-i18n="admin.system"></span></h2>
         <p class="hint" id="sys-version"></p>
         <div class="row wrap" id="sys-buttons">
           <button type="button" id="sys-check" data-i18n="admin.check_updates"></button>
@@ -157,7 +178,7 @@
       </section>
 
       <section class="card" id="sec-sec">
-        <h2><span class="num">10</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">11</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

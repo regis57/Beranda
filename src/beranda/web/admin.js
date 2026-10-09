@@ -372,7 +372,77 @@ async function refreshPhotosCount() {
   } catch { $('photos-count').textContent = t('admin.photos_empty'); }
 }
 
-// ------------------------------------------------------------------ 8. screen ---
+// ------------------------------------------------------------------ 8. radio ---
+let radioStations = [];
+let radioStatus = { playing: false, station: null };
+
+function stationRow(station, { onRemove } = {}) {
+  const playing = radioStatus.playing && radioStatus.station?.uuid === station.uuid;
+  const btn = el('button', { type: 'button', textContent: playing ? t('admin.radio_stop') : t('admin.radio_play') });
+  btn.addEventListener('click', async () => {
+    try {
+      radioStatus = await api(playing ? '/radio-stop' : '/radio-play', playing ? { method: 'POST' } : { method: 'POST', body: JSON.stringify(station) });
+    } catch (e) { $('radio-now').textContent = e.message; }
+    renderRadioFavorites();
+  });
+  const label = el('span', {}, station.name, station.country ? el('small', { textContent: ` (${regionName(station.country)})` }) : '');
+  const kids = [label, btn];
+  if (onRemove) {
+    const rm = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
+    rm.addEventListener('click', onRemove);
+    kids.push(rm);
+  }
+  return el('div', { className: 'item radio' }, ...kids);
+}
+
+function renderRadioFavorites() {
+  $('radio-list').replaceChildren(...radioStations.map((s) => stationRow(s, {
+    onRemove: () => { radioStations = radioStations.filter((x) => x.uuid !== s.uuid); renderRadioFavorites(); markDirty(); },
+  })));
+  $('radio-empty').hidden = radioStations.length > 0;
+  $('radio-now').textContent = radioStatus.playing && radioStatus.station
+    ? t('admin.radio_now_playing', { name: radioStatus.station.name }) : '';
+}
+
+async function radioSearch() {
+  const params = new URLSearchParams();
+  if ($('radio-q').value.trim()) params.set('name', $('radio-q').value.trim());
+  if ($('radio-country').value) params.set('country', $('radio-country').value);
+  if ($('radio-language').value) params.set('language', $('radio-language').value);
+  const box = $('radio-results');
+  box.textContent = t('admin.loading');
+  try {
+    const { stations } = await api(`/radio-search?${params}`);
+    box.replaceChildren(...stations.map((s) => {
+      const add = el('button', { type: 'button', textContent: t('admin.radio_add') });
+      add.disabled = radioStations.some((x) => x.uuid === s.uuid);
+      add.addEventListener('click', () => {
+        if (!radioStations.some((x) => x.uuid === s.uuid)) radioStations.push(s);
+        renderRadioFavorites();
+        add.disabled = true;
+        markDirty();
+      });
+      const label = el('span', {}, s.name, s.country ? el('small', { textContent: ` (${regionName(s.country)})` }) : '');
+      return el('div', { className: 'item radio' }, label, add);
+    }));
+    if (!stations.length) box.textContent = t('admin.radio_no_result');
+  } catch (e) { box.textContent = e.message; }
+}
+
+function renderRadio() {
+  const radio = cfg.radio || { stations: [], volume: 70 };
+  radioStations = [...radio.stations];
+  $('radio-volume').value = radio.volume ?? 70;
+  fill($('radio-country'), [['', t('admin.radio_any_country')], ...Object.keys(options.countries).sort((a, b) => regionName(a).localeCompare(regionName(b), lang)).map((c) => [c, regionName(c)])], '');
+  fill($('radio-language'), [['', t('admin.radio_any_language')], ...options.languages.map((l) => [l, languageName(l)])], '');
+  renderRadioFavorites();
+}
+async function refreshRadioStatus() {
+  try { radioStatus = await api('/radio-status'); } catch { /* offline: leave the last known status */ }
+  renderRadioFavorites();
+}
+
+// ------------------------------------------------------------------ 9. screen ---
 function renderScreen() {
   const screen = cfg.screen || { rotate: 0, off: '', on: '' };
   fill($('rotate'), [0, 90, 180, 270].map((r) => [String(r), t(`admin.rotate_${r}`)]), String(screen.rotate || 0));
@@ -380,7 +450,7 @@ function renderScreen() {
   $('on-at').value = screen.on || '';
 }
 
-// ------------------------------------------------------------------ 9. system ---
+// ------------------------------------------------------------------ 10. system ---
 // Buttons that change the Pi ask for a second click instead of a pop-up.
 function armed(button, run) {
   button.addEventListener('click', async () => {
@@ -449,6 +519,7 @@ function collect() {
     },
   };
   body.photos = { folder: $('photos-folder').value.trim(), interval: Number($('photos-interval').value) || 20 };
+  body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -485,7 +556,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -507,6 +578,8 @@ async function start() {
   if (!editable) { $('state').textContent = t('admin.demo_readonly'); $('state').className = 'bad'; }
   fitPreview();
   refreshPreview();
+  refreshRadioStatus();
+  setInterval(refreshRadioStatus, 10_000);
 }
 
 async function boot() {
@@ -526,6 +599,8 @@ async function boot() {
   });
   $('q-go').addEventListener('click', search);
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  $('radio-go').addEventListener('click', radioSearch);
+  $('radio-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); radioSearch(); } });
   $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
   $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });

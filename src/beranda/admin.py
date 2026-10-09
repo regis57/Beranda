@@ -14,7 +14,7 @@ import ipaddress
 import logging
 import os
 import tempfile
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -25,9 +25,10 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from . import __version__, system
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics, news_catalog, photos, seasons
+from .providers import calendar_ics, news_catalog, photos, radio, seasons
 from .providers import countries as world
 from .providers import news as news_mod
+from .providers.radio_player import RadioPlayer
 
 log = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ class Runtime:
 
     cfg: Config
     config_path: Path | None  # None: nowhere to save (demo mode)
+    radio: RadioPlayer = field(default_factory=RadioPlayer)
 
 
 def _is_local(host: str | None) -> bool:
@@ -144,6 +146,8 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(422, f"invalid settings: {exc}") from exc
         new = replace(new, demo=runtime.cfg.demo, cache_dir=runtime.cfg.cache_dir)
         write_config(runtime.config_path, new)
+        if new.radio_volume != runtime.cfg.radio_volume:
+            runtime.radio.set_volume(new.radio_volume)
         runtime.cfg = new
         return {"saved": True, "path": str(runtime.config_path)}
 
@@ -191,6 +195,31 @@ def router(runtime: Runtime) -> APIRouter:
     async def photos_count(folder: str) -> dict:
         """Live feedback while the user types a folder path, before they save it."""
         return {"count": len(photos.list_photos(folder))}
+
+    @api.get("/radio-search", dependencies=[Depends(guard)])
+    async def radio_search(country: str = "", language: str = "", name: str = "") -> dict:
+        try:
+            stations = await radio.search(country=country, language=language, name=name)
+        except httpx.HTTPError as exc:
+            raise HTTPException(502, f"radio directory unavailable ({type(exc).__name__})") from exc
+        return {"stations": stations}
+
+    @api.get("/radio-status", dependencies=[Depends(guard)])
+    async def radio_status() -> dict:
+        return runtime.radio.status()
+
+    @api.post("/radio-play", dependencies=[Depends(guard)])
+    async def radio_play(body: dict) -> dict:
+        try:
+            runtime.radio.play(body, runtime.cfg.radio_volume)
+        except (ValueError, RuntimeError) as exc:
+            raise HTTPException(409, str(exc)) from exc
+        return runtime.radio.status()
+
+    @api.post("/radio-stop", dependencies=[Depends(guard)])
+    async def radio_stop() -> dict:
+        runtime.radio.stop()
+        return runtime.radio.status()
 
     @api.get("/system", dependencies=[Depends(guard)])
     async def system_info() -> dict:

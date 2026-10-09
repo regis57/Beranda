@@ -254,6 +254,7 @@ def create_app(
         # `theme` lets the admin preview another theme with its own seasonal calendar.
         theme = theme if theme in THEMES else None
         data = await build_state(runtime.cfg, cache, clock(), theme, setup_info())
+        data["radio"] = runtime.radio.status()
         return JSONResponse(data, headers={"Cache-Control": "no-store"})
 
     @app.get("/")

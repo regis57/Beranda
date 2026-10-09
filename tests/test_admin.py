@@ -170,3 +170,72 @@ def test_photos_settings_round_trip(tmp_path):
     assert client.put("/api/admin/config", json=body).json() == {"saved": True, "path": str(path)}
     saved = tomllib.loads(path.read_text())
     assert saved["photos"] == {"folder": "/home/pi/pictures", "interval": 30}
+
+
+@respx.mock
+def test_radio_search_proxies_radio_browser(tmp_path):
+    from beranda.providers import radio
+
+    respx.get(f"{radio.MIRRORS[0]}/json/stations/search").mock(
+        return_value=httpx.Response(200, json=[{"stationuuid": "u1", "name": "Test", "url": "http://s/live"}])
+    )
+    client, _ = make(tmp_path)
+    found = client.get("/api/admin/radio-search", params={"name": "test"}).json()
+    assert found["stations"][0]["uuid"] == "u1"
+
+
+@respx.mock
+def test_radio_search_failure_is_a_clean_502(tmp_path):
+    from beranda.providers import radio
+
+    for mirror in radio.MIRRORS:
+        respx.get(f"{mirror}/json/stations/search").mock(side_effect=httpx.ConnectError("down"))
+    client, _ = make(tmp_path)
+    assert client.get("/api/admin/radio-search").status_code == 502
+
+
+def test_radio_play_stop_and_status(tmp_path, monkeypatch):
+    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/mpv")
+    monkeypatch.setattr("subprocess.Popen", lambda *a, **kw: _FakeProc())
+    client, _ = make(tmp_path)
+
+    station = {"uuid": "u1", "name": "Test FM", "url": "http://s/live"}
+    played = client.post("/api/admin/radio-play", json=station).json()
+    assert played == {"playing": True, "station": station, "volume": 70}
+    assert client.get("/api/admin/radio-status").json()["playing"] is True
+
+    stopped = client.post("/api/admin/radio-stop").json()
+    assert stopped == {"playing": False, "station": None, "volume": 70}
+
+
+def test_radio_play_without_mpv_is_a_clean_409(tmp_path, monkeypatch):
+    monkeypatch.setattr("shutil.which", lambda name: None)
+    client, _ = make(tmp_path)
+    r = client.post("/api/admin/radio-play", json={"uuid": "u1", "name": "Test", "url": "http://s/live"})
+    assert r.status_code == 409
+
+
+def test_radio_settings_round_trip(tmp_path):
+    client, path = make(tmp_path)
+    station = {"uuid": "u1", "name": "Test FM", "url": "http://s/live", "favicon": "", "country": "FR"}
+    body = valid_body(radio={"stations": [station], "volume": 45})
+    assert client.put("/api/admin/config", json=body).json()["saved"] is True
+    saved = tomllib.loads(path.read_text())
+    assert saved["radio"] == {"stations": [station], "volume": 45}
+
+
+class _FakeProc:
+    def __init__(self):
+        self.alive = True
+
+    def poll(self):
+        return None if self.alive else 0
+
+    def terminate(self):
+        self.alive = False
+
+    def wait(self, timeout=None):
+        return 0
+
+    def kill(self):
+        self.alive = False

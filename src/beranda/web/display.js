@@ -521,6 +521,9 @@ function renderStatus(online) {
   const off = $('badge-offline');
   off.hidden = online && !(state?.stale?.length);
   off.textContent = t('offline');
+  const onAir = $('badge-radio');
+  onAir.hidden = !state?.radio?.playing;
+  onAir.textContent = state?.radio?.station ? `▶ ${state.radio.station.name}` : '';
   // Open-Meteo's free tier requires attribution.
   const credit = state?.weather?.source === 'Open-Meteo' ? ' · Open-Meteo' : '';
   $('place').textContent = (state?.config.location.name ?? '') + credit;
