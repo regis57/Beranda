@@ -4,7 +4,13 @@
 # turning the screen off and on at the hours chosen in the settings page).
 set -uo pipefail
 
-URL="http://127.0.0.1:8080"
+# The port is the one saved in the settings file ([server] port, 8080 unless it was changed in
+# the settings page, "Advanced user"). Read again at every start of the screen.
+# shellcheck source=/dev/null
+source /etc/beranda/install.env 2>/dev/null || true  # gives CONFDIR
+CONFIG="${CONFDIR:-/etc/beranda}/config.toml"
+PORT="$(sed -n '/^\[server\]/,/^\[/{s/^port *= *\([0-9]\{1,5\}\).*/\1/p}' "$CONFIG" 2>/dev/null | head -n 1)"
+URL="http://127.0.0.1:${PORT:-8080}"
 browser="$(command -v chromium-browser || command -v chromium || true)"
 
 for _ in $(seq 1 60); do  # the server may still be starting

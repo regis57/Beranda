@@ -9,7 +9,8 @@ from pathlib import Path
 
 import uvicorn
 
-from . import __version__, config
+from . import __version__, config, system
+from .admin import write_config
 from .app import create_app
 
 
@@ -41,6 +42,18 @@ def main(argv: list[str] | None = None) -> None:
         overrides["port"] = args.port
     if overrides:
         cfg = replace(cfg, **overrides)
+
+    if not args.port and cfg.port != system.DEFAULT_PORT and not system.port_is_free(cfg.host, cfg.port):
+        # The port chosen in the settings page is taken by something else: go back to the usual
+        # one (and remember it, the full-screen display reads it too) rather than never starting.
+        logging.getLogger("beranda").error(
+            "port %s is already in use, going back to %s", cfg.port, system.DEFAULT_PORT
+        )
+        cfg = replace(cfg, port=system.DEFAULT_PORT)
+        try:
+            write_config(config_path, cfg)
+        except OSError:
+            pass
 
     uvicorn.run(create_app(cfg, config_path=config_path), host=cfg.host, port=cfg.port, log_level="info")
 

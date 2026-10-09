@@ -37,6 +37,8 @@ kind = "birth"
 # [limits]
 # profile = "auto"
 
+# port: the number at the end of Beranda's address (http://beranda.local:8080). Easier to change
+# from the settings page ("Advanced user"), which also restarts everything that needs it.
 [server]
 host = "0.0.0.0"
 port = 8080

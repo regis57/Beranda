@@ -16,14 +16,36 @@ link with the details in plain words.
 | Box | What it does |
 |---|---|
 | **1. Where are you?** | Type your town, press *Search*, click the right line: name, position and time zone fill in. Without internet, type latitude and longitude (press and hold on your home in any map app to read them). |
-| **2. Country and language** | The country gives public holidays, the first day of the week and the suggested news; picking it also proposes its language. 48 languages for the screen. A region is only needed for regional holidays. |
+| **2. Country and language** | The country gives public holidays, the first day of the week and the suggested news; picking it also proposes its language. 57 languages for the screen. A region is only needed for regional holidays. |
 | **3. Look** | Fifteen themes, shown live in the preview. *Auto* switches to night colours after sunset. |
-| **4. Your calendar** | Paste the private link of your calendar and press *Test*. The box *Where do I find this link?* gives the steps for Google, Apple, Outlook, Nextcloud and Proton, each with a link to the official guide in your language. |
-| **5. Dates that matter** | Births, remembrances, anniversaries. `2018-06-02` shows the number of years; `06-02` repeats every year. |
-| **6. News headlines** | On by default with *Choose for me*. Untick it to pick media yourself (your town, your country, international, another country) and add any RSS feed; every line has a *Test* button. |
-| **7. Screen** | Rotation for a screen hung upright (90° or 270°) or upside down (180°), and the hours to turn it off at night. On the Pi the screen itself switches off; on a tablet the page goes dark. |
-| **8. System** | Version, *Check for updates*, *Update now*, *Restart the screen*, *Restart the Raspberry Pi*. Each button asks for a second click. They work when Beranda was installed with `install.sh`. |
-| **9. Access** | Optional PIN. |
+| **4. Extras of the main screen** | The 24-hour graph, air quality / UV / pollen, weather warnings, name day and local calendar, a second clock. Each one has its own tick box. |
+| **5. Your calendar** | Paste the private link of your calendar and press *Test*. The box *Where do I find this link?* gives the steps for Google, Apple, Outlook, Nextcloud and Proton, each with a link to the official guide in your language. |
+| **6. Dates that matter** | Births, remembrances, anniversaries. `2018-06-02` shows the number of years; `06-02` repeats every year. |
+| **7. News headlines** | On by default with *Choose for me*. Untick it to pick media yourself (your town, your country, international, another country) and add any RSS feed; every line has a *Test* button. |
+| **8. Photo frame** | *Add photos* from your phone or computer, or follow a shared Dropbox folder. |
+| **9. World radio** | Search 50,000 stations and keep your favourites. |
+| **10. TV tonight** | Pick a free guide for your country, then tick your channels. |
+| **11. Voice control** | Optional; your own phrases can be added. See [VOICE.md](VOICE.md). |
+| **12. Screen** | Rotation for a screen hung upright (90° or 270°) or upside down (180°), and the hours to turn it off at night. On the Pi the screen itself switches off; on a tablet the page goes dark. |
+| **13. System** | Version, the board Beranda recognised (and so how much it can hold, see the README), *Check for updates*, *Update now*, *Restart the screen*, *Restart the Raspberry Pi*. Each button asks for a second click. They work when Beranda was installed with `install.sh`. |
+| **14. Access** | Optional PIN. |
+| **15. Advanced user** | Change the **port** and **start over from scratch** (see below). |
+
+### Advanced user: changing the port
+
+The `8080` at the end of Beranda's address is its **port**. Change it only if another program on
+the same device already uses 8080. Type a free number from 1024 to 65535 (for example 8081), press
+the button twice, and Beranda:
+
+- checks that the number is free, saves it and restarts (about ten seconds);
+- restarts the screen plugged into the Pi, which then opens the new address by itself;
+- sends this page to the new address (or shows it to you).
+
+What you have to do yourself: update bookmarks and the home-screen shortcut of a tablet used as the
+screen, and, if you use voice control, redo the one-time Chrome microphone setting with the new
+address. If the new port cannot be used when Beranda starts, it goes back to 8080 on its own.
+*Start over from scratch*, in the same box, also brings the port back to 8080 (you must type the
+word "yes" in your language first).
 
 Press **Save**. The display picks the changes up within a minute, without a restart. The page
 writes `~/.config/beranda/config.toml` (readable by you only, because calendar links are secrets).

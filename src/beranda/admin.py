@@ -52,6 +52,10 @@ class Runtime:
     config_path: Path | None  # None: nowhere to save (demo mode)
     dropbox: dict = field(default_factory=dict)  # result of the last Dropbox copy, for the page
     _tasks: set = field(default_factory=set)
+    listening_port: int = field(init=False, default=0)  # the port this server really listens on
+
+    def __post_init__(self) -> None:
+        self.listening_port = self.cfg.port  # a new port saved later only applies after a restart
 
     @property
     def photo_folder(self) -> Path:
@@ -359,6 +363,8 @@ def router(runtime: Runtime) -> APIRouter:
             "branch": info.get("BRANCH", "main"),
             "screen": info.get("SCREEN", "0") == "1",
             "actions": system.requests_dir() is not None,
+            "port": runtime.listening_port,
+            "saved_port": runtime.cfg.port,  # differs from "port" until Beranda is restarted
         }
 
     @api.get("/system/latest", dependencies=[Depends(guard)])
@@ -366,6 +372,33 @@ def router(runtime: Runtime) -> APIRouter:
         latest = await system.latest_version(system.install_info().get("BRANCH", "main"))
         newer = bool(latest) and system.version_tuple(latest) > system.version_tuple(__version__)
         return {"latest": latest, "update_available": newer}
+
+    @api.post("/system/port", dependencies=[Depends(guard)])
+    async def change_port(body: dict) -> dict:
+        """Move Beranda to another port (the number after the colon in its address).
+
+        The new number is saved in the settings file, the server then stops so that systemd
+        starts it again on the new port, and the screen on the Pi is restarted so it opens the
+        new address. The page that asked must go to the new address itself."""
+        if runtime.config_path is None:
+            raise HTTPException(409, "nowhere to save the settings")
+        if body.get("confirmed") is not True:
+            raise HTTPException(400, "the change must be confirmed")
+        port = body.get("port")
+        problem = system.port_problem(port, runtime.cfg.port, runtime.cfg.host)
+        if problem:
+            raise HTTPException(422, f"port_{problem}")
+        runtime.cfg = replace(runtime.cfg, port=port)
+        write_config(runtime.config_path, runtime.cfg)
+        restarting = system.restart_server_soon()
+        screen = False
+        if restarting and system.install_info().get("SCREEN", "0") == "1":
+            try:
+                system.request_action("restart-screen")  # the screen reads the port when it starts
+                screen = True
+            except (RuntimeError, OSError):
+                pass
+        return {"port": port, "restarting": restarting, "screen": screen}
 
     @api.post("/system/{action}", dependencies=[Depends(guard)])
     async def system_action(action: str, body: dict | None = None) -> dict:
