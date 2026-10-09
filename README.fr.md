@@ -12,6 +12,9 @@ Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
 > Si vous l'essayez, dites-nous comment ça s'est passé dans une « issue ».
 > 🇬🇧 [Read in English](README.md)
 
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
+*Beranda reste libre et gratuit. Si vous aimez ce qu'il apporte à votre mur, un café est toujours le bienvenu.*
+
 | | |
 |---|---|
 | ![Japon](docs/screenshots/v0.12.0-japan-light.png) | ![Chine, nuit](docs/screenshots/v0.12.0-china-night.png) |
