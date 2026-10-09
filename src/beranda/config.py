@@ -7,8 +7,6 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .providers import voice as voice_mod
-
 # Countries whose weeks conventionally start on Sunday (the rest start on Monday).
 SUNDAY_FIRST = {
     "US", "CA", "MX", "JP", "BR", "AU", "IL", "IN", "KR", "TW", "PH", "ZA", "SA", "CO", "PE",
@@ -75,18 +73,16 @@ class Config:
     screen_rotate: int = 0  # 0, 90, 180 or 270 degrees (applied by the kiosk on the Pi)
     screen_off: str = ""  # "23:00": turn the screen off at night ("" = never)
     screen_on: str = ""  # "06:30": and back on in the morning
-    photos_folder: str = ""  # local folder of pictures ("" = carousel disabled); fill it with
-    # rclone or Syncthing so photos from a phone or a cloud account land here on their own
-    photos_interval: int = 20  # seconds a photo stays full-screen before the dashboard returns
+    photos_folder: str = ""  # "" = Beranda's own photo folder (shown on the settings page);
+    # a path here points to another folder, e.g. one that rclone or Syncthing keeps filled
+    photos_interval: int = 20  # seconds each picture stays in the photo tile
+    photos_dropbox_url: str = ""  # a Dropbox "shared folder" link, copied here now and then
     radio_stations: tuple[Station, ...] = ()  # favourites, picked on the settings page
     radio_volume: int = 70  # 0-100
     tv_xmltv_url: str = ""  # the user's own XMLTV guide address ("" = TV section disabled)
     tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
-    tv_prime_start: str = "20:00"  # "HH:MM", local time
-    tv_prime_end: str = "23:00"  # if this is not after the start, it is treated as past midnight
-    voice_enabled: bool = False  # the beranda-voice service only acts when this is on
-    voice_wake_word: str = voice_mod.DEFAULT_WAKE_WORD  # one of the pretrained wake phrases
-    history_enabled: bool = True  # "on this day" historical events for `country`, from Wikidata
+    voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
+    history_enabled: bool = True  # the "On this day" box, from Wikipedia
 
     @property
     def week_start(self) -> int:
@@ -148,6 +144,13 @@ def _check_interval(value: object, minimum: int, default: int) -> int:
     if seconds < minimum:
         raise ValueError(f"interval must be at least {minimum} seconds, got {seconds}")
     return seconds
+
+
+def _check_share_url(value: object, what: str) -> str:
+    url = str(value or "").strip()
+    if url and not url.lower().startswith(("http://", "https://")):
+        raise ValueError(f"the {what} address must start with http:// or https://, got {url[:60]!r}")
+    return url
 
 
 def _check_tv_url(value: object) -> str:
@@ -227,14 +230,12 @@ def from_dict(data: dict) -> Config:
         screen_on=_check_hhmm(screen.get("on", "")),
         photos_folder=str(photos.get("folder", "")).strip(),
         photos_interval=_check_interval(photos.get("interval"), 5, Config.photos_interval),
+        photos_dropbox_url=_check_share_url(photos.get("dropbox_url", ""), "Dropbox"),
         radio_stations=tuple(_parse_station(s) for s in radio.get("stations", [])),
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
         tv_xmltv_url=_check_tv_url(tv.get("url", "")),
         tv_channels=tuple(str(c) for c in tv.get("channels", [])),
-        tv_prime_start=_check_hhmm(tv.get("prime_start")) or Config.tv_prime_start,
-        tv_prime_end=_check_hhmm(tv.get("prime_end")) or Config.tv_prime_end,
         voice_enabled=bool(voice.get("enabled", False)),
-        voice_wake_word=voice_mod.check_wake_word(voice.get("wake_word")),
         history_enabled=bool(history.get("enabled", True)),
     )
 
@@ -288,7 +289,11 @@ def to_dict(cfg: Config) -> dict:
         news["sources"] = list(cfg.news_sources)
     out["news"] = news
     out["screen"] = {"rotate": cfg.screen_rotate, "off": cfg.screen_off, "on": cfg.screen_on}
-    out["photos"] = {"folder": cfg.photos_folder, "interval": cfg.photos_interval}
+    out["photos"] = {
+        "folder": cfg.photos_folder,
+        "interval": cfg.photos_interval,
+        "dropbox_url": cfg.photos_dropbox_url,
+    }
     out["radio"] = {
         "stations": [
             {"uuid": s.uuid, "name": s.name, "url": s.url, "favicon": s.favicon, "country": s.country}
@@ -299,10 +304,8 @@ def to_dict(cfg: Config) -> dict:
     out["tv"] = {
         "url": cfg.tv_xmltv_url,
         "channels": list(cfg.tv_channels),
-        "prime_start": cfg.tv_prime_start,
-        "prime_end": cfg.tv_prime_end,
     }
-    out["voice"] = {"enabled": cfg.voice_enabled, "wake_word": cfg.voice_wake_word}
+    out["voice"] = {"enabled": cfg.voice_enabled}
     out["history"] = {"enabled": cfg.history_enabled}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision

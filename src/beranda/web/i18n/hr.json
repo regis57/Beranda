@@ -87,5 +87,9 @@
     "text": "Skenirajte kod ili otvorite ovu adresu na uređaju u istoj Wi-Fi mreži:",
     "wifi_title": "Još nemate Wi-Fi? Spojite se na moj",
     "wifi_text": "Skenirajte ovaj kod telefonom da se spojite na Wi-Fi mrežu \"{ssid}\", zatim na stranici koja se otvori odaberite svoj Wi-Fi."
-  }
+  },
+  "history_title": "Na današnji dan",
+  "radio_error": "Ova se postaja ne može reproducirati",
+  "voice_listening": "Slušam…",
+  "voice_unavailable": "Mikrofon nije dostupan – pogledajte postavke"
 }

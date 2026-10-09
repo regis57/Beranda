@@ -8,6 +8,7 @@ import hashlib
 import io
 import logging
 from collections.abc import Callable
+from contextlib import asynccontextmanager
 from dataclasses import replace
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -27,6 +28,7 @@ from .providers import calendar_ics, demo, news_catalog, photos, seasons, specia
 from .providers import history as history_mod
 from .providers import news as news_mod
 from .providers import tv as tv_mod
+from .providers import voice as voice_mod
 from .providers import weather as weather_mod
 
 log = logging.getLogger(__name__)
@@ -43,7 +45,8 @@ HISTORY_TTL = 20 * 60 * 60  # "on this day" only changes once a day, by definiti
 # entry or feed from ever running code on the mirror.
 CSP = (
     "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; "
-    "connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'"
+    "connect-src 'self'; media-src 'self' http: https:; "  # media: radio streams play in the page
+    "base-uri 'none'; form-action 'self'; frame-ancestors 'self'"
 )
 
 
@@ -60,16 +63,17 @@ def _window(today: date) -> tuple[date, date]:
     return first, last
 
 
-def _prime_window(now: datetime, start_hhmm: str, end_hhmm: str) -> tuple[datetime, datetime]:
-    """Today's prime-time window, in `now`'s own timezone. An end not after the start means
-    it runs past midnight (e.g. 20:00 -> 00:30), so we push it a day later."""
-    start_h, start_m = (int(x) for x in start_hhmm.split(":"))
-    end_h, end_m = (int(x) for x in end_hhmm.split(":"))
-    start = now.replace(hour=start_h, minute=start_m, second=0, microsecond=0)
-    end = now.replace(hour=end_h, minute=end_m, second=0, microsecond=0)
-    if end <= start:
-        end += timedelta(days=1)
-    return start, end
+PRIME_START_HOUR = 20  # prime time is always from 20:00 local time...
+PRIME_HOURS = 3  # ...for the next three hours (so until 23:00)
+
+
+def _prime_window(now: datetime) -> tuple[datetime, datetime]:
+    """Tonight's prime time in `now`'s own timezone: 20:00 -> 23:00. Once it is over (23:00 or
+    later) the window moves on to tomorrow evening, so the strip never goes empty at night."""
+    start = now.replace(hour=PRIME_START_HOUR, minute=0, second=0, microsecond=0)
+    if now >= start + timedelta(hours=PRIME_HOURS):
+        start += timedelta(days=1)
+    return start, start + timedelta(hours=PRIME_HOURS)
 
 
 def news_plan(cfg: Config) -> list[tuple[str, str, str]]:
@@ -174,29 +178,31 @@ async def build_state(
     day_cfg = replace(cfg, key_dates=cfg.key_dates + demo.key_dates(today, cfg.language)) if cfg.demo else cfg
     days = specialdays.special_days(day_cfg, start, end)
 
-    # --- "on this day" historical events for the user's own country (Wikidata) ----------
+    # --- "on this day": what happened today in history, from Wikipedia ----------------
     history: list[dict] = []
-    if cfg.history_enabled and not cfg.demo:
+    if cfg.history_enabled and cfg.demo:
+        history = demo.history(cfg.language)
+    elif cfg.history_enabled:
 
         async def load_history() -> list[dict]:
-            return await history_mod.fetch(cfg.country, today.month, today.day, cfg.language)
+            return await history_mod.fetch(cfg.language, today.month, today.day)
 
         try:
-            history, is_stale = await cache.get(f"history:{cfg.country}:{today.isoformat()}", HISTORY_TTL, load_history)
+            history, is_stale = await cache.get(f"history:{cfg.language}:{today.isoformat()}", HISTORY_TTL, load_history)
             if is_stale:
                 stale.append("history")
         except Exception as exc:  # noqa: BLE001 - Wikidata being slow or down must not blank the screen
             errors["history"] = type(exc).__name__
 
-    # --- photo carousel (local folder, filled by rclone/Syncthing, nothing fetched here) ---
-    photo_names = photos.list_photos(cfg.photos_folder)
+    # --- photo tile (a local folder; filled from the settings page, Dropbox or rclone) -----
+    photo_names = photos.list_photos(photos.effective_folder(cfg.photos_folder))
 
     # --- TV prime time (read-only: the user's own XMLTV guide, never scraped by us) -----
     tv = None
     if cfg.tv_xmltv_url and cfg.tv_channels:
         digest = hashlib.sha1(cfg.tv_xmltv_url.encode()).hexdigest()[:12]
         channel_ids = set(cfg.tv_channels)
-        prime_start, prime_end = _prime_window(now, cfg.tv_prime_start, cfg.tv_prime_end)
+        prime_start, prime_end = _prime_window(now)
 
         async def load_tv() -> list[dict]:
             raw = await tv_mod.download(cfg.tv_xmltv_url)
@@ -213,8 +219,8 @@ async def build_state(
             ]
 
         try:
-            got, is_stale = await cache.get(f"tv:{digest}:{today}", TV_TTL, load_tv)
-            tv = {"programmes": got}
+            got, is_stale = await cache.get(f"tv:{digest}:{prime_start.date()}", TV_TTL, load_tv)
+            tv = {"programmes": got, "from": prime_start.strftime("%H:%M"), "to": prime_end.strftime("%H:%M")}
             if is_stale:
                 stale.append("tv")
         except Exception as exc:  # noqa: BLE001 - a dead guide must not blank the screen
@@ -246,6 +252,12 @@ async def build_state(
         "photos": {"names": photo_names, "interval": cfg.photos_interval},
         "tv": tv,
         "history": history,
+        # Radio plays in the page itself (the tablet's speakers), so the page needs the list.
+        "radio": {
+            "stations": [{"uuid": st.uuid, "name": st.name, "url": st.url} for st in cfg.radio_stations],
+            "volume": cfg.radio_volume,
+        },
+        "voice": cfg.voice_enabled,
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.
@@ -264,7 +276,16 @@ def create_app(
     runtime = Runtime(cfg=cfg, config_path=config_path)
     clock = now_fn or (lambda: datetime.now(ZoneInfo(runtime.cfg.location.timezone)))
     cache = Cache(cfg.cache_dir)
-    app = FastAPI(title="Beranda", version=__version__, docs_url=None, redoc_url=None)
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI):
+        task = asyncio.create_task(runtime.dropbox_loop())
+        try:
+            yield
+        finally:
+            task.cancel()
+
+    app = FastAPI(title="Beranda", version=__version__, docs_url=None, redoc_url=None, lifespan=lifespan)
     app.include_router(admin_router(runtime))
 
     @app.middleware("http")
@@ -317,7 +338,7 @@ def create_app(
 
     @app.get("/api/photos/{name}")
     async def photo(name: str) -> FileResponse:
-        path = photos.resolve(runtime.cfg.photos_folder, name)
+        path = photos.resolve(photos.effective_folder(runtime.cfg.photos_folder), name)
         if path is None:
             return JSONResponse({"detail": "not found"}, status_code=404)
         return FileResponse(path, headers={"Cache-Control": "no-store"})
@@ -331,8 +352,25 @@ def create_app(
         # `theme` lets the admin preview another theme with its own seasonal calendar.
         theme = theme if theme in THEMES else None
         data = await build_state(runtime.cfg, cache, clock(), theme, setup_info())
-        data["radio"] = runtime.radio.status()
         return JSONResponse(data, headers={"Cache-Control": "no-store"})
+
+    @app.post("/api/voice")
+    async def voice(body: dict) -> JSONResponse:
+        """A sentence heard by the tablet's microphone -> what to say back and what to do."""
+        cfg = runtime.cfg
+        if not cfg.voice_enabled:
+            return JSONResponse({"detail": "voice control is turned off in the settings"}, status_code=403)
+        text = str(body.get("text", ""))[:300]
+        now = clock()
+        data = await build_state(cfg, cache, now)
+        reply = voice_mod.answer(
+            text,
+            language=cfg.language,
+            now=now,
+            stations=data["radio"]["stations"],
+            weather=data["weather"],
+        )
+        return JSONResponse(reply, headers={"Cache-Control": "no-store"})
 
     @app.get("/")
     async def index() -> FileResponse:

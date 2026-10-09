@@ -8,7 +8,7 @@ import respx
 from fastapi.testclient import TestClient
 
 from beranda.app import create_app
-from beranda.config import Config
+from beranda.config import Config, Station
 from beranda.providers import weather
 from tests.test_calendar_ics import SAMPLE
 from tests.test_weather import payload
@@ -116,14 +116,41 @@ def test_photos_are_listed_and_served_from_their_own_folder(tmp_path):
     assert client.get("/api/photos/missing.jpg").status_code == 404
 
 
-def test_no_photos_folder_means_an_empty_carousel(tmp_path):
+def test_without_a_chosen_folder_beranda_uses_its_own_photo_folder(tmp_path):
+    own = tmp_path / "beranda-photos"  # the test setup points BERANDA_PHOTOS here
+    own.mkdir()
+    (own / "kids.png").write_bytes(b"png")
+    client = make(tmp_path, demo=True)
+    assert client.get("/api/state").json()["photos"]["names"] == ["kids.png"]
+    assert client.get("/api/photos/kids.png").status_code == 200
+
+
+def test_no_photos_means_an_empty_tile(tmp_path):
     state = make(tmp_path, demo=True).get("/api/state").json()
     assert state["photos"] == {"names": [], "interval": 20}
 
 
-def test_state_reports_nothing_playing_by_default(tmp_path):
-    state = make(tmp_path, demo=True).get("/api/state").json()
-    assert state["radio"] == {"playing": False, "station": None, "volume": 70}
+def test_state_gives_the_page_the_radio_favourites_to_play_itself(tmp_path):
+    station = Station(uuid="u1", name="Test FM", url="http://s/live", favicon="x", country="FR")
+    state = make(tmp_path, demo=True, radio_stations=(station,), radio_volume=40).get("/api/state").json()
+    assert state["radio"] == {"stations": [{"uuid": "u1", "name": "Test FM", "url": "http://s/live"}], "volume": 40}
+
+
+def test_radio_streams_are_allowed_by_the_page_policy(tmp_path):
+    csp = make(tmp_path, demo=True).get("/").headers["content-security-policy"]
+    assert "media-src 'self' http: https:" in csp and "unsafe-inline" not in csp
+
+
+def test_prime_time_is_always_tonight_from_8pm_for_three_hours():
+    from beranda.app import _prime_window
+
+    paris = ZoneInfo("Europe/Paris")
+    start, end = _prime_window(datetime(2026, 10, 8, 12, 0, tzinfo=paris))
+    assert (start.hour, end.hour, start.day) == (20, 23, 8)
+    start, end = _prime_window(datetime(2026, 10, 8, 21, 30, tzinfo=paris))  # tonight's still going
+    assert (start.day, end.hour) == (8, 23)
+    start, end = _prime_window(datetime(2026, 10, 8, 23, 30, tzinfo=paris))  # over: show tomorrow
+    assert (start.day, start.hour, end.hour) == (9, 20, 23)
 
 
 def test_no_tv_guide_configured_means_no_tv_section(tmp_path):
@@ -140,14 +167,13 @@ def test_tv_prime_time_is_fetched_and_shown_in_local_time(tmp_path):
         b"<title>Journal</title></programme></tv>"
     )
     respx.get(guide).mock(return_value=httpx.Response(200, content=xml))
-    client = make(
-        tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",),
-        tv_prime_start="18:00", tv_prime_end="22:00",
-    )
+    client = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",))
     state = client.get("/api/state").json()
     # The feed says +0100, but Paris is on summer time (+0200) in October, so local time shifts by an hour.
     assert state["tv"] == {
-        "programmes": [{"channel": "France 2", "title": "Journal", "start": "20:00", "stop": "22:00"}]
+        "programmes": [{"channel": "France 2", "title": "Journal", "start": "20:00", "stop": "22:00"}],
+        "from": "20:00",
+        "to": "23:00",
     }
 
 
@@ -167,37 +193,53 @@ def test_history_disabled_by_default_in_these_tests(tmp_path):
 
 
 @respx.mock
-def test_history_is_fetched_for_the_configured_country(tmp_path):
+def test_history_is_fetched_in_the_users_language_from_wikipedia(tmp_path):
     from beranda.providers import history
 
-    respx.get(history.SPARQL_URL).mock(
-        side_effect=[
-            httpx.Response(
-                200, json={"results": {"bindings": [{"c": {"value": "http://www.wikidata.org/entity/Q142"}}]}}
-            ),
-            httpx.Response(
-                200,
-                json={
-                    "results": {
-                        "bindings": [
-                            {"eventLabel": {"value": "Bastille Day"}, "date": {"value": "1789-07-14T00:00:00Z"}}
-                        ]
-                    }
-                },
-            ),
-        ]
+    route = respx.get(history.FEED_URL.format(lang="fr", month=10, day=8)).mock(
+        return_value=httpx.Response(200, json={"selected": [{"text": "Un fait", "year": 1920}]})
     )
-    client = make(tmp_path, history_enabled=True, country="FR")
+    client = make(tmp_path, history_enabled=True, country="FR", language="fr")
     state = client.get("/api/state").json()
-    assert state["history"] == [{"year": 1789, "label": "Bastille Day"}]
+    assert route.called and state["history"] == [{"year": 1920, "text": "Un fait"}]
+
+
+def test_the_demo_shows_clearly_invented_history_without_the_internet(tmp_path):
+    state = make(tmp_path, demo=True, history_enabled=True).get("/api/state").json()
+    assert state["history"] and all({"year", "text"} <= set(e) for e in state["history"])
 
 
 @respx.mock
 def test_a_broken_history_source_does_not_blank_the_screen(tmp_path):
     from beranda.providers import history
 
-    respx.get(history.SPARQL_URL).mock(side_effect=httpx.ConnectError("down"))
+    respx.get(history.FEED_URL.format(lang="fr", month=10, day=8)).mock(side_effect=httpx.ConnectError("down"))
     client = make(tmp_path, history_enabled=True)
     state = client.get("/api/state").json()
     assert state["history"] == []
     assert state["errors"]["history"] == "ConnectError"
+
+
+# ---- voice, heard by the tablet and answered by the server ------------------------------------
+def test_the_voice_endpoint_is_off_until_the_owner_turns_it_on(tmp_path):
+    client = make(tmp_path, demo=True)
+    assert client.post("/api/voice", json={"text": "quelle heure est-il"}).status_code == 403
+
+
+def test_the_voice_endpoint_answers_and_tells_the_page_what_to_do(tmp_path):
+    station = Station(uuid="u1", name="France Inter", url="http://s/live")
+    client = make(tmp_path, demo=True, voice_enabled=True, radio_stations=(station,))
+    state = client.get("/api/state").json()
+    assert state["voice"] is True
+
+    heard = client.post("/api/voice", json={"text": "mets france inter"}).json()
+    assert heard["action"] == {"type": "radio_play", "uuid": "u1", "url": "http://s/live", "name": "France Inter"}
+    assert client.post("/api/voice", json={"text": "stop"}).json()["action"] == {"type": "radio_stop"}
+    assert "12" in client.post("/api/voice", json={"text": "quelle heure est-il"}).json()["reply"]
+    assert client.post("/api/voice", json={"text": "???"}).json()["action"] is None
+
+
+def test_the_voice_endpoint_shrugs_off_odd_input(tmp_path):
+    client = make(tmp_path, demo=True, voice_enabled=True)
+    assert client.post("/api/voice", json={}).json()["intent"] is None
+    assert client.post("/api/voice", json={"text": "x" * 5000}).status_code == 200

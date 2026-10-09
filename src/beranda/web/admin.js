@@ -1,6 +1,9 @@
 // Beranda settings page. Vanilla JS, no build step. Talks only to /api/admin/*.
 // Written for people who are not technical: every section explains itself.
 
+import { createRadio } from '/static/radio.js';
+import * as voiceApi from '/static/voice.js';
+
 const $ = (id) => document.getElementById(id);
 const THEME_COLORS = {
   japan: ['#f4efe4', '#bf3b2b', '#2f5d8a', '#23201d'],
@@ -81,7 +84,7 @@ function translateStatic() {
 
 // ------------------------------------------------------------------ api ----
 async function api(path, opts = {}) {
-  const headers = { 'Content-Type': 'application/json', ...(pin ? { 'X-Beranda-Pin': pin } : {}) };
+  const headers = { 'Content-Type': 'application/json', ...(pin ? { 'X-Beranda-Pin': pin } : {}), ...(opts.headers || {}) };
   const res = await fetch(`/api/admin${path}`, { ...opts, headers });
   if (!res.ok) {
     let detail = '';
@@ -238,7 +241,8 @@ function addIcsRow(url = '') {
   const input = el('input', { type: 'url', placeholder: t('admin.ics_placeholder'), value: url, spellcheck: false });
   const [test, msg] = testButton(async () => {
     const r = await api('/test-ics', { method: 'POST', body: JSON.stringify({ url: input.value.trim() }) });
-    return [r.ok, r.ok ? t('admin.test_ok', { n: r.count, next: r.next.join(' · ') }) : t('admin.test_fail', { err: r.error })];
+    const when = (e) => new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(e.start));
+    return [r.ok, r.ok ? t('admin.test_ok', { n: r.count, next: r.next.map((e) => `${when(e)} ${e.title}`).join(' · ') }) : t('admin.test_fail', { err: r.error })];
   });
   const del = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
   const row = el('div', { className: 'item ics' }, input, test, del, msg);
@@ -357,17 +361,71 @@ function renderNews() {
 }
 
 // ------------------------------------------------------------------ 7. photos ---
+// Pictures are sent straight away (no need to press Save): one request per picture, the file
+// itself as the request body. Beranda keeps them in its own folder, shown below the buttons.
 function renderPhotos() {
-  const photos = cfg.photos || { folder: '', interval: 20 };
+  const photos = cfg.photos || { folder: '', interval: 20, dropbox_url: '' };
   $('photos-folder').value = photos.folder || '';
   $('photos-interval').value = photos.interval || 20;
+  $('photos-dropbox').value = photos.dropbox_url || '';
   refreshPhotosCount();
+  loadPhotos();
+}
+async function loadPhotos() {
+  try {
+    const data = await api('/photos');
+    $('photos-where').textContent = t('admin.photos_where', { folder: data.folder });
+    $('photos-empty').hidden = data.names.length > 0;
+    $('photos-grid').replaceChildren(...data.names.slice(0, 60).map((name) => {
+      const rm = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
+      rm.addEventListener('click', async () => {
+        try { await api(`/photos/${encodeURIComponent(name)}`, { method: 'DELETE' }); } catch (e) { $('photos-upload-msg').textContent = e.message; }
+        loadPhotos();
+      });
+      return el('div', { className: 'thumb' }, el('img', { src: `/api/photos/${encodeURIComponent(name)}`, alt: '', loading: 'lazy' }), rm);
+    }));
+    showDropboxStatus(data.dropbox);
+  } catch { /* the page is still loading, or offline */ }
+}
+function showDropboxStatus(d) {
+  const box = $('photos-sync-msg');
+  if (!d || !d.at) { box.textContent = ''; return; }
+  box.textContent = d.ok ? t('admin.photos_sync_ok', { n: d.total, added: d.added })
+    : t('admin.photos_sync_fail', { err: t(`admin.photos_err_${d.code || 'net'}`) });
+}
+async function uploadPhotos(files) {
+  const msg = $('photos-upload-msg');
+  let sent = 0;
+  for (const file of files) {
+    msg.textContent = t('admin.photos_sending', { i: sent + 1, n: files.length });
+    try {
+      await api(`/photos?name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file, headers: { 'Content-Type': file.type || 'application/octet-stream' } });
+      sent += 1;
+    } catch (e) {
+      const err = e.status === 422 ? t('admin.photos_bad') : e.status === 413 ? t('admin.photos_err_big') : e.message;
+      msg.textContent = t('admin.photos_refused', { name: file.name, err });
+      await loadPhotos();
+      return;
+    }
+  }
+  msg.textContent = t('admin.photos_sent', { n: sent });
+  await loadPhotos();
+}
+async function syncDropbox() {
+  const box = $('photos-sync-msg');
+  const link = $('photos-dropbox').value.trim();
+  if (link !== (cfg.photos?.dropbox_url || '')) { box.textContent = t('admin.photos_save_first'); return; }
+  if (!link) { box.textContent = t('admin.photos_dropbox_empty'); return; }
+  box.textContent = t('admin.loading');
+  try { showDropboxStatus(await api('/photos-sync', { method: 'POST' })); await loadPhotos(); }
+  catch (e) { box.textContent = e.message; }
 }
 let photosCountTimer = null;
 async function refreshPhotosCount() {
   const folder = $('photos-folder').value.trim();
-  $('photos-count').textContent = folder ? t('admin.photos_checking') : t('admin.photos_none');
+  $('photos-count').textContent = '';
   if (!folder) return;
+  $('photos-count').textContent = t('admin.photos_checking');
   try {
     const { count } = await api(`/photos-count?folder=${encodeURIComponent(folder)}`);
     $('photos-count').textContent = count ? t('admin.photos_found', { n: count }) : t('admin.photos_empty');
@@ -375,18 +433,17 @@ async function refreshPhotosCount() {
 }
 
 // ------------------------------------------------------------------ 8. radio ---
+// The sound plays in this page (on the device you are holding), which is also how it plays
+// on the tablet showing Beranda - so "Listen" here is a true test of what the tablet will do.
 let radioStations = [];
-let radioStatus = { playing: false, station: null };
+const adminRadio = createRadio($('admin-audio'), () => renderRadioFavorites());
 
 function stationRow(station, { onRemove } = {}) {
-  const playing = radioStatus.playing && radioStatus.station?.uuid === station.uuid;
+  const snap = adminRadio.snapshot();
+  const here = snap.station?.url === station.url;
+  const playing = here && (snap.status === 'playing' || snap.status === 'loading');
   const btn = el('button', { type: 'button', textContent: playing ? t('admin.radio_stop') : t('admin.radio_play') });
-  btn.addEventListener('click', async () => {
-    try {
-      radioStatus = await api(playing ? '/radio-stop' : '/radio-play', playing ? { method: 'POST' } : { method: 'POST', body: JSON.stringify(station) });
-    } catch (e) { $('radio-now').textContent = e.message; }
-    renderRadioFavorites();
-  });
+  btn.addEventListener('click', () => (playing ? adminRadio.stop() : adminRadio.play(station)));
   const label = el('span', {}, station.name, station.country ? el('small', { textContent: ` (${regionName(station.country)})` }) : '');
   const kids = [label, btn];
   if (onRemove) {
@@ -402,8 +459,10 @@ function renderRadioFavorites() {
     onRemove: () => { radioStations = radioStations.filter((x) => x.uuid !== s.uuid); renderRadioFavorites(); markDirty(); },
   })));
   $('radio-empty').hidden = radioStations.length > 0;
-  $('radio-now').textContent = radioStatus.playing && radioStatus.station
-    ? t('admin.radio_now_playing', { name: radioStatus.station.name }) : '';
+  const snap = adminRadio.snapshot();
+  $('radio-now').textContent = snap.status === 'playing' ? t('admin.radio_now_playing', { name: snap.station.name })
+    : snap.status === 'loading' ? t('admin.loading')
+    : snap.status === 'error' ? t('admin.radio_error') : '';
 }
 
 async function radioSearch() {
@@ -435,15 +494,11 @@ function renderRadio() {
   const radio = cfg.radio || { stations: [], volume: 70 };
   radioStations = [...radio.stations];
   $('radio-volume').value = radio.volume ?? 70;
+  adminRadio.defaultVolume(radio.volume ?? 70);
   fill($('radio-country'), [['', t('admin.radio_any_country')], ...Object.keys(options.countries).sort((a, b) => regionName(a).localeCompare(regionName(b), lang)).map((c) => [c, regionName(c)])], '');
   fill($('radio-language'), [['', t('admin.radio_any_language')], ...options.languages.map((l) => [l, languageName(l)])], '');
   renderRadioFavorites();
 }
-async function refreshRadioStatus() {
-  try { radioStatus = await api('/radio-status'); } catch { /* offline: leave the last known status */ }
-  renderRadioFavorites();
-}
-
 // ------------------------------------------------------------------ 9. tv ---
 // The guide is only ever read, never stored: "find channels" fetches it once so the user
 // can tick the ones they want; the names we got back are kept just so ticks keep their labels.
@@ -462,6 +517,25 @@ function renderTvChips() {
   $('tv-empty').hidden = tvChannels.length > 0;
 }
 
+// Which free guides exist for the chosen country? The server tries each known address and
+// keeps those that answer; one tap fills the address in and lists the channels.
+async function tvSuggest() {
+  const box = $('tv-suggestions');
+  const msg = $('tv-suggest-msg');
+  box.replaceChildren();
+  msg.textContent = t('admin.tv_suggest_searching');
+  try {
+    const r = await api(`/tv-guides?country=${encodeURIComponent($('country').value)}`);
+    if (!r.guides.length) { msg.textContent = t('admin.tv_suggest_none', { country: regionName(r.country) }); return; }
+    msg.textContent = t('admin.tv_suggest_found', { country: regionName(r.country) });
+    box.replaceChildren(...r.guides.map((g) => {
+      const b = el('button', { type: 'button', textContent: g.name });
+      b.addEventListener('click', () => { $('tv-url').value = g.url; markDirty(); tvFind(); });
+      return b;
+    }));
+  } catch (e) { msg.textContent = e.message; }
+}
+
 async function tvFind() {
   const url = $('tv-url').value.trim();
   if (!url) return;
@@ -477,10 +551,8 @@ async function tvFind() {
 }
 
 function renderTv() {
-  const tv = cfg.tv || { url: '', channels: [], prime_start: '20:00', prime_end: '23:00' };
+  const tv = cfg.tv || { url: '', channels: [] };
   $('tv-url').value = tv.url || '';
-  $('tv-start').value = tv.prime_start || '20:00';
-  $('tv-end').value = tv.prime_end || '23:00';
   tvSelected = new Set(tv.channels || []);
   // Until "find channels" is used again, show the saved ids as their own label.
   tvChannels = [...tvSelected].map((id) => ({ id, name: id }));
@@ -488,14 +560,13 @@ function renderTv() {
 }
 
 // ------------------------------------------------------------------ 10. voice ---
-// Beranda itself only stores whether voice control is on and which wake word to listen
-// for; the actual listening happens in a separate, optional service (`beranda-voice`),
-// started only if that was installed with `--with-voice`.
+// Beranda only stores whether voice control is on. Listening happens in the browser of the
+// tablet that shows the display, so here we just tell whether THIS device could do it.
 function renderVoice() {
-  const voice = cfg.voice || { enabled: false, wake_word: 'hey_jarvis' };
+  const voice = cfg.voice || { enabled: false };
   $('voice-on').checked = !!voice.enabled;
-  $('voice-wake-word').value = voice.wake_word || 'hey_jarvis';
-  $('voice-body').hidden = !voice.enabled;
+  $('voice-check').hidden = !voice.enabled;
+  $('voice-check').textContent = t(`admin.voice_check_${voiceApi.availability()}`);
 }
 
 // ------------------------------------------------------------------ 9. screen ---
@@ -575,15 +646,14 @@ function collect() {
     },
   };
   body.history = { enabled: $('history-on').checked };
-  body.photos = { folder: $('photos-folder').value.trim(), interval: Number($('photos-interval').value) || 20 };
-  body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
-  body.tv = {
-    url: $('tv-url').value.trim(),
-    channels: [...tvSelected],
-    prime_start: $('tv-start').value,
-    prime_end: $('tv-end').value,
+  body.photos = {
+    folder: $('photos-folder').value.trim(),
+    interval: Number($('photos-interval').value) || 20,
+    dropbox_url: $('photos-dropbox').value.trim(),
   };
-  body.voice = { enabled: $('voice-on').checked, wake_word: $('voice-wake-word').value };
+  body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
+  body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected] };
+  body.voice = { enabled: $('voice-on').checked };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -642,8 +712,7 @@ async function start() {
   if (!editable) { $('state').textContent = t('admin.demo_readonly'); $('state').className = 'bad'; }
   fitPreview();
   refreshPreview();
-  refreshRadioStatus();
-  setInterval(refreshRadioStatus, 10_000);
+  if (!cfg.tv?.url) tvSuggest();  // first visit: offer the guides for the country straight away
 }
 
 async function boot() {
@@ -663,14 +732,18 @@ async function boot() {
   });
   $('q-go').addEventListener('click', search);
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  $('radio-volume').addEventListener('input', (e) => adminRadio.setVolume(e.target.value));  // hear it as you slide
   $('radio-go').addEventListener('click', radioSearch);
   $('radio-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); radioSearch(); } });
   $('tv-find').addEventListener('click', tvFind);
+  $('tv-suggest').addEventListener('click', tvSuggest);
+  $('photos-file').addEventListener('change', (e) => { uploadPhotos([...e.target.files]); e.target.value = ''; });
+  $('photos-sync').addEventListener('click', syncDropbox);
   $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
   $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
-  $('voice-on').addEventListener('change', () => { $('voice-body').hidden = !$('voice-on').checked; });
+  $('voice-on').addEventListener('change', () => { $('voice-check').hidden = !$('voice-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
   $('sys-check').addEventListener('click', checkUpdates);

@@ -87,5 +87,9 @@
     "text": "Scan deze code of open dit adres op een apparaat met dezelfde wifi:",
     "wifi_title": "Nog geen wifi? Maak verbinding met de mijne",
     "wifi_text": "Scan deze code om met je telefoon verbinding te maken met het wifi-netwerk \"{ssid}\", en volg daarna de pagina die opent om je eigen wifi te kiezen."
-  }
+  },
+  "history_title": "Op deze dag",
+  "radio_error": "Deze zender kan niet worden afgespeeld",
+  "voice_listening": "Ik luister…",
+  "voice_unavailable": "Microfoon niet beschikbaar – zie de instellingen"
 }

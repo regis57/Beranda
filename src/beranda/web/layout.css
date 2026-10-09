@@ -135,34 +135,83 @@ body {
 .moon-detail { font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.04em; line-height: 1.5; }
 .sun { font-size: 0.8rem; color: var(--ink-2); letter-spacing: 0.04em; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 0.8rem; margin-top: 0.1rem; font-variant-numeric: tabular-nums; }
 
-/* ---- calendar ------------------------------------------------------------------ */
-.cal-title { font-size: 1.15rem; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
-.cal-title::first-letter { text-transform: uppercase; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 0.15rem; text-align: center; }
-.cal-dow { font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.1em; padding-bottom: 0.35rem; }
-.cal-cell { position: relative; height: 2.35rem; font-size: 0.98rem; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0.2rem; }
-.cal-cell.past { color: var(--ink-3); }
-.cal-cell.sunday, .cal-cell.holiday-day { color: var(--accent); }
-.cal-cell.today .cal-num { color: var(--bg); background: var(--accent); border-radius: 50%; width: 1.7rem; height: 1.7rem; display: inline-flex; align-items: center; justify-content: center; margin-top: -0.1rem; }
-.cal-marks { display: flex; gap: 0.18rem; height: 0.5rem; align-items: center; margin-top: 0.12rem; }
+/* Without a season block (e.g. the French theme) the moon sits beside its text, to save height. */
+.sky.no-season .moon { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.1rem; align-items: center; text-align: start; max-width: none; }
+.sky.no-season .moon-svg { grid-row: 1 / span 3; width: 5.2rem; height: 5.2rem; }
+.sky.no-season .sun { justify-content: flex-start; margin-top: 0; }
+
+/* ---- "On this day" ----------------------------------------------------------------- */
+.facts-title { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.55rem; }
+.facts-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.fact { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); gap: 0.6rem; align-items: baseline; font-size: 0.95rem; line-height: 1.3; }
+.fact-year { font-size: 0.85rem; color: var(--ink-3); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; text-align: end; }
+.fact-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+
+/* ---- marks used by the agenda list ------------------------------------------------------ */
 .mark { display: block; width: 0.34rem; height: 0.34rem; background: var(--accent); border-radius: 50%; }
 .mark.birth { background: transparent; border: 1.5px solid var(--accent); }
 .mark.death { border-radius: 0; transform: rotate(45deg); background: var(--ink-2); }
 .mark.anniversary { background: transparent; border: 1.5px solid var(--accent); box-shadow: inset 0 0 0 1.5px var(--bg), inset 0 0 0 5px var(--accent); }
 .mark.other { border-radius: 1px; width: 0.5rem; height: 2px; background: var(--ink-2); }
 .mark.event { border-radius: 1px; width: 0.5rem; height: 2px; background: var(--rain); }
-.cal-cell.today .mark { background: var(--accent); }
 
 /* ---- upcoming ------------------------------------------------------------------- */
 .upcoming { min-height: 0; flex: 1; overflow: hidden; }
 .upcoming-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-.up { display: grid; grid-template-columns: 5.6rem 0.9rem minmax(0, 1fr) auto; align-items: baseline; gap: 0.5rem; font-size: 1.02rem; }
+.up { display: grid; grid-template-columns: 6.6rem 0.9rem minmax(0, 1fr) auto; align-items: baseline; gap: 0.5rem; font-size: 1.02rem; }
 .up-when { font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-3); text-transform: lowercase; white-space: nowrap; }
 .up-when.soon { color: var(--accent); }
 .up-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .up-time { font-size: 0.85rem; color: var(--ink-2); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
 .up .mark { align-self: center; }
 .empty { font-size: 0.95rem; color: var(--ink-3); letter-spacing: 0.06em; }
+
+/* ---- widgets: photo frame + radio, at the bottom of the side column ----------------------- */
+.widgets { display: flex; gap: 1rem; align-items: stretch; flex: none; }
+.widgets:empty, .widgets:not(:has(:not([hidden]))) { display: none; }
+.phototile {
+  position: relative; flex: none; height: 8.5rem; aspect-ratio: 4 / 3; align-self: flex-start;
+  border-radius: 0.5rem; overflow: hidden; background: var(--line);
+}
+.phototile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; }
+.phototile img.on { opacity: 1; }
+body[data-sleep="true"] .phototile img { opacity: 0; }
+
+.radio {
+  flex: 1 1 0; min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
+  gap: 0.2rem 0.7rem; padding: 0.7rem 0.8rem; border: 1px solid var(--line); border-radius: 0.5rem;
+}
+.radio .round { grid-column: 1; grid-row: 1; }
+.radio-name { grid-column: 2 / -1; grid-row: 1; }
+.radio-main { display: contents; }  /* its two children are placed straight into the box's grid */
+.radio-name { font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.radio.error .radio-name { color: var(--accent); white-space: normal; font-size: 0.8rem; line-height: 1.25; }
+.radio-line { grid-column: 1 / -1; grid-row: 2; display: flex; align-items: center; gap: 0.4rem; }
+
+/* big, easy targets for a finger on a tablet */
+.round, .radio-mute, .radio-skip {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  border: 0; cursor: pointer; color: var(--ink); background: transparent;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.round { width: 3.2rem; height: 3.2rem; border-radius: 50%; background: var(--accent); color: var(--bg); }
+.round svg { width: 1.6rem; height: 1.6rem; fill: currentColor; }
+.radio-mute, .radio-skip { width: 2.4rem; height: 2.4rem; border-radius: 50%; }
+.radio-mute svg, .radio-skip svg { width: 1.4rem; height: 1.4rem; fill: currentColor; }
+.radio.playing .round { box-shadow: 0 0 0 0.2rem var(--line); }
+.round:active, .radio-mute:active, .radio-skip:active { opacity: 0.6; }
+.radio input[type="range"] { flex: 1; min-width: 0; height: 2.2rem; accent-color: var(--accent); background: transparent; cursor: pointer; touch-action: pan-y; }
+
+/* the microphone, bottom right: pulses (opacity only) while it listens */
+.mic { width: 2.8rem; height: 2.8rem; }
+.mic svg { width: 1.4rem; height: 1.4rem; }
+.mic.listening { animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.toast {
+  position: fixed; left: 50%; bottom: clamp(1rem, 4vmin, 3rem); transform: translateX(-50%); z-index: 30;
+  max-width: min(36rem, 90vw); padding: 0.8rem 1.2rem; border-radius: 0.6rem; text-align: center;
+  font-size: 1.05rem; color: var(--bg); background: var(--ink); opacity: 0.94;
+}
 
 /* ---- status --------------------------------------------------------------------- */
 /* ---- news: one headline at a time, cross-faded (opacity only: cheap on a Pi) ---------- */
@@ -176,7 +225,7 @@ body {
 .news-title { flex: 1 1 auto; min-width: 0; font-size: 1.02rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .news-age { flex: none; font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; }
 
-.status { grid-area: status; justify-self: end; align-self: end; display: flex; gap: 0.7rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
+.status { grid-area: status; justify-self: end; align-self: end; display: flex; gap: 0.9rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
 .badge { padding: 0.12rem 0.5rem; border: 1px solid currentColor; border-radius: 99px; }
 .place { opacity: 0.9; }
 
@@ -205,10 +254,12 @@ body {
   }
   .side {
     min-height: 0; display: grid; gap: 1.4rem 2.4rem;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
   }
-  .sky { grid-column: 1 / -1; }
-  .upcoming { min-height: 0; padding-top: 0.4rem; }
+  .sky { grid-column: 1; grid-row: 1; }
+  .facts { grid-column: 2; grid-row: 1; }
+  .upcoming { grid-column: 1 / -1; grid-row: 2; min-height: 0; padding-top: 0.4rem; }
+  .widgets { grid-column: 1 / -1; grid-row: 3; }
   .now { gap: 1.2rem; }
 }
 
@@ -223,15 +274,6 @@ body {
 .setup h2 { font-size: 1.35rem; font-weight: 500; margin-bottom: 0.4rem; }
 .setup p { font-size: 0.95rem; color: var(--ink-2); line-height: 1.4; }
 .setup ul { list-style: none; margin-top: 0.6rem; font-size: 1.15rem; color: var(--accent); font-variant-numeric: tabular-nums; }
-
-/* ---- photo carousel: full-screen, fades in/out, alternates with the dashboard --------- */
-.photos {
-  position: fixed; inset: 0; z-index: 20; background: #000;
-  opacity: 0; transition: opacity 1.2s ease; pointer-events: none;
-}
-.photos.show { opacity: 1; }
-.photos-img { width: 100%; height: 100%; object-fit: cover; }
-body[data-sleep="true"] .photos { opacity: 0; }
 
 /* ---- night hours: the screen goes dark (on the Pi the HDMI output is also turned off) -- */
 body[data-sleep="true"] { background: #000; }

@@ -14,9 +14,9 @@ Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
 
 | | |
 |---|---|
-| ![Japon](docs/screenshots/v0.3.0-japan-light.png) | ![Chine, nuit](docs/screenshots/v0.4.0-china-night.png) |
-| ![Afrique (swahili)](docs/screenshots/v0.4.0-africa-light.png) | ![Monde arabe (de droite à gauche)](docs/screenshots/v0.4.0-arab-light.png) |
-| ![Amérique du Nord](docs/screenshots/v0.4.0-america-light.png) | ![Créole (créole haïtien)](docs/screenshots/v0.4.0-creole-light.png) |
+| ![Japon](docs/screenshots/v0.12.0-japan-light.png) | ![Chine, nuit](docs/screenshots/v0.12.0-china-night.png) |
+| ![Afrique (swahili)](docs/screenshots/v0.12.0-africa-light.png) | ![Monde arabe (de droite à gauche)](docs/screenshots/v0.12.0-arab-light.png) |
+| ![Amérique du Nord](docs/screenshots/v0.12.0-america-light.png) | ![Créole (créole haïtien)](docs/screenshots/v0.12.0-creole-light.png) |
 
 *Les captures utilisent des données de démonstration : météo, agenda et titres sont inventés ;
 la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les captures](docs/screenshots/)
@@ -42,25 +42,27 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
 - **Fait pour le mur** : fonctionne en hauteur (portrait) ou en largeur, éteint l'écran la nuit,
   affiche un QR code pour le régler depuis votre téléphone au premier démarrage.
 - **Une page de réglages** pour votre téléphone, en mots simples, avec de l'aide pas à pas.
-- **Carrousel photo** : pointez-le vers un dossier sur le Pi et il affiche ces photos en plein
-  écran, en alternance avec le tableau de bord. Remplissez le dossier avec
-  [rclone](https://rclone.org) (Google Drive, Dropbox, OneDrive, albums partagés iCloud et bien
-  d'autres) ou [Syncthing](https://syncthing.net) (la pellicule de votre téléphone) — Beranda ne
-  fait que lire ce qui s'y trouve déjà, sans jamais avoir son propre compte dans le cloud.
+- **Cadre photo** : un petit cadre sur l'écran principal. Dans la page de réglages, touchez
+  « Ajouter des photos » et choisissez des images depuis votre téléphone ou votre ordinateur
+  (le sélecteur du téléphone propose aussi Google Photos, iCloud ou Google Drive) ; ou collez le
+  lien d'un dossier partagé [Dropbox](https://www.dropbox.com) et Beranda le suit. Rien à
+  taper, aucun dossier à trouver : Beranda garde le sien.
 - **Radio du monde** : cherchez parmi les quelque 50 000 stations gratuites de
   [Radio Browser](https://www.radio-browser.info), sans compte, et enregistrez vos favorites
-  depuis la page de réglages. Le son sort des haut-parleurs du Pi ou de sa sortie HDMI, pas de
-  votre téléphone.
-- **Programme TV du soir** : pointez-le vers un guide XMLTV gratuit (celui de votre fournisseur,
-  ou un guide communautaire comme [iptv-org/epg](https://github.com/iptv-org/epg)) et choisissez
-  vos chaînes ; Beranda ne fait que lire ce guide, il n'en héberge ni n'en récupère jamais lui-même.
-- **Contrôle par la voix (facultatif, entièrement hors ligne)** : un mot d'activation, puis
-  une courte phrase — la météo, l'heure, une station favorite, redémarrer l'écran. Rien n'est
-  envoyé où que ce soit ; cela tourne comme son propre service (`install.sh --with-voice`)
-  avec [openWakeWord](https://github.com/dscripka/openWakeWord),
-  [Vosk](https://alphacephei.com/vosk/) et [Piper](https://github.com/rhasspy/piper).
-- **Ce jour-là** : événements historiques de votre propre pays, cherchés gratuitement sur
-  [Wikidata](https://www.wikidata.org), mêlés au bandeau d'actualité.
+  depuis la page de réglages. Un cadre radio sur l'écran principal joue le son **sur la
+  tablette qui affiche Beranda**, avec un curseur de volume tactile (et un bouton « Écouter »
+  dans les réglages pour tester).
+- **Programme TV du soir** : ce qui passe à partir de 20 h pendant 3 heures (heure locale) sur
+  les chaînes que vous choisissez. La page de réglages propose des guides gratuits pour votre
+  pays (testés en direct) — vous n'avez qu'à choisir les chaînes. Beranda ne fait que lire un
+  guide ; il n'en héberge ni n'en récupère jamais lui-même.
+- **Contrôle par la voix (facultatif)** : un bouton micro sur l'écran ; dites la météo, l'heure,
+  « mets France Inter », « stop ». C'est le micro de la **tablette** qui est utilisé, via Chrome
+  ou Edge (qui envoient le son à leur propre service de reconnaissance vocale), et la tablette lit
+  la réponse à voix haute. Les navigateurs n'autorisent le micro que sur les pages « sécurisées » :
+  la page de réglages explique le réglage Chrome à faire une fois sur un réseau domestique.
+- **Ce jour-là** : quelques événements de la date du jour dans l'histoire, tirés de
+  [Wikipédia](https://www.wikipedia.org) dans votre langue — donc liés à votre région du monde.
 
 ## L'essayer sur votre ordinateur (2 minutes)
 

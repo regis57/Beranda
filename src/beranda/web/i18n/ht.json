@@ -87,5 +87,9 @@
     "text": "Eskane kòd sa a, oswa louvri adrès sa a sou yon aparèy ki sou menm Wi-Fi a:",
     "wifi_title": "Poko gen Wi-Fi? Konekte ak pa mwen an",
     "wifi_text": "Eskane kòd sa a ak telefòn ou pou konekte ak rezo Wi-Fi \"{ssid}\" a, epi swiv paj ki louvri a pou chwazi pwòp Wi-Fi ou."
-  }
+  },
+  "history_title": "Jou sa a nan listwa",
+  "radio_error": "Pa ka jwe estasyon sa a",
+  "voice_listening": "M ap koute…",
+  "voice_unavailable": "Mikwofòn pa disponib – gade anviwònman yo"
 }

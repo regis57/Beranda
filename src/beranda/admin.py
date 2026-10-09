@@ -9,12 +9,14 @@ Safety, because this endpoint can change what the mirror does and holds secret c
 
 from __future__ import annotations
 
+import asyncio
 import hmac
 import ipaddress
 import logging
 import os
 import tempfile
 from dataclasses import dataclass, field, replace
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -25,10 +27,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from . import __version__, system
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics, news_catalog, photos, radio, seasons, tv
+from .providers import calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
 from .providers import countries as world
 from .providers import news as news_mod
-from .providers.radio_player import RadioPlayer
 
 log = logging.getLogger(__name__)
 
@@ -38,13 +39,50 @@ USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 LANGUAGES = world.LANGUAGES
 
 
+DROPBOX_EVERY_SECONDS = 6 * 60 * 60  # how often a Dropbox folder is copied again
+
+
 @dataclass
 class Runtime:
     """What the running app reads on every request; the admin page can replace `cfg`."""
 
     cfg: Config
     config_path: Path | None  # None: nowhere to save (demo mode)
-    radio: RadioPlayer = field(default_factory=RadioPlayer)
+    dropbox: dict = field(default_factory=dict)  # result of the last Dropbox copy, for the page
+    _tasks: set = field(default_factory=set)
+
+    @property
+    def photo_folder(self) -> Path:
+        return photos.effective_folder(self.cfg.photos_folder)
+
+    async def sync_dropbox(self) -> dict:
+        """Copy the shared Dropbox folder into the photo folder and remember how it went."""
+        when = datetime.now(UTC).isoformat(timespec="seconds")
+        try:
+            result = await photos.sync_dropbox(self.cfg.photos_dropbox_url, self.photo_folder)
+            self.dropbox = {"ok": True, "at": when, **result}
+        except photos.PhotoError as exc:  # bad link, too big, not a folder: the page words it
+            self.dropbox = {"ok": False, "at": when, "error": str(exc), "code": exc.code}
+        except (httpx.HTTPError, OSError) as exc:
+            self.dropbox = {"ok": False, "at": when, "error": type(exc).__name__, "code": "net"}
+        return self.dropbox
+
+    def sync_dropbox_soon(self) -> None:
+        """Start a copy in the background (the settings page must not wait for a download)."""
+        task = asyncio.create_task(self.sync_dropbox())
+        self._tasks.add(task)
+        task.add_done_callback(self._tasks.discard)
+
+    async def dropbox_loop(self) -> None:
+        """Runs for the life of the server: copy the Dropbox folder now, then every few hours."""
+        await asyncio.sleep(30)  # let the screen come up first
+        while True:
+            try:
+                if self.cfg.photos_dropbox_url and not self.cfg.demo:
+                    await self.sync_dropbox()
+            except Exception:
+                log.exception("Dropbox copy failed")
+            await asyncio.sleep(DROPBOX_EVERY_SECONDS)
 
 
 def _is_local(host: str | None) -> bool:
@@ -113,6 +151,11 @@ def router(runtime: Runtime) -> APIRouter:
             # first visit: no config file yet, the page shows a short welcome
             "first_run": runtime.config_path is not None and not runtime.config_path.exists(),
             "news_auto": news_catalog.automatic(cfg.country, cfg.language, cfg.location.name),
+            "photos_info": {
+                "folder": str(runtime.photo_folder),
+                "custom": bool(cfg.photos_folder.strip()),
+                "dropbox": runtime.dropbox,
+            },
             "options": {
                 "countries": countries,
                 "languages": list(LANGUAGES),
@@ -146,9 +189,10 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(422, f"invalid settings: {exc}") from exc
         new = replace(new, demo=runtime.cfg.demo, cache_dir=runtime.cfg.cache_dir)
         write_config(runtime.config_path, new)
-        if new.radio_volume != runtime.cfg.radio_volume:
-            runtime.radio.set_volume(new.radio_volume)
+        new_link = new.photos_dropbox_url and new.photos_dropbox_url != runtime.cfg.photos_dropbox_url
         runtime.cfg = new
+        if new_link and not new.demo:
+            runtime.sync_dropbox_soon()
         return {"saved": True, "path": str(runtime.config_path)}
 
     @api.get("/geocode", dependencies=[Depends(guard)])
@@ -178,7 +222,7 @@ def router(runtime: Runtime) -> APIRouter:
 
     @api.post("/test-ics", dependencies=[Depends(guard)])
     async def test_ics(body: dict) -> dict:
-        from datetime import datetime, timedelta
+        from datetime import timedelta
         from zoneinfo import ZoneInfo
 
         url = str(body.get("url", ""))
@@ -189,12 +233,57 @@ def router(runtime: Runtime) -> APIRouter:
             events = calendar_ics.events_from_ics(text, today, today + timedelta(days=60), tz)
         except Exception as exc:  # noqa: BLE001 - class name only: the URL is a secret
             return {"ok": False, "error": type(exc).__name__}
-        return {"ok": True, "count": len(events), "next": [e["title"] for e in events[:3]]}
+        return {
+            "ok": True,
+            "count": len(events),
+            # title + start (ISO), so the page can say "Tuesday 3 Nov - dentist"
+            "next": [{"title": e["title"], "start": e["start"], "all_day": e["all_day"]} for e in events[:3]],
+        }
+
+    @api.get("/photos", dependencies=[Depends(guard)])
+    async def photos_list() -> dict:
+        return {
+            "folder": str(runtime.photo_folder),
+            "names": photos.list_photos(runtime.photo_folder),
+            "dropbox": runtime.dropbox,
+        }
+
+    @api.post("/photos", dependencies=[Depends(guard)])
+    async def photos_add(request: Request, name: str = "photo.jpg") -> dict:
+        """Receive one picture as the raw request body (no form encoding: nothing extra to install)."""
+        declared = request.headers.get("content-length")
+        if declared and declared.isdigit() and int(declared) > photos.MAX_UPLOAD_BYTES:
+            raise HTTPException(413, "that picture is too big (15 MB at most)")
+        chunks, size = [], 0
+        async for chunk in request.stream():
+            size += len(chunk)
+            if size > photos.MAX_UPLOAD_BYTES:
+                raise HTTPException(413, "that picture is too big (15 MB at most)")
+            chunks.append(chunk)
+        try:
+            saved = photos.save(runtime.photo_folder, name, b"".join(chunks))
+        except photos.PhotoError as exc:
+            raise HTTPException(413 if exc.code == "big" else 422, str(exc)) from exc
+        except OSError as exc:
+            raise HTTPException(500, f"could not save the picture ({type(exc).__name__})") from exc
+        return {"saved": saved}
+
+    @api.delete("/photos/{name}", dependencies=[Depends(guard)])
+    async def photos_remove(name: str) -> dict:
+        if not photos.delete(runtime.photo_folder, name):
+            raise HTTPException(404, "no such picture")
+        return {"deleted": name}
+
+    @api.post("/photos-sync", dependencies=[Depends(guard)])
+    async def photos_sync() -> dict:
+        if not runtime.cfg.photos_dropbox_url:
+            raise HTTPException(409, "no Dropbox link is saved yet")
+        return await runtime.sync_dropbox()
 
     @api.get("/photos-count", dependencies=[Depends(guard)])
-    async def photos_count(folder: str) -> dict:
+    async def photos_count(folder: str = "") -> dict:
         """Live feedback while the user types a folder path, before they save it."""
-        return {"count": len(photos.list_photos(folder))}
+        return {"count": len(photos.list_photos(photos.effective_folder(folder)))}
 
     @api.get("/radio-search", dependencies=[Depends(guard)])
     async def radio_search(country: str = "", language: str = "", name: str = "") -> dict:
@@ -204,22 +293,11 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(502, f"radio directory unavailable ({type(exc).__name__})") from exc
         return {"stations": stations}
 
-    @api.get("/radio-status", dependencies=[Depends(guard)])
-    async def radio_status() -> dict:
-        return runtime.radio.status()
-
-    @api.post("/radio-play", dependencies=[Depends(guard)])
-    async def radio_play(body: dict) -> dict:
-        try:
-            runtime.radio.play(body, runtime.cfg.radio_volume)
-        except (ValueError, RuntimeError) as exc:
-            raise HTTPException(409, str(exc)) from exc
-        return runtime.radio.status()
-
-    @api.post("/radio-stop", dependencies=[Depends(guard)])
-    async def radio_stop() -> dict:
-        runtime.radio.stop()
-        return runtime.radio.status()
+    @api.get("/tv-guides", dependencies=[Depends(guard)])
+    async def tv_guides_for(country: str = "") -> dict:
+        """Which guide addresses for this country answer right now (a few seconds' check)."""
+        code = (country or runtime.cfg.country).upper()[:2]
+        return {"country": code, "guides": await tv_guides.available(code), "project": tv_guides.PROJECT_PAGE}
 
     @api.post("/test-tv", dependencies=[Depends(guard)])
     async def test_tv(body: dict) -> dict:

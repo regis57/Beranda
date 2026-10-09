@@ -87,5 +87,9 @@
     "text": "Naskenujte kód nebo otevřete tuto adresu na zařízení ve stejné Wi-Fi:",
     "wifi_title": "Zatím bez Wi-Fi? Připojte se k mé síti",
     "wifi_text": "Naskenujte tento kód telefonem a připojte se k síti Wi-Fi \"{ssid}\", poté na otevřené stránce vyberte svou vlastní Wi-Fi."
-  }
+  },
+  "history_title": "Tento den v historii",
+  "radio_error": "Tuto stanici nelze přehrát",
+  "voice_listening": "Poslouchám…",
+  "voice_unavailable": "Mikrofon není dostupný – viz nastavení"
 }

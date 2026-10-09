@@ -13,9 +13,9 @@ of news headlines. Light by day, dark at night. Free: no account, no subscriptio
 
 | | |
 |---|---|
-| ![Japan](docs/screenshots/v0.3.0-japan-light.png) | ![China, night](docs/screenshots/v0.4.0-china-night.png) |
-| ![Africa (Swahili)](docs/screenshots/v0.4.0-africa-light.png) | ![Arab world (right to left)](docs/screenshots/v0.4.0-arab-light.png) |
-| ![North America](docs/screenshots/v0.4.0-america-light.png) | ![Creole (Haitian Creole)](docs/screenshots/v0.4.0-creole-light.png) |
+| ![Japan](docs/screenshots/v0.12.0-japan-light.png) | ![China, night](docs/screenshots/v0.12.0-china-night.png) |
+| ![Africa (Swahili)](docs/screenshots/v0.12.0-africa-light.png) | ![Arab world (right to left)](docs/screenshots/v0.12.0-arab-light.png) |
+| ![North America](docs/screenshots/v0.12.0-america-light.png) | ![Creole (Haitian Creole)](docs/screenshots/v0.12.0-creole-light.png) |
 
 *Screenshots use demo data: weather, agenda and headlines are invented; moon, sun, seasons and
 public holidays are real.* [All screenshots](docs/screenshots/)
@@ -41,24 +41,25 @@ public holidays are real.* [All screenshots](docs/screenshots/)
 - **Made for a wall**: works upright (portrait) or sideways, turns the screen off at night,
   shows a QR code to set it up from your phone the first time.
 - **A settings page** for your phone, in plain words, with step-by-step help.
-- **Photo carousel**: point it at a folder on the Pi and it shows those pictures full-screen,
-  alternating with the dashboard. Fill the folder with [rclone](https://rclone.org) (Google
-  Drive, Dropbox, OneDrive, iCloud shared albums and many more) or
-  [Syncthing](https://syncthing.net) (your phone's camera roll) — Beranda only ever reads
-  what's already there, no cloud account of its own.
+- **Photo frame**: a small frame on the main screen. In the settings page, tap "Add photos"
+  and pick pictures from your phone or computer (the phone's own picker also offers Google
+  Photos, iCloud or Google Drive); or paste a shared [Dropbox](https://www.dropbox.com) folder
+  link and Beranda follows it. Nothing to type, no folder to find — Beranda keeps its own.
 - **World radio**: search [Radio Browser](https://www.radio-browser.info)'s ~50,000 free
-  stations, no account, and save favourites from the settings page. Plays through the Pi's
-  own speakers or HDMI audio, not through your phone.
-- **TV prime time**: point it at a free XMLTV guide (your provider's, or a community one such
-  as [iptv-org/epg](https://github.com/iptv-org/epg)) and pick your channels; Beranda only ever
-  reads that guide, it never hosts or scrapes a TV guide itself.
-- **Voice control (optional, fully offline)**: a wake word, then a short sentence — the
-  weather, the time, a favourite station, restarting the screen. Nothing is sent anywhere;
-  it runs as its own service (`install.sh --with-voice`) using
-  [openWakeWord](https://github.com/dscripka/openWakeWord),
-  [Vosk](https://alphacephei.com/vosk/) and [Piper](https://github.com/rhasspy/piper).
-- **On this day**: historical events for your own country, looked up for free on
-  [Wikidata](https://www.wikidata.org), woven into the news ticker.
+  stations, no account, and save favourites from the settings page. A radio box on the main
+  screen plays the sound **on the tablet showing Beranda**, with a touch volume slider (and a
+  "Play" button in the settings page to test it).
+- **TV tonight**: what is on from 20:00 for the next 3 hours (local time) on the channels you
+  pick. The settings page suggests free guides for your country (tested live) — you only choose
+  channels. Beranda only ever reads a guide; it never hosts or scrapes one.
+- **Voice control (optional)**: a microphone button on the screen; say the weather, the time,
+  "play France Inter", "stop". It uses the **tablet's** microphone through Chrome or Edge
+  (which send the sound to their own speech service) and the tablet reads the answer aloud.
+  Browsers only allow microphones on "secure" pages: the settings page explains the one-time
+  Chrome setting for a home network.
+- **On this day**: a few events from today's date in history, from
+  [Wikipedia](https://www.wikipedia.org) in your language — so they are about your part of the
+  world.
 
 ## Try it on your computer (2 minutes)
 

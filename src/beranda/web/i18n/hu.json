@@ -87,5 +87,9 @@
     "text": "Olvasd be a kódot, vagy nyisd meg a címet egy ugyanazon a Wi-Fi-n lévő eszközön:",
     "wifi_title": "Még nincs Wi-Fi? Csatlakozz az enyémhez",
     "wifi_text": "Szkenneld be ezt a kódot a telefonoddal, hogy csatlakozz a \"{ssid}\" Wi-Fi hálózathoz, majd a megnyíló oldalon válaszd ki a saját Wi-Fi-det."
-  }
+  },
+  "history_title": "Ezen a napon",
+  "radio_error": "Ez az állomás nem játszható le",
+  "voice_listening": "Hallgatom…",
+  "voice_unavailable": "A mikrofon nem érhető el – lásd a beállításokat"
 }

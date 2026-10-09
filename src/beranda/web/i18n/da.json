@@ -87,5 +87,9 @@
     "text": "Scan koden, eller åbn adressen på en enhed på samme wi-fi:",
     "wifi_title": "Stadig ingen wifi? Opret forbindelse til min",
     "wifi_text": "Scan denne kode for at oprette forbindelse til wifi-netværket \"{ssid}\" med din telefon, og følg derefter den side, der åbner, for at vælge dit eget wifi."
-  }
+  },
+  "history_title": "På denne dag",
+  "radio_error": "Kan ikke afspille denne station",
+  "voice_listening": "Lytter…",
+  "voice_unavailable": "Mikrofon ikke tilgængelig – se indstillinger"
 }

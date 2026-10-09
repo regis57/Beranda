@@ -1,6 +1,9 @@
 // Beranda display. Vanilla JS, no framework, no build step: it has to stay light on a Pi 3B.
 // Data comes from one endpoint (/api/state); the display never talks to third parties.
 
+import { createRadio } from '/static/radio.js';
+import * as voice from '/static/voice.js';
+
 const POLL_MS = 60_000;
 const RETRY_MS = 5_000;
 const params = new URLSearchParams(location.search);
@@ -117,7 +120,7 @@ function renderClock() {
   $('date').textContent = dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now);
   // Re-run exactly when the next minute starts: no per-second timer, no wasted CPU.
   clearTimeout(clockTimer);
-  clockTimer = setTimeout(() => { renderClock(); renderCalendarDay(); }, 60_000 - (now.getTime() % 60_000) + 50);
+  clockTimer = setTimeout(() => { renderClock(); renderAgenda(); }, 60_000 - (now.getTime() % 60_000) + 50);
 }
 
 // ---------------------------------------------------------------- weather ----
@@ -241,6 +244,11 @@ function renderSky() {
   }
 
   const s = state.season;
+  // The French Republican calendar (17 Vendémiaire, "Pumpkin") is only a curiosity: the box
+  // "On this day" replaces it. Other themes keep their own seasonal block.
+  $('season').hidden = s.kind === 'republican';
+  $('sky').classList.toggle('no-season', s.kind === 'republican');
+  if (s.kind === 'republican') return;
   const base = (loadedLang || 'en').split('-')[0];
   const pick = (o) => (o && (o[loadedLang] || o[base] || o.en)) || '';
   const own = s.kind === 'ko' ? 'ja' : s.kind === 'jieqi' ? 'zh' : loadedLang;
@@ -291,78 +299,8 @@ function chineseLunarDate() {
   } catch { return ''; }
 }
 
-// ---------------------------------------------------------------- calendar --------
-function marksByDay() {
-  const map = new Map();
-  const add = (date, cls) => {
-    const list = map.get(date) || [];
-    if (!list.includes(cls)) list.push(cls);
-    map.set(date, list);
-  };
-  for (const d of state.special_days) add(d.date, d.kind);
-  for (const e of state.events) {
-    const first = e.start.slice(0, 10);
-    add(first, 'event');
-    if (e.all_day) { // an all-day event's end date is exclusive
-      const last = e.end.slice(0, 10);
-      for (let d = new Date(`${first}T12:00:00Z`); ; ) {
-        d.setUTCDate(d.getUTCDate() + 1);
-        const key = d.toISOString().slice(0, 10);
-        if (key >= last) break;
-        add(key, 'event');
-      }
-    }
-  }
-  return map;
-}
-
-function renderCalendar() {
-  const todayKey = dayKey(new Date());
-  const [y, m] = todayKey.split('-').map(Number);
-  const startJS = (state.config.week_start + 1) % 7; // server: 0=Mon..6=Sun -> JS: 0=Sun..6=Sat
-  const first = new Date(Date.UTC(y, m - 1, 1));
-  const lead = (first.getUTCDay() - startJS + 7) % 7;
-  const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
-
-  $('cal-title').textContent = dtf({ month: 'long', year: 'numeric' }, 'UTC').format(first);
-  const grid = $('cal-grid');
-  grid.replaceChildren();
-
-  for (let i = 0; i < 7; i++) {
-    const dow = document.createElement('div');
-    dow.className = 'cal-dow';
-    dow.textContent = dtf({ weekday: 'narrow' }, 'UTC').format(new Date(Date.UTC(2024, 0, 7 + startJS + i)));
-    grid.append(dow);
-  }
-  for (let i = 0; i < lead; i++) grid.append(document.createElement('div'));
-
-  const marks = marksByDay();
-  for (let day = 1; day <= days; day++) {
-    const key = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const kinds = marks.get(key) || [];
-    const cell = document.createElement('div');
-    const dow = new Date(Date.UTC(y, m - 1, day)).getUTCDay();
-    cell.className = 'cal-cell';
-    if (key < todayKey) cell.classList.add('past');
-    if (key === todayKey) cell.classList.add('today');
-    if (dow === 0) cell.classList.add('sunday');
-    if (kinds.includes('holiday')) cell.classList.add('holiday-day');
-    const num = document.createElement('span');
-    num.className = 'cal-num';
-    num.textContent = day;
-    const row = document.createElement('div');
-    row.className = 'cal-marks';
-    for (const kind of kinds.slice(0, 3)) {
-      const mark = document.createElement('i');
-      mark.className = `mark ${kind}`;
-      row.append(mark);
-    }
-    cell.append(num, row);
-    grid.append(cell);
-  }
-}
-
-function renderCalendarDay() { if (state) { renderCalendar(); renderUpcoming(); } }
+// ---------------------------------------------------------------- agenda ----------------
+function renderAgenda() { if (state) renderUpcoming(); }
 
 function renderUpcoming() {
   const list = $('upcoming');
@@ -370,7 +308,7 @@ function renderUpcoming() {
   const today = new Date();
   const todayKey = dayKey(today);
   const tomorrowKey = dayKey(new Date(today.getTime() + 86_400_000));
-  const horizon = dayKey(new Date(today.getTime() + 12 * 86_400_000));
+  const soon = dayKey(new Date(today.getTime() + 6 * 86_400_000));
 
   const items = [
     ...state.special_days.map((d) => ({ date: d.date, kind: d.kind, label: d.label, time: '', sort: '00' })),
@@ -378,9 +316,9 @@ function renderUpcoming() {
       date: e.start.slice(0, 10), kind: 'event', label: e.title, sort: e.all_day ? '01' : e.start.slice(11, 16),
       time: e.all_day ? t('all_day') : dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start)),
     })),
-  ].filter((i) => i.date >= todayKey && i.date <= horizon)
+  ].filter((i) => i.date >= todayKey)  // everything the server sent: until the end of next month
     .sort((a, b) => a.date.localeCompare(b.date) || a.sort.localeCompare(b.sort))
-    .slice(0, 7);
+    .slice(0, 8);
 
   if (!items.length) {
     const li = document.createElement('li');
@@ -396,7 +334,8 @@ function renderUpcoming() {
     when.className = 'up-when';
     if (item.date === todayKey) { when.textContent = t('today'); when.classList.add('soon'); }
     else if (item.date === tomorrowKey) when.textContent = t('tomorrow');
-    else when.textContent = dtf({ weekday: 'short', day: 'numeric' }, 'UTC').format(noon(item.date));
+    else if (item.date <= soon) when.textContent = dtf({ weekday: 'short', day: 'numeric' }, 'UTC').format(noon(item.date));
+    else when.textContent = dtf({ day: 'numeric', month: 'short' }, 'UTC').format(noon(item.date));  // further away: "3 nov."
     const mark = document.createElement('i');
     mark.className = `mark ${item.kind}`;
     const label = document.createElement('span');
@@ -437,16 +376,11 @@ function tickerItems() {
   const shows = (state?.tv?.programmes || []).map((p) => ({
     source: p.channel, title: p.title, age: `${p.start}–${p.stop}`,
   }));
-  // "On this day": the source column becomes the year it happened (negative = BCE).
-  const onThisDay = (state?.history || []).map((h) => ({
-    source: h.year < 0 ? `${-h.year} BCE` : String(h.year), title: h.label, age: '',
-  }));
   const merged = [];
-  const count = Math.max(news.length, shows.length, onThisDay.length);
+  const count = Math.max(news.length, shows.length);
   for (let i = 0; i < count; i++) {
     if (i < news.length) merged.push(news[i]);
     if (i < shows.length) merged.push(shows[i]);
-    if (i < onThisDay.length) merged.push(onThisDay[i]);
   }
   return merged;
 }
@@ -476,49 +410,148 @@ function renderNews() {
   newsTimer = setTimeout(next, NEWS_MS);
 }
 
-// ---------------------------------------------------------------- photo carousel ------
-// Alternates full-screen photo / dashboard, each for `interval` seconds, so a mirror with
-// no folder configured never shows this at all (names stays empty and the timer is skipped).
+// ---------------------------------------------------------------- "On this day" -------
+function renderFacts() {
+  const items = (state.history || []).slice(0, 3);
+  $('facts').hidden = !items.length;
+  if (!items.length) return;
+  $('facts-title').textContent = t('history_title');
+  $('facts-list').replaceChildren(...items.map((h) => {
+    const li = document.createElement('li');
+    li.className = 'fact';
+    const year = document.createElement('span');
+    year.className = 'fact-year';
+    year.textContent = h.year < 0 ? `−${-h.year}` : String(h.year);  // −44 = 44 before our era
+    const text = document.createElement('span');
+    text.className = 'fact-text';
+    text.textContent = h.text;
+    li.append(year, text);
+    return li;
+  }));
+}
+
+// ---------------------------------------------------------------- photo frame ----------
+// A small frame that cross-fades through the pictures, one every `interval` seconds. It hides
+// itself while the photo folder is empty. Two stacked <img>: the next one loads invisibly,
+// then fades in over the other (only opacity changes - cheap on a Raspberry Pi).
 let photosTimer = null;
-let photosRunning = false;
 let photosIndex = -1;
 let photosNames = [];
+let photosFront = 'photo-a';
+
+function nextPhoto() {
+  if (!photosNames.length) return;
+  photosIndex = (photosIndex + 1) % photosNames.length;
+  const back = $(photosFront === 'photo-a' ? 'photo-b' : 'photo-a');
+  const front = $(photosFront);
+  const loader = new Image();
+  loader.onload = () => {
+    back.src = loader.src;
+    back.classList.add('on');
+    front.classList.remove('on');
+    photosFront = back.id;
+  };
+  loader.src = `/api/photos/${encodeURIComponent(photosNames[photosIndex])}`;
+}
 
 function renderPhotos() {
   const names = state?.photos?.names || [];
-  if (!names.length) {
-    clearTimeout(photosTimer);
-    photosTimer = null;
-    photosRunning = false;
-    photosNames = [];
-    $('photos').classList.remove('show');
-    $('photos').hidden = true;
-    return;
-  }
-  $('photos').hidden = false;
-  const sameSet = names.length === photosNames.length && names.every((n, i) => n === photosNames[i]);
+  const tile = $('phototile');
+  const same = names.length === photosNames.length && names.every((n, i) => n === photosNames[i]);
+  tile.hidden = !names.length;
+  if (!names.length) { clearInterval(photosTimer); photosTimer = null; photosNames = []; return; }
+  if (photosTimer && same) return;  // the slideshow keeps its own rhythm between polls
   photosNames = names;
-  // The carousel polls every minute like everything else, but its own slideshow timing is
-  // independent: only (re)start it when it isn't running yet, or the folder's contents changed.
-  if (photosRunning && sameSet) return;
-  clearTimeout(photosTimer);
   photosIndex = -1;
-  photosRunning = true;
-  const seconds = Math.max(5, state?.photos?.interval || 20);
-  const box = $('photos');
-  const img = $('photos-img');
-  const showNext = () => {
-    photosIndex = (photosIndex + 1) % photosNames.length;
-    img.src = `/api/photos/${encodeURIComponent(photosNames[photosIndex])}`;
-    box.classList.add('show');
-    photosTimer = setTimeout(hideAgain, seconds * 1000);
-  };
-  const hideAgain = () => {
-    box.classList.remove('show');
-    photosTimer = setTimeout(showNext, seconds * 1000);
-  };
-  showNext();
+  clearInterval(photosTimer);
+  nextPhoto();
+  photosTimer = setInterval(nextPhoto, Math.max(5, state?.photos?.interval || 20) * 1000);
 }
+
+// ---------------------------------------------------------------- radio -----------------
+const radio = createRadio($('radio-audio'), () => paintRadio());
+const PLAY = 'M8 5v14l11-7z';
+const PAUSE = 'M7 5h4v14H7zM13 5h4v14h-4z';
+const SPEAKER = 'M4 9v6h4l5 4V5L8 9z';
+const SPEAKER_OFF = 'M4 9v6h4l5 4V5L8 9zM16 9l5 6M21 9l-5 6';
+let stations = [];
+
+function currentStation() {
+  const snap = radio.snapshot();
+  return snap.station || stations.find((s) => (s.uuid || s.url) === radio.lastStationId()) || stations[0] || null;
+}
+
+function paintRadio() {
+  const box = $('radio');
+  const snap = radio.snapshot();
+  const on = snap.status === 'playing' || snap.status === 'loading';
+  box.classList.toggle('playing', snap.status === 'playing');
+  box.classList.toggle('error', snap.status === 'error');
+  $('radio-icon').setAttribute('d', on ? PAUSE : PLAY);
+  const shown = currentStation();
+  $('radio-name').textContent = snap.status === 'error' ? t('radio_error') : (shown?.name || '');
+  $('radio-toggle').setAttribute('aria-label', shown?.name || 'Radio');
+  $('radio-volume').value = snap.muted ? 0 : snap.volume;
+  $('radio-speaker').setAttribute('d', snap.muted || snap.volume === 0 ? SPEAKER_OFF : SPEAKER);
+  $('radio-next').hidden = stations.length < 2;
+}
+
+function renderRadio() {
+  stations = state?.radio?.stations || [];
+  $('radio').hidden = !stations.length;
+  if (state?.radio) radio.defaultVolume(state.radio.volume);
+  const snap = radio.snapshot();
+  // A station removed from the favourites stops playing; one still there is left alone.
+  if (snap.station && !stations.some((s) => s.url === snap.station.url)) radio.stop();
+  paintRadio();
+}
+
+$('radio-toggle').addEventListener('click', () => radio.toggle(currentStation()));
+$('radio-volume').addEventListener('input', (e) => radio.setVolume(e.target.value));
+$('radio-mute').addEventListener('click', () => radio.toggleMute());
+$('radio-next').addEventListener('click', () => {
+  if (stations.length < 2) return;
+  const here = stations.findIndex((s) => s.url === currentStation()?.url);
+  radio.play(stations[(here + 1) % stations.length]);
+});
+
+// ---------------------------------------------------------------- voice -----------------
+let toastTimer = null;
+function toast(text, ms = 6000) {
+  const el = $('toast');
+  el.textContent = text;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  if (ms) toastTimer = setTimeout(() => { el.hidden = true; }, ms);
+}
+
+async function listen() {
+  const mic = $('mic');
+  if (mic.classList.contains('listening')) return;
+  if (voice.availability() !== 'ok') { toast(t('voice_unavailable'), 9000); return; }
+  mic.classList.add('listening');
+  toast(t('voice_listening'), 0);
+  try {
+    const heard = await voice.listenOnce(lang);
+    if (!heard) { $('toast').hidden = true; return; }
+    const response = await fetch('/api/voice', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard }),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const answer = await response.json();
+    toast(`« ${heard} »\n${answer.reply}`);
+    voice.speak(answer.reply, lang);
+    if (answer.action?.type === 'radio_play') radio.play(answer.action);
+    if (answer.action?.type === 'radio_stop') radio.stop();
+  } catch (err) {
+    toast(t('voice_unavailable'), 9000);  // microphone blocked, or the browser's speech service is unreachable
+    console.warn('voice failed', err);
+  } finally {
+    mic.classList.remove('listening');
+  }
+}
+$('mic').addEventListener('click', listen);
+function renderVoice() { $('mic').hidden = !state.voice; }
 
 // ---------------------------------------------------------------- first start ---------
 function renderSetup() {
@@ -553,9 +586,6 @@ function renderStatus(online) {
   const off = $('badge-offline');
   off.hidden = online && !(state?.stale?.length);
   off.textContent = t('offline');
-  const onAir = $('badge-radio');
-  onAir.hidden = !state?.radio?.playing;
-  onAir.textContent = state?.radio?.station ? `▶ ${state.radio.station.name}` : '';
   // Open-Meteo's free tier requires attribution.
   const credit = state?.weather?.source === 'Open-Meteo' ? ' · Open-Meteo' : '';
   $('place').textContent = (state?.config.location.name ?? '') + credit;
@@ -574,14 +604,14 @@ function applyTheme() {
   const href = `/static/themes/${name}.css`;
   if (link && !link.getAttribute('href').endsWith(href)) {
     // A new theme changes the size of the blocks: fit the agenda list again once it applies.
-    link.addEventListener('load', () => renderCalendarDay(), { once: true });
+    link.addEventListener('load', () => renderAgenda(), { once: true });
     link.setAttribute('href', href);
   }
 }
 
 // Fonts and window size change how many agenda lines fit.
-document.fonts?.ready.then(() => renderCalendarDay());
-window.addEventListener('resize', () => renderCalendarDay());
+document.fonts?.ready.then(() => renderAgenda());
+window.addEventListener('resize', () => renderAgenda());
 
 async function render(online) {
   tz = state.config.location.timezone;
@@ -592,10 +622,13 @@ async function render(online) {
   renderClock();
   renderWeather();
   renderSky();
-  renderCalendar();
+  renderFacts();
   renderUpcoming();
   renderNews();
   renderPhotos();
+  renderRadio();
+  renderVoice();
+  renderAgenda();  // the widgets above may have changed how much room the agenda has
   renderSetup();
   document.body.dataset.sleep = String(Boolean(state.sleep));
   renderStatus(online);

@@ -39,8 +39,7 @@ def test_from_dict_full():
         {"key_dates": [{"date": "03-14", "label": "x", "kind": "party"}]},
         {"radio": {"stations": [{"uuid": "u1", "name": "x", "url": "not-a-url"}]}},
         {"tv": {"url": "not-a-url"}},
-        {"tv": {"prime_start": "25:99"}},
-        {"voice": {"wake_word": "beranda"}},
+        {"photos": {"dropbox_url": "ftp://x"}},
     ],
 )
 def test_invalid_values_are_rejected(bad):
@@ -68,24 +67,27 @@ def test_radio_defaults_and_round_trip():
 def test_tv_defaults_and_round_trip():
     cfg = config.Config()
     assert cfg.tv_xmltv_url == "" and cfg.tv_channels == ()
-    assert cfg.tv_prime_start == "20:00" and cfg.tv_prime_end == "23:00"
 
+    # Old files still carry prime_start/prime_end: prime time is now fixed (20:00 + 3 h), so they are ignored.
     cfg = config.from_dict(
-        {"tv": {"url": "https://example.org/guide.xml", "channels": ["c1", "c2"], "prime_start": "19:30", "prime_end": "0:15"}}
+        {"tv": {"url": "https://example.org/guide.xml", "channels": ["c1", "c2"], "prime_start": "19:30"}}
     )
     assert cfg.tv_xmltv_url == "https://example.org/guide.xml"
     assert cfg.tv_channels == ("c1", "c2")
-    assert cfg.tv_prime_start == "19:30" and cfg.tv_prime_end == "00:15"
-    assert config.to_dict(cfg)["tv"]["channels"] == ["c1", "c2"]
+    assert config.to_dict(cfg)["tv"] == {"url": "https://example.org/guide.xml", "channels": ["c1", "c2"]}
 
 
 def test_voice_defaults_and_round_trip():
-    cfg = config.Config()
-    assert cfg.voice_enabled is False and cfg.voice_wake_word == "hey_jarvis"
+    assert config.Config().voice_enabled is False
+    cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "alexa"}})  # old key: ignored
+    assert cfg.voice_enabled is True
+    assert config.to_dict(cfg)["voice"] == {"enabled": True}
 
-    cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "alexa"}})
-    assert cfg.voice_enabled is True and cfg.voice_wake_word == "alexa"
-    assert config.to_dict(cfg)["voice"] == {"enabled": True, "wake_word": "alexa"}
+
+def test_photos_round_trip_with_a_dropbox_link():
+    cfg = config.from_dict({"photos": {"dropbox_url": "https://www.dropbox.com/scl/fo/a/b?rlkey=c"}})
+    assert cfg.photos_folder == "" and cfg.photos_dropbox_url.startswith("https://www.dropbox.com/")
+    assert config.to_dict(cfg)["photos"]["dropbox_url"] == cfg.photos_dropbox_url
 
 
 def test_history_defaults_and_round_trip():

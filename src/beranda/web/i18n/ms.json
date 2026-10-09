@@ -87,5 +87,9 @@
     "text": "Imbas kod ini, atau buka alamat ini pada peranti dalam Wi-Fi yang sama:",
     "wifi_title": "Belum ada Wi-Fi? Sertai rangkaian saya",
     "wifi_text": "Imbas kod ini dengan telefon anda untuk menyertai rangkaian Wi-Fi \"{ssid}\", kemudian ikuti halaman yang dibuka untuk memilih Wi-Fi anda sendiri."
-  }
+  },
+  "history_title": "Pada hari ini",
+  "radio_error": "Stesen ini tidak dapat dimainkan",
+  "voice_listening": "Sedang mendengar…",
+  "voice_unavailable": "Mikrofon tidak tersedia – lihat tetapan"
 }

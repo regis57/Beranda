@@ -41,15 +41,18 @@ enabled = true
 # sources = ["city", "franceinfo", "lemonde", "france24-fr"]   # ids: see the settings page
 # feeds = ["https://example.org/rss"]                           # any RSS or Atom link
 
-# Photo carousel: a local folder, shown full-screen in alternation with the dashboard. Fill
-# it with rclone (Google Drive, Dropbox, OneDrive, iCloud shared albums...) or Syncthing
-# (your phone's camera roll) — Beranda only reads what's already there.
+# Photo frame: a small frame on the main screen. Easiest: open the settings page and tap
+# "Add photos" (works with pictures from your phone's gallery, Google Photos, iCloud...).
+# Or follow a shared Dropbox folder. Beranda keeps the pictures in its own folder, so there
+# is normally nothing to write here.
 # [photos]
-# folder = "/home/pi/Pictures/beranda"
-# interval = 20   # seconds each photo stays on screen
+# interval = 20            # seconds each photo stays on screen
+# dropbox_url = "https://www.dropbox.com/scl/fo/..."   # a shared Dropbox folder link
+# folder = "/home/pi/Pictures/beranda"   # advanced: use another folder instead (rclone, Syncthing)
 
 # World radio: favourite stations picked from the settings page (search Radio Browser, add
-# the ones you like). Plays through `mpv` on the Pi itself, not through the browser.
+# the ones you like). The sound plays in the page itself, on the tablet that shows Beranda,
+# with a volume slider on the screen. `volume` is the starting level.
 # [radio]
 # volume = 70   # 0-100
 # [[radio.stations]]
@@ -57,24 +60,20 @@ enabled = true
 # name = "France Inter"
 # url = "https://icecast.radiofrance.fr/franceinter-midfi.mp3"
 
-# TV prime time: your own XMLTV guide (your provider's, or a free community one such as
-# iptv-org/epg). Beranda only ever reads it, never scrapes or hosts a guide itself. Use the
-# settings page's "Find channels" button to get the channel ids below.
+# TV tonight: what is on from 20:00 for the next 3 hours (local time), for the channels you
+# pick. The settings page suggests a free guide for your country; you only choose channels.
+# Beranda only ever reads a guide (XMLTV format), never scrapes or hosts one itself.
 # [tv]
 # url = "https://example.org/guide.xml"   # .xml or .xml.gz
 # channels = ["channel.id.from.the.guide"]
-# prime_start = "20:00"   # "HH:MM", local time
-# prime_end = "23:00"     # not after prime_start means it runs past midnight
 
-# Offline voice control: only takes effect if you also installed it with
-# install.sh --with-voice (it's a separate service - see the README). wake_word must be one
-# of "alexa", "hey_jarvis" or "hey_mycroft": the three pretrained wake words Beranda can use.
+# Voice control: shows a microphone button on the screen. It listens through the microphone of
+# the tablet showing Beranda (Chrome or Edge), not the Raspberry Pi. See the settings page.
 # [voice]
 # enabled = true
-# wake_word = "hey_jarvis"
 
-# "On this day": historical events for your own country, looked up for free on Wikidata and
-# woven into the news ticker. On by default; set to false to turn it off.
+# "On this day": a few events from today's date in history, from Wikipedia in your language.
+# On by default; set to false to turn it off.
 # [history]
 # enabled = true
 

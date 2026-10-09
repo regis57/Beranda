@@ -26,4 +26,3 @@
 .season-name { font-size: 1.05rem; }
 .season-romaji { font-style: italic; }
 .season-note { font-family: var(--f-serif); color: var(--gold); font-size: 0.85rem; letter-spacing: 0.1em; }
-.cal-cell.today .cal-num { box-shadow: 0 0 0 2px var(--gold); }

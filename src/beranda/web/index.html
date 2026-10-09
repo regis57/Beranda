@@ -38,7 +38,7 @@
     <section class="week" id="week" aria-label="Prévisions sur 7 jours"></section>
 
     <aside class="side">
-      <section class="sky">
+      <section class="sky" id="sky">
         <div class="season" id="season">
           <div class="season-kanji" id="season-kanji"></div>
           <div class="season-text">
@@ -57,14 +57,43 @@
         </div>
       </section>
 
-      <section class="cal" aria-label="Calendrier">
-        <div class="cal-title" id="cal-title"></div>
-        <div class="cal-grid" id="cal-grid"></div>
+      <!-- "On this day": a few things that happened today in history (from Wikipedia). -->
+      <section class="facts" id="facts" hidden>
+        <h2 class="facts-title" id="facts-title"></h2>
+        <ul class="facts-list" id="facts-list"></ul>
       </section>
 
       <section class="upcoming" aria-label="À venir">
         <ul class="upcoming-list" id="upcoming"></ul>
       </section>
+
+      <!-- Two little widgets: a photo frame and a radio. Each hides itself when it has nothing
+           to show (no pictures yet / no favourite stations chosen). -->
+      <div class="widgets" id="widgets">
+        <figure class="phototile" id="phototile" hidden>
+          <img id="photo-a" alt="" class="on">
+          <img id="photo-b" alt="">
+        </figure>
+
+        <section class="radio" id="radio" hidden>
+          <button type="button" class="round" id="radio-toggle" aria-label="Radio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path id="radio-icon" d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="radio-main">
+            <div class="radio-name" id="radio-name"></div>
+            <div class="radio-line">
+              <button type="button" class="radio-mute" id="radio-mute" aria-label="Volume">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path id="radio-speaker" d="M4 9v6h4l5 4V5L8 9z"/></svg>
+              </button>
+              <input type="range" id="radio-volume" min="0" max="100" step="1" aria-label="Volume">
+              <button type="button" class="radio-skip" id="radio-next" aria-label="Next station">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l9 6-9 6zM17 6h2v12h-2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <audio id="radio-audio" preload="none"></audio>
     </aside>
 
     <section class="news" id="news" hidden>
@@ -76,16 +105,15 @@
     <footer class="status">
       <span class="badge" id="badge-demo" hidden></span>
       <span class="badge" id="badge-offline" hidden></span>
-      <span class="badge" id="badge-radio" hidden></span>
       <span class="place" id="place"></span>
+      <button type="button" class="round mic" id="mic" aria-label="Microphone" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg>
+      </button>
     </footer>
   </main>
 
-  <!-- Photo carousel: full-screen, alternating with the dashboard. Hidden unless a folder
-       is configured and has pictures in it. -->
-  <div class="photos" id="photos" hidden>
-    <img class="photos-img" id="photos-img" alt="">
-  </div>
+  <!-- A short message from the voice assistant ("Listening…", what it understood, its answer). -->
+  <div class="toast" id="toast" role="status" hidden></div>
 
   <!-- First start only: where to open the settings page. -->
   <section class="setup" id="setup" hidden>
