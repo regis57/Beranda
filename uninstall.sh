@@ -8,7 +8,7 @@ PREFIX="/opt/beranda"
 # shellcheck source=/dev/null
 [ -f /etc/beranda/install.env ] && source /etc/beranda/install.env
 
-for unit in beranda-kiosk.service beranda.service beranda-actions.path beranda-actions.service; do
+for unit in beranda-voice.service beranda-kiosk.service beranda.service beranda-actions.path beranda-actions.service; do
     systemctl disable --now "$unit" 2>/dev/null || true
     rm -f "/etc/systemd/system/$unit"
 done

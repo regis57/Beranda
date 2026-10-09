@@ -209,5 +209,10 @@
   "tv_none": "Ainda sem canais — cole acima o endereço de um guia e clique em «Encontrar canais».",
   "tv_prime_start": "O horário nobre começa",
   "tv_prime_end": "O horário nobre termina",
-  "tv_help": "Um guia XMLTV é um ficheiro simples que alguns operadores de TV e projetos comunitários (como o iptv-org/epg) publicam gratuitamente, com o que passa e quando. Peça o seu ao seu operador de TV, ou procure por «XMLTV» com o nome do seu país. Cole o endereço, clique em «Encontrar canais», marque os que vê e o painel mostrará a sua programação nas horas que definir."
+  "tv_help": "Um guia XMLTV é um ficheiro simples que alguns operadores de TV e projetos comunitários (como o iptv-org/epg) publicam gratuitamente, com o que passa e quando. Peça o seu ao seu operador de TV, ou procure por «XMLTV» com o nome do seu país. Cole o endereço, clique em «Encontrar canais», marque os que vê e o painel mostrará a sua programação nas horas que definir.",
+  "voice": "Controlo por voz",
+  "voice_hint": "Um serviço separado, opcional e totalmente offline: uma palavra de ativação, depois uma frase curta (o tempo, a hora, uma estação favorita, reiniciar o ecrã). Nada é enviado para lado nenhum; precisa de um microfone e de um altifalante no Pi, e instala-se à parte (install.sh --with-voice).",
+  "voice_enabled": "Ativar o controlo por voz",
+  "voice_wake_word": "Palavra de ativação",
+  "voice_help": "Diga a palavra de ativação e depois o seu pedido, por exemplo «Hey Jarvis, que tempo faz» ou «Hey Jarvis, põe France Inter». A palavra de ativação tem de ser uma destas três já prontas — o Beranda não pode treinar uma personalizada. Este cartão só ativa a funcionalidade e escolhe a palavra de ativação; a escuta em si corre como um programa próprio no Pi, iniciado uma vez com install.sh --with-voice."
 }

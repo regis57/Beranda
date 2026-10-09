@@ -485,6 +485,17 @@ function renderTv() {
   renderTvChips();
 }
 
+// ------------------------------------------------------------------ 10. voice ---
+// Beranda itself only stores whether voice control is on and which wake word to listen
+// for; the actual listening happens in a separate, optional service (`beranda-voice`),
+// started only if that was installed with `--with-voice`.
+function renderVoice() {
+  const voice = cfg.voice || { enabled: false, wake_word: 'hey_jarvis' };
+  $('voice-on').checked = !!voice.enabled;
+  $('voice-wake-word').value = voice.wake_word || 'hey_jarvis';
+  $('voice-body').hidden = !voice.enabled;
+}
+
 // ------------------------------------------------------------------ 9. screen ---
 function renderScreen() {
   const screen = cfg.screen || { rotate: 0, off: '', on: '' };
@@ -569,6 +580,7 @@ function collect() {
     prime_start: $('tv-start').value,
     prime_end: $('tv-end').value,
   };
+  body.voice = { enabled: $('voice-on').checked, wake_word: $('voice-wake-word').value };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -605,7 +617,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderVoice(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -655,6 +667,7 @@ async function boot() {
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
   $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
+  $('voice-on').addEventListener('change', () => { $('voice-body').hidden = !$('voice-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
   $('sys-check').addEventListener('click', checkUpdates);
