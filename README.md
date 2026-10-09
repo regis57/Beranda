@@ -6,7 +6,7 @@ A dashboard for a smart mirror or an old tablet, made for a **Raspberry Pi 3B+ o
 clock, local weather and rain, moon, your calendar, holidays and dates that matter, and a line
 of news headlines. Light by day, dark at night. Free: no account, no subscription, no paid API.
 
-> **Status: alpha (v0.6).** The installer is tested automatically on a fresh Debian-family
+> **Status: alpha (v0.7).** The installer is tested automatically on a fresh Debian-family
 > machine with systemd; the full-screen part has not been tried on a real Raspberry Pi yet.
 > If you try it, please tell us how it went in an issue.
 > 🇫🇷 [Lire en français](README.fr.md)
@@ -49,6 +49,9 @@ public holidays are real.* [All screenshots](docs/screenshots/)
 - **World radio**: search [Radio Browser](https://www.radio-browser.info)'s ~50,000 free
   stations, no account, and save favourites from the settings page. Plays through the Pi's
   own speakers or HDMI audio, not through your phone.
+- **TV prime time**: point it at a free XMLTV guide (your provider's, or a community one such
+  as [iptv-org/epg](https://github.com/iptv-org/epg)) and pick your channels; Beranda only ever
+  reads that guide, it never hosts or scrapes a TV guide itself.
 
 ## Try it on your computer (2 minutes)
 

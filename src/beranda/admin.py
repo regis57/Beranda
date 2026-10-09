@@ -25,7 +25,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from . import __version__, system
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics, news_catalog, photos, radio, seasons
+from .providers import calendar_ics, news_catalog, photos, radio, seasons, tv
 from .providers import countries as world
 from .providers import news as news_mod
 from .providers.radio_player import RadioPlayer
@@ -220,6 +220,17 @@ def router(runtime: Runtime) -> APIRouter:
     async def radio_stop() -> dict:
         runtime.radio.stop()
         return runtime.radio.status()
+
+    @api.post("/test-tv", dependencies=[Depends(guard)])
+    async def test_tv(body: dict) -> dict:
+        """Download the guide once and list its channels, for the settings page's picker."""
+        url = str(body.get("url", "")).strip()
+        try:
+            raw = await tv.download(url)
+            found = tv.channels(raw)
+        except Exception as exc:  # noqa: BLE001 - class name only: the URL may be private
+            return {"ok": False, "error": type(exc).__name__}
+        return {"ok": True, "channels": found}
 
     @api.get("/system", dependencies=[Depends(guard)])
     async def system_info() -> dict:

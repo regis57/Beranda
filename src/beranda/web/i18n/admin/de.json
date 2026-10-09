@@ -199,5 +199,15 @@
   "requested_update": "Wird aktualisiert… die Seite ist in ein bis zwei Minuten wieder da.",
   "requested_restart_screen": "Der Bildschirm startet neu.",
   "requested_reboot": "Der Raspberry Pi startet neu. Öffnen Sie diese Seite in einer Minute wieder.",
-  "requested_reset": "Wird zurückgesetzt… Beranda startet mit den ursprünglichen Einstellungen neu. Laden Sie diese Seite in ein paar Sekunden neu."
+  "requested_reset": "Wird zurückgesetzt… Beranda startet mit den ursprünglichen Einstellungen neu. Laden Sie diese Seite in ein paar Sekunden neu.",
+  "tv": "TV",
+  "tv_hint": "Gib Beranda einen TV-Programmführer (XMLTV-Format) und wähle die Sender, deren Abendprogramm angezeigt werden soll. Beranda liest nur den Führer, den du angibst — er sammelt oder hostet selbst keinen.",
+  "tv_url_ph": "https://.../guide.xml (oder .xml.gz)",
+  "tv_find": "Sender suchen",
+  "tv_ok": "{n} Sender gefunden. Wähle die gewünschten aus.",
+  "tv_fail": "Dieser Programmführer konnte nicht gelesen werden ({err}).",
+  "tv_none": "Noch keine Sender — füge oben eine Adresse ein und klicke auf „Sender suchen“.",
+  "tv_prime_start": "Hauptabendzeit ab",
+  "tv_prime_end": "Hauptabendzeit bis",
+  "tv_help": "Ein XMLTV-Programmführer ist eine einfache Datei, die manche TV-Anbieter und Gemeinschaftsprojekte (wie iptv-org/epg) kostenlos veröffentlichen und die zeigt, was wann läuft. Frage deinen TV-Anbieter danach oder suche nach „XMLTV“ und deinem Land. Füge die Adresse ein, klicke auf „Sender suchen“, wähle deine Sender aus, und das Display zeigt deren Programm in den von dir eingestellten Stunden."
 }

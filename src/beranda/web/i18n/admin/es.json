@@ -199,5 +199,15 @@
   "requested_update": "Actualizando… la página volverá en uno o dos minutos.",
   "requested_restart_screen": "La pantalla se reinicia.",
   "requested_reboot": "La Raspberry Pi se reinicia. Vuelva a esta página en un minuto.",
-  "requested_reset": "Reiniciando los ajustes… Beranda se reinicia con los ajustes originales. Recargue esta página en unos segundos."
+  "requested_reset": "Reiniciando los ajustes… Beranda se reinicia con los ajustes originales. Recargue esta página en unos segundos.",
+  "tv": "TV",
+  "tv_hint": "Indica a Beranda una guía de TV (formato XMLTV) y elige los canales de los que quieres ver la programación de la noche. Beranda solo lee la guía que le indiques — nunca recopila ni aloja ninguna por su cuenta.",
+  "tv_url_ph": "https://.../guide.xml (o .xml.gz)",
+  "tv_find": "Buscar canales",
+  "tv_ok": "Se encontraron {n} canal(es). Marca los que quieras.",
+  "tv_fail": "No se pudo leer esa guía ({err}).",
+  "tv_none": "Aún no hay canales — pega arriba la dirección de una guía y pulsa «Buscar canales».",
+  "tv_prime_start": "La franja empieza",
+  "tv_prime_end": "La franja termina",
+  "tv_help": "Una guía XMLTV es un archivo sencillo que algunos proveedores de TV y proyectos comunitarios (como iptv-org/epg) publican gratis, con lo que se emite y cuándo. Pide la tuya a tu proveedor de TV, o busca «XMLTV» junto con el nombre de tu país. Pega su dirección, pulsa «Buscar canales», marca los que ves y el panel mostrará su programación en el horario que elijas."
 }

@@ -199,5 +199,15 @@
   "requested_update": "Sedang memperbarui… halaman kembali dalam satu atau dua menit.",
   "requested_restart_screen": "Layar sedang dimulai ulang.",
   "requested_reboot": "Raspberry Pi sedang dimulai ulang. Buka lagi halaman ini dalam satu menit.",
-  "requested_reset": "Sedang mengatur ulang… Beranda memulai ulang dengan pengaturan awal. Muat ulang halaman ini dalam beberapa detik."
+  "requested_reset": "Sedang mengatur ulang… Beranda memulai ulang dengan pengaturan awal. Muat ulang halaman ini dalam beberapa detik.",
+  "tv": "TV",
+  "tv_hint": "Arahkan Beranda ke panduan TV (format XMLTV) dan pilih kanal mana yang ingin ditampilkan acara jam tayang utamanya. Beranda hanya membaca panduan yang Anda berikan — ia tidak pernah mengumpulkan atau menyediakan panduan sendiri.",
+  "tv_url_ph": "https://.../guide.xml (atau .xml.gz)",
+  "tv_find": "Cari kanal",
+  "tv_ok": "Ditemukan {n} kanal. Centang yang ingin ditampilkan.",
+  "tv_fail": "Panduan itu tidak dapat dibaca ({err}).",
+  "tv_none": "Belum ada kanal — tempel alamat panduan di atas lalu klik «Cari kanal».",
+  "tv_prime_start": "Jam tayang utama mulai",
+  "tv_prime_end": "Jam tayang utama berakhir",
+  "tv_help": "Panduan XMLTV adalah berkas sederhana yang diterbitkan gratis oleh sejumlah penyedia TV dan proyek komunitas (seperti iptv-org/epg), berisi daftar tayangan dan waktunya. Minta panduan Anda ke penyedia TV, atau cari “XMLTV” beserta nama negara Anda. Tempel alamatnya, klik «Cari kanal», centang kanal yang Anda tonton, dan dasbor akan menampilkan acaranya pada jam yang Anda atur."
 }

@@ -123,3 +123,38 @@ def test_no_photos_folder_means_an_empty_carousel(tmp_path):
 def test_state_reports_nothing_playing_by_default(tmp_path):
     state = make(tmp_path, demo=True).get("/api/state").json()
     assert state["radio"] == {"playing": False, "station": None, "volume": 70}
+
+
+def test_no_tv_guide_configured_means_no_tv_section(tmp_path):
+    state = make(tmp_path, demo=True).get("/api/state").json()
+    assert state["tv"] is None
+
+
+@respx.mock
+def test_tv_prime_time_is_fetched_and_shown_in_local_time(tmp_path):
+    guide = "https://example.org/guide.xml"
+    xml = (
+        b'<tv><channel id="c1"><display-name>France 2</display-name></channel>'
+        b'<programme start="20261008190000 +0100" stop="20261008210000 +0100" channel="c1">'
+        b"<title>Journal</title></programme></tv>"
+    )
+    respx.get(guide).mock(return_value=httpx.Response(200, content=xml))
+    client = make(
+        tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",),
+        tv_prime_start="18:00", tv_prime_end="22:00",
+    )
+    state = client.get("/api/state").json()
+    # The feed says +0100, but Paris is on summer time (+0200) in October, so local time shifts by an hour.
+    assert state["tv"] == {
+        "programmes": [{"channel": "France 2", "title": "Journal", "start": "20:00", "stop": "22:00"}]
+    }
+
+
+@respx.mock
+def test_a_broken_tv_guide_does_not_blank_the_screen(tmp_path):
+    guide = "https://example.org/guide.xml"
+    respx.get(guide).mock(side_effect=httpx.ConnectError("down"))
+    client = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",))
+    state = client.get("/api/state").json()
+    assert state["tv"] is None
+    assert state["errors"]["tv"] == "ConnectError"

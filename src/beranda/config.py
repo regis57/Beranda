@@ -78,6 +78,10 @@ class Config:
     photos_interval: int = 20  # seconds a photo stays full-screen before the dashboard returns
     radio_stations: tuple[Station, ...] = ()  # favourites, picked on the settings page
     radio_volume: int = 70  # 0-100
+    tv_xmltv_url: str = ""  # the user's own XMLTV guide address ("" = TV section disabled)
+    tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
+    tv_prime_start: str = "20:00"  # "HH:MM", local time
+    tv_prime_end: str = "23:00"  # if this is not after the start, it is treated as past midnight
 
     @property
     def week_start(self) -> int:
@@ -141,6 +145,13 @@ def _check_interval(value: object, minimum: int, default: int) -> int:
     return seconds
 
 
+def _check_tv_url(value: object) -> str:
+    url = str(value or "").strip()
+    if url and not url.lower().startswith(("http://", "https://")):
+        raise ValueError(f"the TV guide address must start with http:// or https://, got {url[:60]!r}")
+    return url
+
+
 def _check_rotate(value: object) -> int:
     rotate = int(value or 0)
     if rotate not in {0, 90, 180, 270}:
@@ -183,6 +194,7 @@ def from_dict(data: dict) -> Config:
     screen = data.get("screen", {})
     photos = data.get("photos", {})
     radio = data.get("radio", {})
+    tv = data.get("tv", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -210,6 +222,10 @@ def from_dict(data: dict) -> Config:
         photos_interval=_check_interval(photos.get("interval"), 5, Config.photos_interval),
         radio_stations=tuple(_parse_station(s) for s in radio.get("stations", [])),
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
+        tv_xmltv_url=_check_tv_url(tv.get("url", "")),
+        tv_channels=tuple(str(c) for c in tv.get("channels", [])),
+        tv_prime_start=_check_hhmm(tv.get("prime_start")) or Config.tv_prime_start,
+        tv_prime_end=_check_hhmm(tv.get("prime_end")) or Config.tv_prime_end,
     )
 
 
@@ -269,6 +285,12 @@ def to_dict(cfg: Config) -> dict:
             for s in cfg.radio_stations
         ],
         "volume": cfg.radio_volume,
+    }
+    out["tv"] = {
+        "url": cfg.tv_xmltv_url,
+        "channels": list(cfg.tv_channels),
+        "prime_start": cfg.tv_prime_start,
+        "prime_end": cfg.tv_prime_end,
     }
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision

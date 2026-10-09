@@ -224,6 +224,39 @@ def test_radio_settings_round_trip(tmp_path):
     assert saved["radio"] == {"stations": [station], "volume": 45}
 
 
+@respx.mock
+def test_tv_test_lists_channels_for_the_picker(tmp_path):
+    guide = "https://example.org/guide.xml"
+    respx.get(guide).mock(
+        return_value=httpx.Response(
+            200, content=b'<tv><channel id="c1"><display-name>France 2</display-name></channel></tv>'
+        )
+    )
+    client, _ = make(tmp_path)
+    found = client.post("/api/admin/test-tv", json={"url": guide}).json()
+    assert found == {"ok": True, "channels": [{"id": "c1", "name": "France 2"}]}
+
+
+@respx.mock
+def test_tv_test_failure_is_reported_without_a_stack_trace(tmp_path):
+    guide = "https://example.org/guide.xml"
+    respx.get(guide).mock(side_effect=httpx.ConnectError("down"))
+    client, _ = make(tmp_path)
+    assert client.post("/api/admin/test-tv", json={"url": guide}).json() == {"ok": False, "error": "ConnectError"}
+
+
+def test_tv_settings_round_trip(tmp_path):
+    client, path = make(tmp_path)
+    body = valid_body(
+        tv={"url": "https://example.org/guide.xml", "channels": ["c1"], "prime_start": "19:00", "prime_end": "22:00"}
+    )
+    assert client.put("/api/admin/config", json=body).json()["saved"] is True
+    saved = tomllib.loads(path.read_text())
+    assert saved["tv"] == {
+        "url": "https://example.org/guide.xml", "channels": ["c1"], "prime_start": "19:00", "prime_end": "22:00"
+    }
+
+
 class _FakeProc:
     def __init__(self):
         self.alive = True

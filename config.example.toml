@@ -57,6 +57,15 @@ enabled = true
 # name = "France Inter"
 # url = "https://icecast.radiofrance.fr/franceinter-midfi.mp3"
 
+# TV prime time: your own XMLTV guide (your provider's, or a free community one such as
+# iptv-org/epg). Beranda only ever reads it, never scrapes or hosts a guide itself. Use the
+# settings page's "Find channels" button to get the channel ids below.
+# [tv]
+# url = "https://example.org/guide.xml"   # .xml or .xml.gz
+# channels = ["channel.id.from.the.guide"]
+# prime_start = "20:00"   # "HH:MM", local time
+# prime_end = "23:00"     # not after prime_start means it runs past midnight
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"

@@ -14,6 +14,8 @@ Done:
   photo account of its own
 - **v0.6**: world radio (Radio Browser, ~50,000 free stations, played through `mpv` on the Pi
   itself)
+- **v0.7**: TV prime time from the user's own XMLTV guide (read-only, never scraped or hosted
+  by Beranda)
 
 Next:
 
@@ -21,11 +23,10 @@ Next:
    that installing needs no terminal at all
 2. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3
 3. Settings menu on the Pi itself (raspi-config style)
-4. TV prime time from XMLTV files
-5. Blink camera thumbnails
-6. Voice control (local: openWakeWord + Vosk + Piper; Alexa skill / Matter with limits)
-7. Country-specific historical events (Wikidata)
-8. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
+4. Blink camera thumbnails
+5. Voice control (local: openWakeWord + Vosk + Piper; Alexa skill / Matter with limits)
+6. Country-specific historical events (Wikidata)
+7. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
 
 ## What we won't do, and why
 

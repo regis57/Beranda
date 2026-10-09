@@ -199,5 +199,15 @@
   "requested_update": "Inasasisha… ukurasa utarudi baada ya dakika moja au mbili.",
   "requested_restart_screen": "Skrini inaanza upya.",
   "requested_reboot": "Raspberry Pi inaanza upya. Rudi kwenye ukurasa huu baada ya dakika moja.",
-  "requested_reset": "Inarejesha mipangilio… Beranda inaanza upya na mipangilio ya awali. Pakia tena ukurasa huu baada ya sekunde chache."
+  "requested_reset": "Inarejesha mipangilio… Beranda inaanza upya na mipangilio ya awali. Pakia tena ukurasa huu baada ya sekunde chache.",
+  "tv": "TV",
+  "tv_hint": "Mwelekeze Beranda kwenye mwongozo wa TV (muundo wa XMLTV) kisha uchague vituo unavyotaka kuonyesha ratiba yake ya jioni. Beranda hausomi chochote isipokuwa mwongozo unaompa — haukusanyi wala kuhifadhi mwongozo wenyewe kamwe.",
+  "tv_url_ph": "https://.../guide.xml (au .xml.gz)",
+  "tv_find": "Tafuta vituo",
+  "tv_ok": "Vituo {n} vimepatikana. Tia alama kwenye unavyotaka kuonyesha.",
+  "tv_fail": "Imeshindikana kusoma mwongozo huo ({err}).",
+  "tv_none": "Hakuna kituo bado — bandika anwani ya mwongozo hapo juu kisha bofya «Tafuta vituo».",
+  "tv_prime_start": "Muda wa jioni unaanza",
+  "tv_prime_end": "Muda wa jioni unaisha",
+  "tv_help": "Mwongozo wa XMLTV ni faili rahisi ambayo baadhi ya watoa huduma wa TV na miradi ya jamii (kama iptv-org/epg) huchapisha bure, ikionyesha kinachorushwa na wakati wake. Muulize mtoa huduma wako wa TV, au tafuta “XMLTV” pamoja na jina la nchi yako. Bandika anwani yake, bofya «Tafuta vituo», tia alama kwenye unavyotazama, na dashibodi itaonyesha ratiba yao katika saa ulizoweka."
 }

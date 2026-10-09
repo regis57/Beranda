@@ -428,21 +428,39 @@ function newsAge(iso) {
   return rtf.format(-Math.round(minutes / 1440), 'day');
 }
 
+// The strip shows news headlines and, when a TV guide is set up, upcoming prime-time
+// programmes too - interleaved so TV doesn't end up buried behind a long news list.
+function tickerItems() {
+  const news = (state?.news?.items || []).map((item) => ({
+    source: item.source, title: item.title, age: newsAge(item.published),
+  }));
+  const shows = (state?.tv?.programmes || []).map((p) => ({
+    source: p.channel, title: p.title, age: `${p.start}–${p.stop}`,
+  }));
+  const merged = [];
+  const count = Math.max(news.length, shows.length);
+  for (let i = 0; i < count; i++) {
+    if (i < news.length) merged.push(news[i]);
+    if (i < shows.length) merged.push(shows[i]);
+  }
+  return merged;
+}
+
 function showHeadline() {
-  const items = state?.news?.items || [];
+  const items = tickerItems();
   const box = $('news');
   if (!items.length) { box.hidden = true; return; }
   box.hidden = false;
   const item = items[newsIndex % items.length];
   $('news-src').textContent = item.source;
   $('news-title').textContent = item.title;
-  $('news-age').textContent = newsAge(item.published);
+  $('news-age').textContent = item.age;
 }
 
 function renderNews() {
   clearTimeout(newsTimer);
   showHeadline();
-  const items = state?.news?.items || [];
+  const items = tickerItems();
   if (items.length < 2) return;
   const box = $('news');
   const next = () => {
