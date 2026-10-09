@@ -22,9 +22,9 @@ from urllib.parse import urlparse
 
 import httpx
 import tomli_w
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from . import __version__, system
+from . import __version__, diagnostics, system, tls
 from . import config as config_mod
 from . import limits as limits_mod
 from .config import Config
@@ -52,6 +52,7 @@ class Runtime:
     config_path: Path | None  # None: nowhere to save (demo mode)
     dropbox: dict = field(default_factory=dict)  # result of the last Dropbox copy, for the page
     _tasks: set = field(default_factory=set)
+    state_fn: object | None = None  # reads what the display shows now (set by create_app), for the diagnostic file
     cache: object | None = None  # the downloaded-data cache (set by create_app), emptied by "erase data"
     listening_port: int = field(init=False, default=0)  # the port this server really listens on
 
@@ -184,7 +185,10 @@ def router(runtime: Runtime) -> APIRouter:
         if over:
             raise HTTPException(422, f"invalid settings: {over}")
         merged = dict(body)
-        merged["server"] = {"host": runtime.cfg.host, "port": runtime.cfg.port}
+        merged["server"] = {
+            "host": runtime.cfg.host, "port": runtime.cfg.port,
+            "https": runtime.cfg.https, "https_port": runtime.cfg.https_port,
+        }
         if "pin" in merged:  # "" clears, a string sets, absent keeps
             merged["admin"] = {"pin": str(merged.pop("pin"))}
         elif runtime.cfg.admin_pin:
@@ -365,6 +369,12 @@ def router(runtime: Runtime) -> APIRouter:
             "screen": info.get("SCREEN", "0") == "1",
             "actions": system.requests_dir() is not None,
             "own_photos": len(photos.list_photos(photos.default_folder(), 100000)),
+            "https": {
+                "enabled": runtime.cfg.https,
+                "port": runtime.cfg.https_port,
+                "running": tls.is_running(),
+                "openssl": tls.openssl_available(),
+            },
             "port": runtime.listening_port,
             "saved_port": runtime.cfg.port,  # differs from "port" until Beranda is restarted
         }
@@ -388,6 +398,8 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(400, "the change must be confirmed")
         port = body.get("port")
         problem = system.port_problem(port, runtime.cfg.port, runtime.cfg.host)
+        if problem is None and runtime.cfg.https and port == runtime.cfg.https_port:
+            problem = "busy"  # that number is the secure address's
         if problem:
             raise HTTPException(422, f"port_{problem}")
         runtime.cfg = replace(runtime.cfg, port=port)
@@ -401,6 +413,57 @@ def router(runtime: Runtime) -> APIRouter:
             except (RuntimeError, OSError):
                 pass
         return {"port": port, "restarting": restarting, "screen": screen}
+
+    @api.post("/diagnostics", dependencies=[Depends(guard)])
+    async def diagnostics_file(body: dict) -> Response:
+        """A plain-text file to attach to a bug report (see diagnostics.py: it holds no secret)."""
+        state, problem = None, ""
+        if runtime.state_fn is not None:
+            try:
+                state = await asyncio.wait_for(runtime.state_fn(), timeout=25)
+            except Exception as exc:  # noqa: BLE001 - the file is most useful exactly when something is broken
+                problem = type(exc).__name__
+        now = datetime.now(UTC)
+        text = diagnostics.build(
+            runtime.cfg,
+            runtime_info={"port": runtime.listening_port, "config_exists": bool(runtime.config_path and runtime.config_path.is_file())},
+            state=state, state_problem=problem,
+            client=body.get("client") if isinstance(body.get("client"), dict) else {},
+            photo_folder=runtime.photo_folder,
+            own_photos=len(photos.list_photos(photos.default_folder(), 100000)),
+            shown_photos=len(photos.list_photos(runtime.photo_folder, runtime.cfg.limits.photos)),
+            now=now,
+        )
+        name = f"beranda-diagnostic-{now.astimezone().strftime('%Y%m%d-%H%M')}.txt"
+        return Response(text, media_type="text/plain; charset=utf-8",
+                        headers={"Content-Disposition": f'attachment; filename="{name}"', "Cache-Control": "no-store"})
+
+    @api.post("/system/https", dependencies=[Depends(guard)])
+    async def change_https(body: dict) -> dict:
+        """Switch the secure (https) address on or off. On: a certificate is made now (so a
+        problem is reported before anything restarts), the choice is saved and the server restarts."""
+        if runtime.config_path is None:
+            raise HTTPException(409, "nowhere to save the settings")
+        if body.get("confirmed") is not True or not isinstance(body.get("enabled"), bool):
+            raise HTTPException(400, "the change must be confirmed")
+        enabled = body["enabled"]
+        if enabled == runtime.cfg.https:
+            raise HTTPException(422, "https_same")
+        if enabled:
+            https_port = runtime.cfg.https_port
+            if https_port == runtime.cfg.port:
+                https_port = system.DEFAULT_PORT + 363  # 8443
+            if system.port_problem(https_port, -1, runtime.cfg.host):
+                raise HTTPException(422, "https_busy")
+            try:
+                await asyncio.to_thread(tls.ensure_certificate, runtime.config_path.parent / "tls")
+            except tls.TlsError as exc:
+                raise HTTPException(422, f"https_{exc}") from exc
+            runtime.cfg = replace(runtime.cfg, https=True, https_port=https_port)
+        else:
+            runtime.cfg = replace(runtime.cfg, https=False)
+        write_config(runtime.config_path, runtime.cfg)
+        return {"https": enabled, "port": runtime.cfg.https_port, "restarting": system.restart_server_soon()}
 
     @api.post("/system/{action}", dependencies=[Depends(guard)])
     async def system_action(action: str, body: dict | None = None) -> dict:

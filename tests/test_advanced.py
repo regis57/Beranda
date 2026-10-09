@@ -194,3 +194,78 @@ def test_nothing_is_erased_when_the_reset_itself_cannot_follow(tmp_path, monkeyp
     )
     assert r.status_code == 409
     assert len(list(photos.iterdir())) == 4 and len(list(cache.iterdir())) == 2
+
+
+# --- the optional secure (https) address, for the microphone ------------------------------
+
+
+def test_https_settings_round_trip_and_are_only_written_when_on():
+    assert "https" not in config.to_dict(Config())["server"]
+    cfg = config.from_dict({"server": {"https": True, "https_port": 9443}})
+    assert cfg.https and cfg.https_port == 9443
+    assert config.from_dict(config.to_dict(cfg)).https_port == 9443
+
+
+def test_turning_https_on_makes_the_certificate_saves_and_restarts(tmp_path, monkeypatch):
+    from beranda import tls
+
+    made = []
+    monkeypatch.setattr(tls, "ensure_certificate", lambda folder: made.append(folder))
+    monkeypatch.setattr(system, "restart_server_soon", lambda: True)
+    monkeypatch.setattr(system, "port_problem", lambda *a, **k: None)
+    client, path = _client(tmp_path)
+    assert client.post("/api/admin/system/https", json={"enabled": True}).status_code == 400
+    r = client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
+    assert r.status_code == 200 and r.json() == {"https": True, "port": 8443, "restarting": True}
+    assert made == [tmp_path / "tls"]
+    server = tomllib.loads(path.read_text())["server"]
+    assert server["https"] is True and server["https_port"] == 8443
+    info = client.get("/api/admin/system").json()["https"]
+    assert info["enabled"] is True and info["port"] == 8443
+    assert client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True}).json()["detail"] == "https_same"
+    assert client.post("/api/admin/system/https", json={"enabled": False, "confirmed": True}).json()["https"] is False
+    assert "https" not in tomllib.loads(path.read_text())["server"]
+
+
+def test_https_says_why_it_cannot_be_turned_on(tmp_path, monkeypatch):
+    from beranda import tls
+
+    def no_openssl(folder):
+        raise tls.TlsError("no_openssl")
+
+    monkeypatch.setattr(tls, "ensure_certificate", no_openssl)
+    client, path = _client(tmp_path)
+    r = client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
+    assert r.status_code == 422 and r.json()["detail"] == "https_no_openssl"
+    assert not path.exists()  # nothing saved, nothing restarted
+
+
+def test_the_https_port_cannot_be_taken_by_the_normal_one(tmp_path, monkeypatch):
+    from beranda import tls
+
+    monkeypatch.setattr(tls, "ensure_certificate", lambda folder: None)
+    monkeypatch.setattr(system, "restart_server_soon", lambda: True)
+    client, _ = _client(tmp_path)
+    client.post("/api/admin/system/https", json={"enabled": True, "confirmed": True})
+    r = client.post("/api/admin/system/port", json={"port": 8443, "confirmed": True})
+    assert r.status_code == 422 and r.json()["detail"] == "port_busy"
+
+
+@pytest.mark.skipif(not __import__("shutil").which("openssl"), reason="needs the openssl tool")
+def test_the_certificate_covers_this_device_and_is_reused(tmp_path):
+    import subprocess
+
+    from beranda import tls
+
+    cert, key = tls.ensure_certificate(tmp_path / "tls")
+    shown = subprocess.run(
+        ["openssl", "x509", "-in", str(cert), "-noout", "-ext", "subjectAltName"],
+        capture_output=True, text=True, check=False
+    ).stdout
+    assert "DNS:localhost" in shown and "DNS:beranda.local" in shown and "IP Address:127.0.0.1" in shown
+    assert oct(key.stat().st_mode)[-3:] == "600"
+    before = cert.read_bytes()
+    assert tls.ensure_certificate(tmp_path / "tls") == (cert, key) and cert.read_bytes() == before  # kept
+    (tmp_path / "tls" / "names.txt").write_text("the name of this device changed")
+    tls.ensure_certificate(tmp_path / "tls")
+    assert cert.read_bytes() != before  # made again

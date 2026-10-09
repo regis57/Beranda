@@ -18,7 +18,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
-from . import __version__, system
+from . import __version__, diagnostics, system
 from .admin import Runtime
 from .admin import router as admin_router
 from .cache import Cache
@@ -353,6 +353,8 @@ def create_app(
     clock = now_fn or (lambda: datetime.now(ZoneInfo(runtime.cfg.location.timezone)))
     cache = Cache(cfg.cache_dir)
     runtime.cache = cache
+    runtime.state_fn = lambda: build_state(runtime.cfg, cache, clock(), None, setup_info())
+    diagnostics.install_log_buffer()  # keeps the last log lines for the diagnostic file
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
