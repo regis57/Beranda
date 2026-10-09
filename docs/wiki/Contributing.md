@@ -22,7 +22,7 @@ Screenshots: `python scripts/screenshot.py` and `python scripts/screenshot_admin
 ## How we work
 
 1. A branch per change, one pull request, a **squash merge** with a plain-words title.
-2. Bump the version in `pyproject.toml` and `src/beranda/__init__.py`, add a line to [[Changelog]].
+2. Bump the version in `pyproject.toml` and `src/beranda/__init__.py`, add a line to [Changelog](Changelog).
    The wiki lives in the code repository, in `docs/wiki/`: edit it there, in the same pull request.
    A workflow publishes it to the GitHub wiki when the change reaches `main`.
 3. Words for people come first: every message, hint and doc in plain language ("ease" is the master word).
@@ -39,4 +39,4 @@ Screenshots: `python scripts/screenshot.py` and `python scripts/screenshot_admin
 | a theme | `providers/seasons.py` + its season module, colours in the CSS, translations |
 | a voice phrase | `providers/voice.py` (defaults per language) |
 
-Questions and ideas: [issues](https://github.com/regis57/Beranda/issues). See also [[Architecture]] and [[Translations]].
+Questions and ideas: [issues](https://github.com/regis57/Beranda/issues). See also [Architecture](Architecture) and [Translations](Translations).

@@ -8,16 +8,16 @@ by day, dark at night. Free, open source (MIT), no account, no subscription.
 
 ![Beranda at night](https://raw.githubusercontent.com/regis57/Beranda/main/docs/screenshots/v0.14.0-display-night.png)
 
-**Current version: 0.15.9 (alpha)**, used every day on a Raspberry Pi 4. See [[Status]].
+**Current version: 0.15.10 (alpha)**, used every day on a Raspberry Pi 4. See [Status](Status).
 
 | I want to... | Go to |
 |---|---|
-| install it, update it, rescue it | [[Install & Update|Install-and-Update]] |
-| understand every box of the settings page | [[Settings, box by box|Settings-box-by-box]] |
-| talk to it | [[Voice control|Voice-control]] |
-| fix something that does not work | [[Troubleshooting]] |
-| know what is coming | [[Roadmap]] |
-| read the code, or help | [[Architecture]] · [[Contributing]] |
+| install it, update it, rescue it | [Install & Update](Install-and-Update) |
+| understand every box of the settings page | [Settings, box by box](Settings-box-by-box) |
+| talk to it | [Voice control](Voice-control) |
+| fix something that does not work | [Troubleshooting](Troubleshooting) |
+| know what is coming | [Roadmap](Roadmap) |
+| read the code, or help | [Architecture](Architecture) · [Contributing](Contributing) |
 
 The [README](https://github.com/regis57/Beranda#readme) is the short tour; this wiki is the full manual.
 

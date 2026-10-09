@@ -37,4 +37,4 @@ comes first. Order agreed in October 2026.
 The short story: **0.1-0.4** foundations and the one-line installer · **0.5-0.9** photos, radio, TV,
 voice, history · **0.10-0.11** 57 languages, Wi-Fi setup · **0.12-0.13** lessons from the first real
 tests · **0.14** the new main screen and limits per board · **0.15** advanced settings, diagnostics,
-https, small SD cards. Every version, one line each: [[Changelog]].
+https, small SD cards. Every version, one line each: [Changelog](Changelog).
