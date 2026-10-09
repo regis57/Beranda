@@ -378,5 +378,6 @@
   "voice_err_other": "Das Mikrofon hat nicht funktioniert ({code}). Laden Sie die Diagnosedatei herunter (Fortgeschrittene) und schicken Sie sie.",
   "area_mismatch": "Dieses Gebiet („{area}“) passt nicht zu Ihrem Ort {town}, dessen Gebiet „{suggested}“ ist: Es würde nie eine Warnung erscheinen.",
   "area_missing": "Noch kein Gebiet. Das Gebiet von {town} ist „{suggested}“.",
-  "area_use": "„{suggested}“ verwenden"
+  "area_use": "„{suggested}“ verwenden",
+  "voice_edge": "Microsoft Edge scheitert hier oft an der Spracherkennung (sein Sprachdienst meldet „network“): Nutzen Sie Google Chrome für die Sprachsteuerung."
 }

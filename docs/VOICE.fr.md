@@ -7,8 +7,8 @@ de la tablette qui affiche Beranda**, jamais ceux du Raspberry Pi.
 
 1. Dans la page de réglages, case **10 · Contrôle par la voix**, cochez **Afficher le bouton micro**
    puis **Enregistrez**.
-2. Sur la tablette, ouvrez Beranda dans **Chrome ou Edge**. (Firefox et Safari n'offrent pas la
-   reconnaissance vocale aux pages web de la même façon.)
+2. Sur la tablette, ouvrez Beranda dans **Google Chrome**. (Edge la propose aussi, mais son service
+   vocal répond souvent « network » et ne marche pas ; Firefox et Safari ne l'offrent pas aux pages web.)
 3. Les navigateurs n'autorisent le micro que sur des pages « sécurisées », et une adresse comme
    `http://192.168.1.20:8080` n'en est pas une. Deux solutions, au choix :
    - **La plus simple : ajouter un « s ».** Ouvrez Beranda avec `https://` au lieu de `http://`,

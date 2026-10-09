@@ -378,5 +378,6 @@
   "voice_err_other": "لم يعمل الميكروفون ({code}). نزّل ملف التشخيص (المستخدم المتقدم) وأرسله.",
   "area_mismatch": "هذه المنطقة («{area}») لا تطابق مدينتك {town} التي منطقتها «{suggested}»: لن يظهر أي تنبيه أبدًا.",
   "area_missing": "لا توجد منطقة بعد. منطقة {town} هي «{suggested}».",
-  "area_use": "استخدام «{suggested}»"
+  "area_use": "استخدام «{suggested}»",
+  "voice_edge": "كثيرًا ما يفشل Microsoft Edge في التعرف على الصوت هنا (تردّ خدمته الصوتية بـ «network»): استخدم Google Chrome للتحكم الصوتي."
 }

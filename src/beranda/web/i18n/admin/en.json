@@ -378,5 +378,6 @@
   "voice_err_other": "The microphone did not work ({code}). Download the diagnostic file (Advanced user) and send it.",
   "area_mismatch": "This area (“{area}”) does not match your town, {town}, whose area is “{suggested}”: no warning would ever show.",
   "area_missing": "No area yet. The area of {town} is “{suggested}”.",
-  "area_use": "Use “{suggested}”"
+  "area_use": "Use “{suggested}”",
+  "voice_edge": "Microsoft Edge often fails to recognise speech here (its speech service answers “network”): use Google Chrome for voice control."
 }

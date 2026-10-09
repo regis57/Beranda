@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "beranda"
-version = "0.15.5"
+version = "0.15.6"
 description = "A lean, beautiful, offline-tolerant dashboard for a smart mirror or a big tablet. Runs on a Raspberry Pi 3B."
 readme = "README.md"
 license = { text = "MIT" }

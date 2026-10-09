@@ -7,7 +7,8 @@ tablet that shows Beranda** — never the Raspberry Pi's.
 
 1. Open the settings page, box **10 · Voice control**, tick **Show the microphone button** and
    press **Save**.
-2. On the tablet, open Beranda in **Chrome or Edge**. (Firefox and Safari do not offer speech
+2. On the tablet, open Beranda in **Google Chrome**. (Edge offers it too, but its speech service
+   often answers "network" and does not work; Firefox and Safari do not offer it to web pages.) (Firefox and Safari do not offer speech
    recognition to web pages in the same way.)
 3. Browsers only allow a microphone on "secure" pages, and an address such as
    `http://192.168.1.20:8080` is not one. Two ways out, pick one:
