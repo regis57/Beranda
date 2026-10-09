@@ -76,6 +76,9 @@ Done:
 - **v0.15.2**: the secure address is now simply the usual one with an "s": the same port answers
   http:// and https:// (no switch, no second port). The README gets a "settings page does not answer"
   rescue section with the few commands that always work
+- **v0.15.3**: "Test the microphone on this device" in the Voice control box says in plain words what
+  blocks it (blocked permission, no microphone, speech service unreachable...); the screen's message
+  adds a short reason code
 
 Next:
 

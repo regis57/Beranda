@@ -917,6 +917,28 @@ function renderHttps() {
   if (!httpsOk) { state.textContent = t('admin.https_unavailable'); return; }
   state.append(t('admin.https_state_on'), ' ', el('a', { href: httpsAddress(), textContent: httpsAddress() }));
 }
+// "Test the microphone": listen once in THIS browser and say in plain words what went wrong, if anything.
+const MIC_ERRORS = { 'not-allowed': 'not_allowed', 'audio-capture': 'audio_capture', network: 'network', 'service-not-allowed': 'service_not_allowed' };
+async function testMicrophone() {
+  const msg = $('voice-test-msg');
+  const availability = voiceApi.availability();
+  if (availability !== 'ok') {
+    msg.textContent = t(`admin.voice_check_${availability}`) + (availability === 'insecure' ? ` ${t('admin.voice_check_tip')}` : '');
+    noteProblem(`microphone test: ${availability}`);
+    return;
+  }
+  msg.textContent = t('admin.voice_test_listening');
+  try {
+    const heard = await voiceApi.listenOnce(lang);
+    msg.textContent = heard ? t('admin.voice_test_ok', { text: heard }) : t('admin.voice_test_silence');
+    noteProblem(`microphone test: ${heard ? 'ok' : 'nothing heard'}`);
+  } catch (e) {
+    const code = String(e.message || e);
+    msg.textContent = MIC_ERRORS[code] ? t(`admin.voice_err_${MIC_ERRORS[code]}`) : t('admin.voice_err_other', { code });
+    noteProblem(`microphone test: ${code}`);
+  }
+}
+
 // The diagnostic file: the server writes it (settings, device, what the display shows, recent log);
 // this page adds what only a browser knows. Downloaded as a text file; nothing is sent anywhere else.
 async function downloadDiagnostics() {
@@ -1150,6 +1172,7 @@ async function boot() {
   });
   armed($('port-apply'), changePort);
   $('diag-btn').addEventListener('click', downloadDiagnostics);
+  $('voice-test').addEventListener('click', testMicrophone);
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
   $('w-alerts').addEventListener('change', showWidgetBodies);
   $('w-clock2').addEventListener('change', showWidgetBodies);

@@ -26,6 +26,12 @@ tablet that shows Beranda** — never the Raspberry Pi's.
 > service, so the sound of your voice goes over the internet to them. Beranda itself only
 > receives the resulting text, uses it and keeps nothing.
 
+## If the microphone does not work
+
+Open the settings page **in the same browser**, box **Voice control**, and press **Test the
+microphone on this device**: it says in plain words what blocks it (permission refused, no
+microphone plugged in, the browser's speech service unreachable...) and what to do.
+
 ## Which languages?
 
 The tablet listens in the **display language** chosen in box 2 of the settings page.
