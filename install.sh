@@ -76,18 +76,6 @@ fi
 [ "$WIFI_SETUP" = 1 ] && packages+=(network-manager)
 run apt-get update -q
 run env DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends "${packages[@]}"
-# Small SD cards fill up fast: drop the downloaded .deb files (they are installed now) and keep
-# the system log small (Beranda's own messages are tiny; the default allows hundreds of MB).
-run apt-get clean
-if [ -d /etc/systemd ] && [ ! -f /etc/systemd/journald.conf.d/beranda.conf ]; then
-    run install -d -m 0755 /etc/systemd/journald.conf.d
-    if [ "$DRY" = 0 ]; then
-        printf '# Written by the Beranda installer: keep the system log small on an SD card.\n[Journal]\nSystemMaxUse=50M\n' \
-            > /etc/systemd/journald.conf.d/beranda.conf
-        systemctl restart systemd-journald 2>/dev/null || true
-        journalctl --vacuum-size=50M >/dev/null 2>&1 || true
-    fi
-fi
 
 # ------------------------------------------------------------------ 2. user ---
 say "2/4 Creating the '$USER_NAME' user"
@@ -109,18 +97,17 @@ if [ -n "$SOURCE" ]; then
 elif [ -d "$PREFIX/src/.git" ]; then
     run git -C "$PREFIX/src" fetch --depth 1 origin "$BRANCH"
     run git -C "$PREFIX/src" reset --hard FETCH_HEAD
-    # forget the previous versions' files: only the current one is needed
-    run git -C "$PREFIX/src" reflog expire --expire=now --all
-    run git -C "$PREFIX/src" gc --prune=now --quiet
 else
     run git clone --depth 1 --branch "$BRANCH" "$REPO" "$PREFIX/src"
 fi
 [ -d "$PREFIX/venv" ] || run python3 -m venv "$PREFIX/venv"
 run "$PREFIX/venv/bin/pip" install --quiet --no-cache-dir --upgrade pip
 run "$PREFIX/venv/bin/pip" install --quiet --no-cache-dir --upgrade "$PREFIX/src"
-run rm -rf /root/.cache/pip  # older installs kept a copy of every download here
 run install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
 run install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
+run install -m 0755 "$PREFIX/src/system/beranda-tidy" "$PREFIX/bin/beranda-tidy"
+# keep a small SD card from filling up (caches, old versions, log size, swap file): see the script
+run env PREFIX="$PREFIX" "$PREFIX/bin/beranda-tidy"
 run ln -sf "$PREFIX/venv/bin/beranda" /usr/local/bin/beranda
 
 commit="$(git -C "$PREFIX/src" rev-parse --short HEAD 2>/dev/null || echo local)"

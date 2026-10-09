@@ -19,14 +19,12 @@ for file in "$requests"/*; do
             log "updating from branch $BRANCH"
             git -C "$PREFIX/src" fetch --depth 1 origin "$BRANCH"
             git -C "$PREFIX/src" reset --hard FETCH_HEAD
-            # keep the SD card tidy: only the current version's files, no download caches
-            git -C "$PREFIX/src" reflog expire --expire=now --all || true
-            git -C "$PREFIX/src" gc --prune=now --quiet || true
             "$PREFIX/venv/bin/pip" install --quiet --no-cache-dir --upgrade "$PREFIX/src"
-            rm -rf /root/.cache/pip "$PREFIX/src/build"
-            apt-get clean || true
             install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
             install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
+            install -m 0755 "$PREFIX/src/system/beranda-tidy" "$PREFIX/bin/beranda-tidy"
+            # keep the SD card from filling up (caches, old versions, log size, swap file)
+            PREFIX="$PREFIX" "$PREFIX/bin/beranda-tidy" || true
             sed -i "s/^COMMIT=.*/COMMIT=$(git -C "$PREFIX/src" rev-parse --short HEAD)/" /etc/beranda/install.env
             systemctl restart beranda.service
             systemctl try-restart beranda-kiosk.service

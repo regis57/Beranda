@@ -86,6 +86,9 @@ Done:
 - **v0.15.7**: tidier on small SD cards: the installer and each update drop the downloaded packages,
   the pip cache and the old versions' files, and keep the system log under 50 MB; `beranda doctor`
   shows the free space
+- **v0.15.8**: `beranda-tidy`, run by the installer and every update: package and pip caches, old
+  versions, a 50 MB system log, and on cards under 32 GB with rpi-swap, swap in compressed memory
+  only (the swap file as big as the memory goes away at the next reboot; a hand-made choice is kept)
 
 Next:
 

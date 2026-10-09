@@ -165,7 +165,7 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 | le redémarrer | `sudo systemctl restart beranda beranda-kiosk` |
 | le mettre à jour ou le réparer (garde vos réglages) | `curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh \| sudo bash` |
 | lire le port utilisé | `sudo grep -A3 '\[server\]' /etc/beranda/config.toml` |
-| libérer de la place sur la carte SD | `sudo apt clean && sudo apt autoremove --purge && sudo journalctl --vacuum-size=50M` |
+| libérer de la place sur la carte SD (fait aussi à chaque mise à jour) | `sudo apt clean && sudo apt autoremove --purge && sudo journalctl --vacuum-size=50M` |
 
 ## Vie privée
 

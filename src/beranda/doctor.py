@@ -139,6 +139,10 @@ def run() -> int:
         lines.append(f"{OK} installed with install.sh in {info.get('PREFIX')} (branch {info.get('BRANCH')}, {info.get('COMMIT')})")
     try:
         free_mb = shutil.disk_usage("/").free // 2**20
+        swap_file = Path("/var/swap")
+        if swap_file.is_file() and swap_file.stat().st_size > 600 * 2**20:
+            lines.append(f"{WARN} a {swap_file.stat().st_size // 2**20} MB swap file takes room on the SD card. "
+                         "Update Beranda then restart the Pi: it switches to compressed memory only.")
         if free_mb < 500:
             lines.append(f"{WARN} only {free_mb} MB free on the SD card. To free some: sudo apt clean ; "
                          "sudo journalctl --vacuum-size=50M ; sudo apt autoremove --purge")
