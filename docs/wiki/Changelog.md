@@ -92,4 +92,5 @@ One line per version, newest last. Each one was a pull request on
   only (the swap file as big as the memory goes away at the next reboot; a hand-made choice is kept)
 - **v0.15.9**: the wiki (roadmap, status, changelog, user guide, developer documentation) lives in
   `docs/wiki/` and is published automatically; the automatic checks pass again (a newer linter and
-  a shell-script warning had turned them red since 0.14.0)
+  a shell-script warning had turned them red since 0.14.0); fix - a first install on a new card
+  stopped with an error at its very last step since 0.15.1 (updates were not affected)
