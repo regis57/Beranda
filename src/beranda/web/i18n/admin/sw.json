@@ -298,5 +298,20 @@
   "reset_word": "ndiyo",
   "reset_confirm": "Ndiyo, futa kila kitu",
   "reset_cancel": "Ghairi",
-  "city_changed": "Mji mpya umechaguliwa. Mkoa (sikukuu za mkoa) na eneo la maonyo vimewekwa upya: angalia visanduku 2 na 4."
+  "city_changed": "Mji mpya umechaguliwa. Mkoa (sikukuu za mkoa) na eneo la maonyo vimewekwa upya: angalia visanduku 2 na 4.",
+  "limit_reached": "Kikomo kimefikiwa: {n} {what} kwenye kifaa hiki. Ondoa kimoja ili kuongeza kingine.",
+  "limit_calendars": "kalenda",
+  "limit_news_sources": "vyanzo vya habari",
+  "limit_tv_channels": "vituo vya TV",
+  "limit_radio_stations": "vituo vya redio",
+  "limit_key_dates": "tarehe",
+  "limit_photos": "picha",
+  "limit_voice_commands": "misemo ya sauti",
+  "device_line": "Kifaa chako: {device} · kumbukumbu ya GB {mem}. Mipaka iliyorekebishwa: wasifu “{profile}”.",
+  "device_other": "kompyuta hii",
+  "profile_lite": "nyepesi",
+  "profile_standard": "kawaida",
+  "profile_comfort": "starehe",
+  "profile_plus": "starehe +",
+  "profile_max": "upeo"
 }

@@ -53,6 +53,12 @@ Done:
   refused (too many decimals), so the page could not be saved
 - **v0.14.2**: fix - choosing a new town in the settings page now also replaces the weather
   warnings area (it kept the old town's) and says that the region was reset
+- **v0.14.3**: limits that fit the board. Beranda recognises the Raspberry Pi model and its memory
+  (Pi 2, 3, 4, 5; 1 to 16 GB) and caps each list accordingly (calendars, news sources, TV channels,
+  radio stations, key dates, photos, voice phrases): the settings page stops you with a plain
+  sentence instead of slowing the Pi down, and a hand-edited file is trimmed to fit. The five
+  profiles (light, standard, comfortable, comfortable +, maximum) are tabulated in the README and
+  can be forced with `[limits] profile` or `BERANDA_PROFILE`. README rewritten around the reader
 
 Next:
 

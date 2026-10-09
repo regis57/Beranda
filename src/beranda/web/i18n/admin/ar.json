@@ -298,5 +298,20 @@
   "reset_word": "نعم",
   "reset_confirm": "نعم، امسح كل شيء",
   "reset_cancel": "إلغاء",
-  "city_changed": "تم اختيار مدينة جديدة. أُعيد ضبط المنطقة (العطل الإقليمية) ومنطقة التحذيرات: راجع الخانتين 2 و4."
+  "city_changed": "تم اختيار مدينة جديدة. أُعيد ضبط المنطقة (العطل الإقليمية) ومنطقة التحذيرات: راجع الخانتين 2 و4.",
+  "limit_reached": "تم بلوغ الحد الأقصى: {n} {what} على هذا الجهاز. احذف واحدًا لإضافة آخر.",
+  "limit_calendars": "تقاويم",
+  "limit_news_sources": "مصادر أخبار",
+  "limit_tv_channels": "قنوات تلفاز",
+  "limit_radio_stations": "محطات إذاعة",
+  "limit_key_dates": "تواريخ",
+  "limit_photos": "صور",
+  "limit_voice_commands": "عبارات صوتية",
+  "device_line": "جهازك: {device} · ذاكرة {mem} جيجابايت. الحدود المناسبة: نمط «{profile}».",
+  "device_other": "هذا الحاسوب",
+  "profile_lite": "خفيف",
+  "profile_standard": "عادي",
+  "profile_comfort": "مريح",
+  "profile_plus": "مريح +",
+  "profile_max": "أقصى"
 }

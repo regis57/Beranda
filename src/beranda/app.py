@@ -200,7 +200,7 @@ async def build_state(
             errors["history"] = type(exc).__name__
 
     # --- photo tile (a local folder; filled from the settings page, Dropbox or rclone) -----
-    photo_names = photos.list_photos(photos.effective_folder(cfg.photos_folder))
+    photo_names = photos.list_photos(photos.effective_folder(cfg.photos_folder), cfg.limits.photos)
 
     # --- TV prime time (read-only: the user's own XMLTV guide, never scraped by us) -----
     # `status` tells the screen *why* the TV box may be empty, so it can say so in plain words

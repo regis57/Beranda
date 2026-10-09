@@ -41,6 +41,7 @@ let strings = {};
 let lang = 'en';
 let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
+let limits = {};  // the most this computer may hold (see limits.py): calendars, news_sources, tv_channels...
 let editable = true;
 let dirty = false;
 let unitsTouched = false;
@@ -147,6 +148,24 @@ function testButton(run) {
   });
   return [button, msg];
 }
+
+// ------------------------------------------------------------------ limits ---
+// Each list has a maximum that depends on the computer (a small Raspberry Pi cannot follow 80
+// news feeds). When the maximum is reached the page says so and does not add one more.
+let limitTimer = null;
+function atLimit(kind, count, anchor) {
+  const max = limits[kind];
+  if (!max || count < max) return false;
+  const card = (anchor || document.body).closest?.('.card') || $('sec-system');
+  let note = card.querySelector('.limit-note');
+  if (!note) { note = el('p', { className: 'error limit-note', role: 'status' }); card.querySelector('h2').after(note); }
+  note.textContent = t('admin.limit_reached', { n: max, what: t(`admin.limit_${kind}`) });
+  note.hidden = false;
+  clearTimeout(limitTimer);
+  limitTimer = setTimeout(() => { note.hidden = true; }, 8000);
+  return true;
+}
+const newsCount = () => $('feed-list').children.length + (newsAuto ? 0 : newsSelected.size);
 
 // ------------------------------------------------------------------ burger menu ---
 // One entry per card of the page (built from the card titles, so it follows the language).
@@ -312,6 +331,7 @@ function sourceRow(id, desc = '') {
   const src = sourceById(id);
   const box = el('input', { type: 'checkbox', checked: newsSelected.has(id) });
   box.addEventListener('change', () => {
+    if (box.checked && atLimit('news_sources', newsCount(), box)) { box.checked = false; return; }
     if (box.checked) newsSelected.add(id); else newsSelected.delete(id);
     markDirty(); renderChips();
   });
@@ -439,7 +459,8 @@ async function uploadPhotos(files) {
       await api(`/photos?name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file, headers: { 'Content-Type': file.type || 'application/octet-stream' } });
       sent += 1;
     } catch (e) {
-      const err = e.status === 422 ? t('admin.photos_bad') : e.status === 413 ? t('admin.photos_err_big') : e.message;
+      const err = e.status === 422 ? t('admin.photos_bad') : e.status === 413 ? t('admin.photos_err_big')
+        : e.status === 409 ? t('admin.limit_reached', { n: limits.photos, what: t('admin.limit_photos') }) : e.message;
       msg.textContent = t('admin.photos_refused', { name: file.name, err });
       await loadPhotos();
       return;
@@ -527,6 +548,7 @@ async function radioSearch() {
       const add = el('button', { type: 'button', textContent: t('admin.radio_add') });
       add.disabled = radioStations.some((x) => x.uuid === s.uuid);
       add.addEventListener('click', () => {
+        if (atLimit('radio_stations', radioStations.length, add)) return;
         if (!radioStations.some((x) => x.uuid === s.uuid)) radioStations.push(s);
         renderRadioFavorites();
         add.disabled = true;
@@ -570,6 +592,7 @@ function renderTvChips() {
   $('tv-channels').replaceChildren(...matching.slice(0, TV_SHOWN_MAX).map((c) => {
     const box = el('input', { type: 'checkbox', checked: tvSelected.has(c.id) });
     box.addEventListener('change', () => {
+      if (box.checked && atLimit('tv_channels', tvSelected.size, box)) { box.checked = false; return; }
       if (box.checked) tvSelected.add(c.id); else tvSelected.delete(c.id);
       $('tv-count').textContent = t('admin.tv_count', { n: tvChannels.length, k: tvSelected.size });
       markDirty();
@@ -773,6 +796,10 @@ async function renderSystem() {
   try {
     const info = await api('/system');
     $('sys-version').textContent = t('admin.version', { v: info.version }) + (info.commit ? ` (${info.commit})` : '');
+    $('sys-device').textContent = t('admin.device_line', {
+      device: limits.device ? limits.device.replace(/ Rev [\d.]+$/, '') : t('admin.device_other'),
+      mem: limits.memory_gb, profile: t(`admin.profile_${limits.profile}`),
+    });
     for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) $(id).disabled = !info.actions;
     $('sys-screen').hidden = !info.screen;
     if (!info.installed) msg.textContent = t('admin.not_installed');
@@ -898,6 +925,7 @@ async function start() {
   const data = await api('/config');
   cfg = data.config;
   options = data.options;
+  limits = data.limits || {};
   editable = data.editable;
   await loadStrings(cfg.language);
   translateStatic();
@@ -937,11 +965,11 @@ async function boot() {
   $('tv-suggest').addEventListener('click', tvSuggest);
   $('photos-file').addEventListener('change', (e) => { uploadPhotos([...e.target.files]); e.target.value = ''; });
   $('photos-sync').addEventListener('click', syncDropbox);
-  $('ics-add').addEventListener('click', () => { addIcsRow(); markDirty(); });
-  $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
-  $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });
+  $('ics-add').addEventListener('click', () => { if (atLimit('calendars', $('ics-list').children.length, $('ics-add'))) return; addIcsRow(); markDirty(); });
+  $('key-add').addEventListener('click', () => { if (atLimit('key_dates', $('key-list').children.length, $('key-add'))) return; addKeyRow(); markDirty(); });
+  $('feed-add').addEventListener('click', () => { if (atLimit('news_sources', newsCount(), $('feed-add'))) return; addFeedRow(); markDirty(); });
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
-  $('voice-add').addEventListener('click', () => { voiceCommands.push({ phrase: '', action: 'say', station: '', reply: '' }); renderVoiceCommands(); markDirty(); });
+  $('voice-add').addEventListener('click', () => { if (atLimit('voice_commands', voiceCommands.length, $('voice-add'))) return; voiceCommands.push({ phrase: '', action: 'say', station: '', reply: '' }); renderVoiceCommands(); markDirty(); });
   $('language').addEventListener('change', renderVoiceDefaults);
   $('voice-on').addEventListener('change', () => { $('voice-check').hidden = !$('voice-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });

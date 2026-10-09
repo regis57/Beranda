@@ -298,5 +298,20 @@
   "reset_word": "sí",
   "reset_confirm": "Sí, borrar todo",
   "reset_cancel": "Cancelar",
-  "city_changed": "Nueva ciudad elegida. La región (festivos regionales) y la zona de avisos se han reiniciado: revise las casillas 2 y 4."
+  "city_changed": "Nueva ciudad elegida. La región (festivos regionales) y la zona de avisos se han reiniciado: revise las casillas 2 y 4.",
+  "limit_reached": "Máximo alcanzado: {n} {what} en este dispositivo. Quite uno para añadir otro.",
+  "limit_calendars": "calendarios",
+  "limit_news_sources": "fuentes de noticias",
+  "limit_tv_channels": "canales de TV",
+  "limit_radio_stations": "emisoras de radio",
+  "limit_key_dates": "fechas",
+  "limit_photos": "fotos",
+  "limit_voice_commands": "frases de voz",
+  "device_line": "Su dispositivo: {device} · {mem} GB de memoria. Límites adaptados: perfil «{profile}».",
+  "device_other": "este ordenador",
+  "profile_lite": "ligero",
+  "profile_standard": "estándar",
+  "profile_comfort": "cómodo",
+  "profile_plus": "cómodo +",
+  "profile_max": "máximo"
 }

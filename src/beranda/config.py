@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from . import limits as limits_mod
+
 # Countries whose weeks conventionally start on Sunday (the rest start on Monday).
 SUNDAY_FIRST = {
     "US", "CA", "MX", "JP", "BR", "AU", "IL", "IN", "KR", "TW", "PH", "ZA", "SA", "CO", "PE",
@@ -46,7 +48,6 @@ VOICE_ACTIONS = (
     "radio_play", "radio_stop", "radio_next", "radio_prev", "volume_up", "volume_down",
     "weather", "time", "tv", "say",
 )
-MAX_VOICE_COMMANDS = 50
 
 
 @dataclass(frozen=True)
@@ -110,6 +111,12 @@ class Config:
     voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
     history_enabled: bool = True  # the "On this day" box, from Wikipedia
+    limits_profile: str = "auto"  # how much may be added: "auto" (by Raspberry Pi model) or lite..max
+
+    @property
+    def limits(self) -> limits_mod.Limits:
+        """The most you may add on this computer (see limits.py)."""
+        return limits_mod.resolve(self.limits_profile)
 
     @property
     def week_start(self) -> int:
@@ -260,6 +267,11 @@ def from_dict(data: dict) -> Config:
     voice = data.get("voice", {})
     history = data.get("history", {})
     widgets = data.get("widgets", {})
+    profile = str(data.get("limits", {}).get("profile", "auto")).lower()
+    if profile != "auto" and profile not in limits_mod.PROFILES:
+        raise ValueError(f"limits profile must be auto or one of {', '.join(limits_mod.PROFILES)}")
+    cap = limits_mod.resolve(profile)  # a safety net: a file edited by hand never overloads a small Pi
+    own_feeds = tuple(_check_feed(str(u)) for u in news.get("feeds", []))[: cap.news_sources]
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -270,35 +282,36 @@ def from_dict(data: dict) -> Config:
         units=units,
         theme=data.get("theme", "japan"),
         mode=mode,
-        ics_urls=tuple(data.get("calendar", {}).get("ics_urls", [])),
-        key_dates=tuple(_parse_key_date(k) for k in data.get("key_dates", [])),
+        ics_urls=tuple(data.get("calendar", {}).get("ics_urls", []))[: cap.calendars],
+        key_dates=tuple(_parse_key_date(k) for k in data.get("key_dates", [])[: cap.key_dates]),
         demo=bool(data.get("demo", False)),
         host=server.get("host", "0.0.0.0"),
         port=int(server.get("port", 8080)),
         cache_dir=cache_dir,
         admin_pin=str(data.get("admin", {}).get("pin", "")),
         news_enabled=bool(news.get("enabled", True)),
-        news_sources=None if news.get("sources") is None else tuple(str(x) for x in news["sources"]),
-        news_feeds=tuple(_check_feed(str(u)) for u in news.get("feeds", [])),
+        news_sources=None if news.get("sources") is None else tuple(str(x) for x in news["sources"])[: cap.news_sources - len(own_feeds)],
+        news_feeds=own_feeds,
         screen_rotate=_check_rotate(screen.get("rotate", 0)),
         screen_off=_check_hhmm(screen.get("off", "")),
         screen_on=_check_hhmm(screen.get("on", "")),
         photos_folder=str(photos.get("folder", "")).strip(),
         photos_interval=_check_interval(photos.get("interval"), 5, Config.photos_interval),
         photos_dropbox_url=_check_share_url(photos.get("dropbox_url", ""), "Dropbox"),
-        radio_stations=tuple(_parse_station(s) for s in radio.get("stations", [])),
+        radio_stations=tuple(_parse_station(s) for s in radio.get("stations", [])[: cap.radio_stations]),
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
         tv_xmltv_url=_check_tv_url(tv.get("url", "")),
-        tv_channels=tuple(str(c) for c in tv.get("channels", [])),
+        tv_channels=tuple(str(c) for c in tv.get("channels", []))[: cap.tv_channels],
         widget_chart=bool(widgets.get("chart", True)),
         widget_air=bool(widgets.get("air", True)),
         widget_alerts=bool(widgets.get("alerts", False)),
         alerts_area=" ".join(str(widgets.get("alerts_area", "")).split())[:80],
         widget_ephemeris=bool(widgets.get("ephemeris", True)),
         second_clock=_check_timezone(widgets.get("second_clock", "")),
-        voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[:MAX_VOICE_COMMANDS]),
+        voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[: cap.voice_commands]),
         voice_enabled=bool(voice.get("enabled", False)),
         history_enabled=bool(history.get("enabled", True)),
+        limits_profile=profile,
     )
 
 
@@ -375,6 +388,8 @@ def to_dict(cfg: Config) -> dict:
         ],
     }
     out["history"] = {"enabled": cfg.history_enabled}
+    if cfg.limits_profile != "auto":
+        out["limits"] = {"profile": cfg.limits_profile}
     out["widgets"] = {
         "chart": cfg.widget_chart,
         "air": cfg.widget_air,

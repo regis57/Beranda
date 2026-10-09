@@ -30,6 +30,13 @@ date = "2018-06-02"
 label = "Léa"
 kind = "birth"
 
+# How much your device can hold (calendars, news sources, TV channels, radio stations, dates,
+# photos, voice phrases). Beranda recognises your Raspberry Pi and its memory by itself, so
+# normally there is nothing to write. To force a size: "lite" | "standard" | "comfort" | "plus" | "max".
+# The table is in the README ("What your Raspberry Pi can hold").
+# [limits]
+# profile = "auto"
+
 [server]
 host = "0.0.0.0"
 port = 8080
