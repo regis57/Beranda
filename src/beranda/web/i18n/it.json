@@ -97,5 +97,71 @@
   "tv_empty": "Niente nella guida per stasera",
   "tv_error": "Guida TV non raggiungibile",
   "radio_prev": "Stazione precedente",
-  "radio_next": "Stazione successiva"
+  "radio_next": "Stazione successiva",
+  "chart": {
+    "title": "Prossime 24 h: temperatura, pioggia, vento ({wind})"
+  },
+  "air": {
+    "aqi": "Aria",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Buona",
+      "1": "Discreta",
+      "2": "Moderata",
+      "3": "Scadente",
+      "4": "Molto scadente",
+      "5": "Pessima"
+    },
+    "uv_level": {
+      "0": "Basso",
+      "1": "Moderato",
+      "2": "Alto",
+      "3": "Molto alto",
+      "4": "Estremo"
+    },
+    "pollen_level": {
+      "1": "Basso",
+      "2": "Moderato",
+      "3": "Alto",
+      "4": "Molto alto"
+    },
+    "kind": {
+      "alder": "Ontano",
+      "birch": "Betulla",
+      "grass": "Graminacee",
+      "mugwort": "Artemisia",
+      "olive": "Olivo",
+      "ragweed": "Ambrosia"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Temporali",
+      "flood": "Alluvione",
+      "avalanche": "Valanga",
+      "fire": "Incendio boschivo",
+      "coastal": "Costa",
+      "snow_ice": "Neve / ghiaccio",
+      "fog": "Nebbia",
+      "wind": "Vento",
+      "rain": "Pioggia",
+      "heat": "Caldo",
+      "cold": "Freddo",
+      "other": "Allerta"
+    },
+    "level": {
+      "1": "gialla",
+      "2": "arancione",
+      "3": "rossa"
+    },
+    "no_area": "Allerte meteo: indica la tua zona nelle impostazioni",
+    "unsupported": "Allerte meteo: non disponibili per questo paese",
+    "error": "Allerte meteo non raggiungibili",
+    "quiet": "Nessuna allerta meteo"
+  },
+  "eph": {
+    "nameday": "Onomastico",
+    "daylight": "Luce del giorno",
+    "calendar": "Calendario"
+  }
 }

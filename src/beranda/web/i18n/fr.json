@@ -97,5 +97,71 @@
   "tv_empty": "Rien dans le guide pour ce soir",
   "tv_error": "Guide TV injoignable",
   "radio_prev": "Station précédente",
-  "radio_next": "Station suivante"
+  "radio_next": "Station suivante",
+  "chart": {
+    "title": "24 h à venir : température, pluie, vent ({wind})"
+  },
+  "air": {
+    "aqi": "Air",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Bon",
+      "1": "Correct",
+      "2": "Moyen",
+      "3": "Médiocre",
+      "4": "Mauvais",
+      "5": "Très mauvais"
+    },
+    "uv_level": {
+      "0": "Faible",
+      "1": "Modéré",
+      "2": "Élevé",
+      "3": "Très élevé",
+      "4": "Extrême"
+    },
+    "pollen_level": {
+      "1": "Faible",
+      "2": "Moyen",
+      "3": "Élevé",
+      "4": "Très élevé"
+    },
+    "kind": {
+      "alder": "Aulne",
+      "birch": "Bouleau",
+      "grass": "Graminées",
+      "mugwort": "Armoise",
+      "olive": "Olivier",
+      "ragweed": "Ambroisie"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Orages",
+      "flood": "Inondation",
+      "avalanche": "Avalanche",
+      "fire": "Feux de forêt",
+      "coastal": "Littoral",
+      "snow_ice": "Neige / verglas",
+      "fog": "Brouillard",
+      "wind": "Vent",
+      "rain": "Pluie",
+      "heat": "Canicule",
+      "cold": "Grand froid",
+      "other": "Alerte"
+    },
+    "level": {
+      "1": "jaune",
+      "2": "orange",
+      "3": "rouge"
+    },
+    "no_area": "Alertes météo : indiquez votre zone dans les réglages",
+    "unsupported": "Alertes météo : indisponibles pour ce pays",
+    "error": "Alertes météo injoignables",
+    "quiet": "Aucune alerte météo"
+  },
+  "eph": {
+    "nameday": "Fête",
+    "daylight": "Jour",
+    "calendar": "Calendrier"
+  }
 }

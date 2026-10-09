@@ -97,5 +97,71 @@
   "tv_empty": "Hakuna kitu kwenye mwongozo wa usiku huu",
   "tv_error": "Mwongozo wa TV haupatikani",
   "radio_prev": "Kituo kilichotangulia",
-  "radio_next": "Kituo kinachofuata"
+  "radio_next": "Kituo kinachofuata",
+  "chart": {
+    "title": "Saa 24 zijazo: joto, mvua, upepo ({wind})"
+  },
+  "air": {
+    "aqi": "Hewa",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Nzuri",
+      "1": "Wastani mzuri",
+      "2": "Wastani",
+      "3": "Mbaya",
+      "4": "Mbaya sana",
+      "5": "Mbaya kupita kiasi"
+    },
+    "uv_level": {
+      "0": "Chini",
+      "1": "Wastani",
+      "2": "Juu",
+      "3": "Juu sana",
+      "4": "Kali sana"
+    },
+    "pollen_level": {
+      "1": "Chini",
+      "2": "Wastani",
+      "3": "Juu",
+      "4": "Juu sana"
+    },
+    "kind": {
+      "alder": "Alder",
+      "birch": "Birch",
+      "grass": "Nyasi",
+      "mugwort": "Mugwort",
+      "olive": "Mzeituni",
+      "ragweed": "Ragweed"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Ngurumo",
+      "flood": "Mafuriko",
+      "avalanche": "Maporomoko ya theluji",
+      "fire": "Moto wa msitu",
+      "coastal": "Pwani",
+      "snow_ice": "Theluji / barafu",
+      "fog": "Ukungu",
+      "wind": "Upepo",
+      "rain": "Mvua",
+      "heat": "Joto kali",
+      "cold": "Baridi",
+      "other": "Onyo"
+    },
+    "level": {
+      "1": "njano",
+      "2": "machungwa",
+      "3": "nyekundu"
+    },
+    "no_area": "Maonyo ya hali ya hewa: andika eneo lako kwenye mipangilio",
+    "unsupported": "Maonyo ya hali ya hewa: hayapatikani kwa nchi hii",
+    "error": "Maonyo ya hali ya hewa hayapatikani",
+    "quiet": "Hakuna onyo la hali ya hewa"
+  },
+  "eph": {
+    "nameday": "Siku ya jina",
+    "daylight": "Mchana",
+    "calendar": "Kalenda"
+  }
 }

@@ -25,6 +25,18 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
 
 - **L'heure et la date** dans votre langue.
 - **La météo** : maintenant, la pluie dans les deux prochaines heures, les prévisions à 7 jours (Open-Meteo, gratuit).
+- **Graphique sur 24 heures** (v0.14) : la courbe de température du jour à venir avec la pluie,
+  le vent et les nuits grisées, à côté du cadre photo, plus **qualité de l'air, UV et pollens**
+  en petits points de couleur (Open-Meteo / Copernicus CAMS ; pollens seulement en Europe, en saison).
+- **Alertes météo de votre zone** (facultatif, désactivé par défaut) : les vigilances officielles
+  (vent, orages, canicule...) d'une quarantaine de pays d'Europe et d'Israël, via
+  [MeteoAlarm](https://meteoalarm.org). Indiquez votre zone dans les réglages et touchez Tester.
+- **Éphéméride** : la fête du jour dans 19 pays, la durée du jour (et le gain ou la perte depuis
+  hier), et le calendrier local de votre pays (hégirien, persan, hébraïque, ère bouddhiste, ère
+  japonaise avec rokuyō, lunaire chinois, pasaran javanais...).
+- **Une deuxième horloge** (facultatif) : une petite heure d'ailleurs, sous la date.
+- **Chaque extra est facultatif** : la carte « Extras de l'écran principal » des réglages active
+  ou retire chacun d'eux.
 - **La lune et le soleil** : phase de la lune, lever et coucher du soleil, tout est calculé sur le Pi.
 - **Le calendrier** : votre agenda Google, Apple, Outlook, Nextcloud ou Proton (en lecture seule),
   les jours fériés de votre pays et vos propres dates (naissances, souvenirs, anniversaires).
@@ -172,7 +184,8 @@ Chaque flux du catalogue est vérifié automatiquement chaque semaine.
 - La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN.
 - Vos réglages restent sur le Pi. Le Pi ne parle qu'aux services que vous utilisez : Open-Meteo
   (météo), votre agenda, les flux d'actualité choisis, et GDELT si « actualité de ma ville » est
-  activé (il envoie alors le nom de votre ville).
+  activé (il envoie alors le nom de votre ville) ; qualité de l'air, MeteoAlarm et
+  nameday.abalin.net si vous activez ces extras.
 - N'ouvrez pas le port 8080 du Pi vers internet sur votre box.
 
 ## Pour contribuer
@@ -184,7 +197,9 @@ Voir la [feuille de route](docs/ROADMAP.md).
 
 ## Crédits
 
-Météo par [Open-Meteo](https://open-meteo.com/) (CC BY 4.0). Actualité locale par
+Météo et qualité de l'air par [Open-Meteo](https://open-meteo.com/) (CC BY 4.0 ; air par
+[Copernicus CAMS](https://atmosphere.copernicus.eu)). Alertes par
+[MeteoAlarm](https://meteoalarm.org). Fêtes par [nameday.abalin.net](https://nameday.abalin.net). Actualité locale par
 [GDELT](https://www.gdeltproject.org/). Jours fériés par la bibliothèque
 [holidays](https://github.com/vacanza/holidays). Les titres appartiennent à leurs éditeurs.
 

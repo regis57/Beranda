@@ -24,6 +24,18 @@ public holidays are real.* [All screenshots](docs/screenshots/)
 
 - **Clock and date** in your language.
 - **Weather**: now, rain in the next two hours, seven-day forecast (Open-Meteo, free).
+- **24-hour graph** (v0.14): a temperature curve for the next day with rain bars, wind and the
+  nights shaded, next to your photo frame, plus **air quality, UV and pollen** as small colour
+  dots (Open-Meteo / Copernicus CAMS; pollen only in Europe, in season).
+- **Weather warnings in your area** (optional, off by default): the official warnings (wind,
+  storms, heat...) of about 38 European countries and Israel, through
+  [MeteoAlarm](https://meteoalarm.org). Type your area in the settings page and press Test.
+- **Ephemeris**: the name day in 19 countries, the length of the day (and how much it grew since
+  yesterday), and the local calendar of your country (Hijri, Persian, Hebrew, Buddhist era,
+  Japanese era with rokuyo, Chinese lunar, Javanese pasaran...).
+- **A second clock** (optional): a small time somewhere else, under the date.
+- **Every extra is optional**: the "Extras on the main screen" card of the settings page switches
+  each one on or off.
 - **Moon and sun**: moon phase, sunrise and sunset, all calculated on the Pi.
 - **Calendar**: your Google, Apple, Outlook, Nextcloud or Proton calendar (read-only), the
   public holidays of your country, and your own dates (births, remembrances, anniversaries).
@@ -40,7 +52,8 @@ public holidays are real.* [All screenshots](docs/screenshots/)
   [Every country, every language](docs/COUNTRIES.md).
 - **Made for a wall**: works upright (portrait) or sideways, turns the screen off at night,
   shows a QR code to set it up from your phone the first time.
-- **A settings page** for your phone, in plain words, with step-by-step help.
+- **A settings page** for your phone, in plain words, with step-by-step help, a menu (☰) to jump
+  to any section, and a typed "yes" before the "start again from zero" button does anything.
 - **Photo frame**: a small frame on the main screen. In the settings page, tap "Add photos"
   and pick pictures from your phone or computer (the phone's own picker also offers Google
   Photos, iCloud or Google Drive); or paste a shared [Dropbox](https://www.dropbox.com) folder
@@ -169,7 +182,8 @@ Every feed of the catalog is checked automatically every week.
 - The settings page only opens from your home network, and can ask for a PIN.
 - Your settings stay on the Pi. The Pi talks only to the services you use: Open-Meteo (weather),
   your calendar, the news feeds you chose, and GDELT if "news about my town" is on (it then
-  sends the name of your town).
+  sends the name of your town); air quality, MeteoAlarm and nameday.abalin.net if you switch those
+  extras on.
 - Do not open the Pi's port 8080 to the internet on your router.
 
 ## For contributors
@@ -181,7 +195,9 @@ See [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Credits
 
-Weather data by [Open-Meteo](https://open-meteo.com/) (CC BY 4.0). Town news by
+Weather and air quality by [Open-Meteo](https://open-meteo.com/) (CC BY 4.0; air data from
+[Copernicus CAMS](https://atmosphere.copernicus.eu)). Warnings by
+[MeteoAlarm](https://meteoalarm.org). Name days by [nameday.abalin.net](https://nameday.abalin.net). Town news by
 [GDELT](https://www.gdeltproject.org/). Public holidays by the
 [holidays](https://github.com/vacanza/holidays) library. Headlines belong to their publishers.
 

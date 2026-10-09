@@ -7,6 +7,7 @@ nobody mistakes it for a forecast.
 
 from __future__ import annotations
 
+import math
 from datetime import date, datetime, timedelta
 
 from ..config import KeyDate
@@ -21,6 +22,40 @@ _WEEK = (
     (0, 17, 7, 0.0, 0),
     (2, 16, 9, 0.3, 25),
 )
+
+
+def _hourly(now: datetime, units: str) -> list[dict]:
+    """A believable next 24 hours: cool night, mild afternoon, a shower in the evening."""
+    base = now.replace(minute=0, second=0, microsecond=0, tzinfo=None)
+    out = []
+    for i in range(24):
+        hour = base + timedelta(hours=i)
+        temp = 9.5 + 4.5 * math.sin((hour.hour - 9) / 24 * 2 * math.pi)
+        rain = (0.6, 1.2, 0.8, 0.2)[i - 2] if 2 <= i <= 5 else 0.0
+        out.append(
+            {
+                "time": hour.isoformat(timespec="minutes"),
+                "temp": round(temp * 9 / 5 + 32, 1) if units == "imperial" else round(temp, 1),
+                "precip": rain,
+                "wind": 10 + (i % 7) * 2,
+            }
+        )
+    return out
+
+
+NAMEDAY = "Denis"  # an invented example of "the saint of the day"
+
+
+def air() -> dict:
+    return {
+        "aqi": 34, "aqi_level": 1, "aqi_scale": "eu", "uv": 3.2, "uv_level": 1,
+        "pollen": [{"kind": "grass", "value": 28, "level": 2}, {"kind": "birch", "value": 4, "level": 1}],
+        "source": "demo",
+    }
+
+
+def alerts() -> list[dict]:
+    return [{"area": "Demo", "kind": "wind", "level": 1, "event": "Moderate wind warning", "onset": "", "expires": ""}]
 
 
 def weather(today: date, now: datetime, units: str = "metric") -> dict:
@@ -62,6 +97,7 @@ def weather(today: date, now: datetime, units: str = "metric") -> dict:
             "starts_in_min": 45,
             "stops_in_min": None,
         },
+        "hourly": _hourly(now, units),
         "daily": days,
         "units": (
             {"temp": "°F", "wind": "mph", "precip": "in"}

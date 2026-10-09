@@ -118,9 +118,27 @@ function renderClock() {
   $('hm').textContent = `${hour}${get('literal') || ':'}${get('minute')}`;
   $('period').textContent = get('dayPeriod');
   $('date').textContent = dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+  renderSecondClock(now);
   // Re-run exactly when the next minute starts: no per-second timer, no wasted CPU.
   clearTimeout(clockTimer);
   clockTimer = setTimeout(() => { renderClock(); renderAgenda(); }, 60_000 - (now.getTime() % 60_000) + 50);
+}
+
+// An optional second clock ("Tokyo 05:15"), small, under the date. A wrong zone name just hides it.
+function renderSecondClock(now) {
+  const el = $('clock2');
+  const zone = state?.widgets?.second_clock;
+  el.hidden = !zone;
+  if (!zone) return;
+  try {
+    const city = zone.split('/').pop().replaceAll('_', ' ');
+    const h24 = dtf({ hour: 'numeric' }).resolvedOptions().hourCycle?.startsWith('h2');
+    const time = dtf({ hour: h24 ? '2-digit' : 'numeric', minute: '2-digit' }, zone).format(now);
+    // Not the same calendar day there? Say which day ("lun.").
+    const other = new Intl.DateTimeFormat('en-CA', { timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+    const day = other === dayKey(now) ? '' : ` · ${dtf({ weekday: 'short' }, zone).format(now)}`;
+    el.replaceChildren(`${city} `, Object.assign(document.createElement('b'), { textContent: time }), day);
+  } catch { el.hidden = true; }
 }
 
 // ---------------------------------------------------------------- weather ----
@@ -199,6 +217,233 @@ function renderWeek(w) {
     range.style.setProperty('--len', len.toFixed(1));
     root.append(el);
   }
+}
+
+// ---------------------------------------------------------------- the middle zone ------
+// Photo frame + 24 h graph + air / UV / pollen. The zone hides when none of the three has anything.
+const esc = (text) => String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+function chartWanted() {
+  return Boolean(state?.widgets?.chart && (state?.weather?.hourly || []).length >= 6);
+}
+
+function renderFeature() {
+  renderAir();
+  const chart = chartWanted();
+  $('chart').hidden = !chart;
+  document.querySelector('.now').classList.toggle('has-chart', chart);
+  $('feature').hidden = $('phototile').hidden && !chart && $('air').hidden;
+  drawChart();
+}
+
+// Temperature curve, rain bars along the bottom, wind every 3 hours, shaded nights. Drawn at the
+// real pixel size of its box (so the text is never stretched) and redrawn when the window changes.
+function drawChart() {
+  if (!state || $('chart').hidden) return;
+  const w = state.weather;
+  const hours = w.hourly;
+  const box = $('chart-plot');
+  const W = box.clientWidth;
+  const H = box.clientHeight;
+  if (!W || !H) return;
+  $('chart-title').textContent = t('chart.title', { wind: w.units.wind });
+  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const fs = rem * 0.8;
+  const padX = rem * 0.6;
+  const top = fs * 1.9;
+  const withWind = H > rem * 9;          // a very short graph drops the wind numbers
+  const bottom = H - fs * (withWind ? 3.2 : 2.0);  // the plot ends here; wind numbers and hours come below
+  const height = Math.max(bottom - top, 20);
+  const n = hours.length;
+  const step = (W - 2 * padX) / (n - 1);
+  const x = (i) => padX + i * step;
+  const temps = hours.map((h) => h.temp);
+  const lo = Math.min(...temps);
+  const hi = Math.max(...temps);
+  const span = Math.max(hi - lo, 2);
+  const lineH = height * 0.68;           // the curve uses the upper part, the rain bars the lower part
+  const y = (v) => top + (1 - (v - lo) / span) * lineH;
+  const out = [];
+
+  // nights: grey bands from sunset to sunrise
+  const sun = Object.fromEntries(w.daily.map((d) => [d.date, d]));
+  const isNight = (time) => {
+    const d = sun[time.slice(0, 10)];
+    return d ? time < d.sunrise || time >= d.sunset : false;
+  };
+  for (let i = 0; i < n;) {
+    if (!isNight(hours[i].time)) { i += 1; continue; }
+    let j = i;
+    while (j + 1 < n && isNight(hours[j + 1].time)) j += 1;
+    const x0 = Math.max(0, x(i) - step / 2);
+    const x1 = Math.min(W, x(j) + step / 2);
+    out.push(`<rect class="c-night" x="${x0.toFixed(1)}" y="${top - fs}" width="${(x1 - x0).toFixed(1)}" height="${(bottom - top + fs).toFixed(1)}"/>`);
+    i = j + 1;
+  }
+  out.push(`<line class="c-grid" x1="0" x2="${W}" y1="${bottom}" y2="${bottom}"/>`);
+
+  // rain bars (square-root scale, so drizzle stays visible next to a downpour)
+  const barMax = height * 0.3;
+  hours.forEach((h, i) => {
+    if (h.precip < 0.1) return;
+    const bh = Math.max(2, Math.min(1, Math.sqrt(h.precip / 4)) * barMax);
+    out.push(`<rect class="c-rain" x="${(x(i) - step * 0.35).toFixed(1)}" y="${(bottom - bh).toFixed(1)}" width="${(step * 0.7).toFixed(1)}" height="${bh.toFixed(1)}" rx="1"/>`);
+  });
+
+  // temperature curve, with labels on the first, the coldest and the warmest point
+  const path = hours.map((h, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(h.temp).toFixed(1)}`).join('');
+  out.push(`<path class="c-line" d="${path}"/>`);
+  const iMax = temps.indexOf(hi);
+  const iMin = temps.indexOf(lo);
+  const marks = new Set([0, iMax, iMin]);
+  for (const i of marks) {
+    const px = x(i);
+    const anchor = i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle';
+    const roomBelow = y(hours[i].temp) + fs * 1.5 < bottom - 2;  // the coldest label goes under its dot when there is room
+    const above = i === iMin && i !== 0 && iMin !== iMax && roomBelow ? y(hours[i].temp) + fs * 1.5 : y(hours[i].temp) - fs * 0.7;
+    out.push(`<circle class="c-dot" cx="${px.toFixed(1)}" cy="${y(hours[i].temp).toFixed(1)}" r="${(fs * 0.28).toFixed(1)}"/>`);
+    out.push(`<text class="c-temp" x="${px.toFixed(1)}" y="${above.toFixed(1)}" text-anchor="${anchor}" font-size="${(fs * 1.1).toFixed(1)}">${Math.round(hours[i].temp)}°</text>`);
+  }
+
+  // every 3rd hour: the wind (small number) and the time of day
+  const hourFmt = dtf({ hour: 'numeric' }, 'UTC');
+  hours.forEach((h, i) => {
+    const hh = Number(h.time.slice(11, 13));
+    if (hh % 3 !== 0 || i > n - 2) return;
+    const px = x(i);
+    if (withWind) out.push(`<text class="c-wind" x="${px.toFixed(1)}" y="${(bottom + fs * 1.3).toFixed(1)}" text-anchor="middle" font-size="${fs.toFixed(1)}">${Math.round(h.wind)}</text>`);
+    out.push(`<text x="${px.toFixed(1)}" y="${(H - fs * 0.2).toFixed(1)}" text-anchor="middle" font-size="${fs.toFixed(1)}">${esc(hourFmt.format(new Date(`${h.time.slice(0, 13)}:00:00Z`)))}</text>`);
+  });
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('chart.title', { wind: w.units.wind }))}">${out.join('')}</svg>`;
+}
+
+// Air quality, UV and pollen as small coloured tiles. Colour = how worrying (green ... purple).
+const AQI_COLOUR = [1, 1, 2, 3, 4, 5];   // 6 bands of the European / US scales
+const UV_COLOUR = [1, 2, 3, 4, 5];
+const POLLEN_COLOUR = [1, 1, 2, 3, 4];
+
+function renderAir() {
+  const a = state?.air;
+  const tiles = [];
+  const add = (label, value, word, colour) => tiles.push({ label, value, word, colour });
+  if (a?.aqi != null) add(t('air.aqi'), a.aqi, t(`air.aqi_level.${a.aqi_level}`), AQI_COLOUR[a.aqi_level]);
+  if (a?.uv != null) add(t('air.uv'), Math.round(a.uv * 10) / 10, t(`air.uv_level.${a.uv_level}`), UV_COLOUR[a.uv_level]);
+  for (const p of a?.pollen || []) add(t(`air.kind.${p.kind}`), p.value, t(`air.pollen_level.${p.level}`), POLLEN_COLOUR[p.level]);
+  $('air').hidden = !tiles.length;
+  $('air').replaceChildren(...tiles.map((tile) => {
+    const li = document.createElement('li');
+    li.className = 'air-tile';
+    li.style.setProperty('--lvl', `var(--lvl-${tile.colour || 1})`);
+    for (const [cls, text] of [['air-label', tile.label], ['air-value', tile.value], ['air-word', tile.word]]) {
+      const span = document.createElement('span');
+      span.className = cls;
+      span.textContent = text;
+      li.append(span);
+    }
+    return li;
+  }));
+}
+
+// Official weather warnings (MeteoAlarm) as coloured pills under the date.
+function renderAlerts() {
+  const a = state?.alerts;
+  const ul = $('alerts');
+  ul.hidden = !a;
+  if (!a) return;
+  const note = (text) => { const li = document.createElement('li'); li.className = 'alert-note'; li.textContent = text; return [li]; };
+  const items = a.status !== 'ok' ? note(t(`alerts.${a.status}`))
+    : !a.items.length ? note(t('alerts.quiet'))
+      : a.items.map((w) => {
+        const li = document.createElement('li');
+        li.className = `alert l${w.level}`;
+        li.textContent = `${t(`alerts.kind.${w.kind}`)} · ${t(`alerts.level.${w.level}`)}`;
+        return li;
+      });
+  ul.replaceChildren(...items);
+}
+
+// ---------------------------------------------------------------- ephemeris -----------
+// The date in the calendar people of your country also use. Worked out by the browser itself.
+const ARAB_HIJRI = 'SA AE KW QA BH OM YE IQ JO LB SY EG LY TN DZ MA MR SD PS DJ SO KM MY BN'.split(' ');
+const LOCAL_CALENDARS = {
+  JP: () => japaneseDate(),
+  KR: () => `음력 ${intlDate('ko-KR', 'chinese', { month: 'long', day: 'numeric' })}`,
+  IR: () => intlDate(dateLocale(), 'persian'),
+  AF: () => intlDate(dateLocale(), 'persian'),
+  IL: () => intlDate(dateLocale(), 'hebrew'),
+  IN: () => intlDate(dateLocale(), 'indian'),
+  ET: () => intlDate(dateLocale(), 'ethiopic'),
+  ER: () => intlDate(dateLocale(), 'ethiopic'),
+  ID: () => pasaran(),
+};
+for (const c of ['CN', 'TW', 'HK', 'MO', 'SG']) LOCAL_CALENDARS[c] = () => chineseLunarDate();
+for (const c of ['TH', 'KH', 'LA', 'MM']) LOCAL_CALENDARS[c] = () => intlDate(dateLocale(), 'buddhist');
+for (const c of ARAB_HIJRI) LOCAL_CALENDARS[c] = () => intlDate(dateLocale(), 'islamic-umalqura');
+
+function intlDate(locale, calendar, opts = { day: 'numeric', month: 'long', year: 'numeric' }) {
+  try { return new Intl.DateTimeFormat(`${locale}-u-ca-${calendar}-nu-latn`, { timeZone: tz, ...opts }).format(new Date()); }
+  catch { return ''; }
+}
+
+// "令和8年10月9日 · 大安": the era year, and the rokuyō (a six-day luck cycle from the lunar date).
+function japaneseDate() {
+  const ROKUYO = ['大安', '赤口', '先勝', '友引', '先負', '仏滅'];
+  const era = intlDate('ja-JP', 'japanese', { era: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  try {
+    const parts = new Intl.DateTimeFormat('en-u-ca-chinese', { timeZone: tz, month: 'numeric', day: 'numeric' }).formatToParts(new Date());
+    const month = parseInt(parts.find((p) => p.type === 'month')?.value, 10);
+    const day = parseInt(parts.find((p) => p.type === 'day')?.value, 10);
+    return `${era} · ${ROKUYO[(month + day) % 6]}`;
+  } catch { return era; }
+}
+
+// The 5-day Javanese market week (Legi, Pahing, Pon, Wage, Kliwon): counted from a known day.
+function pasaran() {
+  const names = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
+  const [y, m, d] = dayKey(new Date()).split('-').map(Number);
+  const days = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(1945, 7, 17)) / 86_400_000);  // 17 Aug 1945 was a Legi
+  return `Pasaran ${names[((days % 5) + 5) % 5]}`;
+}
+
+function pad2(n) { return String(n).padStart(2, '0'); }
+function spanText(seconds) {
+  const m = Math.floor(seconds / 60);
+  return m ? `${m} min ${pad2(seconds % 60)} s` : `${seconds} s`;
+}
+
+function renderEph() {
+  const e = state?.ephemeris;
+  const rows = [];
+  if (e) {
+    if (e.nameday) rows.push([t('eph.nameday'), e.nameday]);
+    if (e.daylight_min != null) {
+      const text = `${Math.floor(e.daylight_min / 60)} h ${pad2(e.daylight_min % 60)}`;
+      const delta = e.delta_s ? ` (${e.delta_s > 0 ? '+' : '−'}${spanText(Math.abs(e.delta_s))})` : '';
+      rows.push([t('eph.daylight'), text, delta]);
+    }
+    const cal = LOCAL_CALENDARS[(state.config.country || '').toUpperCase()]?.();
+    if (cal) rows.push([t('eph.calendar'), cal]);
+  }
+  $('eph').hidden = !rows.length;
+  $('eph-list').replaceChildren(...rows.map(([label, text, extra]) => {
+    const li = document.createElement('li');
+    const k = document.createElement('span');
+    k.className = 'k';
+    k.textContent = label;
+    // The value keeps its own reading direction (numbers like "11 h 43" must not flip in Arabic).
+    const v = document.createElement('span');
+    v.dir = extra ? 'ltr' : 'auto';
+    v.textContent = text;
+    li.append(k, v);
+    if (extra) {
+      const d = document.createElement('span');
+      d.className = 'delta';
+      d.dir = 'ltr';
+      d.textContent = extra;
+      li.append(d);
+    }
+    return li;
+  }));
 }
 
 // ---------------------------------------------------------------- sky ---------
@@ -302,7 +547,7 @@ function chineseLunarDate() {
 // ---------------------------------------------------------------- agenda ----------------
 // The TV box and the agenda share the room left in the side column: the TV claims its lines
 // first, the agenda then keeps what fits. Both are redone when fonts, theme or window size change.
-function renderAgenda() { if (state) { renderTv(); renderUpcoming(); } }
+function renderAgenda() { if (state) { drawChart(); renderTv(); renderUpcoming(); } }
 
 function renderUpcoming() {
   const list = $('upcoming');
@@ -710,6 +955,9 @@ async function render(online) {
   renderUpcoming();
   renderNews();
   renderPhotos();
+  renderFeature();
+  renderAlerts();
+  renderEph();
   renderRadio();
   renderVoice();
   renderAgenda();  // the widgets above may have changed how much room the agenda has

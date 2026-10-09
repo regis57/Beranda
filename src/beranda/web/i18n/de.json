@@ -97,5 +97,71 @@
   "tv_empty": "Nichts im Programm für heute Abend",
   "tv_error": "TV-Programm nicht erreichbar",
   "radio_prev": "Vorheriger Sender",
-  "radio_next": "Nächster Sender"
+  "radio_next": "Nächster Sender",
+  "chart": {
+    "title": "Nächste 24 h: Temperatur, Regen, Wind ({wind})"
+  },
+  "air": {
+    "aqi": "Luft",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Gut",
+      "1": "Befriedigend",
+      "2": "Mäßig",
+      "3": "Schlecht",
+      "4": "Sehr schlecht",
+      "5": "Extrem schlecht"
+    },
+    "uv_level": {
+      "0": "Niedrig",
+      "1": "Mäßig",
+      "2": "Hoch",
+      "3": "Sehr hoch",
+      "4": "Extrem"
+    },
+    "pollen_level": {
+      "1": "Niedrig",
+      "2": "Mäßig",
+      "3": "Hoch",
+      "4": "Sehr hoch"
+    },
+    "kind": {
+      "alder": "Erle",
+      "birch": "Birke",
+      "grass": "Gräser",
+      "mugwort": "Beifuß",
+      "olive": "Olive",
+      "ragweed": "Ambrosia"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Gewitter",
+      "flood": "Hochwasser",
+      "avalanche": "Lawine",
+      "fire": "Waldbrand",
+      "coastal": "Küste",
+      "snow_ice": "Schnee / Eis",
+      "fog": "Nebel",
+      "wind": "Wind",
+      "rain": "Regen",
+      "heat": "Hitze",
+      "cold": "Kälte",
+      "other": "Warnung"
+    },
+    "level": {
+      "1": "gelb",
+      "2": "orange",
+      "3": "rot"
+    },
+    "no_area": "Wetterwarnungen: Gebiet in den Einstellungen eintragen",
+    "unsupported": "Wetterwarnungen: für dieses Land nicht verfügbar",
+    "error": "Wetterwarnungen nicht erreichbar",
+    "quiet": "Keine Wetterwarnung"
+  },
+  "eph": {
+    "nameday": "Namenstag",
+    "daylight": "Tageslicht",
+    "calendar": "Kalender"
+  }
 }

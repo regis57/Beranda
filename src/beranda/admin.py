@@ -27,7 +27,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from . import __version__, system
 from . import config as config_mod
 from .config import Config
-from .providers import calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
+from .providers import alerts, calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
 from .providers import countries as world
 from .providers import news as news_mod
 from .providers import voice as voice_mod
@@ -212,6 +212,7 @@ def router(runtime: Runtime) -> APIRouter:
             {
                 "name": item.get("name"),
                 "region": item.get("admin1"),
+                "area": item.get("admin2") or item.get("admin1") or "",  # often the department / county
                 "country": item.get("country_code"),
                 "latitude": item.get("latitude"),
                 "longitude": item.get("longitude"),
@@ -311,6 +312,24 @@ def router(runtime: Runtime) -> APIRouter:
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "channels": found}
 
+    @api.post("/test-alerts", dependencies=[Depends(guard)])
+    async def test_alerts(body: dict) -> dict:
+        """Read the country's warning feed once and say whether the typed area is understood."""
+        country = str(body.get("country") or runtime.cfg.country).upper()[:2]
+        area = " ".join(str(body.get("area", "")).split())[:80]
+        if not alerts.supported(country):
+            return {"ok": False, "error": "unsupported"}
+        try:
+            every = await alerts.fetch(country, datetime.now(UTC))
+        except Exception as exc:  # noqa: BLE001 - class name only
+            return {"ok": False, "error": type(exc).__name__}
+        mine = alerts.for_area(every, area, limit=10)
+        return {
+            "ok": True,
+            "warned_areas": sorted({w["area"] for w in every})[:40],  # the areas with a warning right now
+            "mine": [{"kind": w["kind"], "level": w["level"], "event": w["event"]} for w in mine],
+        }
+
     @api.get("/voice-commands", dependencies=[Depends(guard)])
     async def voice_commands(language: str = "") -> dict:
         """The phrases Beranda understands out of the box, in the display language."""
@@ -340,7 +359,11 @@ def router(runtime: Runtime) -> APIRouter:
         return {"latest": latest, "update_available": newer}
 
     @api.post("/system/{action}", dependencies=[Depends(guard)])
-    async def system_action(action: str) -> dict:
+    async def system_action(action: str, body: dict | None = None) -> dict:
+        # Wiping every setting must be asked for on purpose: the settings page only sends
+        # "confirmed" after the person typed the word "yes" (in their language) themselves.
+        if action == "reset" and (body or {}).get("confirmed") is not True:
+            raise HTTPException(400, "the reset must be confirmed")
         try:
             system.request_action(action)
         except ValueError as exc:

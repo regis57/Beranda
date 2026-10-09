@@ -97,5 +97,71 @@
   "tv_empty": "Nada no guia para esta noite",
   "tv_error": "Guia de TV inacessível",
   "radio_prev": "Estação anterior",
-  "radio_next": "Estação seguinte"
+  "radio_next": "Estação seguinte",
+  "chart": {
+    "title": "Próximas 24 h: temperatura, chuva, vento ({wind})"
+  },
+  "air": {
+    "aqi": "Ar",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Bom",
+      "1": "Razoável",
+      "2": "Moderado",
+      "3": "Fraco",
+      "4": "Mau",
+      "5": "Muito mau"
+    },
+    "uv_level": {
+      "0": "Baixo",
+      "1": "Moderado",
+      "2": "Alto",
+      "3": "Muito alto",
+      "4": "Extremo"
+    },
+    "pollen_level": {
+      "1": "Baixo",
+      "2": "Moderado",
+      "3": "Alto",
+      "4": "Muito alto"
+    },
+    "kind": {
+      "alder": "Amieiro",
+      "birch": "Vidoeiro",
+      "grass": "Gramíneas",
+      "mugwort": "Artemísia",
+      "olive": "Oliveira",
+      "ragweed": "Ambrósia"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Trovoada",
+      "flood": "Inundação",
+      "avalanche": "Avalanche",
+      "fire": "Incêndio florestal",
+      "coastal": "Costa",
+      "snow_ice": "Neve / gelo",
+      "fog": "Nevoeiro",
+      "wind": "Vento",
+      "rain": "Chuva",
+      "heat": "Calor",
+      "cold": "Frio",
+      "other": "Aviso"
+    },
+    "level": {
+      "1": "amarelo",
+      "2": "laranja",
+      "3": "vermelho"
+    },
+    "no_area": "Avisos meteorológicos: indique a sua zona nas definições",
+    "unsupported": "Avisos meteorológicos: indisponíveis para este país",
+    "error": "Avisos meteorológicos inacessíveis",
+    "quiet": "Sem avisos meteorológicos"
+  },
+  "eph": {
+    "nameday": "Onomástico",
+    "daylight": "Luz do dia",
+    "calendar": "Calendário"
+  }
 }

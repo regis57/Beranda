@@ -79,6 +79,8 @@ function translateStatic() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   for (const el of document.querySelectorAll('[data-ph]')) el.placeholder = t(el.dataset.ph);
   $('open-display').textContent = t('admin.open_display');
+  $('menu-label').textContent = t('admin.menu');
+  buildMenu();
   document.title = `Beranda · ${t('admin.title')}`;
 }
 
@@ -146,6 +148,35 @@ function testButton(run) {
   return [button, msg];
 }
 
+// ------------------------------------------------------------------ burger menu ---
+// One entry per card of the page (built from the card titles, so it follows the language).
+function buildMenu() {
+  const items = [...document.querySelectorAll('#form > section.card[id]')].filter((s) => !s.hidden && s.querySelector('h2 .num'));
+  $('menu-list').replaceChildren(...items.map((section) => {
+    const num = section.querySelector('h2 .num').textContent;
+    const title = section.querySelector('h2 [data-i18n]')?.textContent || '';
+    const a = el('a', { href: `#${section.id}` }, el('span', { className: 'num', textContent: num }), el('span', { textContent: title }));
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMenu();
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      section.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    });
+    return el('li', {}, a);
+  }));
+  $('menu-btn').hidden = !items.length || $('app').hidden;
+}
+function closeMenu() {
+  $('menu').hidden = true;
+  $('menu-btn').setAttribute('aria-expanded', 'false');
+}
+function toggleMenu() {
+  const open = $('menu').hidden;
+  $('menu').hidden = !open;
+  $('menu-btn').setAttribute('aria-expanded', String(open));
+  if (open) $('menu-list').querySelector('a')?.focus();
+}
+
 // ------------------------------------------------------------------ 1. place ---
 function renderPlace() {
   $('loc-name').value = cfg.location.name;
@@ -167,6 +198,7 @@ async function search() {
         $('loc-name').value = r.name;
         $('loc-lat').value = r.latitude;
         $('loc-lon').value = r.longitude;
+        if (r.area && !$('w-area').value.trim()) $('w-area').value = r.area;  // a good first guess for weather warnings
         if (r.timezone) fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), r.timezone);
         if (r.country && options.countries[r.country]) { $('country').value = r.country; onCountry(); }
         list.hidden = true;
@@ -652,6 +684,61 @@ function renderVoice() {
   renderVoiceDefaults();
 }
 
+// ------------------------------------------------------------------ widgets ---
+// Small optional extras of the main screen. Each one can be switched off.
+function renderWidgets() {
+  const w = cfg.widgets || {};
+  $('w-chart').checked = w.chart !== false;
+  $('w-air').checked = w.air !== false;
+  $('w-eph').checked = w.ephemeris !== false;
+  $('w-alerts').checked = !!w.alerts;
+  $('w-area').value = w.alerts_area || '';
+  $('w-clock2').checked = !!w.second_clock;
+  $('w-clock2-tz').value = w.second_clock || '';
+  const zones = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
+  $('tz-list').replaceChildren(...zones.map((z) => el('option', { value: z })));
+  $('w-area-msg').textContent = '';
+  showWidgetBodies();
+}
+function showWidgetBodies() {
+  $('w-alerts-body').hidden = !$('w-alerts').checked;
+  $('w-clock2-body').hidden = !$('w-clock2').checked;
+}
+// Ask the warning service once, and say in plain words whether the typed area is understood.
+async function testAlertsArea() {
+  const msg = $('w-area-msg');
+  const area = $('w-area').value.trim();
+  if (!area) { msg.textContent = t('admin.w_area_empty'); return; }
+  msg.textContent = '…';
+  try {
+    const r = await api('/test-alerts', { method: 'POST', body: JSON.stringify({ country: $('country').value, area }) });
+    if (!r.ok) {
+      msg.textContent = r.error === 'unsupported' ? t('admin.w_area_unsupported') : t('admin.w_area_error');
+    } else if (r.mine.length) {
+      msg.textContent = t('admin.w_area_found', { n: r.mine.length, area });
+    } else {
+      const others = r.warned_areas.length ? ` ${t('admin.w_area_others', { list: r.warned_areas.slice(0, 12).join(', ') })}` : '';
+      msg.textContent = t('admin.w_area_calm', { area }) + others;
+    }
+  } catch (e) { msg.textContent = e.message; }
+}
+function collectWidgets() {
+  const zone = $('w-clock2').checked ? $('w-clock2-tz').value.trim() : '';
+  return {
+    chart: $('w-chart').checked,
+    air: $('w-air').checked,
+    ephemeris: $('w-eph').checked,
+    alerts: $('w-alerts').checked,
+    alerts_area: $('w-area').value.trim(),
+    second_clock: zone,
+  };
+}
+// A time zone typed by hand must be a real one, otherwise the clock would just stay hidden.
+function validZone(zone) {
+  if (!zone) return true;
+  try { new Intl.DateTimeFormat('en', { timeZone: zone }); return true; } catch { return false; }
+}
+
 // ------------------------------------------------------------------ 9. screen ---
 function renderScreen() {
   const screen = cfg.screen || { rotate: 0, off: '', on: '' };
@@ -696,9 +783,20 @@ async function checkUpdates() {
     $('sys-update').hidden = !r.update_available;
   } catch (e) { msg.textContent = e.message; }
 }
-async function systemAction(action) {
+// The word that confirms a reset: "yes" in the language of the page (no accents or capitals needed).
+const plain = (text) => String(text).normalize('NFD').replace(/\p{M}/gu, '').trim().toLowerCase();
+function resetWordOk() { return plain($('reset-word').value) === plain(t('admin.reset_word')); }
+function openReset() {
+  $('reset-box').hidden = false;
+  $('reset-prompt').textContent = t('admin.reset_prompt', { word: t('admin.reset_word') });
+  $('reset-word').value = '';
+  $('reset-go').disabled = true;
+  $('reset-word').focus();
+}
+function closeReset() { $('reset-box').hidden = true; $('reset-word').value = ''; }
+async function systemAction(action, body) {
   try {
-    await api(`/system/${action}`, { method: 'POST' });
+    await api(`/system/${action}`, { method: 'POST', ...(body ? { body: JSON.stringify(body) } : {}) });
     $('sys-message').textContent = t(`admin.requested_${action.replace('-', '_')}`);
   } catch (e) { $('sys-message').textContent = e.message; }
 }
@@ -740,6 +838,7 @@ function collect() {
     enabled: $('voice-on').checked,
     commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
   };
+  body.widgets = collectWidgets();
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -750,6 +849,13 @@ async function save(event) {
   event.preventDefault();
   if (!$('form').reportValidity()) return;
   const state = $('state');
+  const zoneBad = $('w-clock2').checked && !validZone($('w-clock2-tz').value.trim());
+  $('w-clock2-err').hidden = !zoneBad;
+  if (zoneBad) {
+    $('w-clock2-err').textContent = t('admin.w_clock2_bad');
+    $('w-clock2-tz').scrollIntoView({ block: 'center' });
+    return;
+  }
   $('save').disabled = true;
   try {
     const body = collect();
@@ -776,7 +882,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderVoice(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); renderVoice(); renderWidgets(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -792,6 +898,7 @@ async function start() {
   translateStatic();
   $('gate').hidden = true;
   $('app').hidden = false;
+  buildMenu();
   $('welcome').hidden = !data.first_run;
   renderAll();
   $('pin').placeholder = data.pin_set ? '••••' : '';
@@ -808,7 +915,7 @@ async function boot() {
   $('form').addEventListener('change', (e) => {
     if (e.target.id === 'units') unitsTouched = true;
     if (e.target.id === 'language') { languageTouched = true; refreshPreview(); refreshNews(); }
-    if (e.target.id !== 'q' && e.target.id !== 'news-other-country') markDirty();
+    if (!['q', 'news-other-country', 'reset-word'].includes(e.target.id)) markDirty();
   });
   $('country').addEventListener('change', onCountry);
   $('loc-name').addEventListener('change', refreshNews);
@@ -835,7 +942,24 @@ async function boot() {
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
   $('sys-check').addEventListener('click', checkUpdates);
-  for (const id of ['sys-update', 'sys-screen', 'sys-reboot', 'sys-reset']) armed($(id), () => systemAction($(id).dataset.action));
+  for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) armed($(id), () => systemAction($(id).dataset.action));
+  // Starting again from zero: no double-click shortcut, the word has to be typed.
+  $('sys-reset').addEventListener('click', openReset);
+  $('reset-word').addEventListener('input', () => { $('reset-go').disabled = !resetWordOk(); });
+  $('reset-word').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('reset-go').click(); } });
+  $('reset-cancel').addEventListener('click', closeReset);
+  $('reset-go').addEventListener('click', async () => {
+    if (!resetWordOk()) return;
+    closeReset();
+    await systemAction('reset', { confirmed: true });
+  });
+  $('w-alerts').addEventListener('change', showWidgetBodies);
+  $('w-clock2').addEventListener('change', showWidgetBodies);
+  $('w-area-test').addEventListener('click', testAlertsArea);
+  $('w-clock2-tz').addEventListener('input', () => { $('w-clock2-err').hidden = true; });
+  $('menu-btn').addEventListener('click', toggleMenu);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('menu').hidden) { closeMenu(); $('menu-btn').focus(); } });
+  document.addEventListener('click', (e) => { if (!$('menu').hidden && !e.target.closest('#menu, #menu-btn')) closeMenu(); });
   $('tz-device').addEventListener('click', () => {
     fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), Intl.DateTimeFormat().resolvedOptions().timeZone);
     markDirty();

@@ -17,6 +17,10 @@
     <header class="clock">
       <div class="time"><span id="hm">--:--</span><span class="period" id="period"></span></div>
       <div class="date" id="date"></div>
+      <!-- Optional: the time somewhere else (family abroad...), small, under the date. -->
+      <div class="clock2" id="clock2" hidden></div>
+      <!-- Optional: official weather warnings for your area (MeteoAlarm). -->
+      <ul class="alerts" id="alerts" hidden></ul>
     </header>
 
     <section class="now" aria-label="Météo">
@@ -33,6 +37,22 @@
         <div class="rain-scale"><span id="rain-from"></span><span id="rain-to"></span></div>
         <div class="rain-text" id="rain-text"></div>
       </div>
+    </section>
+
+    <!-- The big middle zone: your photos next to the 24-hour graph, with air / UV / pollen below.
+         Every part hides itself when it is switched off or has nothing to show. -->
+    <section class="feature" id="feature" hidden>
+      <div class="feature-row">
+        <figure class="phototile" id="phototile" hidden>
+          <img id="photo-a" alt="" class="on">
+          <img id="photo-b" alt="">
+        </figure>
+        <figure class="chart" id="chart" hidden>
+          <figcaption class="chart-title" id="chart-title"></figcaption>
+          <div class="chart-plot" id="chart-plot"></div>
+        </figure>
+      </div>
+      <ul class="air" id="air" hidden></ul>
     </section>
 
     <section class="week" id="week" aria-label="Prévisions sur 7 jours"></section>
@@ -63,6 +83,11 @@
         <ul class="facts-list" id="facts-list"></ul>
       </section>
 
+      <!-- The "ephemeris": name day, length of the day, and the local calendar of your country. -->
+      <section class="eph" id="eph" hidden>
+        <ul class="eph-list" id="eph-list"></ul>
+      </section>
+
       <section class="upcoming" aria-label="À venir">
         <ul class="upcoming-list" id="upcoming"></ul>
       </section>
@@ -74,14 +99,8 @@
         <ul class="tv-list" id="tv-list"></ul>
       </section>
 
-      <!-- Two little widgets: a photo frame and a radio. Each hides itself when it has nothing
-           to show (no pictures yet / no favourite stations chosen). -->
+      <!-- The radio. It hides itself when no favourite station is chosen. -->
       <div class="widgets" id="widgets">
-        <figure class="phototile" id="phototile" hidden>
-          <img id="photo-a" alt="" class="on">
-          <img id="photo-b" alt="">
-        </figure>
-
         <section class="radio" id="radio" hidden>
           <button type="button" class="round" id="radio-toggle" aria-label="Radio">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path id="radio-icon" d="M8 5v14l11-7z"/></svg>

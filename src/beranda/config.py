@@ -6,6 +6,7 @@ import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 # Countries whose weeks conventionally start on Sunday (the rest start on Monday).
 SUNDAY_FIRST = {
@@ -99,6 +100,13 @@ class Config:
     radio_volume: int = 70  # 0-100
     tv_xmltv_url: str = ""  # the user's own XMLTV guide address ("" = TV section disabled)
     tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
+    # Optional extras on the display, each one switchable on the settings page.
+    widget_chart: bool = True  # the 24-hour temperature / rain / wind graph
+    widget_air: bool = True  # air quality, UV index and pollen
+    widget_alerts: bool = False  # official weather warnings (MeteoAlarm, Europe) for `alerts_area`
+    alerts_area: str = ""  # the name of your area as MeteoAlarm writes it, e.g. "Moselle"
+    widget_ephemeris: bool = True  # name day, length of the day, the local calendar
+    second_clock: str = ""  # a second time zone ("Asia/Jakarta"), small, under the date; "" = off
     voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
     history_enabled: bool = True  # the "On this day" box, from Wikipedia
@@ -153,6 +161,17 @@ def _parse_voice_command(raw: dict) -> VoiceCommand:
         raise ValueError("a voice answer can be 200 characters at most")
     station = str(raw.get("station", "")).strip()[:100] if action == "radio_play" else ""
     return VoiceCommand(phrase=phrase, action=action, station=station, reply=reply if action == "say" else "")
+
+
+def _check_timezone(value: object) -> str:
+    name = str(value or "").strip()
+    if not name:
+        return ""
+    try:
+        ZoneInfo(name)
+    except (ZoneInfoNotFoundError, ValueError, OSError) as exc:
+        raise ValueError(f"unknown time zone: {name[:60]!r} (try for example Asia/Jakarta)") from exc
+    return name
 
 
 def normalise_language(raw: object) -> str:
@@ -240,6 +259,7 @@ def from_dict(data: dict) -> Config:
     tv = data.get("tv", {})
     voice = data.get("voice", {})
     history = data.get("history", {})
+    widgets = data.get("widgets", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -270,6 +290,12 @@ def from_dict(data: dict) -> Config:
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
         tv_xmltv_url=_check_tv_url(tv.get("url", "")),
         tv_channels=tuple(str(c) for c in tv.get("channels", [])),
+        widget_chart=bool(widgets.get("chart", True)),
+        widget_air=bool(widgets.get("air", True)),
+        widget_alerts=bool(widgets.get("alerts", False)),
+        alerts_area=" ".join(str(widgets.get("alerts_area", "")).split())[:80],
+        widget_ephemeris=bool(widgets.get("ephemeris", True)),
+        second_clock=_check_timezone(widgets.get("second_clock", "")),
         voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[:MAX_VOICE_COMMANDS]),
         voice_enabled=bool(voice.get("enabled", False)),
         history_enabled=bool(history.get("enabled", True)),
@@ -349,6 +375,14 @@ def to_dict(cfg: Config) -> dict:
         ],
     }
     out["history"] = {"enabled": cfg.history_enabled}
+    out["widgets"] = {
+        "chart": cfg.widget_chart,
+        "air": cfg.widget_air,
+        "alerts": cfg.widget_alerts,
+        "alerts_area": cfg.alerts_area,
+        "ephemeris": cfg.widget_ephemeris,
+        "second_clock": cfg.second_clock,
+    }
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

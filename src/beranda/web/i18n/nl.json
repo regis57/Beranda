@@ -97,5 +97,71 @@
   "tv_empty": "Niets in de gids voor vanavond",
   "tv_error": "Tv-gids onbereikbaar",
   "radio_prev": "Vorige zender",
-  "radio_next": "Volgende zender"
+  "radio_next": "Volgende zender",
+  "chart": {
+    "title": "Komende 24 u: temperatuur, regen, wind ({wind})"
+  },
+  "air": {
+    "aqi": "Lucht",
+    "uv": "UV",
+    "aqi_level": {
+      "0": "Goed",
+      "1": "Redelijk",
+      "2": "Matig",
+      "3": "Slecht",
+      "4": "Zeer slecht",
+      "5": "Extreem slecht"
+    },
+    "uv_level": {
+      "0": "Laag",
+      "1": "Matig",
+      "2": "Hoog",
+      "3": "Zeer hoog",
+      "4": "Extreem"
+    },
+    "pollen_level": {
+      "1": "Laag",
+      "2": "Matig",
+      "3": "Hoog",
+      "4": "Zeer hoog"
+    },
+    "kind": {
+      "alder": "Els",
+      "birch": "Berk",
+      "grass": "Gras",
+      "mugwort": "Bijvoet",
+      "olive": "Olijf",
+      "ragweed": "Ambrosia"
+    }
+  },
+  "alerts": {
+    "kind": {
+      "thunderstorm": "Onweer",
+      "flood": "Overstroming",
+      "avalanche": "Lawine",
+      "fire": "Bosbrand",
+      "coastal": "Kust",
+      "snow_ice": "Sneeuw / ijs",
+      "fog": "Mist",
+      "wind": "Wind",
+      "rain": "Regen",
+      "heat": "Hitte",
+      "cold": "Kou",
+      "other": "Waarschuwing"
+    },
+    "level": {
+      "1": "geel",
+      "2": "oranje",
+      "3": "rood"
+    },
+    "no_area": "Weerwaarschuwingen: vul je gebied in bij de instellingen",
+    "unsupported": "Weerwaarschuwingen: niet beschikbaar voor dit land",
+    "error": "Weerwaarschuwingen onbereikbaar",
+    "quiet": "Geen weerwaarschuwing"
+  },
+  "eph": {
+    "nameday": "Naamdag",
+    "daylight": "Daglicht",
+    "calendar": "Kalender"
+  }
 }

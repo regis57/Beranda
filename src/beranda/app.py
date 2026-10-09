@@ -23,8 +23,11 @@ from .admin import Runtime
 from .admin import router as admin_router
 from .cache import Cache
 from .config import Config
+from .providers import air as air_mod
+from .providers import alerts as alerts_mod
 from .providers import astro as astro_mod
 from .providers import calendar_ics, demo, news_catalog, photos, seasons, specialdays
+from .providers import ephemeris as eph_mod
 from .providers import history as history_mod
 from .providers import news as news_mod
 from .providers import tv as tv_mod
@@ -39,6 +42,8 @@ WEATHER_TTL = 15 * 60
 CALENDAR_TTL = 15 * 60
 NEWS_TTL = 30 * 60
 TV_TTL = 3 * 60 * 60  # XMLTV guides are usually refreshed by their publisher a few times a day
+AIR_TTL = 60 * 60  # air quality and pollen move slowly (the forecast model updates hourly)
+ALERTS_TTL = 15 * 60  # warnings can be issued or lifted at any time
 HISTORY_TTL = 20 * 60 * 60  # "on this day" only changes once a day, by definition
 
 # The display loads nothing but its own files. A strict policy keeps a hostile calendar
@@ -237,6 +242,61 @@ async def build_state(
             errors["tv"] = type(exc).__name__
             tv = {"status": "error", "programmes": [], **window}
 
+    # --- optional extras: air / UV / pollen, official warnings, ephemeris ------------------
+    air = None
+    if cfg.widget_air and cfg.demo:
+        air = demo.air()
+    elif cfg.widget_air:
+        us_scale = cfg.country.upper() == "US"
+        try:
+            air, is_stale = await cache.get(
+                f"air:{loc.latitude:.2f}:{loc.longitude:.2f}:{us_scale}",
+                AIR_TTL,
+                lambda: air_mod.fetch(loc.latitude, loc.longitude, us_scale),
+            )
+            if is_stale:
+                stale.append("air")
+        except Exception as exc:  # noqa: BLE001 - this extra must never blank the screen
+            errors["air"] = type(exc).__name__
+
+    # `status` says why the box may be empty: "no_area" (no area typed yet), "unsupported" (no
+    # MeteoAlarm feed for this country), "error", or "ok" (items may be empty = all quiet).
+    alerts = None
+    if cfg.widget_alerts:
+        if not cfg.alerts_area:
+            alerts = {"status": "no_area", "items": []}
+        elif cfg.demo:
+            alerts = {"status": "ok", "items": demo.alerts()}
+        elif not alerts_mod.supported(cfg.country):
+            alerts = {"status": "unsupported", "items": []}
+        else:
+            try:
+                every, is_stale = await cache.get(
+                    f"alerts:{cfg.country.upper()}", ALERTS_TTL, lambda: alerts_mod.fetch(cfg.country, now)
+                )
+                alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area)}
+                if is_stale:
+                    stale.append("alerts")
+            except Exception as exc:  # noqa: BLE001
+                errors["alerts"] = type(exc).__name__
+                alerts = {"status": "error", "items": []}
+
+    ephemeris = None
+    if cfg.widget_ephemeris:
+        ephemeris = eph_mod.daylight(now, loc.latitude, loc.longitude, loc.timezone)
+        ephemeris["nameday"] = None
+        if cfg.demo and eph_mod.has_nameday(cfg.country):
+            ephemeris["nameday"] = demo.NAMEDAY
+        elif eph_mod.has_nameday(cfg.country):
+            try:
+                ephemeris["nameday"], _stale = await cache.get(
+                    f"nameday:{cfg.country.upper()}:{today.isoformat()}",
+                    HISTORY_TTL,
+                    lambda: eph_mod.fetch_nameday(cfg.country, today.month, today.day),
+                )
+            except Exception as exc:  # noqa: BLE001
+                errors["nameday"] = type(exc).__name__
+
     # --- sky & season (all local) --------------------------------------------------
     sky = astro_mod.astro(now, loc.latitude, loc.longitude, loc.timezone)
     mode = cfg.mode if cfg.mode != "auto" else ("night" if sky["night"] else "light")
@@ -263,6 +323,11 @@ async def build_state(
         "photos": {"names": photo_names, "interval": cfg.photos_interval},
         "tv": tv,
         "history": history,
+        "air": air,
+        "alerts": alerts,
+        "ephemeris": ephemeris,
+        # Which optional extras are on (the page shows only these), and the second time zone.
+        "widgets": {"chart": cfg.widget_chart, "second_clock": cfg.second_clock},
         # Radio plays in the page itself (the tablet's speakers), so the page needs the list.
         "radio": {
             "stations": [{"uuid": st.uuid, "name": st.name, "url": st.url} for st in cfg.radio_stations],

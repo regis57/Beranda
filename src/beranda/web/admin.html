@@ -11,8 +11,16 @@
 </head>
 <body>
   <header class="top">
-    <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></div>
+    <div class="top-left">
+      <!-- The burger: a list of every section, to jump straight to one instead of scrolling. -->
+      <button type="button" class="burger" id="menu-btn" aria-expanded="false" aria-controls="menu" hidden>
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span id="menu-label"></span>
+      </button>
+      <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></div>
+    </div>
     <a class="link" id="open-display" href="/" target="_blank" rel="noopener"></a>
+    <nav class="menu" id="menu" hidden><ul id="menu-list"></ul></nav>
   </header>
 
   <div id="gate" class="gate" hidden>
@@ -75,8 +83,36 @@
         <div class="seg" id="modes" role="radiogroup"></div>
       </section>
 
+      <section class="card" id="sec-widgets">
+        <h2><span class="num">4</span><span data-i18n="admin.widgets"></span></h2>
+        <p class="hint" data-i18n="admin.widgets_hint"></p>
+        <label class="check"><input type="checkbox" id="w-chart"><span data-i18n="admin.w_chart"></span></label>
+        <p class="hint" data-i18n="admin.w_chart_hint"></p>
+        <label class="check"><input type="checkbox" id="w-air"><span data-i18n="admin.w_air"></span></label>
+        <p class="hint" data-i18n="admin.w_air_hint"></p>
+        <label class="check"><input type="checkbox" id="w-eph"><span data-i18n="admin.w_eph"></span></label>
+        <p class="hint" data-i18n="admin.w_eph_hint"></p>
+        <label class="check"><input type="checkbox" id="w-alerts"><span data-i18n="admin.w_alerts"></span></label>
+        <div id="w-alerts-body" hidden>
+          <p class="hint" data-i18n="admin.w_alerts_hint"></p>
+          <div class="row wrap">
+            <input id="w-area" type="text" spellcheck="false" maxlength="80" data-ph="admin.w_area_ph" aria-label="area">
+            <button type="button" id="w-area-test" data-i18n="admin.w_area_test"></button>
+          </div>
+          <p class="hint" id="w-area-msg" role="status"></p>
+        </div>
+        <label class="check"><input type="checkbox" id="w-clock2"><span data-i18n="admin.w_clock2"></span></label>
+        <div id="w-clock2-body" hidden>
+          <p class="hint" data-i18n="admin.w_clock2_hint"></p>
+          <input id="w-clock2-tz" type="text" list="tz-list" spellcheck="false" autocomplete="off" data-ph="admin.w_clock2_ph" aria-label="time zone">
+          <datalist id="tz-list"></datalist>
+          <p class="error" id="w-clock2-err" hidden></p>
+        </div>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.widgets_help"></p></details>
+      </section>
+
       <section class="card" id="sec-cal">
-        <h2><span class="num">4</span><span data-i18n="admin.calendar"></span></h2>
+        <h2><span class="num">5</span><span data-i18n="admin.calendar"></span></h2>
         <p class="hint" data-i18n="admin.calendar_hint"></p>
         <div id="ics-list"></div>
         <button type="button" id="ics-add" data-i18n="admin.add"></button>
@@ -88,14 +124,14 @@
       </section>
 
       <section class="card" id="sec-keys">
-        <h2><span class="num">5</span><span data-i18n="admin.key_dates"></span></h2>
+        <h2><span class="num">6</span><span data-i18n="admin.key_dates"></span></h2>
         <p class="hint" data-i18n="admin.key_dates_hint"></p>
         <div id="key-list"></div>
         <button type="button" id="key-add" data-i18n="admin.add_date"></button>
       </section>
 
       <section class="card" id="sec-news">
-        <h2><span class="num">6</span><span data-i18n="admin.news"></span></h2>
+        <h2><span class="num">7</span><span data-i18n="admin.news"></span></h2>
         <p class="hint" data-i18n="admin.news_hint"></p>
         <label class="check"><input type="checkbox" id="news-on"><span data-i18n="admin.news_enabled"></span></label>
         <div id="news-body">
@@ -123,7 +159,7 @@
       </section>
 
       <section class="card" id="sec-photos">
-        <h2><span class="num">7</span><span data-i18n="admin.photos"></span></h2>
+        <h2><span class="num">8</span><span data-i18n="admin.photos"></span></h2>
         <p class="hint" data-i18n="admin.photos_hint"></p>
         <h3 data-i18n="admin.photos_add_title"></h3>
         <div class="row wrap">
@@ -155,7 +191,7 @@
       </section>
 
       <section class="card" id="sec-radio">
-        <h2><span class="num">8</span><span data-i18n="admin.radio"></span></h2>
+        <h2><span class="num">9</span><span data-i18n="admin.radio"></span></h2>
         <p class="hint" data-i18n="admin.radio_hint"></p>
         <h3 data-i18n="admin.radio_favorites"></h3>
         <div id="radio-list"></div>
@@ -182,7 +218,7 @@
       </section>
 
       <section class="card" id="sec-tv">
-        <h2><span class="num">9</span><span data-i18n="admin.tv"></span></h2>
+        <h2><span class="num">10</span><span data-i18n="admin.tv"></span></h2>
         <p class="hint" data-i18n="admin.tv_hint"></p>
         <h3 data-i18n="admin.tv_suggest_title"></h3>
         <p class="hint" id="tv-suggest-msg" role="status"></p>
@@ -211,7 +247,7 @@
       </section>
 
       <section class="card" id="sec-voice">
-        <h2><span class="num">10</span><span data-i18n="admin.voice"></span></h2>
+        <h2><span class="num">11</span><span data-i18n="admin.voice"></span></h2>
         <p class="hint" data-i18n="admin.voice_hint"></p>
         <label class="check"><input type="checkbox" id="voice-on"><span data-i18n="admin.voice_enabled"></span></label>
         <p class="hint" data-i18n="admin.voice_save_note"></p>
@@ -229,7 +265,7 @@
       </section>
 
       <section class="card" id="sec-screen">
-        <h2><span class="num">11</span><span data-i18n="admin.screen"></span></h2>
+        <h2><span class="num">12</span><span data-i18n="admin.screen"></span></h2>
         <p class="hint" data-i18n="admin.screen_hint"></p>
         <div class="grid3">
           <label><span data-i18n="admin.rotate"></span><select id="rotate"></select></label>
@@ -240,7 +276,7 @@
       </section>
 
       <section class="card" id="sec-system">
-        <h2><span class="num">12</span><span data-i18n="admin.system"></span></h2>
+        <h2><span class="num">13</span><span data-i18n="admin.system"></span></h2>
         <p class="hint" id="sys-version"></p>
         <div class="row wrap" id="sys-buttons">
           <button type="button" id="sys-check" data-i18n="admin.check_updates"></button>
@@ -250,11 +286,20 @@
           <button type="button" id="sys-reset" data-action="reset" data-i18n="admin.factory_reset"></button>
         </div>
         <p class="hint" id="sys-message" role="status"></p>
+        <!-- Starting again from zero needs more than a second click: type the word "yes" yourself. -->
+        <div class="reset-box" id="reset-box" hidden>
+          <p id="reset-prompt"></p>
+          <div class="row wrap">
+            <input id="reset-word" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="reset-prompt">
+            <button type="button" class="danger" id="reset-go" disabled data-i18n="admin.reset_confirm"></button>
+            <button type="button" id="reset-cancel" data-i18n="admin.reset_cancel"></button>
+          </div>
+        </div>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.factory_reset_help"></p></details>
       </section>
 
       <section class="card" id="sec-sec">
-        <h2><span class="num">13</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">14</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

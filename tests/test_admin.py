@@ -132,7 +132,8 @@ def test_city_search_proxies_open_meteo(tmp_path):
          "latitude": -7.8, "longitude": 110.36, "timezone": "Asia/Jakarta", "population": 1}]}))
     client, _ = make(tmp_path)
     found = client.get("/api/admin/geocode", params={"q": "Yogya", "language": "id"}).json()["results"]
-    assert found == [{"name": "Yogyakarta", "region": "Special Region", "country": "ID",
+    assert found == [{"name": "Yogyakarta", "region": "Special Region",
+            "area": "Special Region", "country": "ID",
                       "latitude": -7.8, "longitude": 110.36, "timezone": "Asia/Jakarta"}]
 
 
@@ -398,3 +399,34 @@ def test_the_default_voice_phrases_are_offered_in_the_display_language(tmp_path)
     assert r["language"] == "fr"
     assert "météo" in r["commands"]["weather"]
     assert "say" in r["actions"]
+
+
+# ---- v0.14: optional widgets -------------------------------------------------------------
+def test_widgets_are_saved_and_come_back(tmp_path):
+    client, path = make(tmp_path)
+    widgets = {"chart": False, "air": True, "ephemeris": False, "alerts": True, "alerts_area": " Moselle ", "second_clock": "Asia/Tokyo"}
+    assert client.put("/api/admin/config", json=valid_body(widgets=widgets)).json()["saved"] is True
+    saved = tomllib.loads(path.read_text())["widgets"]
+    assert saved["chart"] is False and saved["alerts_area"] == "Moselle" and saved["second_clock"] == "Asia/Tokyo"
+    assert client.get("/api/admin/config").json()["config"]["widgets"]["ephemeris"] is False
+
+
+def test_an_unknown_second_time_zone_is_refused(tmp_path):
+    client, _ = make(tmp_path)
+    assert client.put("/api/admin/config", json=valid_body(widgets={"second_clock": "Mars/Olympus"})).status_code == 422
+
+
+def test_test_alerts_says_whether_the_area_is_understood(tmp_path):
+    client, _ = make(tmp_path)
+    feed = (
+        '<feed xmlns="http://www.w3.org/2005/Atom"><entry xmlns:cap="urn:oasis:names:tc:emergency:cap:1.2">'
+        "<title>Orange Wind Warning</title><cap:areaDesc>Moselle</cap:areaDesc><cap:event>Wind</cap:event>"
+        "<cap:severity>Severe</cap:severity><cap:status>Actual</cap:status></entry></feed>"
+    )
+    with respx.mock:
+        respx.get(url__regex=r"https://feeds\.meteoalarm\.org/.*").mock(return_value=httpx.Response(200, text=feed))
+        mine = client.post("/api/admin/test-alerts", json={"country": "FR", "area": "moselle"}).json()
+        none = client.post("/api/admin/test-alerts", json={"country": "FR", "area": "Var"}).json()
+    assert mine["ok"] and mine["mine"][0]["level"] == 2
+    assert none["ok"] and none["mine"] == [] and none["warned_areas"] == ["Moselle"]
+    assert client.post("/api/admin/test-alerts", json={"country": "US", "area": "x"}).json() == {"ok": False, "error": "unsupported"}
