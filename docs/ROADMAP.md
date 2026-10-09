@@ -16,6 +16,8 @@ Done:
   itself)
 - **v0.7**: TV prime time from the user's own XMLTV guide (read-only, never scraped or hosted
   by Beranda)
+- **v0.8**: offline voice control (openWakeWord + Vosk + Piper), a separate opt-in service
+  (`install.sh --with-voice`) for the weather, the time, a favourite station and the screen
 
 Next:
 
@@ -24,9 +26,8 @@ Next:
 2. Test on real Raspberry Pi 3B+, 4 and 5 hardware, and tune Chromium for the Pi 3
 3. Settings menu on the Pi itself (raspi-config style)
 4. Blink camera thumbnails
-5. Voice control (local: openWakeWord + Vosk + Piper; Alexa skill / Matter with limits)
-6. Country-specific historical events (Wikidata)
-7. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
+5. Country-specific historical events (Wikidata)
+6. More languages: Hausa, Yoruba, Zulu, Somali, Malagasy, Wolof, Tamil, Tahitian, Quechua...
 
 ## What we won't do, and why
 

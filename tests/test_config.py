@@ -40,6 +40,7 @@ def test_from_dict_full():
         {"radio": {"stations": [{"uuid": "u1", "name": "x", "url": "not-a-url"}]}},
         {"tv": {"url": "not-a-url"}},
         {"tv": {"prime_start": "25:99"}},
+        {"voice": {"wake_word": "beranda"}},
     ],
 )
 def test_invalid_values_are_rejected(bad):
@@ -76,6 +77,15 @@ def test_tv_defaults_and_round_trip():
     assert cfg.tv_channels == ("c1", "c2")
     assert cfg.tv_prime_start == "19:30" and cfg.tv_prime_end == "00:15"
     assert config.to_dict(cfg)["tv"]["channels"] == ["c1", "c2"]
+
+
+def test_voice_defaults_and_round_trip():
+    cfg = config.Config()
+    assert cfg.voice_enabled is False and cfg.voice_wake_word == "hey_jarvis"
+
+    cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "alexa"}})
+    assert cfg.voice_enabled is True and cfg.voice_wake_word == "alexa"
+    assert config.to_dict(cfg)["voice"] == {"enabled": True, "wake_word": "alexa"}
 
 
 def test_load_reads_toml(tmp_path):

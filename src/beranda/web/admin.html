@@ -169,8 +169,24 @@
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.tv_help"></p></details>
       </section>
 
+      <section class="card" id="sec-voice">
+        <h2><span class="num">10</span><span data-i18n="admin.voice"></span></h2>
+        <p class="hint" data-i18n="admin.voice_hint"></p>
+        <label class="check"><input type="checkbox" id="voice-on"><span data-i18n="admin.voice_enabled"></span></label>
+        <div id="voice-body">
+          <label><span data-i18n="admin.voice_wake_word"></span>
+            <select id="voice-wake-word">
+              <option value="hey_jarvis">Hey Jarvis</option>
+              <option value="hey_mycroft">Hey Mycroft</option>
+              <option value="alexa">Alexa</option>
+            </select>
+          </label>
+        </div>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.voice_help"></p></details>
+      </section>
+
       <section class="card" id="sec-screen">
-        <h2><span class="num">10</span><span data-i18n="admin.screen"></span></h2>
+        <h2><span class="num">11</span><span data-i18n="admin.screen"></span></h2>
         <p class="hint" data-i18n="admin.screen_hint"></p>
         <div class="grid3">
           <label><span data-i18n="admin.rotate"></span><select id="rotate"></select></label>
@@ -181,7 +197,7 @@
       </section>
 
       <section class="card" id="sec-system">
-        <h2><span class="num">11</span><span data-i18n="admin.system"></span></h2>
+        <h2><span class="num">12</span><span data-i18n="admin.system"></span></h2>
         <p class="hint" id="sys-version"></p>
         <div class="row wrap" id="sys-buttons">
           <button type="button" id="sys-check" data-i18n="admin.check_updates"></button>
@@ -195,7 +211,7 @@
       </section>
 
       <section class="card" id="sec-sec">
-        <h2><span class="num">12</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">13</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>

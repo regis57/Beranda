@@ -7,6 +7,8 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .providers import voice as voice_mod
+
 # Countries whose weeks conventionally start on Sunday (the rest start on Monday).
 SUNDAY_FIRST = {
     "US", "CA", "MX", "JP", "BR", "AU", "IL", "IN", "KR", "TW", "PH", "ZA", "SA", "CO", "PE",
@@ -82,6 +84,8 @@ class Config:
     tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
     tv_prime_start: str = "20:00"  # "HH:MM", local time
     tv_prime_end: str = "23:00"  # if this is not after the start, it is treated as past midnight
+    voice_enabled: bool = False  # the beranda-voice service only acts when this is on
+    voice_wake_word: str = voice_mod.DEFAULT_WAKE_WORD  # one of the pretrained wake phrases
 
     @property
     def week_start(self) -> int:
@@ -195,6 +199,7 @@ def from_dict(data: dict) -> Config:
     photos = data.get("photos", {})
     radio = data.get("radio", {})
     tv = data.get("tv", {})
+    voice = data.get("voice", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -226,6 +231,8 @@ def from_dict(data: dict) -> Config:
         tv_channels=tuple(str(c) for c in tv.get("channels", [])),
         tv_prime_start=_check_hhmm(tv.get("prime_start")) or Config.tv_prime_start,
         tv_prime_end=_check_hhmm(tv.get("prime_end")) or Config.tv_prime_end,
+        voice_enabled=bool(voice.get("enabled", False)),
+        voice_wake_word=voice_mod.check_wake_word(voice.get("wake_word")),
     )
 
 
@@ -292,6 +299,7 @@ def to_dict(cfg: Config) -> dict:
         "prime_start": cfg.tv_prime_start,
         "prime_end": cfg.tv_prime_end,
     }
+    out["voice"] = {"enabled": cfg.voice_enabled, "wake_word": cfg.voice_wake_word}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

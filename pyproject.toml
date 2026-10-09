@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "beranda"
-version = "0.7.0"
+version = "0.8.0"
 description = "A lean, beautiful, offline-tolerant dashboard for a smart mirror or a big tablet. Runs on a Raspberry Pi 3B."
 readme = "README.md"
 license = { text = "MIT" }
@@ -32,9 +32,14 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pytest-asyncio>=0.23", "respx>=0.21", "playwright>=1.44", "ruff>=0.5"]
+# Only needed for the separate, optional beranda-voice service (install.sh --with-voice):
+# openWakeWord for the wake word, Vosk for offline speech-to-text. Piper itself is a separate
+# command-line program, not a Python package, and is installed by install.sh directly.
+voice = ["openwakeword>=0.6", "vosk>=0.3"]
 
 [project.scripts]
 beranda = "beranda.__main__:main"
+beranda-voice = "beranda.voice_service:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

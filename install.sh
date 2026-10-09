@@ -16,6 +16,7 @@
 #   --branch NAME      install another branch of the repository (default: main)
 #   --source DIR       install from a local copy instead of downloading (for developers)
 #   --no-systemd       do not install the services (containers, tests)
+#   --with-voice       also prepare the optional offline voice-control service
 #   --dry-run          print what would be done, change nothing
 set -euo pipefail
 
@@ -27,6 +28,7 @@ STATEDIR="/var/lib/beranda"
 USER_NAME="beranda"
 SCREEN=1
 SYSTEMD=1
+VOICE=0
 DRY=0
 SOURCE=""
 NEW_HOSTNAME=""
@@ -40,6 +42,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --no-screen) SCREEN=0 ;;
         --no-systemd) SYSTEMD=0 ;;
+        --with-voice) VOICE=1 ;;
         --dry-run) DRY=1 ;;
         --hostname) NEW_HOSTNAME="${2:?--hostname needs a name}"; shift ;;
         --branch) BRANCH="${2:?--branch needs a name}"; shift ;;
@@ -68,6 +71,7 @@ if [ "$SCREEN" = 1 ]; then
     # Raspberry Pi OS calls its Chromium "chromium-browser"; Debian and Ubuntu call it "chromium".
     if apt-cache show chromium-browser >/dev/null 2>&1; then packages+=(chromium-browser); else packages+=(chromium); fi
 fi
+[ "$VOICE" = 1 ] && packages+=(alsa-utils)
 run apt-get update -q
 run env DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends "${packages[@]}"
 
@@ -96,7 +100,12 @@ else
 fi
 [ -d "$PREFIX/venv" ] || run python3 -m venv "$PREFIX/venv"
 run "$PREFIX/venv/bin/pip" install --quiet --upgrade pip
-run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src"
+if [ "$VOICE" = 1 ]; then
+    run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src[voice]"
+    run install -d -m 0750 -o "$USER_NAME" -g "$USER_NAME" "$STATEDIR/voice"
+else
+    run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src"
+fi
 run install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
 run install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
 run ln -sf "$PREFIX/venv/bin/beranda" /usr/local/bin/beranda
@@ -121,6 +130,7 @@ if [ "$SYSTEMD" = 1 ]; then
     say "4/4 Starting Beranda now and at every boot"
     units=(beranda.service beranda-actions.path beranda-actions.service)
     [ "$SCREEN" = 1 ] && units+=(beranda-kiosk.service)
+    [ "$VOICE" = 1 ] && units+=(beranda-voice.service)
     for unit in "${units[@]}"; do
         if [ "$DRY" = 1 ]; then
             printf '    $ write /etc/systemd/system/%s\n' "$unit"
@@ -160,3 +170,15 @@ echo "        http://$name.local:8080/admin"
 [ -n "$ip" ] && echo "        or http://$ip:8080/admin"
 [ "$SCREEN" = 1 ] && echo "    The screen shows the same address and a QR code until you have saved the settings."
 echo "    Something wrong? Run:  beranda doctor"
+if [ "$VOICE" = 1 ]; then
+    echo
+    say "Voice control was prepared but is not running yet."
+    echo "    It needs two files you fetch yourself (they're too big to ship in Beranda):"
+    echo "      - a Vosk speech model for your language, unzipped into $STATEDIR/voice/vosk-model"
+    echo "        (https://alphacephei.com/vosk/models - a 'small' model is enough for a Pi)"
+    echo "      - a Piper voice for your language, saved as $STATEDIR/voice/piper-voice.onnx"
+    echo "        (https://github.com/rhasspy/piper/blob/master/VOICES.md), plus the 'piper'"
+    echo "        program itself (same repository's releases) on the PATH"
+    echo "    Then turn voice control on in the settings page and run:"
+    echo "        sudo systemctl enable --now beranda-voice.service"
+fi

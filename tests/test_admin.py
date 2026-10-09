@@ -257,6 +257,14 @@ def test_tv_settings_round_trip(tmp_path):
     }
 
 
+def test_voice_settings_round_trip(tmp_path):
+    client, path = make(tmp_path)
+    body = valid_body(voice={"enabled": True, "wake_word": "alexa"})
+    assert client.put("/api/admin/config", json=body).json()["saved"] is True
+    saved = tomllib.loads(path.read_text())
+    assert saved["voice"] == {"enabled": True, "wake_word": "alexa"}
+
+
 class _FakeProc:
     def __init__(self):
         self.alive = True

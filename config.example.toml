@@ -66,6 +66,13 @@ enabled = true
 # prime_start = "20:00"   # "HH:MM", local time
 # prime_end = "23:00"     # not after prime_start means it runs past midnight
 
+# Offline voice control: only takes effect if you also installed it with
+# install.sh --with-voice (it's a separate service - see the README). wake_word must be one
+# of "alexa", "hey_jarvis" or "hey_mycroft": the three pretrained wake words Beranda can use.
+# [voice]
+# enabled = true
+# wake_word = "hey_jarvis"
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"

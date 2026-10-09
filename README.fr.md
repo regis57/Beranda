@@ -7,7 +7,7 @@ plus récent** : l'heure, la météo et la pluie chez vous, la lune, votre agend
 et les dates qui comptent, et une ligne de titres d'actualité. Clair le jour, sombre la nuit.
 Gratuit : pas de compte, pas d'abonnement, pas d'API payante.
 
-> **État : alpha (v0.7).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
+> **État : alpha (v0.8).** L'installateur est testé automatiquement sur une machine Debian/Ubuntu
 > neuve avec systemd ; la partie plein écran n'a pas encore été essayée sur un vrai Raspberry Pi.
 > Si vous l'essayez, dites-nous comment ça s'est passé dans une « issue ».
 > 🇬🇧 [Read in English](README.md)
@@ -54,6 +54,11 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
 - **Programme TV du soir** : pointez-le vers un guide XMLTV gratuit (celui de votre fournisseur,
   ou un guide communautaire comme [iptv-org/epg](https://github.com/iptv-org/epg)) et choisissez
   vos chaînes ; Beranda ne fait que lire ce guide, il n'en héberge ni n'en récupère jamais lui-même.
+- **Contrôle par la voix (facultatif, entièrement hors ligne)** : un mot d'activation, puis
+  une courte phrase — la météo, l'heure, une station favorite, redémarrer l'écran. Rien n'est
+  envoyé où que ce soit ; cela tourne comme son propre service (`install.sh --with-voice`)
+  avec [openWakeWord](https://github.com/dscripka/openWakeWord),
+  [Vosk](https://alphacephei.com/vosk/) et [Piper](https://github.com/rhasspy/piper).
 
 ## L'essayer sur votre ordinateur (2 minutes)
 
