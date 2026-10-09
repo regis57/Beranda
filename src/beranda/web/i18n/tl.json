@@ -91,5 +91,11 @@
   "history_title": "Sa araw na ito",
   "radio_error": "Hindi mapatugtog ang istasyong ito",
   "voice_listening": "Nakikinig…",
-  "voice_unavailable": "Hindi magamit ang mikropono – tingnan ang mga setting"
+  "voice_unavailable": "Hindi magamit ang mikropono – tingnan ang mga setting",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

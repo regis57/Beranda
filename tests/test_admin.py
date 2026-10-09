@@ -241,7 +241,7 @@ def test_voice_settings_round_trip(tmp_path):
     body = valid_body(voice={"enabled": True, "wake_word": "alexa"})  # old key: ignored
     assert client.put("/api/admin/config", json=body).json()["saved"] is True
     saved = tomllib.loads(path.read_text())
-    assert saved["voice"] == {"enabled": True}
+    assert saved["voice"] == {"enabled": True, "commands": []}
 
 
 def test_history_settings_round_trip(tmp_path):
@@ -373,3 +373,28 @@ def test_tv_guides_ignores_html_error_pages_served_with_status_200(tmp_path):
         respx.get(option["url"]).mock(return_value=httpx.Response(200, content=b"<html>Not found</html>"))
     client, _ = make(tmp_path)
     assert client.get("/api/admin/tv-guides", params={"country": "FR"}).json()["guides"] == []
+
+
+def test_voice_commands_are_saved_and_listed(tmp_path):
+    client, _ = make(tmp_path)
+    commands = [
+        {"phrase": "bonne nuit", "action": "say", "reply": "Bonne nuit !"},
+        {"phrase": "mets ma radio", "action": "radio_play", "station": "abc"},
+    ]
+    body = valid_body(voice={"enabled": True, "commands": commands})
+    assert client.put("/api/admin/config", json=body).json()["saved"] is True
+    assert client.get("/api/admin/config").json()["config"]["voice"]["commands"] == commands
+
+
+def test_a_voice_command_that_says_nothing_is_refused(tmp_path):
+    client, _ = make(tmp_path)
+    body = valid_body(voice={"enabled": True, "commands": [{"phrase": "salut", "action": "say"}]})
+    assert client.put("/api/admin/config", json=body).status_code in (400, 422)
+
+
+def test_the_default_voice_phrases_are_offered_in_the_display_language(tmp_path):
+    client, _ = make(tmp_path)
+    r = client.get("/api/admin/voice-commands?language=fr").json()
+    assert r["language"] == "fr"
+    assert "météo" in r["commands"]["weather"]
+    assert "say" in r["actions"]

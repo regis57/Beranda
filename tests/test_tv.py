@@ -53,6 +53,10 @@ def test_programmes_ignores_channels_that_were_not_asked_for():
     assert [p["title"] for p in found] == ["Le film du soir"]
 
 
+def test_a_timestamp_with_impossible_values_is_skipped():
+    assert tv._parse_time("20261008209000 +0000") is None
+
+
 def test_bad_timestamps_are_skipped_not_crashed_on():
     raw = b"""<tv><programme start="nonsense" channel="chan1"><title>?</title></programme></tv>"""
     start = datetime(2024, 1, 1, tzinfo=UTC)
@@ -80,3 +84,45 @@ async def test_download_rejects_an_oversized_guide(monkeypatch):
     respx.get("https://example.org/guide.xml").mock(return_value=httpx.Response(200, content=XML))
     with pytest.raises(ValueError, match="too large"):
         await tv.download("https://example.org/guide.xml")
+
+
+def test_a_big_guide_is_not_cut_off_before_the_channels_we_want():
+    """Regression: the old 200-programme cap stopped reading before reaching later channels."""
+    parts = ["<tv>"]
+    for n in range(40):  # 40 channels x 10 shows = 400 programmes, ours is the very last channel
+        parts.append(f'<channel id="c{n}"><display-name>Chaine {n}</display-name></channel>')
+    for n in range(40):
+        for h in range(10):
+            parts.append(
+                f'<programme start="20261008190{h}00 +0000" stop="20261008200{h}00 +0000" channel="c{n}">'
+                f"<title>Show {n}-{h}</title></programme>"
+            )
+    parts.append("</tv>")
+    xml = "".join(parts).encode()
+    start = datetime(2026, 10, 8, 18, 0, tzinfo=UTC)
+    end = datetime(2026, 10, 9, 23, 0, tzinfo=UTC)
+    found = tv.programmes(xml, {"c39"}, start, end)
+    assert found and all(p["channel_id"] == "c39" for p in found)
+
+
+def test_more_than_500_channels_are_all_listed():
+    xml = ("<tv>" + "".join(f'<channel id="c{n}"><display-name>C{n}</display-name></channel>' for n in range(800)) + "</tv>").encode()
+    assert len(tv.channels(xml)) == 800
+
+
+def test_prime_time_keeps_the_main_programme_of_each_channel_in_the_users_order():
+    start = datetime(2026, 10, 8, 18, 0, tzinfo=UTC)
+    end = datetime(2026, 10, 8, 21, 0, tzinfo=UTC)
+
+    def show(cid, title, a, b):
+        return {
+            "channel_id": cid, "channel": cid.upper(), "title": title,
+            "start": datetime(2026, 10, 8, a, 0, tzinfo=UTC), "stop": datetime(2026, 10, 8, b, 0, tzinfo=UTC),
+        }
+
+    found = [
+        show("a", "Journal", 18, 19), show("a", "Film", 19, 21),
+        show("b", "Quiz", 18, 19), show("b", "Série", 19, 21),
+    ]
+    picks = tv.prime_time_picks(found, ["b", "a"], start, end)
+    assert [(p["channel"], p["title"]) for p in picks] == [("B", "Série"), ("A", "Film")]

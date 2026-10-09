@@ -57,7 +57,8 @@ la lune, le soleil, les saisons et les jours fériés sont réels.* [Toutes les 
   pays (testés en direct) — vous n'avez qu'à choisir les chaînes. Beranda ne fait que lire un
   guide ; il n'en héberge ni n'en récupère jamais lui-même.
 - **Contrôle par la voix (facultatif)** : un bouton micro sur l'écran ; dites la météo, l'heure,
-  « mets France Inter », « stop ». C'est le micro de la **tablette** qui est utilisé, via Chrome
+  « mets France Inter », « station suivante », « plus fort », « stop » — et apprenez-lui vos propres
+  phrases depuis les réglages ([mode d'emploi, langues et phrases](docs/VOICE.fr.md)). C'est le micro de la **tablette** qui est utilisé, via Chrome
   ou Edge (qui envoient le son à leur propre service de reconnaissance vocale), et la tablette lit
   la réponse à voix haute. Les navigateurs n'autorisent le micro que sur les pages « sécurisées » :
   la page de réglages explique le réglage Chrome à faire une fois sur un réseau domestique.

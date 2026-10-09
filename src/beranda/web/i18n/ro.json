@@ -91,5 +91,11 @@
   "history_title": "În această zi",
   "radio_error": "Această stație nu poate fi redată",
   "voice_listening": "Ascult…",
-  "voice_unavailable": "Microfon indisponibil – vezi setările"
+  "voice_unavailable": "Microfon indisponibil – vezi setările",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

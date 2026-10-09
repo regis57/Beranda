@@ -91,5 +91,11 @@
   "history_title": "Ce jour-là",
   "radio_error": "Impossible de lire cette station",
   "voice_listening": "J'écoute…",
-  "voice_unavailable": "Micro indisponible – voir les réglages"
+  "voice_unavailable": "Micro indisponible – voir les réglages",
+  "tv_title": "Ce soir à la télé",
+  "tv_no_channels": "Choisissez vos chaînes dans les réglages",
+  "tv_empty": "Rien dans le guide pour ce soir",
+  "tv_error": "Guide TV injoignable",
+  "radio_prev": "Station précédente",
+  "radio_next": "Station suivante"
 }

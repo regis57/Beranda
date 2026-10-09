@@ -30,6 +30,7 @@ from .config import Config
 from .providers import calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
 from .providers import countries as world
 from .providers import news as news_mod
+from .providers import voice as voice_mod
 
 log = logging.getLogger(__name__)
 
@@ -309,6 +310,16 @@ def router(runtime: Runtime) -> APIRouter:
         except Exception as exc:  # noqa: BLE001 - class name only: the URL may be private
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "channels": found}
+
+    @api.get("/voice-commands", dependencies=[Depends(guard)])
+    async def voice_commands(language: str = "") -> dict:
+        """The phrases Beranda understands out of the box, in the display language."""
+        lang = config_mod.normalise_language(language or runtime.cfg.language)
+        return {
+            "language": lang,
+            "commands": voice_mod.default_commands(lang),
+            "actions": list(config_mod.VOICE_ACTIONS),
+        }
 
     @api.get("/system", dependencies=[Depends(guard)])
     async def system_info() -> dict:

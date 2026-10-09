@@ -31,6 +31,12 @@ Done:
   and Dropbox; TV prime time is fixed at 20:00 + 3 h and a guide is suggested for the country;
   "On this day" comes from Wikipedia in the user's language; the month grid is gone and the
   agenda looks further ahead
+- **v0.13**: TV gets its own "Tonight on TV" box on the screen (one main programme per ticked
+  channel, with a plain message when it is empty) and big guides are no longer cut off; the
+  radio box gets a "previous station" button; long lists in the settings page can be folded
+  away (radio results, TV channels with a search box); voice control gets more built-in phrases
+  (next/previous station, volume, tonight's TV), your own phrases from the settings page, and a
+  step-by-step guide ([docs/VOICE.md](VOICE.md))
 
 Next:
 

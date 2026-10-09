@@ -91,5 +91,11 @@
   "history_title": "در چنین روزی",
   "radio_error": "پخش این ایستگاه ممکن نیست",
   "voice_listening": "در حال گوش دادن…",
-  "voice_unavailable": "میکروفون در دسترس نیست – تنظیمات را ببینید"
+  "voice_unavailable": "میکروفون در دسترس نیست – تنظیمات را ببینید",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

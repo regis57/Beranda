@@ -91,5 +91,11 @@
   "history_title": "Un día como hoy",
   "radio_error": "No se puede reproducir esta emisora",
   "voice_listening": "Escuchando…",
-  "voice_unavailable": "Micrófono no disponible – mira los ajustes"
+  "voice_unavailable": "Micrófono no disponible – mira los ajustes",
+  "tv_title": "Esta noche en la tele",
+  "tv_no_channels": "Elige tus canales en los ajustes",
+  "tv_empty": "Nada en la guía para esta noche",
+  "tv_error": "Guía de TV inaccesible",
+  "radio_prev": "Emisora anterior",
+  "radio_next": "Emisora siguiente"
 }

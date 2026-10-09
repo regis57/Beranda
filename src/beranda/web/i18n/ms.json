@@ -91,5 +91,11 @@
   "history_title": "Pada hari ini",
   "radio_error": "Stesen ini tidak dapat dimainkan",
   "voice_listening": "Sedang mendengar…",
-  "voice_unavailable": "Mikrofon tidak tersedia – lihat tetapan"
+  "voice_unavailable": "Mikrofon tidak tersedia – lihat tetapan",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

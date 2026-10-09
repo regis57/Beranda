@@ -91,5 +91,11 @@
   "history_title": "Tento den v historii",
   "radio_error": "Tuto stanici nelze přehrát",
   "voice_listening": "Poslouchám…",
-  "voice_unavailable": "Mikrofon není dostupný – viz nastavení"
+  "voice_unavailable": "Mikrofon není dostupný – viz nastavení",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

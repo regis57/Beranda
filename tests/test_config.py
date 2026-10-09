@@ -81,7 +81,7 @@ def test_voice_defaults_and_round_trip():
     assert config.Config().voice_enabled is False
     cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "alexa"}})  # old key: ignored
     assert cfg.voice_enabled is True
-    assert config.to_dict(cfg)["voice"] == {"enabled": True}
+    assert config.to_dict(cfg)["voice"] == {"enabled": True, "commands": []}
 
 
 def test_photos_round_trip_with_a_dropbox_link():
@@ -111,3 +111,18 @@ def test_a_config_path_that_does_not_exist_yet_gives_the_defaults(tmp_path, monk
 
     monkeypatch.setenv("BERANDA_CONFIG", str(tmp_path / "not-yet.toml"))
     assert cfgmod.load().location.name == "Metz"
+
+
+def test_voice_commands_round_trip_and_are_validated():
+    raw = {"voice": {"commands": [{"phrase": "  bonne   nuit ", "action": "say", "reply": "Dors bien", "station": "x"}]}}
+    cfg = config.from_dict(raw)
+    assert cfg.voice_commands == (config.VoiceCommand(phrase="bonne nuit", action="say", reply="Dors bien"),)
+    assert config.to_dict(cfg)["voice"]["commands"] == [{"phrase": "bonne nuit", "action": "say", "reply": "Dors bien"}]
+    for bad in (
+        {"phrase": "", "action": "weather"},
+        {"phrase": "x", "action": "fly"},
+        {"phrase": "x", "action": "say"},
+        {"phrase": "x" * 81, "action": "weather"},
+    ):
+        with pytest.raises(ValueError):
+            config.from_dict({"voice": {"commands": [bad]}})

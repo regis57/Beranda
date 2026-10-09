@@ -91,5 +91,11 @@
   "history_title": "Accadde oggi",
   "radio_error": "Impossibile riprodurre questa stazione",
   "voice_listening": "Sto ascoltando…",
-  "voice_unavailable": "Microfono non disponibile – vedi le impostazioni"
+  "voice_unavailable": "Microfono non disponibile – vedi le impostazioni",
+  "tv_title": "Stasera in TV",
+  "tv_no_channels": "Scegli i tuoi canali nelle impostazioni",
+  "tv_empty": "Niente nella guida per stasera",
+  "tv_error": "Guida TV non raggiungibile",
+  "radio_prev": "Stazione precedente",
+  "radio_next": "Stazione successiva"
 }

@@ -27,60 +27,110 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "time": ("what time is it", "time"),
         "radio_stop": ("turn off the radio", "stop the radio", "stop", "quiet"),
         "radio_play": ("play",),
+        "radio_next": ("next station", "next radio", "skip"),
+        "radio_prev": ("previous station", "last station", "go back"),
+        "volume_up": ("volume up", "louder", "turn it up"),
+        "volume_down": ("volume down", "quieter", "turn it down"),
+        "tv": ("tv tonight", "what's on tonight", "on tv", "television"),
     },
     "fr": {
         "weather": ("quel temps fait-il", "météo", "previsions"),
         "time": ("quelle heure est-il", "heure"),
         "radio_stop": ("coupe la radio", "arrête la radio", "silence", "arrête", "stop"),
         "radio_play": ("joue", "mets", "écoute"),
+        "radio_next": ("station suivante", "radio suivante", "suivante", "suivant"),
+        "radio_prev": ("station précédente", "radio précédente", "précédente", "précédent"),
+        "volume_up": ("plus fort", "monte le son", "augmente le volume"),
+        "volume_down": ("moins fort", "baisse le son", "baisse le volume"),
+        "tv": ("à la télé", "programme tv", "programme télé", "télévision"),
     },
     "de": {
         "weather": ("wie ist das wetter", "wetter", "vorhersage"),
         "time": ("wie spät ist es", "uhrzeit", "zeit"),
         "radio_stop": ("radio aus", "stopp", "stop", "leise"),
         "radio_play": ("spiele", "spiel"),
+        "radio_next": ("nächster sender", "nächste station", "nächster"),
+        "radio_prev": ("vorheriger sender", "letzter sender", "zurück"),
+        "volume_up": ("lauter",),
+        "volume_down": ("leiser",),
+        "tv": ("fernsehprogramm", "im fernsehen", "tv-programm", "fernsehen"),
     },
     "es": {
         "weather": ("qué tiempo hace", "tiempo", "pronóstico"),
         "time": ("qué hora es", "hora"),
         "radio_stop": ("para la radio", "detén la radio", "silencio", "para"),
         "radio_play": ("pon", "reproduce", "escucha"),
+        "radio_next": ("siguiente emisora", "siguiente"),
+        "radio_prev": ("emisora anterior", "anterior"),
+        "volume_up": ("sube el volumen", "más fuerte", "más alto", "sube"),
+        "volume_down": ("baja el volumen", "más bajo", "baja"),
+        "tv": ("en la tele", "programa de tv", "televisión"),
     },
     "it": {
         "weather": ("che tempo fa", "meteo", "previsioni"),
         "time": ("che ora è", "ora"),
         "radio_stop": ("ferma la radio", "silenzio", "stop"),
         "radio_play": ("metti", "riproduci", "ascolta"),
+        "radio_next": ("stazione successiva", "successiva", "prossima"),
+        "radio_prev": ("stazione precedente", "precedente"),
+        "volume_up": ("alza il volume", "più forte", "volume su"),
+        "volume_down": ("abbassa il volume", "più piano", "volume giù"),
+        "tv": ("stasera in tv", "programma tv", "in tv", "televisione"),
     },
     "pt": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
         "time": ("que horas são", "hora"),
         "radio_stop": ("para a rádio", "silêncio", "para"),
         "radio_play": ("põe", "toca", "ouve"),
+        "radio_next": ("estação seguinte", "seguinte"),
+        "radio_prev": ("estação anterior", "anterior"),
+        "volume_up": ("aumenta o volume", "mais alto", "mais forte"),
+        "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
+        "tv": ("na televisão", "programação", "na tv", "televisão"),
     },
     "pt-BR": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
         "time": ("que horas são", "hora"),
         "radio_stop": ("para o rádio", "silêncio", "para"),
         "radio_play": ("põe", "toca", "ouve"),
+        "radio_next": ("rádio seguinte", "seguinte", "próxima"),
+        "radio_prev": ("rádio anterior", "anterior"),
+        "volume_up": ("aumenta o volume", "mais alto", "mais forte"),
+        "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
+        "tv": ("na televisão", "programação", "na tv", "televisão"),
     },
     "ar": {
         "weather": ("كيف حال الطقس", "الطقس", "توقعات"),
         "time": ("كم الساعة", "الوقت"),
         "radio_stop": ("أوقف الراديو", "صمت", "قف"),
         "radio_play": ("شغل", "استمع"),
+        "radio_next": ("المحطة التالية", "التالي"),
+        "radio_prev": ("المحطة السابقة", "السابق"),
+        "volume_up": ("ارفع الصوت",),
+        "volume_down": ("اخفض الصوت",),
+        "tv": ("برنامج التلفاز", "على التلفاز", "التلفزيون"),
     },
     "sw": {
         "weather": ("hali ya hewa", "utabiri"),
         "time": ("saa ngapi", "muda"),
         "radio_stop": ("zima redio", "kimya", "simama"),
         "radio_play": ("cheza", "sikiliza"),
+        "radio_next": ("kituo kinachofuata", "kinachofuata"),
+        "radio_prev": ("kituo kilichotangulia", "kilichotangulia"),
+        "volume_up": ("ongeza sauti",),
+        "volume_down": ("punguza sauti",),
+        "tv": ("kwenye tv", "televisheni"),
     },
     "id": {
         "weather": ("bagaimana cuacanya", "cuaca", "ramalan"),
         "time": ("jam berapa", "waktu"),
         "radio_stop": ("matikan radio", "diam", "berhenti"),
         "radio_play": ("putar", "dengarkan"),
+        "radio_next": ("stasiun berikutnya", "berikutnya"),
+        "radio_prev": ("stasiun sebelumnya", "sebelumnya"),
+        "volume_up": ("naikkan volume", "lebih keras"),
+        "volume_down": ("turunkan volume", "lebih pelan"),
+        "tv": ("acara tv", "di tv", "televisi"),
     },
 }
 
@@ -124,6 +174,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "I couldn't find that station in your favourites.",
         "radio_stopped": "Stopped.",
         "unknown": "Sorry, I didn't understand.",
+        "ok": "OK.",
+        "tv": "Tonight on TV: {list}.",
+        "tv_none": "I have no TV programme for tonight.",
     },
     "fr": {
         "weather_unknown": "Je n'ai pas la météo pour le moment.",
@@ -133,6 +186,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Je n'ai pas trouvé cette station dans vos favorites.",
         "radio_stopped": "Arrêté.",
         "unknown": "Désolé, je n'ai pas compris.",
+        "ok": "D'accord.",
+        "tv": "Ce soir à la télé : {list}.",
+        "tv_none": "Je n'ai aucun programme télé pour ce soir.",
     },
     "de": {
         "weather_unknown": "Ich habe gerade keine Wetterdaten.",
@@ -142,6 +198,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Diesen Sender habe ich nicht in deinen Favoriten gefunden.",
         "radio_stopped": "Gestoppt.",
         "unknown": "Entschuldigung, das habe ich nicht verstanden.",
+        "ok": "Okay.",
+        "tv": "Heute Abend im Fernsehen: {list}.",
+        "tv_none": "Ich habe kein Fernsehprogramm für heute Abend.",
     },
     "es": {
         "weather_unknown": "No tengo el tiempo en este momento.",
@@ -151,6 +210,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "No encontré esa emisora en tus favoritas.",
         "radio_stopped": "Detenido.",
         "unknown": "Lo siento, no entendí eso.",
+        "ok": "Vale.",
+        "tv": "Esta noche en la tele: {list}.",
+        "tv_none": "No tengo programación de TV para esta noche.",
     },
     "it": {
         "weather_unknown": "Al momento non ho il meteo.",
@@ -160,6 +222,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Non ho trovato quella stazione tra i tuoi preferiti.",
         "radio_stopped": "Fermato.",
         "unknown": "Scusa, non ho capito.",
+        "ok": "Va bene.",
+        "tv": "Stasera in TV: {list}.",
+        "tv_none": "Non ho programmi TV per stasera.",
     },
     "pt": {
         "weather_unknown": "Não tenho a meteorologia neste momento.",
@@ -169,6 +234,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Não encontrei essa estação nas suas favoritas.",
         "radio_stopped": "Parado.",
         "unknown": "Desculpe, não entendi.",
+        "ok": "Está bem.",
+        "tv": "Esta noite na TV: {list}.",
+        "tv_none": "Não tenho programação de TV para esta noite.",
     },
     "pt-BR": {
         "weather_unknown": "Não tenho a previsão agora.",
@@ -178,6 +246,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Não encontrei essa rádio nas suas favoritas.",
         "radio_stopped": "Parado.",
         "unknown": "Desculpe, não entendi.",
+        "ok": "Tudo bem.",
+        "tv": "Hoje à noite na TV: {list}.",
+        "tv_none": "Não tenho programação de TV para hoje à noite.",
     },
     "ar": {
         "weather_unknown": "لا تتوفر لدي حالة الطقس الآن.",
@@ -187,6 +258,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "لم أجد هذه المحطة بين مفضلاتك.",
         "radio_stopped": "تم التوقف.",
         "unknown": "عذرًا، لم أفهم ذلك.",
+        "ok": "حسنًا.",
+        "tv": "هذا المساء على التلفاز: {list}.",
+        "tv_none": "ليس لدي برنامج تلفزيوني لهذا المساء.",
     },
     "sw": {
         "weather_unknown": "Sina taarifa za hali ya hewa sasa hivi.",
@@ -196,6 +270,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Sikuipata kituo hicho kwenye vipendwa vyako.",
         "radio_stopped": "Imesimama.",
         "unknown": "Samahani, sikuelewa.",
+        "ok": "Sawa.",
+        "tv": "Usiku huu kwenye TV: {list}.",
+        "tv_none": "Sina kipindi cha TV cha usiku huu.",
     },
     "id": {
         "weather_unknown": "Saya tidak punya data cuaca saat ini.",
@@ -205,6 +282,9 @@ _RESPONSES: dict[str, dict[str, str]] = {
         "radio_not_found": "Saya tidak menemukan stasiun itu di favorit Anda.",
         "radio_stopped": "Dihentikan.",
         "unknown": "Maaf, saya tidak mengerti.",
+        "ok": "Baik.",
+        "tv": "Malam ini di TV: {list}.",
+        "tv_none": "Saya tidak punya acara TV untuk malam ini.",
     },
 }
 
@@ -243,16 +323,61 @@ def best_station(stations: list[dict], query: str) -> dict | None:
     return best if _similar(best.get("name", ""), query) >= MATCH_THRESHOLD else None
 
 
-def answer(text: str, *, language: str, now: datetime, stations: list[dict], weather: dict | None) -> dict:
+def default_commands(language: str) -> dict[str, list[str]]:
+    """The built-in phrases per action, in the display language, for the settings page to show."""
+    table = _INTENTS.get(language) or _INTENTS.get(language.split("-")[0]) or _INTENTS["en"]
+    return {intent: list(phrases) for intent, phrases in table.items()}
+
+
+def match_custom(text: str, commands) -> object | None:
+    """The user's own command whose phrase is contained in what was said (longest phrase first).
+
+    Own phrases win over the built-in ones: if you taught Beranda "good night", that is what
+    "good night" does, whatever the built-in list says.
+    """
+    heard = _normalise(text)
+    for cmd in sorted(commands, key=lambda c: -len(c.phrase)):
+        phrase = _normalise(cmd.phrase)
+        if phrase and phrase in heard:
+            return cmd
+    return None
+
+
+def _tv_reply(language: str, tv: dict | None) -> str:
+    programmes = (tv or {}).get("programmes") or []
+    if not programmes:
+        return _t(language, "tv_none")
+    listing = ", ".join(f"{p['channel']} : {p['title']} ({p['start']})" for p in programmes[:4])
+    return _t(language, "tv", list=listing)
+
+
+def answer(
+    text: str,
+    *,
+    language: str,
+    now: datetime,
+    stations: list[dict],
+    weather: dict | None,
+    tv: dict | None = None,
+    commands=(),
+) -> dict:
     """What to say and do for the sentence `text`.
 
     Returns {"intent": name|None, "reply": text to speak, "action": None | {"type": ..., ...}}.
-    The page itself plays or stops the radio (the sound must come out of the tablet).
+    The page itself plays or stops the radio and moves the volume (the sound must come out of
+    the tablet, and only the page knows which station is on).
     """
-    intent = parse_intent(text, language)
-    if intent is None:
-        return {"intent": None, "reply": _t(language, "unknown"), "action": None}
-    name = intent["intent"]
+    custom = match_custom(text, commands)
+    if custom is not None and custom.action == "say":
+        return {"intent": "say", "reply": custom.reply, "action": None}
+    if custom is not None:
+        name, query, wanted = custom.action, "", custom.station
+    else:
+        intent = parse_intent(text, language)
+        if intent is None:
+            return {"intent": None, "reply": _t(language, "unknown"), "action": None}
+        name, query, wanted = intent["intent"], intent.get("query", ""), ""
+
     if name == "weather":
         if not weather:
             return {"intent": name, "reply": _t(language, "weather_unknown"), "action": None}
@@ -261,9 +386,18 @@ def answer(text: str, *, language: str, now: datetime, stations: list[dict], wea
         return {"intent": name, "reply": reply, "action": None}
     if name == "time":
         return {"intent": name, "reply": _t(language, "time", time=now.strftime("%H:%M")), "action": None}
+    if name == "tv":
+        return {"intent": name, "reply": _tv_reply(language, tv), "action": None}
     if name == "radio_stop":
         return {"intent": name, "reply": _t(language, "radio_stopped"), "action": {"type": "radio_stop"}}
-    station = best_station(stations, intent.get("query", ""))
+    if name in ("radio_next", "radio_prev", "volume_up", "volume_down"):
+        return {"intent": name, "reply": _t(language, "ok"), "action": {"type": name}}
+
+    # radio_play: a favourite chosen on the settings page, or the one named out loud.
+    if wanted:
+        station = next((s for s in stations if s.get("uuid") == wanted), None)
+    else:
+        station = best_station(stations, query)
     if station is None:
         return {"intent": name, "reply": _t(language, "radio_not_found"), "action": None}
     return {

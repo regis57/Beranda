@@ -91,5 +91,11 @@
   "history_title": "I teie mahana",
   "radio_error": "Aita te stasio nei e nehenehe e faaroohia",
   "voice_listening": "Te faaroo nei au…",
-  "voice_unavailable": "Aita te mikorofono – a hi'o i te mau faanahoraa"
+  "voice_unavailable": "Aita te mikorofono – a hi'o i te mau faanahoraa",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

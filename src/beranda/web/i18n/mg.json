@@ -91,5 +91,11 @@
   "history_title": "Tamin'ity andro ity",
   "radio_error": "Tsy afaka lalaina ity onjam-peo ity",
   "voice_listening": "Mihaino…",
-  "voice_unavailable": "Tsy misy mikrô – jereo ny fikirakirana"
+  "voice_unavailable": "Tsy misy mikrô – jereo ny fikirakirana",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

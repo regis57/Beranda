@@ -67,6 +67,13 @@
         <ul class="upcoming-list" id="upcoming"></ul>
       </section>
 
+      <!-- Tonight's main programme on each TV channel the user ticked (from their own guide).
+           Shown whenever a guide is set up, with a plain message when there is nothing to list. -->
+      <section class="tv" id="tv" hidden>
+        <h2 class="tv-title" id="tv-title"></h2>
+        <ul class="tv-list" id="tv-list"></ul>
+      </section>
+
       <!-- Two little widgets: a photo frame and a radio. Each hides itself when it has nothing
            to show (no pictures yet / no favourite stations chosen). -->
       <div class="widgets" id="widgets">
@@ -82,6 +89,9 @@
           <div class="radio-main">
             <div class="radio-name" id="radio-name"></div>
             <div class="radio-line">
+              <button type="button" class="radio-skip" id="radio-prev" aria-label="Previous station">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6l-9 6 9 6zM5 6h2v12H5z"/></svg>
+              </button>
               <button type="button" class="radio-mute" id="radio-mute" aria-label="Volume">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path id="radio-speaker" d="M4 9v6h4l5 4V5L8 9z"/></svg>
               </button>

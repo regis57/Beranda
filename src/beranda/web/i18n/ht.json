@@ -91,5 +91,11 @@
   "history_title": "Jou sa a nan listwa",
   "radio_error": "Pa ka jwe estasyon sa a",
   "voice_listening": "M ap koute…",
-  "voice_unavailable": "Mikwofòn pa disponib – gade anviwònman yo"
+  "voice_unavailable": "Mikwofòn pa disponib – gade anviwònman yo",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

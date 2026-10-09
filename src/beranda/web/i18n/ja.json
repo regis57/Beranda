@@ -91,5 +91,11 @@
   "history_title": "この日の出来事",
   "radio_error": "この局は再生できません",
   "voice_listening": "聞いています…",
-  "voice_unavailable": "マイクを使えません – 設定を確認してください"
+  "voice_unavailable": "マイクを使えません – 設定を確認してください",
+  "tv_title": "今夜のテレビ",
+  "tv_no_channels": "設定でチャンネルを選んでください",
+  "tv_empty": "今夜の番組が番組表にありません",
+  "tv_error": "番組表に接続できません",
+  "radio_prev": "前の局",
+  "radio_next": "次の局"
 }

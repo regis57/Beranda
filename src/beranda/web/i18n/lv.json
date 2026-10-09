@@ -91,5 +91,11 @@
   "history_title": "Šajā dienā",
   "radio_error": "Šo staciju nevar atskaņot",
   "voice_listening": "Klausos…",
-  "voice_unavailable": "Mikrofons nav pieejams – skatiet iestatījumus"
+  "voice_unavailable": "Mikrofons nav pieejams – skatiet iestatījumus",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

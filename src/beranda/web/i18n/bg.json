@@ -91,5 +91,11 @@
   "history_title": "На този ден",
   "radio_error": "Станцията не може да се пусне",
   "voice_listening": "Слушам…",
-  "voice_unavailable": "Микрофонът не е достъпен – вижте настройките"
+  "voice_unavailable": "Микрофонът не е достъпен – вижте настройките",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

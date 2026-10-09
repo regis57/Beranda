@@ -71,6 +71,14 @@ enabled = true
 # the tablet showing Beranda (Chrome or Edge), not the Raspberry Pi. See the settings page.
 # [voice]
 # enabled = true
+#
+# Your own phrases (also editable on the settings page). "say" just answers with a sentence;
+# the other actions are radio_play (+ the uuid of one favourite), radio_stop, radio_next,
+# radio_prev, volume_up, volume_down, weather, time and tv. See docs/VOICE.md.
+# [[voice.commands]]
+# phrase = "good night"
+# action = "say"
+# reply = "Sleep well"
 
 # "On this day": a few events from today's date in history, from Wikipedia in your language.
 # On by default; set to false to turn it off.

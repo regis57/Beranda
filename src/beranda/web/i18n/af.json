@@ -91,5 +91,11 @@
   "history_title": "Op hierdie dag",
   "radio_error": "Kan hierdie stasie nie speel nie",
   "voice_listening": "Luister…",
-  "voice_unavailable": "Mikrofoon nie beskikbaar nie – sien die instellings"
+  "voice_unavailable": "Mikrofoon nie beskikbaar nie – sien die instellings",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

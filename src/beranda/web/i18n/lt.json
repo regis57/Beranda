@@ -91,5 +91,11 @@
   "history_title": "Šią dieną",
   "radio_error": "Šios stoties paleisti nepavyksta",
   "voice_listening": "Klausausi…",
-  "voice_unavailable": "Mikrofonas nepasiekiamas – žr. nustatymus"
+  "voice_unavailable": "Mikrofonas nepasiekiamas – žr. nustatymus",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

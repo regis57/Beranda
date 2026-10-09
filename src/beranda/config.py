@@ -40,6 +40,24 @@ class Station:
     country: str = ""
 
 
+# What a voice command of your own can do. "say" just answers with a fixed sentence.
+VOICE_ACTIONS = (
+    "radio_play", "radio_stop", "radio_next", "radio_prev", "volume_up", "volume_down",
+    "weather", "time", "tv", "say",
+)
+MAX_VOICE_COMMANDS = 50
+
+
+@dataclass(frozen=True)
+class VoiceCommand:
+    """One phrase of the user's own ("good night") and what Beranda does when it hears it."""
+
+    phrase: str
+    action: str
+    station: str = ""  # radio_play only: the uuid of one favourite ("" = the first favourite)
+    reply: str = ""  # say only: the sentence spoken back
+
+
 @dataclass(frozen=True)
 class KeyDate:
     """A personal date shown on the calendar: birth, death, anniversary, other."""
@@ -81,6 +99,7 @@ class Config:
     radio_volume: int = 70  # 0-100
     tv_xmltv_url: str = ""  # the user's own XMLTV guide address ("" = TV section disabled)
     tv_channels: tuple[str, ...] = ()  # channel ids (from that guide) to show prime time for
+    voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
     history_enabled: bool = True  # the "On this day" box, from Wikipedia
 
@@ -118,6 +137,22 @@ def _parse_station(raw: dict) -> Station:
         favicon=str(raw.get("favicon", "")),
         country=str(raw.get("country", "")),
     )
+
+
+def _parse_voice_command(raw: dict) -> VoiceCommand:
+    phrase = " ".join(str(raw.get("phrase", "")).split())
+    action = str(raw.get("action", ""))
+    reply = str(raw.get("reply", "")).strip()
+    if not phrase or len(phrase) > 80:
+        raise ValueError("a voice command needs a phrase of 1 to 80 characters")
+    if action not in VOICE_ACTIONS:
+        raise ValueError(f"unknown voice action: {action!r}")
+    if action == "say" and not reply:
+        raise ValueError(f"the voice command {phrase!r} must say something: fill in its answer")
+    if len(reply) > 200:
+        raise ValueError("a voice answer can be 200 characters at most")
+    station = str(raw.get("station", "")).strip()[:100] if action == "radio_play" else ""
+    return VoiceCommand(phrase=phrase, action=action, station=station, reply=reply if action == "say" else "")
 
 
 def normalise_language(raw: object) -> str:
@@ -235,6 +270,7 @@ def from_dict(data: dict) -> Config:
         radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
         tv_xmltv_url=_check_tv_url(tv.get("url", "")),
         tv_channels=tuple(str(c) for c in tv.get("channels", [])),
+        voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[:MAX_VOICE_COMMANDS]),
         voice_enabled=bool(voice.get("enabled", False)),
         history_enabled=bool(history.get("enabled", True)),
     )
@@ -305,7 +341,13 @@ def to_dict(cfg: Config) -> dict:
         "url": cfg.tv_xmltv_url,
         "channels": list(cfg.tv_channels),
     }
-    out["voice"] = {"enabled": cfg.voice_enabled}
+    out["voice"] = {
+        "enabled": cfg.voice_enabled,
+        "commands": [
+            {k: v for k, v in (("phrase", c.phrase), ("action", c.action), ("station", c.station), ("reply", c.reply)) if v}
+            for c in cfg.voice_commands
+        ],
+    }
     out["history"] = {"enabled": cfg.history_enabled}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision

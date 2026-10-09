@@ -465,12 +465,24 @@ function renderRadioFavorites() {
     : snap.status === 'error' ? t('admin.radio_error') : '';
 }
 
+// Long lists can be folded away with one button, so the settings page stays short.
+let radioResultsOpen = true;
+function paintRadioResults(count) {
+  if (count !== undefined) {  // undefined = just folding/unfolding: leave the header as it is
+    $('radio-results-head').hidden = count === null || count === 0;
+    if (count) $('radio-results-count').textContent = t('admin.results_count', { n: count });
+  }
+  $('radio-results').hidden = !radioResultsOpen;
+  $('radio-results-toggle').textContent = radioResultsOpen ? t('admin.hide_list') : t('admin.show_list');
+}
+
 async function radioSearch() {
   const params = new URLSearchParams();
   if ($('radio-q').value.trim()) params.set('name', $('radio-q').value.trim());
   if ($('radio-country').value) params.set('country', $('radio-country').value);
   if ($('radio-language').value) params.set('language', $('radio-language').value);
   const box = $('radio-results');
+  box.hidden = false;
   box.textContent = t('admin.loading');
   try {
     const { stations } = await api(`/radio-search?${params}`);
@@ -486,11 +498,14 @@ async function radioSearch() {
       const label = el('span', {}, s.name, s.country ? el('small', { textContent: ` (${regionName(s.country)})` }) : '');
       return el('div', { className: 'item radio' }, label, add);
     }));
+    radioResultsOpen = true;  // a new search always opens the list
     if (!stations.length) box.textContent = t('admin.radio_no_result');
-  } catch (e) { box.textContent = e.message; }
+    paintRadioResults(stations.length);
+  } catch (e) { box.textContent = e.message; paintRadioResults(null); }
 }
 
 function renderRadio() {
+  $('radio-results-toggle').onclick = () => { radioResultsOpen = !radioResultsOpen; paintRadioResults(undefined); };
   const radio = cfg.radio || { stations: [], volume: 70 };
   radioStations = [...radio.stations];
   $('radio-volume').value = radio.volume ?? 70;
@@ -505,16 +520,34 @@ function renderRadio() {
 let tvChannels = [];
 let tvSelected = new Set();
 
+const TV_SHOWN_MAX = 150;  // thousands of checkboxes would make the page sluggish: filter instead
+let tvOpen = true;
+
 function renderTvChips() {
-  $('tv-channels').replaceChildren(...tvChannels.map((c) => {
+  const q = $('tv-filter').value.trim().toLowerCase();
+  const only = $('tv-only').checked;
+  // Ticked channels first, so the user's choices are always at the top of the list.
+  const ordered = [...tvChannels].sort((a, b) => Number(tvSelected.has(b.id)) - Number(tvSelected.has(a.id)));
+  const matching = ordered.filter((c) => (!q || c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q))
+    && (!only || tvSelected.has(c.id)));
+  $('tv-channels').replaceChildren(...matching.slice(0, TV_SHOWN_MAX).map((c) => {
     const box = el('input', { type: 'checkbox', checked: tvSelected.has(c.id) });
     box.addEventListener('change', () => {
       if (box.checked) tvSelected.add(c.id); else tvSelected.delete(c.id);
+      $('tv-count').textContent = t('admin.tv_count', { n: tvChannels.length, k: tvSelected.size });
       markDirty();
     });
     return el('label', { className: 'check chip' }, box, el('span', { textContent: c.name }));
   }));
+  const more = matching.length - TV_SHOWN_MAX;
+  $('tv-more').hidden = more <= 0 || !tvOpen;
+  if (more > 0) $('tv-more').textContent = t('admin.tv_more', { n: more });
   $('tv-empty').hidden = tvChannels.length > 0;
+  $('tv-head').hidden = tvChannels.length === 0;
+  $('tv-tools').hidden = tvChannels.length === 0 || !tvOpen;
+  $('tv-channels').hidden = !tvOpen;
+  $('tv-count').textContent = t('admin.tv_count', { n: tvChannels.length, k: tvSelected.size });
+  $('tv-toggle').textContent = tvOpen ? t('admin.hide_list') : t('admin.show_list');
 }
 
 // Which free guides exist for the chosen country? The server tries each known address and
@@ -551,6 +584,9 @@ async function tvFind() {
 }
 
 function renderTv() {
+  $('tv-toggle').onclick = () => { tvOpen = !tvOpen; renderTvChips(); };
+  $('tv-filter').oninput = renderTvChips;
+  $('tv-only').onchange = renderTvChips;
   const tv = cfg.tv || { url: '', channels: [] };
   $('tv-url').value = tv.url || '';
   tvSelected = new Set(tv.channels || []);
@@ -562,11 +598,55 @@ function renderTv() {
 // ------------------------------------------------------------------ 10. voice ---
 // Beranda only stores whether voice control is on. Listening happens in the browser of the
 // tablet that shows the display, so here we just tell whether THIS device could do it.
+let voiceCommands = [];
+const VOICE_ACTIONS = ['radio_play', 'radio_stop', 'radio_next', 'radio_prev', 'volume_up', 'volume_down', 'weather', 'time', 'tv', 'say'];
+
+function renderVoiceCommands() {
+  $('voice-commands').replaceChildren(...voiceCommands.map((c, i) => {
+    const phrase = el('input', { className: 'v-phrase', type: 'text', value: c.phrase, maxLength: 80, placeholder: t('admin.voice_phrase_ph') });
+    phrase.addEventListener('input', () => { c.phrase = phrase.value; markDirty(); });
+    const action = el('select', { className: 'v-action' });
+    fill(action, VOICE_ACTIONS.map((a) => [a, t(`admin.voice_act_${a}`)]), c.action);
+    action.addEventListener('change', () => { c.action = action.value; renderVoiceCommands(); markDirty(); });
+    let extra = el('span', { className: 'v-extra' });  // most actions need nothing more
+    if (c.action === 'say') {
+      extra = el('input', { className: 'v-extra', type: 'text', value: c.reply || '', maxLength: 200, placeholder: t('admin.voice_reply_ph') });
+      extra.addEventListener('input', () => { c.reply = extra.value; markDirty(); });
+    } else if (c.action === 'radio_play') {
+      extra = el('select', { className: 'v-extra' });
+      fill(extra, [['', t('admin.voice_any_station')], ...radioStations.map((s) => [s.uuid, s.name])], c.station || '');
+      extra.addEventListener('change', () => { c.station = extra.value; markDirty(); });
+    }
+    const rm = el('button', { className: 'v-rm', type: 'button', textContent: '✕', title: t('admin.remove') });
+    rm.addEventListener('click', () => { voiceCommands.splice(i, 1); renderVoiceCommands(); markDirty(); });
+    return el('div', { className: 'item voice' }, phrase, action, extra, rm);
+  }));
+  $('voice-add').disabled = voiceCommands.length >= 50;
+}
+
+// The built-in phrases, in the language chosen for the display (that is the language the
+// tablet listens in), so the user can see exactly what to say.
+async function renderVoiceDefaults() {
+  const box = $('voice-defaults');
+  try {
+    const r = await api(`/voice-commands?language=${encodeURIComponent($('language').value)}`);
+    $('voice-defaults-summary').textContent = t('admin.voice_defaults_show', { language: languageName(r.language) });
+    const dl = el('dl');
+    for (const [intent, phrases] of Object.entries(r.commands)) {
+      dl.append(el('dt', { textContent: t(`admin.voice_act_${intent}`) }), el('dd', { textContent: phrases.map((p) => `« ${p} »`).join('  ·  ') }));
+    }
+    box.replaceChildren(dl);
+  } catch (e) { box.textContent = e.message; }
+}
+
 function renderVoice() {
   const voice = cfg.voice || { enabled: false };
   $('voice-on').checked = !!voice.enabled;
   $('voice-check').hidden = !voice.enabled;
   $('voice-check').textContent = t(`admin.voice_check_${voiceApi.availability()}`);
+  voiceCommands = (voice.commands || []).map((c) => ({ ...c }));
+  renderVoiceCommands();
+  renderVoiceDefaults();
 }
 
 // ------------------------------------------------------------------ 9. screen ---
@@ -653,7 +733,10 @@ function collect() {
   };
   body.radio = { stations: radioStations, volume: Number($('radio-volume').value) || 0 };
   body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected] };
-  body.voice = { enabled: $('voice-on').checked };
+  body.voice = {
+    enabled: $('voice-on').checked,
+    commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
+  };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -743,6 +826,8 @@ async function boot() {
   $('key-add').addEventListener('click', () => { addKeyRow(); markDirty(); });
   $('feed-add').addEventListener('click', () => { addFeedRow(); markDirty(); });
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
+  $('voice-add').addEventListener('click', () => { voiceCommands.push({ phrase: '', action: 'say', station: '', reply: '' }); renderVoiceCommands(); markDirty(); });
+  $('language').addEventListener('change', renderVoiceDefaults);
   $('voice-on').addEventListener('change', () => { $('voice-check').hidden = !$('voice-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);

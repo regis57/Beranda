@@ -91,5 +91,11 @@
   "history_title": "Ngày này trong lịch sử",
   "radio_error": "Không thể phát đài này",
   "voice_listening": "Đang nghe…",
-  "voice_unavailable": "Micro không khả dụng – xem phần cài đặt"
+  "voice_unavailable": "Micro không khả dụng – xem phần cài đặt",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

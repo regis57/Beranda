@@ -367,22 +367,12 @@ function newsAge(iso) {
   return rtf.format(-Math.round(minutes / 1440), 'day');
 }
 
-// The strip shows news headlines and, when a TV guide is set up, upcoming prime-time
-// programmes too - interleaved so TV doesn't end up buried behind a long news list.
+// The strip under the board shows news headlines, one at a time.
 function tickerItems() {
   const news = (state?.news?.items || []).map((item) => ({
     source: item.source, title: item.title, age: newsAge(item.published),
   }));
-  const shows = (state?.tv?.programmes || []).map((p) => ({
-    source: p.channel, title: p.title, age: `${p.start}–${p.stop}`,
-  }));
-  const merged = [];
-  const count = Math.max(news.length, shows.length);
-  for (let i = 0; i < count; i++) {
-    if (i < news.length) merged.push(news[i]);
-    if (i < shows.length) merged.push(shows[i]);
-  }
-  return merged;
+  return news;  // TV has its own box now ("Tonight on TV"), see renderTv()
 }
 
 function showHeadline() {
@@ -408,6 +398,49 @@ function renderNews() {
     newsTimer = setTimeout(next, NEWS_MS);
   };
   newsTimer = setTimeout(next, NEWS_MS);
+}
+
+// ---------------------------------------------------------------- tonight on TV --------
+// One line per channel the user ticked: the main programme of the evening. When there is
+// nothing to list, the box says why in plain words instead of staying blank.
+const TV_NOTES = { no_channels: 'tv_no_channels', empty: 'tv_empty', error: 'tv_error' };
+
+function renderTv() {
+  const tv = state?.tv;
+  $('tv').hidden = !tv;
+  if (!tv) return;
+  $('tv-title').replaceChildren(t('tv_title'));
+  if (tv.from) {
+    const when = document.createElement('span');
+    when.className = 'tv-when';
+    when.textContent = `${tv.from}–${tv.to}`;
+    $('tv-title').append(when);
+  }
+  if (tv.status !== 'ok') {
+    const li = document.createElement('li');
+    li.className = 'tv-note';
+    li.textContent = t(TV_NOTES[tv.status] || 'tv_empty');
+    $('tv-list').replaceChildren(li);
+    return;
+  }
+  $('tv-list').replaceChildren(...tv.programmes.slice(0, 6).map((p) => {
+    const li = document.createElement('li');
+    li.className = 'tv-row';
+    const chan = document.createElement('span');
+    chan.className = 'tv-chan';
+    chan.textContent = p.channel;
+    const time = document.createElement('span');
+    time.className = 'tv-time';
+    time.textContent = p.start;
+    const show = document.createElement('span');
+    show.className = 'tv-show';
+    show.textContent = p.title;
+    li.append(chan, time, show);
+    return li;
+  }));
+  // On a narrow, tall screen the box is short: drop the lines that would be cut by its edge.
+  const list = $('tv-list');
+  while (list.children.length > 1 && $('tv').scrollHeight > $('tv').clientHeight + 1) list.lastElementChild.remove();
 }
 
 // ---------------------------------------------------------------- "On this day" -------
@@ -494,6 +527,9 @@ function paintRadio() {
   $('radio-volume').value = snap.muted ? 0 : snap.volume;
   $('radio-speaker').setAttribute('d', snap.muted || snap.volume === 0 ? SPEAKER_OFF : SPEAKER);
   $('radio-next').hidden = stations.length < 2;
+  $('radio-prev').hidden = stations.length < 2;
+  $('radio-prev').setAttribute('aria-label', t('radio_prev'));
+  $('radio-next').setAttribute('aria-label', t('radio_next'));
 }
 
 function renderRadio() {
@@ -509,11 +545,19 @@ function renderRadio() {
 $('radio-toggle').addEventListener('click', () => radio.toggle(currentStation()));
 $('radio-volume').addEventListener('input', (e) => radio.setVolume(e.target.value));
 $('radio-mute').addEventListener('click', () => radio.toggleMute());
-$('radio-next').addEventListener('click', () => {
+// step = +1 (next) or -1 (previous); after the last station it wraps round to the first.
+function skip(step) {
   if (stations.length < 2) return;
   const here = stations.findIndex((s) => s.url === currentStation()?.url);
-  radio.play(stations[(here + 1) % stations.length]);
-});
+  radio.play(stations[(here + step + stations.length) % stations.length]);
+}
+$('radio-prev').addEventListener('click', () => skip(-1));
+$('radio-next').addEventListener('click', () => skip(1));
+
+function nudgeVolume(delta) {
+  const now = radio.snapshot().volume;
+  radio.setVolume(Math.max(0, Math.min(100, now + delta)));
+}
 
 // ---------------------------------------------------------------- voice -----------------
 let toastTimer = null;
@@ -543,6 +587,10 @@ async function listen() {
     voice.speak(answer.reply, lang);
     if (answer.action?.type === 'radio_play') radio.play(answer.action);
     if (answer.action?.type === 'radio_stop') radio.stop();
+    if (answer.action?.type === 'radio_next') skip(1);
+    if (answer.action?.type === 'radio_prev') skip(-1);
+    if (answer.action?.type === 'volume_up') nudgeVolume(15);
+    if (answer.action?.type === 'volume_down') nudgeVolume(-15);
   } catch (err) {
     toast(t('voice_unavailable'), 9000);  // microphone blocked, or the browser's speech service is unreachable
     console.warn('voice failed', err);
@@ -625,6 +673,7 @@ async function render(online) {
   renderFacts();
   renderUpcoming();
   renderNews();
+  renderTv();
   renderPhotos();
   renderRadio();
   renderVoice();

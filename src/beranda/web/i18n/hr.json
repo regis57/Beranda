@@ -91,5 +91,11 @@
   "history_title": "Na današnji dan",
   "radio_error": "Ova se postaja ne može reproducirati",
   "voice_listening": "Slušam…",
-  "voice_unavailable": "Mikrofon nije dostupan – pogledajte postavke"
+  "voice_unavailable": "Mikrofon nije dostupan – pogledajte postavke",
+  "tv_title": "Tonight on TV",
+  "tv_no_channels": "Pick your TV channels in the settings",
+  "tv_empty": "Nothing in the guide for tonight",
+  "tv_error": "TV guide unreachable",
+  "radio_prev": "Previous station",
+  "radio_next": "Next station"
 }

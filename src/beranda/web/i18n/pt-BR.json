@@ -33,5 +33,11 @@
   "setup": {
     "title": "Configure pelo celular",
     "text": "Escaneie este código ou abra este endereço num aparelho conectado ao mesmo Wi-Fi:"
-  }
+  },
+  "tv_title": "Esta noite na TV",
+  "tv_no_channels": "Escolha os seus canais nas definições",
+  "tv_empty": "Nada no guia para esta noite",
+  "tv_error": "Guia de TV inacessível",
+  "radio_prev": "Estação anterior",
+  "radio_next": "Estação seguinte"
 }

@@ -91,5 +91,11 @@
   "history_title": "Neste dia",
   "radio_error": "Não é possível reproduzir esta estação",
   "voice_listening": "A ouvir…",
-  "voice_unavailable": "Microfone indisponível – veja as definições"
+  "voice_unavailable": "Microfone indisponível – veja as definições",
+  "tv_title": "Esta noite na TV",
+  "tv_no_channels": "Escolha os seus canais nas definições",
+  "tv_empty": "Nada no guia para esta noite",
+  "tv_error": "Guia de TV inacessível",
+  "radio_prev": "Estação anterior",
+  "radio_next": "Estação seguinte"
 }
