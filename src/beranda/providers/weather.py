@@ -10,7 +10,7 @@ from datetime import datetime
 import httpx
 
 URL = "https://api.open-meteo.com/v1/forecast"
-USER_AGENT = "Beranda/0.3 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 RAIN_THRESHOLD_MM = 0.1  # per 15 minutes: below this we call it dry
 RAIN_WINDOW = 8  # 8 x 15 min = the next two hours
 

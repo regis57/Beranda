@@ -32,7 +32,7 @@ from .providers import news as news_mod
 log = logging.getLogger(__name__)
 
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
-USER_AGENT = "Beranda/0.3 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 # Languages the display is translated into (the settings page falls back to English).
 LANGUAGES = world.LANGUAGES
 

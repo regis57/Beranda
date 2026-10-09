@@ -216,7 +216,7 @@ def create_app(
             and runtime.config_path is not None
             and not runtime.config_path.exists()
         )
-        return {"needed": needed, "urls": system.lan_addresses(runtime.cfg.port) if needed else []}
+        return {"needed": needed, "urls": system.lan_addresses(runtime.cfg.port)}
 
     @app.get("/api/screen")
     async def screen() -> dict:

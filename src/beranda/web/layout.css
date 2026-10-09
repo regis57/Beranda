@@ -195,6 +195,23 @@ body {
   .news-title { white-space: normal; }
 }
 
+/* ---- a tall screen hung upright (a mirror in portrait): everything on one page, no scroll.
+   The agenda takes the space left and drops the lines that would not fit. */
+@media (max-aspect-ratio: 3/4) and (min-height: 900px) {
+  body { overflow: hidden; }
+  .board {
+    height: 100vh; height: 100dvh; min-height: 0;
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+  }
+  .side {
+    min-height: 0; display: grid; gap: 1.4rem 2.4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+  }
+  .sky { grid-column: 1 / -1; }
+  .upcoming { min-height: 0; padding-top: 0.4rem; }
+  .now { gap: 1.2rem; }
+}
+
 /* ---- first start: the setup card --------------------------------------------------- */
 .setup {
   position: fixed; inset: auto clamp(1rem, 4vmin, 3rem) clamp(1rem, 4vmin, 3rem) auto;

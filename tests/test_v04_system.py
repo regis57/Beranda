@@ -62,7 +62,7 @@ def test_first_start_shows_where_to_set_up(tmp_path):
     assert setup["needed"] is True and all(u.endswith("/admin") for u in setup["urls"])
     svg = client.get("/api/setup-qr.svg")
     assert svg.status_code == 200 and svg.text.startswith("<svg")
-    path.write_text('country = "FR"\n')
+    path.write_text('country = "FR"\n')  # once saved, the card goes away
     assert client.get("/api/state").json()["setup"]["needed"] is False
 
 

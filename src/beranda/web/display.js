@@ -455,9 +455,10 @@ function renderNews() {
 
 // ---------------------------------------------------------------- first start ---------
 function renderSetup() {
-  const setup = state.setup || { needed: false };
-  $('setup').hidden = !setup.needed;
-  if (!setup.needed) return;
+  const setup = state.setup || { needed: false, urls: [] };
+  const show = setup.needed || params.get('setup') === 'preview';  // ?setup=preview: see the card
+  $('setup').hidden = !show;
+  if (!show) return;
   $('setup-title').textContent = t('setup.title');
   $('setup-help').textContent = t('setup.text');
   $('setup-urls').replaceChildren(...setup.urls.map((url) => {
