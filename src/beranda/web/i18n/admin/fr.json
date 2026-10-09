@@ -378,5 +378,6 @@
   "voice_err_other": "Le micro n'a pas fonctionné ({code}). Téléchargez le fichier de diagnostic (Utilisateur avancé) et envoyez-le.",
   "area_mismatch": "Cette zone (« {area} ») ne correspond pas à votre ville, {town}, dont la zone est « {suggested} » : aucune alerte ne s'afficherait jamais.",
   "area_missing": "Pas encore de zone. Celle de {town} est « {suggested} ».",
-  "area_use": "Utiliser « {suggested} »"
+  "area_use": "Utiliser « {suggested} »",
+  "voice_edge": "Microsoft Edge échoue souvent à reconnaître la voix ici (son service vocal répond « network ») : utilisez Google Chrome pour la commande vocale."
 }

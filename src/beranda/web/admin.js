@@ -748,7 +748,10 @@ function renderVoice() {
   $('voice-on').checked = !!voice.enabled;
   $('voice-check').hidden = !voice.enabled;
   const availability = voiceApi.availability();
-  $('voice-check').textContent = t(`admin.voice_check_${availability}`) + (availability === 'insecure' ? ` ${t('admin.voice_check_tip')}` : '');
+  // Edge offers speech recognition but its service often fails ("network"): say so before the person tries.
+  const edge = /\bEdg\//.test(navigator.userAgent);
+  $('voice-check').textContent = t(`admin.voice_check_${availability}`) + (availability === 'insecure' ? ` ${t('admin.voice_check_tip')}` : '')
+    + (edge ? ` ${t('admin.voice_edge')}` : '');
   voiceCommands = (voice.commands || []).map((c) => ({ ...c }));
   renderVoiceCommands();
   renderVoiceDefaults();
@@ -961,6 +964,7 @@ async function testMicrophone() {
   } catch (e) {
     const code = String(e.message || e);
     msg.textContent = MIC_ERRORS[code] ? t(`admin.voice_err_${MIC_ERRORS[code]}`) : t('admin.voice_err_other', { code });
+    if (code === 'network' && /\bEdg\//.test(navigator.userAgent)) msg.textContent = t('admin.voice_edge');
     noteProblem(`microphone test: ${code}`);
   }
 }

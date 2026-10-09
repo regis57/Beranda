@@ -378,5 +378,6 @@
   "voice_err_other": "Maikrofoni haikufanya kazi ({code}). Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume.",
   "area_mismatch": "Eneo hili (“{area}”) halilingani na mji wako, {town}, ambao eneo lake ni “{suggested}”: hakuna tahadhari ingeonekana kamwe.",
   "area_missing": "Bado hakuna eneo. Eneo la {town} ni “{suggested}”.",
-  "area_use": "Tumia “{suggested}”"
+  "area_use": "Tumia “{suggested}”",
+  "voice_edge": "Microsoft Edge mara nyingi hushindwa kutambua sauti hapa (huduma yake ya sauti hujibu “network”): tumia Google Chrome kwa udhibiti wa sauti."
 }

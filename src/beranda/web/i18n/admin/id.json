@@ -378,5 +378,6 @@
   "voice_err_other": "Mikrofon tidak berfungsi ({code}). Unduh berkas diagnostik (Pengguna mahir) dan kirimkan.",
   "area_mismatch": "Area ini (“{area}”) tidak cocok dengan kota Anda, {town}, yang areanya “{suggested}”: tidak akan pernah ada peringatan yang tampil.",
   "area_missing": "Belum ada area. Area {town} adalah “{suggested}”.",
-  "area_use": "Pakai “{suggested}”"
+  "area_use": "Pakai “{suggested}”",
+  "voice_edge": "Microsoft Edge sering gagal mengenali suara di sini (layanan suaranya menjawab “network”): pakai Google Chrome untuk kendali suara."
 }
