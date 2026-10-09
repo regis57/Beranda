@@ -89,6 +89,8 @@ def test_system_info_and_requests(tmp_path, monkeypatch):
     assert info["installed"] and info["actions"] and info["commit"] == "abc1234" and info["screen"]
     assert client.post("/api/admin/system/restart-screen").json() == {"requested": "restart-screen"}
     assert (requests / "restart-screen").exists()
+    assert client.post("/api/admin/system/reset").json() == {"requested": "reset"}
+    assert (requests / "reset").exists()
     assert client.post("/api/admin/system/rm").status_code == 404
     assert not (requests / "rm").exists()
 
