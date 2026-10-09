@@ -43,8 +43,8 @@ def _keys(d, prefix=""):
 def test_every_display_language_is_complete():
     english = _keys(json.loads((WEB / "i18n" / "en.json").read_text()))
     for path in (WEB / "i18n").glob("*.json"):
-        if path.stem == "pt-BR":
-            continue  # only overrides European Portuguese
+        if "-" in path.stem:
+            continue  # regional files (pt-BR, zh-TW) only override their base language
         missing = english - _keys(json.loads(path.read_text()))
         assert not missing, (path.name, sorted(missing)[:5])
 
@@ -107,7 +107,8 @@ def test_every_theme_has_a_season_block_every_day():
     while day.year == 2028:
         for theme in seasons.THEMES:
             block = seasons.current(theme, day, "Europe/Paris", 48.0)
-            assert block["glyph"] and (block.get("title_key") or block["title"])
+            drawn = block["kind"] in {"methali", "matarii", "creole", "hijri"}  # the theme draws it
+            assert (block["glyph"] or drawn) and (block.get("title_key") or block["title"] or drawn)
         day += timedelta(days=1)
 
 

@@ -6,14 +6,16 @@ A dashboard for a smart mirror or an old tablet, made for a **Raspberry Pi 3B+ o
 clock, local weather and rain, moon, your calendar, holidays and dates that matter, and a line
 of news headlines. Light by day, dark at night. Free: no account, no subscription, no paid API.
 
-> **Status: alpha (v0.3).** Everything below works in a browser. It has not been tested on a
-> real Raspberry Pi yet, and the one-line installer is the next step (see the roadmap).
+> **Status: alpha (v0.4).** The installer is tested automatically on a fresh Debian-family
+> machine with systemd; the full-screen part has not been tried on a real Raspberry Pi yet.
+> If you try it, please tell us how it went in an issue.
 > 🇫🇷 [Lire en français](README.fr.md)
 
 | | |
 |---|---|
-| ![Japan](docs/screenshots/v0.3.0-japan-light.png) | ![Brazil](docs/screenshots/v0.3.0-brazil-light.png) |
-| ![Germany, night](docs/screenshots/v0.3.0-germany-night.png) | ![Arabic, right to left](docs/screenshots/v0.3.0-arabic-light.png) |
+| ![Japan](docs/screenshots/v0.3.0-japan-light.png) | ![China, night](docs/screenshots/v0.4.0-china-night.png) |
+| ![Africa (Swahili)](docs/screenshots/v0.4.0-africa-light.png) | ![Arab world (right to left)](docs/screenshots/v0.4.0-arab-light.png) |
+| ![North America](docs/screenshots/v0.4.0-america-light.png) | ![Creole (Haitian Creole)](docs/screenshots/v0.4.0-creole-light.png) |
 
 *Screenshots use demo data: weather, agenda and headlines are invented; moon, sun, seasons and
 public holidays are real.* [All screenshots](docs/screenshots/)
@@ -27,12 +29,17 @@ public holidays are real.* [All screenshots](docs/screenshots/)
   public holidays of your country, and your own dates (births, remembrances, anniversaries).
 - **News**: one line of headlines at the bottom. News about your town, your country's media,
   an international medium in your language, or any RSS feed you like.
-- **Eight themes**, each with its own way of telling the season: Japan (72 micro-seasons),
-  Indonesia (Javanese mangsa), France (Republican calendar), Germany (seasons of nature),
-  Spain, Italy and Portugal (proverb of the month), Brazil (saying of the day, southern seasons).
-- **13 languages**: English, French, German, Spanish, Italian, Portuguese, Brazilian Portuguese,
-  Japanese, Indonesian, Arabic (right to left), Swahili, Amharic, Afrikaans.
-  [Coverage for Latin America and Africa](docs/COUNTRIES.md).
+- **15 themes**, each with its own way of telling the season: Japan (72 micro-seasons),
+  China (24 solar terms and the lunar date), India (the ṛtu and the tithi), Arab world (Hijri
+  date), Africa (a Swahili proverb a day), Indonesia (Javanese mangsa), Oceania (the Tahitian
+  seasons of the Pleiades), Creole (carême or hivernage, a Creole proverb), North America
+  (full-moon names), France (Republican calendar), Germany (seasons of nature), Spain, Italy and
+  Portugal (proverb of the month), Brazil (saying of the day, southern seasons).
+- **48 languages** for the screen, including Arabic, Hebrew, Persian and Urdu written right to
+  left; **243 countries and territories** with their holidays, first day of the week and news.
+  [Every country, every language](docs/COUNTRIES.md).
+- **Made for a wall**: works upright (portrait) or sideways, turns the screen off at night,
+  shows a QR code to set it up from your phone the first time.
 - **A settings page** for your phone, in plain words, with step-by-step help.
 
 ## Try it on your computer (2 minutes)
@@ -50,31 +57,52 @@ beranda --demo
 Open <http://localhost:8080> for the display and <http://localhost:8080/admin> for the settings.
 Stop it with Ctrl+C. Without `--demo` you get real weather and your own calendar.
 
-## Install on a Raspberry Pi (manual, for now)
+## Install on a Raspberry Pi (one line)
 
-1. **Prepare the card.** With [Raspberry Pi Imager](https://www.raspberrypi.com/software/),
-   choose *Raspberry Pi OS Lite (64-bit)*. In the Imager settings, give the Pi a name
-   (for example `beranda`), your Wi-Fi, and a user name and password.
+**What you need**: a Raspberry Pi 3B+ or newer, a microSD card (8 GB or more), a screen with
+HDMI, and a phone or computer on the same Wi-Fi.
+
+1. **Prepare the card.** Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
+   on your computer and choose *Raspberry Pi OS Lite (64-bit)*. When Imager offers to
+   customise the system, give the Pi a name (for example `beranda`), your Wi-Fi name and
+   password, a user name and password, and turn on SSH.
    [Official guide](https://www.raspberrypi.com/documentation/computers/getting-started.html).
-2. **Connect to it** from your computer: `ssh your-user@beranda.local`.
-   [Official guide](https://www.raspberrypi.com/documentation/computers/remote-access.html).
-3. **Install Beranda**:
+2. **Start the Pi** with the card and the screen plugged in, wait two minutes.
+3. **Connect to it** from your computer: open a terminal (on Windows: *PowerShell*) and type
+   `ssh your-user@beranda.local`. [Official guide](https://www.raspberrypi.com/documentation/computers/remote-access.html).
+4. **Install Beranda** by pasting this line (it takes 5 to 15 minutes on a Pi 3):
    ```bash
-   sudo apt update && sudo apt install -y git python3-venv fonts-noto-core fonts-noto-cjk
-   git clone https://github.com/regis57/Beranda.git && cd Beranda
-   python3 -m venv .venv && . .venv/bin/activate && pip install .
-   beranda
+   curl -fsSL https://raw.githubusercontent.com/regis57/Beranda/main/install.sh | sudo bash
    ```
-4. **Set it up from your phone**: open `http://beranda.local:8080/admin` (same Wi-Fi as the Pi)
-   and follow the three steps at the top of the page.
+5. **Set it up from your phone**: the screen shows an address and a QR code. Scan it, or open
+   `http://beranda.local:8080/admin`, and follow the three steps at the top of the page.
 
-Starting by itself at boot and showing full screen (kiosk) come with the installer (v0.4).
+That's it: Beranda starts by itself at every boot, full screen. From the settings page you can
+later **update** it, **restart the screen**, **restart the Pi**, **turn the picture** for a
+screen hung upright and **turn the screen off at night**.
+
+<details><summary>What the installer does, and options</summary>
+
+It installs Python, the Noto fonts (for every script), Cage and Chromium (the full-screen
+browser); creates a `beranda` user that runs everything (never root); puts Beranda in
+`/opt/beranda` and your settings in `/etc/beranda`; and installs three services: the server,
+the full-screen screen, and a small root service that only carries out the three requests of
+the settings page (update, restart the screen, reboot). Run the line again to repair or update.
+
+Options go after `bash -s --`, for example `... | sudo bash -s -- --no-screen`:
+`--no-screen` (server only, to show it on a tablet or another device), `--hostname kitchen`
+(rename the Pi: `http://kitchen.local:8080/admin`), `--branch NAME`, `--dry-run`.
+
+Something wrong? `beranda doctor` checks everything and says what to fix.
+To remove it: `sudo /opt/beranda/src/uninstall.sh` (add `--purge` to delete your settings too).
+</details>
 
 ## Connect your calendar
 
 Beranda reads your calendar through a private **link** (an "iCal" or "ICS" address). It only
 reads: it never changes anything, and it never asks for your password. Paste the link in
-*Settings → 4. Your calendar* and press **Test**.
+*Settings → 4. Your calendar* and press **Test**. The settings page shows these same steps
+under the box, with the official guide in your language.
 
 | Calendar | Where to find the link | Official guide |
 |---|---|---|
@@ -96,8 +124,8 @@ Titles only: no pictures, no ads, no tracking, no account.
 - **"Choose for me"** (default): news mentioning your town (found by [GDELT](https://www.gdeltproject.org/),
   a free open index of the world's press), two media of your country, and an international
   medium in your language.
-- **Choose yourself** among about 70 free feeds: public broadcasters and major newspapers of
-  Europe, the Americas, Africa and Asia, and international services (BBC, DW, France 24, RFI,
+- **Choose yourself** among 140 free feeds from every continent: public broadcasters and major newspapers of
+  Europe, the Americas, Africa, Asia and Oceania, and international services (BBC, DW, France 24, RFI,
   UN News, Al Jazeera...).
 - **Add any feed**: most news sites publish an RSS link (look for the orange RSS logo, or try the
   site address followed by `/rss` or `/feed`). Paste it and press **Test**.

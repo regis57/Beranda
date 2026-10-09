@@ -195,6 +195,39 @@ body {
   .news-title { white-space: normal; }
 }
 
+/* ---- a tall screen hung upright (a mirror in portrait): everything on one page, no scroll.
+   The agenda takes the space left and drops the lines that would not fit. */
+@media (max-aspect-ratio: 3/4) and (min-height: 900px) {
+  body { overflow: hidden; }
+  .board {
+    height: 100vh; height: 100dvh; min-height: 0;
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+  }
+  .side {
+    min-height: 0; display: grid; gap: 1.4rem 2.4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+  }
+  .sky { grid-column: 1 / -1; }
+  .upcoming { min-height: 0; padding-top: 0.4rem; }
+  .now { gap: 1.2rem; }
+}
+
+/* ---- first start: the setup card --------------------------------------------------- */
+.setup {
+  position: fixed; inset: auto clamp(1rem, 4vmin, 3rem) clamp(1rem, 4vmin, 3rem) auto;
+  display: flex; gap: 1.4rem; align-items: center; max-width: min(40rem, 92vw);
+  padding: 1.2rem 1.4rem; border-radius: 0.8rem; background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line), 0 0.6rem 2rem rgba(0, 0, 0, 0.18);
+}
+.setup-qr { width: 9rem; height: 9rem; flex: none; border-radius: 0.4rem; background: #fff; }
+.setup h2 { font-size: 1.35rem; font-weight: 500; margin-bottom: 0.4rem; }
+.setup p { font-size: 0.95rem; color: var(--ink-2); line-height: 1.4; }
+.setup ul { list-style: none; margin-top: 0.6rem; font-size: 1.15rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* ---- night hours: the screen goes dark (on the Pi the HDMI output is also turned off) -- */
+body[data-sleep="true"] { background: #000; }
+body[data-sleep="true"] .board, body[data-sleep="true"] .setup { opacity: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   body { transition: none; }
 }

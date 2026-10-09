@@ -81,5 +81,9 @@
     "summer": "Été",
     "autumn": "Automne",
     "winter": "Hiver"
+  },
+  "setup": {
+    "title": "Réglez-moi depuis votre téléphone",
+    "text": "Scannez ce code, ou ouvrez cette adresse sur un téléphone ou un ordinateur connecté au même Wi-Fi :"
   }
 }

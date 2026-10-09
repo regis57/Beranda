@@ -1,0 +1,89 @@
+{
+  "today": "Astăzi",
+  "tomorrow": "Mâine",
+  "upcoming": "În curând",
+  "nothing_upcoming": "Nimic planificat",
+  "all_day": "toată ziua",
+  "loading": "Se încarcă…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Vremea nu este disponibilă",
+  "feels": "resimțită",
+  "rain": {
+    "none": "Fără ploaie în următoarele 2 ore",
+    "starts": "Ploaie în {min} min",
+    "starts_now": "Începe să plouă",
+    "stops": "Plouă, se oprește în {min} min",
+    "long": "Ploaie peste 2 ore",
+    "now": "acum",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Lună nouă",
+    "waxing_crescent": "Semilună în creștere",
+    "first_quarter": "Primul pătrar",
+    "waxing_gibbous": "Lună în creștere",
+    "full": "Lună plină",
+    "waning_gibbous": "Lună în descreștere",
+    "last_quarter": "Ultimul pătrar",
+    "waning_crescent": "Semilună în descreștere",
+    "lit": "Iluminată {pct} %",
+    "next_full": "Lună plină {date}",
+    "next_new": "Lună nouă {date}"
+  },
+  "sun": {
+    "rise": "răsărit",
+    "set": "apus"
+  },
+  "season": {
+    "in_days": "se schimbă în {n} zile",
+    "tomorrow": "se schimbă mâine"
+  },
+  "kind": {
+    "holiday": "Sărbătoare",
+    "birth": "Naștere",
+    "death": "Comemorare",
+    "anniversary": "Aniversare",
+    "other": "Dată importantă"
+  },
+  "seasons": {
+    "spring": "Primăvară",
+    "summer": "Vară",
+    "autumn": "Toamnă",
+    "winter": "Iarnă"
+  },
+  "wmo": {
+    "0": "Senin",
+    "1": "Predominant senin",
+    "2": "Parțial noros",
+    "3": "Înnorat",
+    "45": "Ceață",
+    "48": "Ceață cu depunere de chiciură",
+    "51": "Burniță slabă",
+    "53": "Burniță",
+    "55": "Burniță densă",
+    "56": "Burniță înghețată",
+    "57": "Burniță înghețată densă",
+    "61": "Ploaie slabă",
+    "63": "Ploaie",
+    "65": "Ploaie puternică",
+    "66": "Ploaie înghețată",
+    "67": "Ploaie înghețată puternică",
+    "71": "Ninsoare slabă",
+    "73": "Ninsoare",
+    "75": "Ninsoare abundentă",
+    "77": "Grăunțe de zăpadă",
+    "80": "Averse slabe",
+    "81": "Averse",
+    "82": "Averse puternice",
+    "85": "Averse de ninsoare",
+    "86": "Averse puternice de ninsoare",
+    "95": "Furtună",
+    "96": "Furtună cu grindină",
+    "99": "Furtună puternică cu grindină"
+  },
+  "setup": {
+    "title": "Configurează-mă de pe telefon",
+    "text": "Scanează codul sau deschide această adresă pe un dispozitiv conectat la aceeași rețea Wi-Fi:"
+  }
+}

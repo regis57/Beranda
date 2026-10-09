@@ -22,17 +22,19 @@ import httpx
 import tomli_w
 from fastapi import APIRouter, Depends, HTTPException, Request
 
+from . import __version__, system
 from . import config as config_mod
 from .config import Config
 from .providers import calendar_ics, news_catalog, seasons
+from .providers import countries as world
 from .providers import news as news_mod
 
 log = logging.getLogger(__name__)
 
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
-USER_AGENT = "Beranda/0.3 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 # Languages the display is translated into (the settings page falls back to English).
-LANGUAGES = ("en", "fr", "de", "es", "it", "pt", "pt-BR", "ja", "id", "ar", "sw", "am", "af")
+LANGUAGES = world.LANGUAGES
 
 
 @dataclass
@@ -116,7 +118,8 @@ def router(runtime: Runtime) -> APIRouter:
                 "news": [
                     {k: v for k, v in src.items() if k != "url"} for src in news_catalog.SOURCES
                 ],
-                "regions": {"africa": sorted(news_catalog.AFRICA), "latam": sorted(news_catalog.LATAM)},
+                "region_of": world.REGION_OF,
+                "country_languages": world.COUNTRY_LANGUAGES,
             },
         }
 
@@ -183,6 +186,34 @@ def router(runtime: Runtime) -> APIRouter:
         except Exception as exc:  # noqa: BLE001 - class name only: the URL is a secret
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "count": len(events), "next": [e["title"] for e in events[:3]]}
+
+    @api.get("/system", dependencies=[Depends(guard)])
+    async def system_info() -> dict:
+        info = system.install_info()
+        return {
+            "version": __version__,
+            "installed": bool(info),
+            "commit": info.get("COMMIT", ""),
+            "branch": info.get("BRANCH", "main"),
+            "screen": info.get("SCREEN", "0") == "1",
+            "actions": system.requests_dir() is not None,
+        }
+
+    @api.get("/system/latest", dependencies=[Depends(guard)])
+    async def system_latest() -> dict:
+        latest = await system.latest_version(system.install_info().get("BRANCH", "main"))
+        newer = bool(latest) and system.version_tuple(latest) > system.version_tuple(__version__)
+        return {"latest": latest, "update_available": newer}
+
+    @api.post("/system/{action}", dependencies=[Depends(guard)])
+    async def system_action(action: str) -> dict:
+        try:
+            system.request_action(action)
+        except ValueError as exc:
+            raise HTTPException(404, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        return {"requested": action}
 
     @api.get("/news-auto", dependencies=[Depends(guard)])
     async def news_auto(country: str, language: str, city: str = "") -> dict:

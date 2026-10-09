@@ -62,5 +62,21 @@
       "name": "Indonésia",
       "desc": "Marrons de batik e índigo, o calendário javanês mangsa."
     }
-  }
+  },
+  "screen": "Tela",
+  "screen_hint": "Gire a imagem para uma tela na vertical e desligue a tela à noite.",
+  "screen_help": "Rotação: escolha 90° ou 270° se a tela estiver na vertical, 180° se estiver de cabeça para baixo. Horário noturno: deixe os dois campos vazios para manter a tela sempre ligada. No Raspberry Pi a própria tela é desligada e economiza energia; num tablet a página só fica escura.",
+  "off_at": "Desligar às",
+  "on_at": "Ligar de novo às",
+  "check_updates": "Procurar atualizações",
+  "up_to_date": "Você tem a versão mais recente.",
+  "update_available": "A versão {v} está disponível.",
+  "update_now": "Atualizar agora",
+  "restart_screen": "Reiniciar a tela",
+  "reboot": "Reiniciar o Raspberry Pi",
+  "confirm": "Clique de novo para confirmar",
+  "not_installed": "Instalado manualmente: estes botões só funcionam depois de instalar com install.sh (veja o README).",
+  "requested_update": "Atualizando… a página volta em um ou dois minutos.",
+  "requested_restart_screen": "A tela está reiniciando.",
+  "requested_reboot": "O Raspberry Pi está reiniciando. Volte a esta página em um minuto."
 }

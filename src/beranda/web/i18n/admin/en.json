@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brazil",
       "desc": "Copacabana waves, green and gold, a saying for every day."
+    },
+    "africa": {
+      "name": "Africa",
+      "desc": "Mud cloth and kente, a Swahili proverb every day."
+    },
+    "arab": {
+      "name": "Arab",
+      "desc": "Zellige stars in emerald and gold, the Hijri date."
+    },
+    "america": {
+      "name": "North America",
+      "desc": "National-park posters, the names of the full moons."
+    },
+    "india": {
+      "name": "India",
+      "desc": "Marigold and indigo, the season (ṛtu) and lunar day (tithi)."
+    },
+    "china": {
+      "name": "China",
+      "desc": "Rice paper and red lacquer, the 24 solar terms and the lunar date."
+    },
+    "oceania": {
+      "name": "Oceania",
+      "desc": "Tapa and lagoon, the Tahitian seasons of the Pleiades."
+    },
+    "creole": {
+      "name": "Creole",
+      "desc": "Madras check, carême or hivernage, a Creole proverb."
     }
   },
   "calendar": "Your calendar",
@@ -120,5 +148,28 @@
   "enter_pin": "Type the settings PIN",
   "unlock": "Unlock",
   "pin_wrong": "Wrong PIN.",
-  "forbidden": "Open this page from a phone or computer connected to the same Wi-Fi as the mirror."
+  "forbidden": "Open this page from a phone or computer connected to the same Wi-Fi as the mirror.",
+  "screen": "Screen",
+  "screen_hint": "Turn the picture for a screen hung upright, and switch the screen off at night.",
+  "screen_help": "Rotation: choose 90° or 270° if the screen hangs upright (portrait), 180° if it is upside down. Night hours: leave both boxes empty to keep the screen on all the time. On the Raspberry Pi the screen itself is switched off, which saves power; on a tablet the page just goes dark.",
+  "rotate": "Rotation",
+  "rotate_0": "Normal",
+  "rotate_90": "90° (upright, turned right)",
+  "rotate_180": "180° (upside down)",
+  "rotate_270": "270° (upright, turned left)",
+  "off_at": "Turn off at",
+  "on_at": "Turn back on at",
+  "system": "System",
+  "version": "Beranda version {v}",
+  "check_updates": "Check for updates",
+  "up_to_date": "You have the latest version.",
+  "update_available": "Version {v} is available.",
+  "update_now": "Update now",
+  "restart_screen": "Restart the screen",
+  "reboot": "Restart the Raspberry Pi",
+  "confirm": "Click again to confirm",
+  "not_installed": "Installed by hand: these buttons work only after installing with install.sh (see the README).",
+  "requested_update": "Updating… the page will come back in a minute or two.",
+  "requested_restart_screen": "The screen is restarting.",
+  "requested_reboot": "The Raspberry Pi is restarting. Come back to this page in a minute."
 }

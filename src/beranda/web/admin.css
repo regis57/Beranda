@@ -103,3 +103,5 @@ h3 { margin: .4rem 0 0; font-size: .9rem; font-weight: 600; }
 .lang { display: inline-block; font-size: .7rem; border: 1px solid var(--line); border-radius: .25rem; padding: 0 .3rem; margin-inline-start: .35rem; color: var(--ink-2); text-transform: uppercase; }
 .item.feed { grid-template-columns: minmax(0, 1fr) auto auto; }
 @media (max-width: 36rem) { .providers li { grid-template-columns: 1fr; } .providers a { grid-column: 1; } }
+.row.wrap { flex-wrap: wrap; }
+button.confirm { border-color: var(--err); color: var(--err); }

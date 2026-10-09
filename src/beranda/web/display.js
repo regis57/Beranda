@@ -51,8 +51,16 @@ function t(key, vars) {
   return s;
 }
 
+// Dates in the reader's language; where the browser has no calendar data for it (Haitian
+// Creole, for one), in the closest language people there read.
+const DATE_FALLBACK = { ht: 'fr' };
+function dateLocale() {
+  const code = loadedLang || lang;
+  try { if (Intl.DateTimeFormat.supportedLocalesOf([code]).length) return code; } catch { /* odd code */ }
+  return DATE_FALLBACK[code.split('-')[0]] || 'en';
+}
 // Latin digits everywhere: the temperatures next to the dates are Latin digits too.
-const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(loadedLang || lang, { timeZone: zone, numberingSystem: 'latn', ...opts });
+const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(dateLocale(), { timeZone: zone, numberingSystem: 'latn', ...opts });
 const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 const noon = (iso) => new Date(`${iso}T12:00:00Z`); // a date-only string, safely in the middle of its day
 
@@ -235,17 +243,52 @@ function renderSky() {
   const s = state.season;
   const base = (loadedLang || 'en').split('-')[0];
   const pick = (o) => (o && (o[loadedLang] || o[base] || o.en)) || '';
+  const own = s.kind === 'ko' ? 'ja' : s.kind === 'jieqi' ? 'zh' : loadedLang;
+  let glyph = s.glyph;
+  let title = s.title_key ? t(s.title_key) : pick(s.title);
+  let sub = pick(s.sub);
+  let note = typeof s.note === 'string' ? s.note : pick(s.note);
+  if (s.kind === 'hijri') [glyph, title, sub] = hijri();
+  if (s.kind === 'hijri' && base === 'ar') sub = '';  // the month is already in Arabic above
+  if (s.kind === 'fullmoon') note = t('moon.next_full', { date: dtf({ day: 'numeric', month: 'long' }, 'UTC').format(noon(s.next_change)) });
+  if (s.kind === 'jieqi') note = chineseLunarDate();
   $('season').dataset.kind = s.kind;
-  $('season-kanji').textContent = s.glyph;
-  $('season-kanji').lang = s.kind === 'ko' ? 'ja' : loadedLang;
+  $('season-kanji').textContent = glyph;
+  $('season-kanji').lang = s.kind === 'hijri' ? 'ar' : own;
   $('season-seal').textContent = s.seal;
-  $('season-seal').lang = s.kind === 'ko' ? 'ja' : loadedLang;
-  $('season-name').textContent = s.title_key ? t(s.title_key) : pick(s.title);
-  $('season-romaji').textContent = pick(s.sub);
-  $('season-romaji').lang = s.sub_lang || (s.kind === 'ko' ? 'ja' : loadedLang);
-  $('season-note').textContent = typeof s.note === 'string' ? s.note : pick(s.note);
+  $('season-seal').lang = own;
+  $('season-name').textContent = title;
+  $('season-name').lang = s.title_lang || (s.kind === 'jieqi' && !s.title[loadedLang] ? 'en' : loadedLang);
+  $('season-romaji').textContent = sub;
+  $('season-romaji').lang = s.sub_lang || (s.kind === 'hijri' ? 'ar' : own);
+  $('season-note').textContent = note;
   $('season-next').textContent = s.days_left == null ? ''
     : s.days_left <= 1 ? t('season.tomorrow') : t('season.in_days', { n: s.days_left });
+}
+
+// The Islamic (Hijri) date, Umm al-Qura reckoning, straight from the browser's calendars.
+function hijri() {
+  try {
+    const now = new Date();
+    const fmt = (locale, opts) => new Intl.DateTimeFormat(`${locale}-u-ca-islamic-umalqura-nu-latn`, { timeZone: tz, ...opts }).format(now);
+    const day = fmt('en', { day: 'numeric' });
+    const local = fmt(loadedLang || 'en', { month: 'long', year: 'numeric' });
+    const arabic = fmt('ar', { month: 'long', year: 'numeric' });
+    return [day, local, arabic];
+  } catch { return ['', '', '']; }
+}
+
+// The Chinese lunar date (农历), e.g. "八月廿九", from the browser's calendars.
+function chineseLunarDate() {
+  try {
+    const parts = new Intl.DateTimeFormat('zh-CN-u-ca-chinese', { timeZone: tz, month: 'long', day: 'numeric' }).formatToParts(new Date());
+    const month = parts.find((p) => p.type === 'month')?.value ?? '';
+    const day = Number(parts.find((p) => p.type === 'day')?.value ?? 0);
+    const names = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+      '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+      '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
+    return `农历 ${month}${names[day - 1] || ''}`;
+  } catch { return ''; }
 }
 
 // ---------------------------------------------------------------- calendar --------
@@ -379,7 +422,7 @@ let newsTimer = null;
 function newsAge(iso) {
   if (!iso) return '';
   const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
-  const rtf = new Intl.RelativeTimeFormat(loadedLang || 'en', { numeric: 'auto', style: 'short' });
+  const rtf = new Intl.RelativeTimeFormat(dateLocale(), { numeric: 'auto', style: 'short' });
   if (minutes < 60) return rtf.format(-Math.max(minutes, 1), 'minute');
   if (minutes < 48 * 60) return rtf.format(-Math.round(minutes / 60), 'hour');
   return rtf.format(-Math.round(minutes / 1440), 'day');
@@ -408,6 +451,22 @@ function renderNews() {
     newsTimer = setTimeout(next, NEWS_MS);
   };
   newsTimer = setTimeout(next, NEWS_MS);
+}
+
+// ---------------------------------------------------------------- first start ---------
+function renderSetup() {
+  const setup = state.setup || { needed: false, urls: [] };
+  const show = setup.needed || params.get('setup') === 'preview';  // ?setup=preview: see the card
+  $('setup').hidden = !show;
+  if (!show) return;
+  $('setup-title').textContent = t('setup.title');
+  $('setup-help').textContent = t('setup.text');
+  $('setup-urls').replaceChildren(...setup.urls.map((url) => {
+    const li = document.createElement('li');
+    li.textContent = url.replace(/^https?:\/\//, '');
+    return li;
+  }));
+  if (!$('setup-qr').getAttribute('src')) $('setup-qr').setAttribute('src', '/api/setup-qr.svg');
 }
 
 // ---------------------------------------------------------------- status & loop ------
@@ -457,6 +516,8 @@ async function render(online) {
   renderCalendar();
   renderUpcoming();
   renderNews();
+  renderSetup();
+  document.body.dataset.sleep = String(Boolean(state.sleep));
   renderStatus(online);
   document.body.dataset.ready = 'true'; // handy for screenshots and tests
 }

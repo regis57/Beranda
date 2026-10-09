@@ -89,6 +89,9 @@ _AGENDA = {
     "sw": ("Yoga", "Daktari wa meno", "Chakula cha jioni kwa Sam", "Soko", "Wikendi Mombasa", "Amani", "Babu", "Maadhimisho ya ndoa"),
     "am": ("ዮጋ", "የጥርስ ሐኪም", "ራት ከሳም ጋር", "ገበያ", "የሳምንት መጨረሻ ጉዞ", "ሊያ", "አያት", "የጋብቻ በዓል"),
     "af": ("Joga", "Tandarts", "Ete by Sam", "Mark", "Naweek weg", "Lea", "Oupa", "Huweliksherdenking"),
+    "hi": ("योग", "दंत चिकित्सक", "सैम के घर रात का खाना", "बाज़ार", "सप्ताहांत यात्रा", "अनन्या", "दादाजी", "शादी की सालगिरह"),
+    "zh": ("瑜伽", "看牙医", "去小山家吃晚饭", "早市", "周末出游", "小雨", "爷爷", "结婚纪念日"),
+    "ht": ("Yoga", "Dantis", "Dine lakay Sam", "Mache", "Wikenn nan Jakmèl", "Lia", "Granpapa", "Anivèsè maryaj"),
 }
 
 
@@ -157,6 +160,11 @@ _HEADLINES = {
            "የሳምንቱ መጨረሻ ትርኢት ሪከርድ ጎብኚዎችን አስተናገደ", "የምሽት ባቡር ወደ ክልሉ መስመር ተመለሰ"),
     "af": ("Die stadsbiblioteek verleng sy oopmaaktye", "Nuwe fietsroete open Maandag",
            "Naweekmark lok rekordgetal besoekers", "Nagtrein keer terug na die streekslyn"),
+    "hi": ("नगर पुस्तकालय के खुलने का समय बढ़ा", "नई साइकिल लेन सोमवार से खुलेगी",
+           "सप्ताहांत मेले में रिकॉर्ड भीड़", "क्षेत्रीय लाइन पर रात की ट्रेन लौटी"),
+    "zh": ("市图书馆延长开放时间", "新自行车道周一开通", "周末集市人流创纪录", "夜间列车重返地区线路"),
+    "ht": ("Bibliyotèk vil la ap louvri pi lontan", "Nouvo wout bisiklèt la ap louvri lendi",
+           "Fwa wikenn nan resevwa plis moun pase tout tan", "Tren lannwit lan retounen sou liy rejyonal la"),
     "sw": ("Maktaba ya mji yaongeza saa za kufunguliwa", "Njia mpya ya baiskeli kufunguliwa Jumatatu",
            "Maonyesho ya wikendi yavunja rekodi ya wageni", "Treni ya usiku yarejea kwenye njia ya mkoa"),
 }

@@ -88,4 +88,4 @@ def test_city_feed_queries_gdelt_in_the_display_language():
     url = news_catalog.city_feed_url("São Paulo", "pt-BR")
     q = parse_qs(urlparse(url).query)
     assert q["query"] == ['"São Paulo" sourcelang:portuguese'] and q["format"] == ["rss"]
-    assert "sourcelang" not in parse_qs(urlparse(news_catalog.city_feed_url("Oslo", "nb")).query)["query"][0]
+    assert "sourcelang" not in parse_qs(urlparse(news_catalog.city_feed_url("Oslo", "xx")).query)["query"][0]

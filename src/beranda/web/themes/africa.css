@@ -1,0 +1,34 @@
+/* Theme "africa" (Bogolan & Kente): the earth tones of Malian mud cloth, a band of kente
+   weave in gold, green and red. The season block gives a Swahili proverb (methali) a day. */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans Ethiopic", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "Noto Serif Ethiopic", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #efe3cd; --ink: #2b1b10; --ink-2: rgba(43, 27, 16, 0.72); --ink-3: rgba(43, 27, 16, 0.5);
+  --line: rgba(43, 27, 16, 0.18); --accent: #b8541a; --rain: #24596a; --warm: #c8661f; --cool: #4e8597;
+  --moon-lit: #2b1b10; --moon-dark: rgba(43, 27, 16, 0.1);
+  --gold: #e2a414; --green: #2e7a3a; --red: #b8281c;
+  --ornament: url("/static/themes/bogolan.svg");
+}
+:root[data-mode="night"] {
+  --bg: #120c07; --ink: rgba(242, 226, 200, 0.84); --ink-2: rgba(242, 226, 200, 0.58); --ink-3: rgba(242, 226, 200, 0.36);
+  --line: rgba(242, 226, 200, 0.13); --accent: #c87a45; --rain: #5f9db0; --warm: #b06b3c; --cool: #4d7b89;
+  --moon-lit: #f2e2c8; --moon-dark: rgba(242, 226, 200, 0.09);
+  --gold: #b88a2a; --green: #3f7a48; --red: #9a3b30;
+}
+.season { flex: 1 1 0; position: relative; padding: 0.8rem 0.9rem; align-items: stretch;
+  background: var(--ornament) center / 4rem repeat; box-shadow: inset 0 0 0 1px var(--line); }
+.season::after { content: ""; position: absolute; inset: 0; background: var(--bg); opacity: 0.86; }
+.season > * { position: relative; z-index: 1; }
+/* Kente: a woven strip where the kanji would be. */
+.season-kanji { width: 1.6rem; min-height: 6rem; align-self: stretch;
+  background:
+    repeating-linear-gradient(0deg, var(--gold) 0 0.7rem, var(--green) 0.7rem 1rem, var(--gold) 1rem 1.7rem, var(--red) 1.7rem 2rem, var(--ink) 2rem 2.3rem); }
+.seal { background: var(--gold); color: var(--ink); border-radius: 0.15rem; }
+.season-name { font-family: var(--f-serif); font-size: 1.15rem; font-style: italic; max-width: none; }
+.season-romaji { font-style: normal; color: var(--ink-2); max-width: none; }

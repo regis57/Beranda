@@ -1,0 +1,89 @@
+{
+  "today": "Dzisiaj",
+  "tomorrow": "Jutro",
+  "upcoming": "Wkrótce",
+  "nothing_upcoming": "Nic nie zaplanowano",
+  "all_day": "cały dzień",
+  "loading": "Ładowanie…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Pogoda niedostępna",
+  "feels": "odczuwalna",
+  "rain": {
+    "none": "Bez deszczu przez najbliższe 2 godziny",
+    "starts": "Deszcz za {min} min",
+    "starts_now": "Zaczyna padać",
+    "stops": "Pada, przestanie za {min} min",
+    "long": "Deszcz przez ponad 2 godziny",
+    "now": "teraz",
+    "in2h": "+2 godz."
+  },
+  "moon": {
+    "new": "Nów",
+    "waxing_crescent": "Przybywający sierp",
+    "first_quarter": "Pierwsza kwadra",
+    "waxing_gibbous": "Przybywający księżyc",
+    "full": "Pełnia",
+    "waning_gibbous": "Ubywający księżyc",
+    "last_quarter": "Ostatnia kwadra",
+    "waning_crescent": "Ubywający sierp",
+    "lit": "Oświetlenie {pct} %",
+    "next_full": "Pełnia {date}",
+    "next_new": "Nów {date}"
+  },
+  "sun": {
+    "rise": "wschód",
+    "set": "zachód"
+  },
+  "season": {
+    "in_days": "zmiana za {n} dni",
+    "tomorrow": "zmiana jutro"
+  },
+  "kind": {
+    "holiday": "Święto",
+    "birth": "Urodziny",
+    "death": "Wspomnienie",
+    "anniversary": "Rocznica",
+    "other": "Ważna data"
+  },
+  "seasons": {
+    "spring": "Wiosna",
+    "summer": "Lato",
+    "autumn": "Jesień",
+    "winter": "Zima"
+  },
+  "wmo": {
+    "0": "Bezchmurnie",
+    "1": "Przeważnie bezchmurnie",
+    "2": "Częściowe zachmurzenie",
+    "3": "Pochmurno",
+    "45": "Mgła",
+    "48": "Marznąca mgła",
+    "51": "Lekka mżawka",
+    "53": "Mżawka",
+    "55": "Gęsta mżawka",
+    "56": "Marznąca mżawka",
+    "57": "Gęsta marznąca mżawka",
+    "61": "Lekki deszcz",
+    "63": "Deszcz",
+    "65": "Ulewny deszcz",
+    "66": "Marznący deszcz",
+    "67": "Silny marznący deszcz",
+    "71": "Lekki śnieg",
+    "73": "Śnieg",
+    "75": "Intensywny śnieg",
+    "77": "Śnieg ziarnisty",
+    "80": "Lekkie przelotne opady",
+    "81": "Przelotne opady",
+    "82": "Silne przelotne opady",
+    "85": "Przelotne opady śniegu",
+    "86": "Silne opady śniegu",
+    "95": "Burza",
+    "96": "Burza z gradem",
+    "99": "Silna burza z gradem"
+  },
+  "setup": {
+    "title": "Skonfiguruj mnie z telefonu",
+    "text": "Zeskanuj kod lub otwórz ten adres na urządzeniu w tej samej sieci Wi-Fi:"
+  }
+}

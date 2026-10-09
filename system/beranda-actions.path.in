@@ -1,0 +1,10 @@
+# Watches for requests from the settings page (update, restart the screen, reboot).
+[Unit]
+Description=Beranda requests from the settings page
+
+[Path]
+DirectoryNotEmpty=@STATEDIR@/requests
+MakeDirectory=yes
+
+[Install]
+WantedBy=multi-user.target

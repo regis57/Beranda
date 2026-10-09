@@ -161,3 +161,7 @@ def astro(when: datetime, latitude: float, longitude: float, tz: str) -> dict:
         "sun": sun_times(when, latitude, longitude, tz),
         "night": is_night(when, latitude, longitude),
     }
+
+
+# Public name for other modules (full-moon names, etc.).
+phase_event = _phase_event

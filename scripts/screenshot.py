@@ -57,6 +57,7 @@ def main() -> int:
     parser.add_argument("--lang", default=None, help="force the UI language (fr, en, ja...)")
     parser.add_argument("--theme", default=None, help="force a theme (japan, indonesia, france)")
     parser.add_argument("--config", default=None, help="config file to start the server with")
+    parser.add_argument("--setup", action="store_true", help="show the first-start setup card")
     parser.add_argument("--prefix", default="display")
     args = parser.parse_args()
 
@@ -88,7 +89,7 @@ def main() -> int:
                     page.on("pageerror", lambda e: errors.append(str(e)))
                     query = f"?mode={mode}" + (f"&lang={args.lang}" if args.lang else "") + (
                         f"&theme={args.theme}" if args.theme else ""
-                    )
+                    ) + ("&setup=preview" if args.setup else "")
                     page.goto(f"{base}/{query}")
                     page.wait_for_selector("body[data-ready=true]", timeout=15000)
                     page.wait_for_timeout(1700)  # let the colour transition finish

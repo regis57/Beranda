@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Run the requests left by the settings page in the requests folder. Only these words are
+# understood: update, restart-screen, reboot. Anything else is deleted and ignored.
+set -euo pipefail
+
+# shellcheck source=/dev/null
+source /etc/beranda/install.env  # PREFIX, BRANCH, USER, STATEDIR
+
+requests="$STATEDIR/requests"
+log() { echo "beranda-action: $*"; }
+
+for file in "$requests"/*; do
+    [ -e "$file" ] || continue
+    action="$(basename "$file")"
+    rm -f -- "$file"
+    case "$action" in
+        update)
+            log "updating from branch $BRANCH"
+            git -C "$PREFIX/src" fetch --depth 1 origin "$BRANCH"
+            git -C "$PREFIX/src" reset --hard FETCH_HEAD
+            "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src"
+            install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
+            install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
+            sed -i "s/^COMMIT=.*/COMMIT=$(git -C "$PREFIX/src" rev-parse --short HEAD)/" /etc/beranda/install.env
+            systemctl restart beranda.service
+            systemctl try-restart beranda-kiosk.service
+            ;;
+        restart-screen)
+            log "restarting the screen"
+            systemctl try-restart beranda-kiosk.service
+            ;;
+        reboot)
+            log "rebooting"
+            systemctl reboot
+            ;;
+        *)
+            log "ignored unknown request: $action"
+            ;;
+    esac
+done

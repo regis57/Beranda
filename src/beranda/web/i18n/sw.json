@@ -81,5 +81,9 @@
     "95": "Radi na ngurumo",
     "96": "Radi na mvua ya mawe",
     "99": "Dhoruba kali na mvua ya mawe"
+  },
+  "setup": {
+    "title": "Niweke kwa simu yako",
+    "text": "Changanua msimbo huu, au fungua anwani hii kwenye kifaa kilicho kwenye Wi-Fi ileile:"
   }
 }

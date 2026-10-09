@@ -59,6 +59,9 @@ class Config:
     news_enabled: bool = True
     news_sources: tuple[str, ...] | None = None  # None = let Beranda choose (town, country, world)
     news_feeds: tuple[str, ...] = ()  # the user's own RSS/Atom links
+    screen_rotate: int = 0  # 0, 90, 180 or 270 degrees (applied by the kiosk on the Pi)
+    screen_off: str = ""  # "23:00": turn the screen off at night ("" = never)
+    screen_on: str = ""  # "06:30": and back on in the morning
 
     @property
     def week_start(self) -> int:
@@ -102,6 +105,23 @@ def _check_feed(url: str) -> str:
     return url
 
 
+def _check_rotate(value: object) -> int:
+    rotate = int(value or 0)
+    if rotate not in {0, 90, 180, 270}:
+        raise ValueError("screen rotation must be 0, 90, 180 or 270")
+    return rotate
+
+
+def _check_hhmm(value: object) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    hours, _, minutes = text.partition(":")
+    if not (hours.isdigit() and minutes.isdigit() and int(hours) < 24 and int(minutes) < 60):
+        raise ValueError(f"times are written HH:MM, like 23:00, got {text!r}")
+    return f"{int(hours):02d}:{int(minutes):02d}"
+
+
 def from_dict(data: dict) -> Config:
     """Build a Config from a parsed TOML dict, validating what matters."""
     loc = data.get("location", {})
@@ -124,6 +144,7 @@ def from_dict(data: dict) -> Config:
 
     server = data.get("server", {})
     news = data.get("news", {})
+    screen = data.get("screen", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -144,6 +165,9 @@ def from_dict(data: dict) -> Config:
         news_enabled=bool(news.get("enabled", True)),
         news_sources=None if news.get("sources") is None else tuple(str(x) for x in news["sources"]),
         news_feeds=tuple(_check_feed(str(u)) for u in news.get("feeds", [])),
+        screen_rotate=_check_rotate(screen.get("rotate", 0)),
+        screen_off=_check_hhmm(screen.get("off", "")),
+        screen_on=_check_hhmm(screen.get("on", "")),
     )
 
 
@@ -160,8 +184,8 @@ def find_config_path() -> Path | None:
 def load(path: Path | None = None) -> Config:
     """Load the config file if there is one, defaults otherwise."""
     path = path or find_config_path()
-    if path is None:
-        return Config()
+    if path is None or not Path(path).is_file():
+        return Config()  # first start: nothing saved yet (BERANDA_CONFIG may name a future file)
     with open(path, "rb") as fh:
         return from_dict(tomllib.load(fh))
 
@@ -195,6 +219,7 @@ def to_dict(cfg: Config) -> dict:
     if cfg.news_sources is not None:
         news["sources"] = list(cfg.news_sources)
     out["news"] = news
+    out["screen"] = {"rotate": cfg.screen_rotate, "off": cfg.screen_off, "on": cfg.screen_on}
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

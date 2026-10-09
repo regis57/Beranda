@@ -81,5 +81,9 @@
     "95": "Trovoada",
     "96": "Trovoada com granizo",
     "99": "Trovoada forte com granizo"
+  },
+  "setup": {
+    "title": "Configure-me a partir do telemóvel",
+    "text": "Leia este código ou abra este endereço num dispositivo ligado à mesma rede Wi-Fi:"
   }
 }

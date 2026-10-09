@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Runs inside the Cage kiosk compositor: waits for the Beranda server, opens the display in a
+# full-screen browser, then every 30 seconds applies the screen settings (rotation, and
+# turning the screen off and on at the hours chosen in the settings page).
+set -uo pipefail
+
+URL="http://127.0.0.1:8080"
+browser="$(command -v chromium-browser || command -v chromium || true)"
+
+for _ in $(seq 1 60); do  # the server may still be starting
+    curl -fsS "$URL/api/health" >/dev/null 2>&1 && break
+    sleep 1
+done
+
+"$browser" --kiosk --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland \
+    --disable-translate --disable-features=Translate,MediaRouter --password-store=basic \
+    --check-for-update-interval=31536000 --disable-session-crashed-bubble --incognito \
+    "$URL/" &
+browser_pid=$!
+
+output=""
+applied_rotate=""
+applied_power=""
+while kill -0 "$browser_pid" 2>/dev/null; do
+    if command -v wlr-randr >/dev/null; then
+        [ -n "$output" ] || output="$(wlr-randr 2>/dev/null | awk 'NR==1 {print $1}')"
+        settings="$(curl -fsS "$URL/api/screen" 2>/dev/null || true)"
+        rotate="$(sed -n 's/.*"rotate": *\([0-9]*\).*/\1/p' <<<"$settings")"
+        power="$(sed -n 's/.*"on": *\(true\|false\).*/\1/p' <<<"$settings")"
+        if [ -n "$output" ] && [ -n "$rotate" ] && [ "$rotate" != "$applied_rotate" ]; then
+            transform="normal"; [ "$rotate" != "0" ] && transform="$rotate"
+            wlr-randr --output "$output" --transform "$transform" && applied_rotate="$rotate"
+        fi
+        if [ -n "$output" ] && [ -n "$power" ] && [ "$power" != "$applied_power" ]; then
+            if [ "$power" = "true" ]; then wlr-randr --output "$output" --on; else wlr-randr --output "$output" --off; fi
+            applied_power="$power"
+        fi
+    fi
+    sleep 30
+done

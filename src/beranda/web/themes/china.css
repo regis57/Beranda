@@ -1,0 +1,29 @@
+/* Theme "china" (Xuan & lacquer): rice paper and ink by day, red lacquer by night, a
+   cinnabar seal. The season block reads the 24 solar terms (节气) and today's lunar date. */
+
+:root {
+  --f-sans: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --f-display: "Noto Sans CJK SC", "Noto Sans SC", system-ui, sans-serif;
+  --f-serif: "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --clock-weight: 200;
+}
+:root, :root[data-mode="light"] {
+  --bg: #f5efe2; --ink: #1d1a18; --ink-2: rgba(29, 26, 24, 0.7); --ink-3: rgba(29, 26, 24, 0.46);
+  --line: rgba(29, 26, 24, 0.15); --accent: #b3261e; --gold: #b28a36; --rain: #2c4f6b;
+  --warm: #c2553a; --cool: #5e83a3; --moon-lit: #1d1a18; --moon-dark: rgba(29, 26, 24, 0.09);
+  --ornament: url("/static/themes/xiangyun.svg");
+}
+:root[data-mode="night"] {
+  --bg: #150908; --ink: rgba(240, 226, 206, 0.86); --ink-2: rgba(240, 226, 206, 0.6); --ink-3: rgba(240, 226, 206, 0.38);
+  --line: rgba(178, 138, 54, 0.22); --accent: #cf4a3c; --gold: #b99550; --rain: #6d8fae;
+  --warm: #b75a43; --cool: #577591; --moon-lit: #f0e2ce; --moon-dark: rgba(240, 226, 206, 0.08);
+}
+.season { position: relative; padding-top: 1.4rem; }
+.season::before { content: ""; position: absolute; left: 0; width: 9rem; top: 0; height: 1.1rem;
+  background: var(--ornament) left center / auto 100% repeat-x; opacity: 0.6; }
+.season-kanji { font-family: var(--f-serif); font-size: 3rem; font-weight: 600; color: var(--accent); }
+.seal { background: var(--accent); color: var(--bg); border-radius: 0.1rem; font-family: var(--f-serif); }
+.season-name { font-size: 1.05rem; }
+.season-romaji { font-style: italic; }
+.season-note { font-family: var(--f-serif); color: var(--gold); font-size: 0.85rem; letter-spacing: 0.1em; }
+.cal-cell.today .cal-num { box-shadow: 0 0 0 2px var(--gold); }

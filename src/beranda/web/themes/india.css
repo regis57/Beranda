@@ -1,0 +1,28 @@
+/* Theme "india" (Rangoli): marigold and saffron on a warm white, indigo ink, a rangoli
+   lotus. The season block gives the ṛtu (शरद, autumn) and today's tithi (lunar day). */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans Devanagari", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans Devanagari", system-ui, sans-serif;
+  --f-serif: "Noto Serif Devanagari", "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 300;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #fbf3e2; --ink: #2a1b45; --ink-2: rgba(42, 27, 69, 0.72); --ink-3: rgba(42, 27, 69, 0.48);
+  --line: rgba(42, 27, 69, 0.15); --accent: #e0700c; --magenta: #b3236a; --rain: #2047a0;
+  --warm: #e38318; --cool: #5a77c4; --moon-lit: #2a1b45; --moon-dark: rgba(42, 27, 69, 0.08);
+  --ornament: url("/static/themes/rangoli.svg");
+}
+:root[data-mode="night"] {
+  --bg: #0f0a1a; --ink: rgba(246, 232, 214, 0.86); --ink-2: rgba(246, 232, 214, 0.6); --ink-3: rgba(246, 232, 214, 0.38);
+  --line: rgba(246, 232, 214, 0.13); --accent: #e39a4a; --magenta: #c2588c; --rain: #7c95d8;
+  --warm: #c98140; --cool: #5a6fa8; --moon-lit: #f6e8d6; --moon-dark: rgba(246, 232, 214, 0.08);
+}
+.season { flex: 1 1 0; position: relative; padding: 0.7rem 0.9rem; align-items: center;
+  background: var(--ornament) right center / 6rem no-repeat; }
+.season-kanji { font-family: var(--f-serif); font-size: 2.8rem; font-weight: 500; line-height: 1.2; color: var(--accent); letter-spacing: 0; }
+.seal { background: var(--magenta); color: var(--bg); border-radius: 50%; font-family: var(--f-serif); }
+.season-name { font-size: 1.05rem; }
+.season-romaji { font-family: var(--f-serif); font-style: normal; color: var(--magenta); max-width: none; }
+:root[data-mode="night"] .season { background-blend-mode: normal; }

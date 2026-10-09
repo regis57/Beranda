@@ -81,5 +81,9 @@
     "summer": "Musim panas",
     "autumn": "Musim gugur",
     "winter": "Musim dingin"
+  },
+  "setup": {
+    "title": "Atur saya dari ponsel Anda",
+    "text": "Pindai kode ini, atau buka alamat ini di perangkat yang terhubung ke Wi-Fi yang sama:"
   }
 }

@@ -1,0 +1,89 @@
+{
+  "today": "Hôm nay",
+  "tomorrow": "Ngày mai",
+  "upcoming": "Sắp tới",
+  "nothing_upcoming": "Không có kế hoạch",
+  "all_day": "cả ngày",
+  "loading": "Đang tải…",
+  "demo": "demo",
+  "offline": "ngoại tuyến",
+  "no_weather": "Không có dữ liệu thời tiết",
+  "feels": "cảm giác",
+  "rain": {
+    "none": "Không mưa trong 2 giờ tới",
+    "starts": "Mưa sau {min} phút",
+    "starts_now": "Bắt đầu mưa",
+    "stops": "Đang mưa, tạnh sau {min} phút",
+    "long": "Mưa hơn 2 giờ",
+    "now": "bây giờ",
+    "in2h": "+2 giờ"
+  },
+  "moon": {
+    "new": "Trăng mới",
+    "waxing_crescent": "Trăng lưỡi liềm đầu tháng",
+    "first_quarter": "Bán nguyệt đầu tháng",
+    "waxing_gibbous": "Trăng khuyết đầu tháng",
+    "full": "Trăng tròn",
+    "waning_gibbous": "Trăng khuyết cuối tháng",
+    "last_quarter": "Bán nguyệt cuối tháng",
+    "waning_crescent": "Trăng lưỡi liềm cuối tháng",
+    "lit": "Sáng {pct}%",
+    "next_full": "Trăng tròn {date}",
+    "next_new": "Trăng mới {date}"
+  },
+  "sun": {
+    "rise": "mặt trời mọc",
+    "set": "mặt trời lặn"
+  },
+  "season": {
+    "in_days": "đổi sau {n} ngày",
+    "tomorrow": "đổi vào ngày mai"
+  },
+  "kind": {
+    "holiday": "Ngày lễ",
+    "birth": "Sinh nhật",
+    "death": "Ngày giỗ",
+    "anniversary": "Kỷ niệm",
+    "other": "Ngày quan trọng"
+  },
+  "seasons": {
+    "spring": "Mùa xuân",
+    "summer": "Mùa hè",
+    "autumn": "Mùa thu",
+    "winter": "Mùa đông"
+  },
+  "wmo": {
+    "0": "Trời quang",
+    "1": "Phần lớn quang đãng",
+    "2": "Có mây rải rác",
+    "3": "Nhiều mây",
+    "45": "Sương mù",
+    "48": "Sương mù đóng băng",
+    "51": "Mưa phùn nhẹ",
+    "53": "Mưa phùn",
+    "55": "Mưa phùn dày",
+    "56": "Mưa phùn đóng băng",
+    "57": "Mưa phùn đóng băng dày",
+    "61": "Mưa nhỏ",
+    "63": "Mưa",
+    "65": "Mưa to",
+    "66": "Mưa đóng băng",
+    "67": "Mưa đóng băng to",
+    "71": "Tuyết nhẹ",
+    "73": "Tuyết",
+    "75": "Tuyết dày",
+    "77": "Hạt tuyết",
+    "80": "Mưa rào nhẹ",
+    "81": "Mưa rào",
+    "82": "Mưa rào mạnh",
+    "85": "Mưa tuyết",
+    "86": "Mưa tuyết mạnh",
+    "95": "Dông",
+    "96": "Dông kèm mưa đá",
+    "99": "Dông mạnh kèm mưa đá"
+  },
+  "setup": {
+    "title": "Cài đặt từ điện thoại của bạn",
+    "text": "Quét mã này, hoặc mở địa chỉ này trên thiết bị cùng mạng Wi-Fi:"
+  }
+}

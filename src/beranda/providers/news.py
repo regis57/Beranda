@@ -14,7 +14,7 @@ from email.utils import parsedate_to_datetime
 import httpx
 from defusedxml import ElementTree
 
-USER_AGENT = "Beranda/0.3 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 MAX_FEED_BYTES = 3 * 1024 * 1024
 MAX_AGE = timedelta(days=3)
 PER_SOURCE = 5

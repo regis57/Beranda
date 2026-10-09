@@ -1,0 +1,89 @@
+{
+  "today": "Tänään",
+  "tomorrow": "Huomenna",
+  "upcoming": "Tulossa",
+  "nothing_upcoming": "Ei mitään suunniteltua",
+  "all_day": "koko päivä",
+  "loading": "Ladataan…",
+  "demo": "demo",
+  "offline": "ei yhteyttä",
+  "no_weather": "Säätietoja ei saatavilla",
+  "feels": "tuntuu kuin",
+  "rain": {
+    "none": "Ei sadetta seuraavaan 2 tuntiin",
+    "starts": "Sadetta {min} min kuluttua",
+    "starts_now": "Sade alkaa",
+    "stops": "Sataa, loppuu {min} min kuluttua",
+    "long": "Sadetta yli 2 tuntia",
+    "now": "nyt",
+    "in2h": "+2 t"
+  },
+  "moon": {
+    "new": "Uusikuu",
+    "waxing_crescent": "Kasvava sirppi",
+    "first_quarter": "Ensimmäinen neljännes",
+    "waxing_gibbous": "Kasvava kuu",
+    "full": "Täysikuu",
+    "waning_gibbous": "Vähenevä kuu",
+    "last_quarter": "Viimeinen neljännes",
+    "waning_crescent": "Vähenevä sirppi",
+    "lit": "{pct} % valaistu",
+    "next_full": "Täysikuu {date}",
+    "next_new": "Uusikuu {date}"
+  },
+  "sun": {
+    "rise": "aurinko nousee",
+    "set": "aurinko laskee"
+  },
+  "season": {
+    "in_days": "vaihtuu {n} päivän päästä",
+    "tomorrow": "vaihtuu huomenna"
+  },
+  "kind": {
+    "holiday": "Pyhäpäivä",
+    "birth": "Syntymäpäivä",
+    "death": "Muistopäivä",
+    "anniversary": "Vuosipäivä",
+    "other": "Tärkeä päivä"
+  },
+  "seasons": {
+    "spring": "Kevät",
+    "summer": "Kesä",
+    "autumn": "Syksy",
+    "winter": "Talvi"
+  },
+  "wmo": {
+    "0": "Selkeää",
+    "1": "Enimmäkseen selkeää",
+    "2": "Puolipilvistä",
+    "3": "Pilvistä",
+    "45": "Sumua",
+    "48": "Jäätävää sumua",
+    "51": "Heikkoa tihkua",
+    "53": "Tihkua",
+    "55": "Runsasta tihkua",
+    "56": "Jäätävää tihkua",
+    "57": "Runsasta jäätävää tihkua",
+    "61": "Heikkoa sadetta",
+    "63": "Sadetta",
+    "65": "Runsasta sadetta",
+    "66": "Jäätävää sadetta",
+    "67": "Runsasta jäätävää sadetta",
+    "71": "Heikkoa lumisadetta",
+    "73": "Lumisadetta",
+    "75": "Runsasta lumisadetta",
+    "77": "Lumijyväsiä",
+    "80": "Heikkoja kuuroja",
+    "81": "Kuuroja",
+    "82": "Voimakkaita kuuroja",
+    "85": "Lumikuuroja",
+    "86": "Voimakkaita lumikuuroja",
+    "95": "Ukkosta",
+    "96": "Ukkosta ja rakeita",
+    "99": "Voimakasta ukkosta ja rakeita"
+  },
+  "setup": {
+    "title": "Määritä minut puhelimella",
+    "text": "Skannaa koodi tai avaa osoite laitteella, joka on samassa wifi-verkossa:"
+  }
+}

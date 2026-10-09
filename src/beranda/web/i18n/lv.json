@@ -1,0 +1,89 @@
+{
+  "today": "Šodien",
+  "tomorrow": "Rīt",
+  "upcoming": "Drīzumā",
+  "nothing_upcoming": "Nekas nav ieplānots",
+  "all_day": "visu dienu",
+  "loading": "Ielādē…",
+  "demo": "demo",
+  "offline": "bezsaistē",
+  "no_weather": "Laikapstākļi nav pieejami",
+  "feels": "sajūtu",
+  "rain": {
+    "none": "Lietus nebūs nākamās 2 stundas",
+    "starts": "Lietus pēc {min} min",
+    "starts_now": "Sāk līt",
+    "stops": "Līst, beigsies pēc {min} min",
+    "long": "Lietus ilgāk par 2 stundām",
+    "now": "tagad",
+    "in2h": "+2 st."
+  },
+  "moon": {
+    "new": "Jauns mēness",
+    "waxing_crescent": "Augošs sirpis",
+    "first_quarter": "Pirmais ceturksnis",
+    "waxing_gibbous": "Augošs mēness",
+    "full": "Pilnmēness",
+    "waning_gibbous": "Dilstošs mēness",
+    "last_quarter": "Pēdējais ceturksnis",
+    "waning_crescent": "Dilstošs sirpis",
+    "lit": "Apgaismots {pct} %",
+    "next_full": "Pilnmēness {date}",
+    "next_new": "Jauns mēness {date}"
+  },
+  "sun": {
+    "rise": "saullēkts",
+    "set": "saulriets"
+  },
+  "season": {
+    "in_days": "mainās pēc {n} dienām",
+    "tomorrow": "mainās rīt"
+  },
+  "kind": {
+    "holiday": "Svētku diena",
+    "birth": "Dzimšanas diena",
+    "death": "Piemiņa",
+    "anniversary": "Gadadiena",
+    "other": "Svarīgs datums"
+  },
+  "seasons": {
+    "spring": "Pavasaris",
+    "summer": "Vasara",
+    "autumn": "Rudens",
+    "winter": "Ziema"
+  },
+  "wmo": {
+    "0": "Skaidrs",
+    "1": "Pārsvarā skaidrs",
+    "2": "Daļēji mākoņains",
+    "3": "Apmācies",
+    "45": "Migla",
+    "48": "Sarmas migla",
+    "51": "Viegla smidzināšana",
+    "53": "Smidzināšana",
+    "55": "Stipra smidzināšana",
+    "56": "Salstoša smidzināšana",
+    "57": "Stipra salstoša smidzināšana",
+    "61": "Neliels lietus",
+    "63": "Lietus",
+    "65": "Stiprs lietus",
+    "66": "Salstošs lietus",
+    "67": "Stiprs salstošs lietus",
+    "71": "Neliels sniegs",
+    "73": "Sniegs",
+    "75": "Stiprs sniegs",
+    "77": "Sniega graudi",
+    "80": "Vieglas lietusgāzes",
+    "81": "Lietusgāzes",
+    "82": "Stipras lietusgāzes",
+    "85": "Sniegputeņi",
+    "86": "Stipri sniegputeņi",
+    "95": "Pērkona negaiss",
+    "96": "Negaiss ar krusu",
+    "99": "Stiprs negaiss ar krusu"
+  },
+  "setup": {
+    "title": "Iestatiet mani no tālruņa",
+    "text": "Noskenējiet kodu vai atveriet adresi ierīcē tajā pašā Wi-Fi tīklā:"
+  }
+}

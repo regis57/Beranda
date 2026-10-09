@@ -81,5 +81,9 @@
     "95": "Donderstorm",
     "96": "Donderstorm met hael",
     "99": "Hewige donderstorm met hael"
+  },
+  "setup": {
+    "title": "Stel my op met jou foon",
+    "text": "Skandeer die kode, of maak hierdie adres oop op 'n toestel op dieselfde wi-fi:"
   }
 }

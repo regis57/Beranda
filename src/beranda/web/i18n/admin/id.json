@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brasil",
       "desc": "Ombak Copacabana, hijau dan emas, pepatah setiap hari."
+    },
+    "africa": {
+      "name": "Afrika",
+      "desc": "Kain bogolan dan kente, satu peribahasa Swahili setiap hari."
+    },
+    "arab": {
+      "name": "Arab",
+      "desc": "Bintang zellige zamrud dan emas, tanggal Hijriah."
+    },
+    "america": {
+      "name": "Amerika Utara",
+      "desc": "Poster taman nasional, nama-nama bulan purnama."
+    },
+    "india": {
+      "name": "India",
+      "desc": "Marigold dan nila, musim (ṛtu) dan hari bulan (tithi)."
+    },
+    "china": {
+      "name": "Tiongkok",
+      "desc": "Kertas beras dan pernis merah, 24 terma matahari dan tanggal Imlek."
+    },
+    "oceania": {
+      "name": "Oseania",
+      "desc": "Tapa dan laguna, musim Tahiti menurut bintang Pleiades."
+    },
+    "creole": {
+      "name": "Kreol",
+      "desc": "Kain madras, musim kemarau atau hujan, peribahasa Kreol."
     }
   },
   "calendar": "Kalender Anda",
@@ -120,5 +148,28 @@
   "enter_pin": "Ketik PIN pengaturan",
   "unlock": "Buka",
   "pin_wrong": "PIN salah.",
-  "forbidden": "Buka halaman ini dari ponsel atau komputer yang terhubung ke Wi-Fi yang sama dengan cermin."
+  "forbidden": "Buka halaman ini dari ponsel atau komputer yang terhubung ke Wi-Fi yang sama dengan cermin.",
+  "screen": "Layar",
+  "screen_hint": "Putar gambar untuk layar yang dipasang tegak, dan matikan layar di malam hari.",
+  "screen_help": "Rotasi: pilih 90° atau 270° jika layar dipasang tegak (potret), 180° jika terbalik. Jam malam: kosongkan kedua kotak agar layar selalu menyala. Di Raspberry Pi layarnya sendiri dimatikan sehingga hemat listrik; di tablet halamannya hanya menjadi gelap.",
+  "rotate": "Rotasi",
+  "rotate_0": "Normal",
+  "rotate_90": "90° (tegak, diputar ke kanan)",
+  "rotate_180": "180° (terbalik)",
+  "rotate_270": "270° (tegak, diputar ke kiri)",
+  "off_at": "Matikan pukul",
+  "on_at": "Nyalakan lagi pukul",
+  "system": "Sistem",
+  "version": "Beranda versi {v}",
+  "check_updates": "Periksa pembaruan",
+  "up_to_date": "Anda memakai versi terbaru.",
+  "update_available": "Versi {v} tersedia.",
+  "update_now": "Perbarui sekarang",
+  "restart_screen": "Mulai ulang layar",
+  "reboot": "Mulai ulang Raspberry Pi",
+  "confirm": "Klik sekali lagi untuk memastikan",
+  "not_installed": "Dipasang manual: tombol ini hanya berfungsi setelah memasang dengan install.sh (lihat README).",
+  "requested_update": "Sedang memperbarui… halaman kembali dalam satu atau dua menit.",
+  "requested_restart_screen": "Layar sedang dimulai ulang.",
+  "requested_reboot": "Raspberry Pi sedang dimulai ulang. Buka lagi halaman ini dalam satu menit."
 }

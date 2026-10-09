@@ -1,0 +1,89 @@
+{
+  "today": "Ngayon",
+  "tomorrow": "Bukas",
+  "upcoming": "Paparating",
+  "nothing_upcoming": "Walang nakaplano",
+  "all_day": "buong araw",
+  "loading": "Naglo-load…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Walang datos ng panahon",
+  "feels": "pakiramdam",
+  "rain": {
+    "none": "Walang ulan sa susunod na 2 oras",
+    "starts": "Uulan sa loob ng {min} min",
+    "starts_now": "Nagsisimula nang umulan",
+    "stops": "Umuulan, titila sa loob ng {min} min",
+    "long": "Ulan nang higit 2 oras",
+    "now": "ngayon",
+    "in2h": "+2 oras"
+  },
+  "moon": {
+    "new": "Bagong buwan",
+    "waxing_crescent": "Lumalaking gasuklay",
+    "first_quarter": "Unang kapat",
+    "waxing_gibbous": "Lumalaking buwan",
+    "full": "Kabilugan",
+    "waning_gibbous": "Lumiliit na buwan",
+    "last_quarter": "Huling kapat",
+    "waning_crescent": "Lumiliit na gasuklay",
+    "lit": "{pct}% maliwanag",
+    "next_full": "Kabilugan ng buwan {date}",
+    "next_new": "Bagong buwan {date}"
+  },
+  "sun": {
+    "rise": "pagsikat ng araw",
+    "set": "paglubog ng araw"
+  },
+  "season": {
+    "in_days": "magbabago sa loob ng {n} araw",
+    "tomorrow": "magbabago bukas"
+  },
+  "kind": {
+    "holiday": "Pista opisyal",
+    "birth": "Kaarawan",
+    "death": "Paggunita",
+    "anniversary": "Anibersaryo",
+    "other": "Mahalagang petsa"
+  },
+  "seasons": {
+    "spring": "Tagsibol",
+    "summer": "Tag-init",
+    "autumn": "Taglagas",
+    "winter": "Taglamig"
+  },
+  "wmo": {
+    "0": "Maaliwalas",
+    "1": "Halos maaliwalas",
+    "2": "Bahagyang maulap",
+    "3": "Maulap",
+    "45": "Hamog",
+    "48": "Nagyeyelong hamog",
+    "51": "Mahinang ambon",
+    "53": "Ambon",
+    "55": "Makapal na ambon",
+    "56": "Nagyeyelong ambon",
+    "57": "Makapal na nagyeyelong ambon",
+    "61": "Mahinang ulan",
+    "63": "Ulan",
+    "65": "Malakas na ulan",
+    "66": "Nagyeyelong ulan",
+    "67": "Malakas na nagyeyelong ulan",
+    "71": "Mahinang niyebe",
+    "73": "Niyebe",
+    "75": "Makapal na niyebe",
+    "77": "Butil ng niyebe",
+    "80": "Mahinang buhos",
+    "81": "Buhos ng ulan",
+    "82": "Malakas na buhos",
+    "85": "Buhos ng niyebe",
+    "86": "Malakas na buhos ng niyebe",
+    "95": "Bagyong may kulog",
+    "96": "Bagyong may kulog at yelo",
+    "99": "Malakas na bagyong may kulog at yelo"
+  },
+  "setup": {
+    "title": "I-set up ako mula sa iyong telepono",
+    "text": "I-scan ang code na ito, o buksan ang address na ito sa device na nasa parehong Wi-Fi:"
+  }
+}

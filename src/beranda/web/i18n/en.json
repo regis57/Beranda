@@ -81,5 +81,9 @@
     "summer": "Summer",
     "autumn": "Autumn",
     "winter": "Winter"
+  },
+  "setup": {
+    "title": "Set me up from your phone",
+    "text": "Scan this code, or open this address on a phone or computer connected to the same Wi-Fi:"
   }
 }

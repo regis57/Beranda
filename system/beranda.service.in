@@ -1,0 +1,24 @@
+# Beranda web server: the display page and the settings page, on port 8080.
+[Unit]
+Description=Beranda dashboard server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=@USER@
+Group=@USER@
+Environment=BERANDA_CONFIG=@CONFDIR@/config.toml
+Environment=BERANDA_REQUESTS=@STATEDIR@/requests
+Environment=BERANDA_INSTALL_INFO=@CONFDIR@/install.env
+ExecStart=@PREFIX@/venv/bin/beranda
+Restart=always
+RestartSec=3
+# Hardening: the server only needs its own config, its cache and the network.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=@CONFDIR@ @STATEDIR@
+
+[Install]
+WantedBy=multi-user.target

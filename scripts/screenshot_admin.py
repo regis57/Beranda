@@ -30,6 +30,8 @@ SEARCH = {"results": [
      "latitude": 37.65, "longitude": -94.07, "timezone": "America/Chicago"},
 ]}
 ICS_OK = {"ok": True, "count": 14, "next": ["Yoga", "Dentiste", "Dîner chez Sam"]}
+SYSTEM = {"version": "0.4.0", "installed": True, "commit": "a1b2c3d", "branch": "main", "screen": True, "actions": True}
+LATEST = {"latest": "0.4.1", "update_available": True}
 FEED_OK = {"ok": True, "count": 31, "first": "La médiathèque élargit ses horaires d'ouverture"}
 
 
@@ -88,8 +90,10 @@ def main() -> int:
             page = browser.new_page(viewport={"width": width, "height": height}, locale=args.lang)
             page.on("console", lambda m: errors.append(m.text) if m.type in ("error", "warning") else None)
             page.on("pageerror", lambda e: errors.append(str(e)))
-            for pattern, answer in (("geocode", SEARCH), ("test-ics", ICS_OK), ("test-feed", FEED_OK)):
-                page.route(f"**/api/admin/{pattern}*", reply(answer))
+            for pattern, answer in (("geocode", SEARCH), ("test-ics", ICS_OK), ("test-feed", FEED_OK),
+                                    ("system/latest", LATEST), ("system", SYSTEM)):
+                page.route(f"**/api/admin/{pattern}", reply(answer))
+                page.route(f"**/api/admin/{pattern}?*", reply(answer))
             page.goto(f"{base}/admin")
             page.wait_for_selector("#app:not([hidden])", timeout=15000)
             page.wait_for_timeout(1800)  # the preview iframe and the news preview
@@ -114,6 +118,10 @@ def main() -> int:
             page.wait_for_timeout(400)
             shot(page, "")
             shot(page, "-calendar", "#sec-cal")
+            page.click("#sys-check")
+            page.wait_for_timeout(300)
+            shot(page, "-screen", "#sec-screen")
+            shot(page, "-system", "#sec-system")
             page.uncheck("#news-auto")  # show the lists you can pick from
             page.wait_for_timeout(500)
             page.click("#news-city .src button")  # Test the town news

@@ -1,0 +1,89 @@
+{
+  "today": "Idag",
+  "tomorrow": "Imorgon",
+  "upcoming": "Kommande",
+  "nothing_upcoming": "Inget planerat",
+  "all_day": "heldag",
+  "loading": "Laddar…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Vädret är inte tillgängligt",
+  "feels": "känns som",
+  "rain": {
+    "none": "Inget regn de närmaste 2 timmarna",
+    "starts": "Regn om {min} min",
+    "starts_now": "Det börjar regna",
+    "stops": "Det regnar, upphör om {min} min",
+    "long": "Regn i mer än 2 timmar",
+    "now": "nu",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Nymåne",
+    "waxing_crescent": "Tilltagande skära",
+    "first_quarter": "Första kvarteret",
+    "waxing_gibbous": "Tilltagande måne",
+    "full": "Fullmåne",
+    "waning_gibbous": "Avtagande måne",
+    "last_quarter": "Sista kvarteret",
+    "waning_crescent": "Avtagande skära",
+    "lit": "{pct} % belyst",
+    "next_full": "Fullmåne {date}",
+    "next_new": "Nymåne {date}"
+  },
+  "sun": {
+    "rise": "soluppgång",
+    "set": "solnedgång"
+  },
+  "season": {
+    "in_days": "byts om {n} dagar",
+    "tomorrow": "byts imorgon"
+  },
+  "kind": {
+    "holiday": "Helgdag",
+    "birth": "Födelsedag",
+    "death": "Minnesdag",
+    "anniversary": "Jubileum",
+    "other": "Viktigt datum"
+  },
+  "seasons": {
+    "spring": "Vår",
+    "summer": "Sommar",
+    "autumn": "Höst",
+    "winter": "Vinter"
+  },
+  "wmo": {
+    "0": "Klart",
+    "1": "Mestadels klart",
+    "2": "Växlande molnighet",
+    "3": "Mulet",
+    "45": "Dimma",
+    "48": "Underkyld dimma",
+    "51": "Lätt duggregn",
+    "53": "Duggregn",
+    "55": "Tätt duggregn",
+    "56": "Underkylt duggregn",
+    "57": "Kraftigt underkylt duggregn",
+    "61": "Lätt regn",
+    "63": "Regn",
+    "65": "Kraftigt regn",
+    "66": "Underkylt regn",
+    "67": "Kraftigt underkylt regn",
+    "71": "Lätt snöfall",
+    "73": "Snöfall",
+    "75": "Kraftigt snöfall",
+    "77": "Kornsnö",
+    "80": "Lätta skurar",
+    "81": "Skurar",
+    "82": "Kraftiga skurar",
+    "85": "Snöbyar",
+    "86": "Kraftiga snöbyar",
+    "95": "Åska",
+    "96": "Åska med hagel",
+    "99": "Kraftig åska med hagel"
+  },
+  "setup": {
+    "title": "Ställ in mig från telefonen",
+    "text": "Skanna koden eller öppna adressen på en enhet i samma wifi:"
+  }
+}

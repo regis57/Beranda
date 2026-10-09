@@ -11,25 +11,17 @@ const THEME_COLORS = {
   italy: ['#f5efe3', '#a8322d', '#335c8a', '#2b2420'],
   portugal: ['#f5f7fa', '#1d4fb0', '#2f86c9', '#102a5c'],
   brazil: ['#f4f5ef', '#0d8a4a', '#e7b400', '#1f4aa8'],
+  africa: ['#efe3cd', '#e2a414', '#2e7a3a', '#b8281c'],
+  arab: ['#f5f0e6', '#0f6e62', '#b8862b', '#13292a'],
+  america: ['#f2e8d2', '#c4512a', '#2f5d3a', '#2b5c8a'],
+  india: ['#fbf3e2', '#e0700c', '#b3236a', '#2a1b45'],
+  china: ['#f5efe2', '#b3261e', '#b28a36', '#1d1a18'],
+  oceania: ['#f0f5f1', '#d9634b', '#128a95', '#7a4a2a'],
+  creole: ['#fdf6e6', '#f2b705', '#d8431b', '#2f8f46'],
 };
 const KINDS = ['birth', 'death', 'anniversary', 'other'];
 const IMPERIAL = new Set(['US', 'LR', 'MM']);
 const RTL = new Set(['ar', 'fa', 'he', 'ur']);
-
-// The language Beranda suggests when you pick a country (you can always change it).
-const COUNTRY_LANG = {
-  FR: 'fr', BE: 'fr', LU: 'fr', MC: 'fr', CH: 'fr', CA: 'en', HT: 'fr',
-  DE: 'de', AT: 'de', LI: 'de', ES: 'es', IT: 'it', SM: 'it', VA: 'it', PT: 'pt', BR: 'pt-BR',
-  JP: 'ja', ID: 'id',
-  AR: 'es', BO: 'es', CL: 'es', CO: 'es', CR: 'es', CU: 'es', DO: 'es', EC: 'es', SV: 'es', GT: 'es',
-  HN: 'es', MX: 'es', NI: 'es', PA: 'es', PY: 'es', PE: 'es', PR: 'es', UY: 'es', VE: 'es', GQ: 'es',
-  BJ: 'fr', BF: 'fr', BI: 'fr', CM: 'fr', CF: 'fr', TD: 'fr', KM: 'fr', CG: 'fr', CD: 'fr', CI: 'fr',
-  DJ: 'fr', GA: 'fr', GN: 'fr', MG: 'fr', ML: 'fr', NE: 'fr', RW: 'fr', SN: 'fr', TG: 'fr', SC: 'fr',
-  DZ: 'ar', EG: 'ar', LY: 'ar', MA: 'ar', MR: 'ar', SD: 'ar', TN: 'ar', SO: 'ar', EH: 'ar',
-  SA: 'ar', AE: 'ar', QA: 'ar', KW: 'ar', BH: 'ar', OM: 'ar', JO: 'ar', LB: 'ar', IQ: 'ar', SY: 'ar', YE: 'ar', PS: 'ar',
-  KE: 'sw', TZ: 'sw', UG: 'en', ET: 'am', ZA: 'en', NA: 'en',
-  AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt',
-};
 
 // Official help pages, opened in the reader's language when the site offers it.
 const MS_LOCALE = { fr: 'fr-fr', de: 'de-de', es: 'es-es', it: 'it-it', pt: 'pt-pt', 'pt-BR': 'pt-br', ja: 'ja-jp', id: 'id-id', ar: 'ar-sa' };
@@ -44,7 +36,7 @@ const CAL_GUIDES = [
 
 let strings = {};
 let lang = 'en';
-let options = { countries: {}, languages: [], themes: [], news: [], regions: {} };
+let options = { countries: {}, languages: [], themes: [], news: [], region_of: {}, country_languages: {} };
 let cfg = null;
 let editable = true;
 let dirty = false;
@@ -204,8 +196,9 @@ function onCountry() {
   const country = $('country').value;
   renderSubdivisions('');
   if (!unitsTouched) $('units').value = IMPERIAL.has(country) ? 'imperial' : 'metric';
-  if (!languageTouched && COUNTRY_LANG[country] && options.languages.includes(COUNTRY_LANG[country])) {
-    $('language').value = COUNTRY_LANG[country];
+  const suggested = (options.country_languages[country] || [])[0];
+  if (!languageTouched && suggested && options.languages.includes(suggested)) {
+    $('language').value = suggested;
     refreshPreview();
   }
   refreshNews();
@@ -309,7 +302,7 @@ function renderNewsLists() {
   $('news-city').replaceChildren(sourceRow('city', t('admin.news_city_desc')));
   $('news-country-title').textContent = t('admin.news_country', { country: regionName(country) });
   let mine = options.news.filter((s) => (s.countries || []).includes(country));
-  const region = (options.regions.africa || []).includes(country) ? 'africa' : (options.regions.latam || []).includes(country) ? 'latam' : null;
+  const region = options.region_of[country];
   if (region) mine = mine.concat(options.news.filter((s) => s.region === region));
   $('news-country').replaceChildren(...(mine.length ? mine.map((s) => sourceRow(s.id)) : [el('p', { className: 'hint', textContent: t('admin.news_none_country') })]));
   const world = options.news.filter((s) => s.scope === 'world').sort((a, b) => (a.lang !== base) - (b.lang !== base));
@@ -361,6 +354,57 @@ function renderNews() {
   refreshNews();
 }
 
+// ------------------------------------------------------------------ 7. screen ---
+function renderScreen() {
+  const screen = cfg.screen || { rotate: 0, off: '', on: '' };
+  fill($('rotate'), [0, 90, 180, 270].map((r) => [String(r), t(`admin.rotate_${r}`)]), String(screen.rotate || 0));
+  $('off-at').value = screen.off || '';
+  $('on-at').value = screen.on || '';
+}
+
+// ------------------------------------------------------------------ 8. system ---
+// Buttons that change the Pi ask for a second click instead of a pop-up.
+function armed(button, run) {
+  button.addEventListener('click', async () => {
+    if (!button.classList.contains('confirm')) {
+      const label = button.textContent;
+      button.classList.add('confirm');
+      button.textContent = t('admin.confirm');
+      setTimeout(() => { button.classList.remove('confirm'); button.textContent = label; }, 5000);
+      return;
+    }
+    button.classList.remove('confirm');
+    button.textContent = t(button.dataset.i18n);
+    await run();
+  });
+}
+async function renderSystem() {
+  const msg = $('sys-message');
+  try {
+    const info = await api('/system');
+    $('sys-version').textContent = t('admin.version', { v: info.version }) + (info.commit ? ` (${info.commit})` : '');
+    for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) $(id).disabled = !info.actions;
+    $('sys-screen').hidden = !info.screen;
+    if (!info.installed) msg.textContent = t('admin.not_installed');
+  } catch (e) { msg.textContent = e.message; }
+}
+async function checkUpdates() {
+  const msg = $('sys-message');
+  msg.textContent = '…';
+  try {
+    const r = await api('/system/latest');
+    if (!r.latest) { msg.textContent = t('admin.search_failed'); return; }
+    msg.textContent = r.update_available ? t('admin.update_available', { v: r.latest }) : t('admin.up_to_date');
+    $('sys-update').hidden = !r.update_available;
+  } catch (e) { msg.textContent = e.message; }
+}
+async function systemAction(action) {
+  try {
+    await api(`/system/${action}`, { method: 'POST' });
+    $('sys-message').textContent = t(`admin.requested_${action.replace('-', '_')}`);
+  } catch (e) { $('sys-message').textContent = e.message; }
+}
+
 // ------------------------------------------------------------------ save -----
 function collect() {
   const body = {
@@ -386,6 +430,7 @@ function collect() {
       feeds: [...$('feed-list').querySelectorAll('input')].map((i) => i.value.trim()).filter(Boolean),
     },
   };
+  body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
   return body;
@@ -421,7 +466,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -464,6 +509,8 @@ async function boot() {
   $('news-on').addEventListener('change', () => { $('news-body').hidden = !$('news-on').checked; });
   $('news-auto').addEventListener('change', () => { newsAuto = $('news-auto').checked; refreshNews(); });
   $('news-other-country').addEventListener('change', renderNewsLists);
+  $('sys-check').addEventListener('click', checkUpdates);
+  for (const id of ['sys-update', 'sys-screen', 'sys-reboot']) armed($(id), () => systemAction($(id).dataset.action));
   $('tz-device').addEventListener('click', () => {
     fill($('loc-tz'), [...$('loc-tz').options].map((o) => [o.value, o.value]), Intl.DateTimeFormat().resolvedOptions().timeZone);
     markDirty();

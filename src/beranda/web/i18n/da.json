@@ -1,0 +1,89 @@
+{
+  "today": "I dag",
+  "tomorrow": "I morgen",
+  "upcoming": "Snart",
+  "nothing_upcoming": "Intet planlagt",
+  "all_day": "hele dagen",
+  "loading": "Indlæser…",
+  "demo": "demo",
+  "offline": "offline",
+  "no_weather": "Vejret er ikke tilgængeligt",
+  "feels": "føles som",
+  "rain": {
+    "none": "Ingen regn de næste 2 timer",
+    "starts": "Regn om {min} min",
+    "starts_now": "Det begynder at regne",
+    "stops": "Det regner, stopper om {min} min",
+    "long": "Regn i mere end 2 timer",
+    "now": "nu",
+    "in2h": "+2 t"
+  },
+  "moon": {
+    "new": "Nymåne",
+    "waxing_crescent": "Tiltagende segl",
+    "first_quarter": "Første kvarter",
+    "waxing_gibbous": "Tiltagende måne",
+    "full": "Fuldmåne",
+    "waning_gibbous": "Aftagende måne",
+    "last_quarter": "Sidste kvarter",
+    "waning_crescent": "Aftagende segl",
+    "lit": "{pct} % oplyst",
+    "next_full": "Fuldmåne {date}",
+    "next_new": "Nymåne {date}"
+  },
+  "sun": {
+    "rise": "solopgang",
+    "set": "solnedgang"
+  },
+  "season": {
+    "in_days": "skifter om {n} dage",
+    "tomorrow": "skifter i morgen"
+  },
+  "kind": {
+    "holiday": "Helligdag",
+    "birth": "Fødselsdag",
+    "death": "Mindedag",
+    "anniversary": "Jubilæum",
+    "other": "Vigtig dato"
+  },
+  "seasons": {
+    "spring": "Forår",
+    "summer": "Sommer",
+    "autumn": "Efterår",
+    "winter": "Vinter"
+  },
+  "wmo": {
+    "0": "Skyfrit",
+    "1": "Overvejende klart",
+    "2": "Delvis skyet",
+    "3": "Overskyet",
+    "45": "Tåge",
+    "48": "Rimtåge",
+    "51": "Let støvregn",
+    "53": "Støvregn",
+    "55": "Tæt støvregn",
+    "56": "Isslag (støvregn)",
+    "57": "Kraftigt isslag (støvregn)",
+    "61": "Let regn",
+    "63": "Regn",
+    "65": "Kraftig regn",
+    "66": "Isslag",
+    "67": "Kraftigt isslag",
+    "71": "Let sne",
+    "73": "Sne",
+    "75": "Kraftig sne",
+    "77": "Kornsne",
+    "80": "Lette byger",
+    "81": "Byger",
+    "82": "Kraftige byger",
+    "85": "Snebyger",
+    "86": "Kraftige snebyger",
+    "95": "Tordenvejr",
+    "96": "Tordenvejr med hagl",
+    "99": "Kraftigt tordenvejr med hagl"
+  },
+  "setup": {
+    "title": "Indstil mig fra din telefon",
+    "text": "Scan koden, eller åbn adressen på en enhed på samme wi-fi:"
+  }
+}

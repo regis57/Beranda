@@ -65,6 +65,34 @@
     "brazil": {
       "name": "Brésil",
       "desc": "Vagues de Copacabana, vert et or, un dicton chaque jour."
+    },
+    "africa": {
+      "name": "Afrique",
+      "desc": "Bogolan et kente, un proverbe swahili chaque jour."
+    },
+    "arab": {
+      "name": "Monde arabe",
+      "desc": "Étoiles de zellige émeraude et or, la date de l'hégire."
+    },
+    "america": {
+      "name": "Amérique du Nord",
+      "desc": "Affiches des parcs nationaux, les noms des pleines lunes."
+    },
+    "india": {
+      "name": "Inde",
+      "desc": "Souci et indigo, la saison (ṛtu) et le jour lunaire (tithi)."
+    },
+    "china": {
+      "name": "Chine",
+      "desc": "Papier de riz et laque rouge, les 24 termes solaires et la date lunaire."
+    },
+    "oceania": {
+      "name": "Océanie",
+      "desc": "Tapa et lagon, les saisons tahitiennes des Pléiades."
+    },
+    "creole": {
+      "name": "Créole",
+      "desc": "Madras, carême ou hivernage, un proverbe créole."
     }
   },
   "calendar": "Votre agenda",
@@ -120,5 +148,28 @@
   "enter_pin": "Tapez le code PIN des réglages",
   "unlock": "Déverrouiller",
   "pin_wrong": "Code incorrect.",
-  "forbidden": "Ouvrez cette page depuis un téléphone ou un ordinateur connecté au même Wi-Fi que le miroir."
+  "forbidden": "Ouvrez cette page depuis un téléphone ou un ordinateur connecté au même Wi-Fi que le miroir.",
+  "screen": "Écran",
+  "screen_hint": "Tournez l'image pour un écran posé à la verticale, et éteignez l'écran la nuit.",
+  "screen_help": "Rotation : choisissez 90° ou 270° si l'écran est accroché en hauteur (portrait), 180° s'il est à l'envers. Heures de nuit : laissez les deux cases vides pour garder l'écran toujours allumé. Sur le Raspberry Pi, l'écran lui-même est éteint, ce qui économise l'énergie ; sur une tablette, la page devient simplement noire.",
+  "rotate": "Rotation",
+  "rotate_0": "Normale",
+  "rotate_90": "90° (vertical, tourné à droite)",
+  "rotate_180": "180° (à l'envers)",
+  "rotate_270": "270° (vertical, tourné à gauche)",
+  "off_at": "Éteindre à",
+  "on_at": "Rallumer à",
+  "system": "Système",
+  "version": "Beranda version {v}",
+  "check_updates": "Chercher une mise à jour",
+  "up_to_date": "Vous avez la dernière version.",
+  "update_available": "La version {v} est disponible.",
+  "update_now": "Mettre à jour",
+  "restart_screen": "Redémarrer l'écran",
+  "reboot": "Redémarrer le Raspberry Pi",
+  "confirm": "Cliquez encore pour confirmer",
+  "not_installed": "Installé à la main : ces boutons ne marchent qu'après une installation avec install.sh (voir le README).",
+  "requested_update": "Mise à jour en cours… la page revient dans une à deux minutes.",
+  "requested_restart_screen": "L'écran redémarre.",
+  "requested_reboot": "Le Raspberry Pi redémarre. Revenez sur cette page dans une minute."
 }

@@ -1,0 +1,89 @@
+{
+  "today": "Danas",
+  "tomorrow": "Sutra",
+  "upcoming": "Uskoro",
+  "nothing_upcoming": "Ništa nije planirano",
+  "all_day": "cijeli dan",
+  "loading": "Učitavanje…",
+  "demo": "demo",
+  "offline": "izvan mreže",
+  "no_weather": "Vrijeme nije dostupno",
+  "feels": "osjećaj",
+  "rain": {
+    "none": "Bez kiše u sljedeća 2 sata",
+    "starts": "Kiša za {min} min",
+    "starts_now": "Počinje kiša",
+    "stops": "Pada kiša, prestaje za {min} min",
+    "long": "Kiša dulje od 2 sata",
+    "now": "sada",
+    "in2h": "+2 h"
+  },
+  "moon": {
+    "new": "Mlađak",
+    "waxing_crescent": "Rastući srp",
+    "first_quarter": "Prva četvrt",
+    "waxing_gibbous": "Rastući mjesec",
+    "full": "Uštap",
+    "waning_gibbous": "Opadajući mjesec",
+    "last_quarter": "Zadnja četvrt",
+    "waning_crescent": "Opadajući srp",
+    "lit": "Osvijetljeno {pct} %",
+    "next_full": "Uštap {date}",
+    "next_new": "Mlađak {date}"
+  },
+  "sun": {
+    "rise": "izlazak",
+    "set": "zalazak"
+  },
+  "season": {
+    "in_days": "mijenja se za {n} dana",
+    "tomorrow": "mijenja se sutra"
+  },
+  "kind": {
+    "holiday": "Blagdan",
+    "birth": "Rođendan",
+    "death": "Sjećanje",
+    "anniversary": "Godišnjica",
+    "other": "Važan datum"
+  },
+  "seasons": {
+    "spring": "Proljeće",
+    "summer": "Ljeto",
+    "autumn": "Jesen",
+    "winter": "Zima"
+  },
+  "wmo": {
+    "0": "Vedro",
+    "1": "Pretežno vedro",
+    "2": "Djelomično oblačno",
+    "3": "Oblačno",
+    "45": "Magla",
+    "48": "Ledena magla",
+    "51": "Slaba rosulja",
+    "53": "Rosulja",
+    "55": "Jaka rosulja",
+    "56": "Ledena rosulja",
+    "57": "Jaka ledena rosulja",
+    "61": "Slaba kiša",
+    "63": "Kiša",
+    "65": "Jaka kiša",
+    "66": "Ledena kiša",
+    "67": "Jaka ledena kiša",
+    "71": "Slab snijeg",
+    "73": "Snijeg",
+    "75": "Jak snijeg",
+    "77": "Zrnati snijeg",
+    "80": "Slabi pljuskovi",
+    "81": "Pljuskovi",
+    "82": "Jaki pljuskovi",
+    "85": "Snježni pljuskovi",
+    "86": "Jaki snježni pljuskovi",
+    "95": "Grmljavina",
+    "96": "Grmljavina s tučom",
+    "99": "Jaka grmljavina s tučom"
+  },
+  "setup": {
+    "title": "Postavite me s mobitela",
+    "text": "Skenirajte kod ili otvorite ovu adresu na uređaju u istoj Wi-Fi mreži:"
+  }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Write docs/COUNTRIES.md: what Beranda covers in Latin America and Africa.
+"""Write docs/COUNTRIES.md: what Beranda covers, country by country, for every continent.
 
-Generated from the code (holiday data, languages, news catalog) so it never drifts:
+Generated from the code (countries table, holiday data, news catalog) so it never drifts:
     python scripts/countries_doc.py
 """
 
@@ -10,49 +10,43 @@ from __future__ import annotations
 from pathlib import Path
 
 import holidays
+from holidays.registry import COUNTRIES as HOLIDAY_REGISTRY
 
 from beranda.config import SUNDAY_FIRST
-from beranda.providers import news_catalog
+from beranda.providers import countries, news_catalog
 from beranda.providers.specialdays import holiday_language
 
-NAMES = {
-    # Latin America and the Caribbean
-    "AR": "Argentina", "BO": "Bolivia", "BR": "Brazil", "CL": "Chile", "CO": "Colombia",
-    "CR": "Costa Rica", "CU": "Cuba", "DO": "Dominican Republic", "EC": "Ecuador",
-    "SV": "El Salvador", "GT": "Guatemala", "HN": "Honduras", "MX": "Mexico", "NI": "Nicaragua",
-    "PA": "Panama", "PY": "Paraguay", "PE": "Peru", "PR": "Puerto Rico", "UY": "Uruguay",
-    "VE": "Venezuela", "HT": "Haiti",
-    # Africa
-    "DZ": "Algeria", "AO": "Angola", "BJ": "Benin", "BW": "Botswana", "BF": "Burkina Faso",
-    "BI": "Burundi", "CV": "Cabo Verde", "CM": "Cameroon", "CF": "Central African Republic",
-    "TD": "Chad", "KM": "Comoros", "CG": "Congo", "CD": "Congo (DR)", "CI": "Côte d'Ivoire",
-    "DJ": "Djibouti", "EG": "Egypt", "GQ": "Equatorial Guinea", "ER": "Eritrea", "SZ": "Eswatini",
-    "ET": "Ethiopia", "GA": "Gabon", "GM": "Gambia", "GH": "Ghana", "GN": "Guinea",
-    "GW": "Guinea-Bissau", "KE": "Kenya", "LS": "Lesotho", "LR": "Liberia", "LY": "Libya",
-    "MG": "Madagascar", "MW": "Malawi", "ML": "Mali", "MR": "Mauritania", "MU": "Mauritius",
-    "MA": "Morocco", "MZ": "Mozambique", "NA": "Namibia", "NE": "Niger", "NG": "Nigeria",
-    "RW": "Rwanda", "ST": "São Tomé and Príncipe", "SN": "Senegal", "SC": "Seychelles",
-    "SL": "Sierra Leone", "SO": "Somalia", "ZA": "South Africa", "SS": "South Sudan",
-    "SD": "Sudan", "TZ": "Tanzania", "TG": "Togo", "TN": "Tunisia", "UG": "Uganda",
-    "ZM": "Zambia", "ZW": "Zimbabwe", "EH": "Western Sahara",
+LANGUAGE_NAMES = {
+    "en": "English", "fr": "French", "de": "German", "es": "Spanish", "it": "Italian",
+    "pt": "Portuguese", "pt-BR": "Brazilian Portuguese", "nl": "Dutch", "ca": "Catalan",
+    "da": "Danish", "sv": "Swedish", "nb": "Norwegian", "fi": "Finnish", "pl": "Polish",
+    "cs": "Czech", "sk": "Slovak", "sl": "Slovenian", "hr": "Croatian", "sr": "Serbian",
+    "bg": "Bulgarian", "ro": "Romanian", "hu": "Hungarian", "el": "Greek", "lt": "Lithuanian",
+    "lv": "Latvian", "et": "Estonian", "uk": "Ukrainian", "ru": "Russian", "tr": "Turkish",
+    "ar": "Arabic", "he": "Hebrew", "fa": "Persian", "ur": "Urdu", "hi": "Hindi", "bn": "Bengali",
+    "zh": "Chinese (simplified)", "zh-TW": "Chinese (traditional)", "ja": "Japanese",
+    "ko": "Korean", "th": "Thai", "vi": "Vietnamese", "ms": "Malay", "id": "Indonesian",
+    "tl": "Filipino", "sw": "Swahili", "am": "Amharic", "af": "Afrikaans", "ht": "Haitian Creole",
 }
+RTL = {"ar", "he", "fa", "ur"}
+# Countries the holidays library does not name (territories) or names awkwardly.
+EXTRA_NAMES = {
+    "CI": "Côte d'Ivoire", "CD": "Congo (DR)", "CG": "Congo", "KP": "Korea (North)",
+    "KR": "Korea (South)", "GB": "United Kingdom", "US": "United States", "RE": "Réunion",
+    "YT": "Mayotte", "SH": "Saint Helena", "BL": "Saint Barthélemy", "MF": "Saint Martin",
+    "PM": "Saint Pierre and Miquelon", "TL": "Timor-Leste", "PS": "Palestine", "XK": "Kosovo",
+    "EH": "Western Sahara", "CX": "Christmas Island", "CC": "Cocos Islands",
+}
+REGION_ORDER = ("europe", "north_america", "latam", "africa", "middle_east", "asia", "oceania")
 
-# Display languages that make sense in each country, best first. The settings page suggests
-# the first one; any of the 13 languages can be chosen anywhere.
-LANGS = {
-    "AR": "es", "BO": "es", "BR": "pt-BR", "CL": "es", "CO": "es", "CR": "es", "CU": "es",
-    "DO": "es", "EC": "es", "SV": "es", "GT": "es", "HN": "es", "MX": "es", "NI": "es", "PA": "es",
-    "PY": "es", "PE": "es", "PR": "es, en", "UY": "es", "VE": "es", "HT": "fr",
-    "DZ": "ar, fr", "AO": "pt", "BJ": "fr", "BW": "en", "BF": "fr", "BI": "fr, sw, en",
-    "CV": "pt", "CM": "fr, en", "CF": "fr", "TD": "fr, ar", "KM": "fr, ar", "CG": "fr",
-    "CD": "fr, sw", "CI": "fr", "DJ": "fr, ar", "EG": "ar, en", "GQ": "es, fr, pt", "ER": "ar, en",
-    "SZ": "en", "ET": "am, en", "GA": "fr", "GM": "en", "GH": "en", "GN": "fr", "GW": "pt",
-    "KE": "sw, en", "LS": "en", "LR": "en", "LY": "ar", "MG": "fr", "MW": "en", "ML": "fr",
-    "MR": "ar, fr", "MU": "en, fr", "MA": "ar, fr", "MZ": "pt", "NA": "en, af", "NE": "fr",
-    "NG": "en", "RW": "en, fr, sw", "ST": "pt", "SN": "fr", "SC": "en, fr", "SL": "en",
-    "SO": "ar, en", "ZA": "en, af", "SS": "en, ar", "SD": "ar, en", "TZ": "sw, en", "TG": "fr",
-    "TN": "ar, fr", "UG": "en, sw", "ZM": "en", "ZW": "en", "EH": "ar, es",
-}
+
+def name_of(code: str) -> str:
+    if code in EXTRA_NAMES:
+        return EXTRA_NAMES[code]
+    for key, entry in HOLIDAY_REGISTRY.items():
+        if entry[1] == code:
+            return key.replace("_", " ").title()
+    return code
 
 
 def holiday_cell(code: str) -> str:
@@ -60,8 +54,7 @@ def holiday_cell(code: str) -> str:
         holidays.country_holidays(code, years=2026)
     except NotImplementedError:
         return "–"
-    first = LANGS[code].split(", ")[0]
-    lang = holiday_language(code, first)
+    lang = holiday_language(code, countries.suggested_language(code))
     return f"yes ({lang})" if lang else "yes"
 
 
@@ -69,58 +62,64 @@ def news_cell(code: str) -> str:
     mine = [s["name"] for s in news_catalog.national(code)]
     if mine:
         return ", ".join(mine)
-    region = news_catalog.region_of(code)
-    first = LANGS[code].split(", ")[0].split("-")[0]
+    region = countries.REGION_OF.get(code)
+    first = countries.suggested_language(code).split("-")[0]
     regional = [s for s in news_catalog.SOURCES if s.get("region") == region]
     regional = [s["name"] for s in sorted(regional, key=lambda s: s["lang"] != first)]
-    return "regional: " + ", ".join(regional[:3]) if regional else "–"
+    return "regional: " + ", ".join(regional[:2]) if regional else "international"
 
 
 def table(codes: list[str]) -> list[str]:
     rows = ["| Country | Code | Display language(s) | Public holidays (names in) | Week starts | Preset news |",
             "|---|---|---|---|---|---|"]
-    for code in sorted(codes, key=lambda c: NAMES[c]):
+    for code in sorted(codes, key=name_of):
+        langs = ", ".join(countries.COUNTRY_LANGUAGES[code])
         start = "Sunday" if code in SUNDAY_FIRST else "Monday"
-        rows.append(f"| {NAMES[code]} | {code} | {LANGS[code]} | {holiday_cell(code)} | {start} | {news_cell(code)} |")
+        rows.append(f"| {name_of(code)} | {code} | {langs} | {holiday_cell(code)} | {start} | {news_cell(code)} |")
     return rows
 
 
 def main() -> None:
-    latam = [c for c in NAMES if c in news_catalog.LATAM]
-    africa = [c for c in NAMES if c in news_catalog.AFRICA]
+    by_region: dict[str, list[str]] = {r: [] for r in REGION_ORDER}
+    for code, region in countries.REGION_OF.items():
+        by_region[region].append(code)
+    langs = ", ".join(f"{LANGUAGE_NAMES[c]}{' (right to left)' if c in RTL else ''} `{c}`" for c in countries.LANGUAGES)
     lines = [
-        "# Countries and languages: Latin America and Africa",
+        "# Countries and languages",
         "",
-        "*This page is generated by `scripts/countries_doc.py` from the code itself.*",
+        "*Generated by `scripts/countries_doc.py` from the code itself.*",
         "",
-        "Every country in the world works with Beranda: weather, moon, sun and town search are",
-        "global. What changes from one country to another is listed here:",
+        (
+            f"Beranda knows **{len(countries.REGION_OF)} countries and territories** on every continent, "
+            f"and speaks **{len(countries.LANGUAGES)} languages**. Weather, moon, sun, town search and"
+        ),
+        "\"news about my town\" work everywhere. What changes from one country to another:",
         "",
-        "- **Display language**: Beranda speaks 13 languages: English, French, German, Spanish,",
-        "  Italian, Portuguese, Brazilian Portuguese, Japanese, Indonesian, Arabic (right to left),",
-        "  Swahili, Amharic and Afrikaans. The settings page suggests the first language listed",
-        "  below when you pick the country; you can always pick another one.",
-        "- **Public holidays**: from the open-source `holidays` library. The language in brackets is",
-        "  the one used for holiday names with the suggested display language.",
-        "- **Preset news**: media Beranda proposes for that country. \"regional\" means the country",
-        "  has no preset media yet and Beranda proposes continental ones. In every country you can",
-        "  add any RSS feed yourself, and \"News about my town\" works everywhere.",
+        "- **Display language(s)**: the first one is suggested when you pick the country; any",
+        "  language can be chosen anywhere. Where Beranda does not speak the local language yet,",
+        "  the language people commonly read there is suggested (often English or French).",
+        "- **Public holidays**: from the open-source `holidays` library; in brackets, the language of",
+        "  the holiday names with the suggested display language.",
+        "- **Preset news**: media Beranda proposes. \"regional\" means continental media are proposed",
+        "  instead; you can add any RSS feed yourself in every country.",
         "",
-        "Languages not yet translated (Hausa, Yoruba, Zulu, Somali, Malagasy, Kinyarwanda, Wolof,",
-        "Haitian Creole, Guarani, Quechua...) are welcome as contributions: one JSON file each.",
+        f"**Languages**: {langs}.",
         "",
-        "## Latin America and the Caribbean",
+        "The settings page itself is in English, French, German, Spanish, Italian, Portuguese,",
+        "Brazilian Portuguese, Indonesian, Arabic and Swahili; for the other languages it shows",
+        "English while the screen speaks your language.",
         "",
-        *table(latam),
-        "",
-        "## Africa",
-        "",
-        *table(africa),
+        "Not translated yet (contributions welcome, one JSON file each): Hausa, Yoruba, Zulu,",
+        "Somali, Malagasy, Kinyarwanda, Wolof, Tamil, Nepali, Khmer, Lao, Burmese, Sinhala,",
+        "Georgian, Armenian, Azerbaijani, Kazakh, Uzbek, Mongolian, Albanian, Macedonian,",
+        "Icelandic, Irish, Maltese, Māori, Tahitian, Samoan, Tongan, Fijian, Quechua, Guarani.",
         "",
     ]
+    for region in REGION_ORDER:
+        lines += [f"## {countries.REGION_NAMES[region]}", "", *table(by_region[region]), ""]
     out = Path(__file__).resolve().parent.parent / "docs" / "COUNTRIES.md"
     out.write_text("\n".join(lines), encoding="utf-8")
-    print("wrote", out)
+    print("wrote", out, len(countries.REGION_OF), "countries")
 
 
 if __name__ == "__main__":

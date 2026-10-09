@@ -1,0 +1,33 @@
+/* Theme "america" (National Parks): the screen-printed posters of the 1930s parks, cream
+   paper, forest green and sunset orange, a mountain skyline. The season block names the
+   next full moon the way North American almanacs do (Hunter's Moon, Cold Moon...). */
+
+:root {
+  --f-sans: "Noto Sans", "Noto Sans CJK JP", "Helvetica Neue", system-ui, sans-serif;
+  --f-display: "Noto Sans", "Noto Sans CJK JP", system-ui, sans-serif;
+  --f-serif: "Noto Serif", "Noto Serif CJK JP", "DejaVu Serif", Georgia, serif;
+  --clock-weight: 600;
+  --glyph-writing: horizontal-tb;
+}
+:root, :root[data-mode="light"] {
+  --bg: #f2e8d2; --ink: #1f2b23; --ink-2: rgba(31, 43, 35, 0.72); --ink-3: rgba(31, 43, 35, 0.48);
+  --line: rgba(31, 43, 35, 0.17); --accent: #c4512a; --forest: #2f5d3a; --rain: #2b5c8a;
+  --warm: #d3692f; --cool: #4d7fae; --moon-lit: #1f2b23; --moon-dark: rgba(31, 43, 35, 0.09);
+  --ornament: url("/static/themes/mountains.svg");
+}
+:root[data-mode="night"] {
+  --bg: #0d1410; --ink: rgba(240, 230, 208, 0.86); --ink-2: rgba(240, 230, 208, 0.6); --ink-3: rgba(240, 230, 208, 0.38);
+  --line: rgba(240, 230, 208, 0.13); --accent: #d27a52; --forest: #5f8f6a; --rain: #6f9bc8;
+  --warm: #bf6f45; --cool: #4f7499; --moon-lit: #f0e6d0; --moon-dark: rgba(240, 230, 208, 0.08);
+}
+.time { letter-spacing: -0.02em; }
+.date { text-transform: uppercase; letter-spacing: 0.14em; font-size: 1.2rem; }
+.season { flex: 1 1 0; position: relative; padding: 2.2rem 0.2rem 0.3rem; align-items: center; }
+.season::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1.8rem;
+  background: var(--ornament) left bottom / auto 100% repeat-x; opacity: 0.8; }
+:root[data-mode="night"] .season::before { opacity: 0.35; filter: invert(1); }
+.season-kanji { display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 50%;
+  font-size: 1.7rem; font-weight: 700; color: var(--bg); background: var(--accent); letter-spacing: 0; }
+.seal { display: none; }
+.season-name { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--forest); }
+.season-romaji { font-family: var(--f-serif); font-size: 0.95rem; color: var(--ink-2); max-width: none; }

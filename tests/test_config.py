@@ -49,3 +49,10 @@ def test_load_reads_toml(tmp_path):
     path.write_text('country = "JP"\nlanguage = "ja"\n[location]\nname = "Kyoto"\nlatitude = 35.01\nlongitude = 135.77\ntimezone = "Asia/Tokyo"\n')
     cfg = config.load(path)
     assert cfg.location.name == "Kyoto" and cfg.week_start == 6
+
+
+def test_a_config_path_that_does_not_exist_yet_gives_the_defaults(tmp_path, monkeypatch):
+    from beranda import config as cfgmod
+
+    monkeypatch.setenv("BERANDA_CONFIG", str(tmp_path / "not-yet.toml"))
+    assert cfgmod.load().location.name == "Metz"
