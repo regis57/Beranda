@@ -433,6 +433,17 @@ def create_app(
         data = await build_state(runtime.cfg, cache, clock(), theme, setup_info())
         return JSONResponse(data, headers={"Cache-Control": "no-store"})
 
+    @app.post("/api/report")
+    async def report(request: Request, body: dict) -> JSONResponse:
+        """The display page tells what went wrong on its side (microphone, page errors), for the
+        diagnostic file. Home network only, a short line, nothing else is kept."""
+        from .admin import _is_local
+
+        if not _is_local(request.client.host if request.client else None):
+            return JSONResponse({"detail": "home network only"}, status_code=403)
+        diagnostics.note_display(str(body.get("event", ""))[:200], request.headers.get("user-agent", ""))
+        return JSONResponse({"ok": True})
+
     @app.post("/api/voice")
     async def voice(body: dict) -> JSONResponse:
         """A sentence heard by the tablet's microphone -> what to say back and what to do."""

@@ -68,6 +68,36 @@ def site(url: str) -> str:
     return (urlparse(url.strip()).hostname or "?") if url.strip() else ""
 
 
+# ------------------------------------------------------------------ what the screens tell ---
+# The display page (the mirror, a tablet...) reports what goes wrong there, such as a microphone
+# that cannot be used, so the diagnostic file made from the settings page can show it too.
+_display: collections.deque[str] = collections.deque(maxlen=40)
+
+
+def note_display(event: str, browser: str) -> None:
+    when = datetime.now().astimezone().strftime("%H:%M:%S")
+    _display.append(f"{when} {scrub(event)[:200]}   [{_short_browser(browser)}]")
+
+
+def _short_browser(agent: str) -> str:
+    """'Edge 154 on Windows' rather than the whole user-agent line."""
+    agent = agent or ""
+    for name, mark in (("Edge", "Edg/"), ("Opera", "OPR/"), ("Samsung", "SamsungBrowser/"), ("Firefox", "Firefox/"),
+                       ("Chrome", "Chrome/"), ("Safari", "Version/")):
+        if mark in agent:
+            version = agent.split(mark, 1)[1].split(".", 1)[0]
+            break
+    else:
+        name, version = "browser", "?"
+    system_name = next((s for s, m in (("Windows", "Windows"), ("Android", "Android"), ("iPad", "iPad"), ("iPhone", "iPhone"),
+                                       ("macOS", "Mac OS"), ("Linux", "Linux")) if m in agent), "?")
+    return f"{name} {version} on {system_name}"
+
+
+def display_lines() -> list[str]:
+    return list(_display) or ["nothing reported"]
+
+
 # ------------------------------------------------------------------ the device ---
 def _read(path: str) -> str:
     try:
@@ -221,6 +251,9 @@ def build(cfg: Config, *, runtime_info: dict, state: dict | None, state_problem:
         "",
         "== WHAT THE DISPLAY SHOWS NOW ==",
         *state_lines(state, state_problem),
+        "",
+        "== WHAT THE SCREENS REPORTED (microphone, page errors; newest last) ==",
+        *display_lines(),
         "",
         "== THE BROWSER OF THE SETTINGS PAGE ==",
         *client_lines(client),

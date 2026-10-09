@@ -81,6 +81,8 @@ Done:
   adds a short reason code
 - **v0.15.4**: a warnings area saved for another town is spotted when the settings page opens
   ("does not match your town"), with a one-tap fix (found thanks to the diagnostic file)
+- **v0.15.5**: the screen reports what goes wrong on its side (microphone result, page errors) and the
+  diagnostic file shows it, with the browser of that screen
 
 Next:
 
