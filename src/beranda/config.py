@@ -30,6 +30,17 @@ class Location:
 
 
 @dataclass(frozen=True)
+class Station:
+    """A radio station the user picked as a favourite, kept as given by Radio Browser."""
+
+    uuid: str
+    name: str
+    url: str
+    favicon: str = ""
+    country: str = ""
+
+
+@dataclass(frozen=True)
 class KeyDate:
     """A personal date shown on the calendar: birth, death, anniversary, other."""
 
@@ -65,6 +76,8 @@ class Config:
     photos_folder: str = ""  # local folder of pictures ("" = carousel disabled); fill it with
     # rclone or Syncthing so photos from a phone or a cloud account land here on their own
     photos_interval: int = 20  # seconds a photo stays full-screen before the dashboard returns
+    radio_stations: tuple[Station, ...] = ()  # favourites, picked on the settings page
+    radio_volume: int = 70  # 0-100
 
     @property
     def week_start(self) -> int:
@@ -87,6 +100,19 @@ def _parse_key_date(raw: dict) -> KeyDate:
     if kind not in {"birth", "death", "anniversary", "other"}:
         raise ValueError(f"unknown key date kind: {kind!r}")
     return KeyDate(month=month, day=day, label=str(raw["label"]), kind=kind, year=year)
+
+
+def _parse_station(raw: dict) -> Station:
+    url = str(raw.get("url", "")).strip()
+    if not url.lower().startswith(("http://", "https://")):
+        raise ValueError(f"a radio station needs a stream url, got {url[:60]!r}")
+    return Station(
+        uuid=str(raw.get("uuid", "")),
+        name=str(raw.get("name", "")).strip() or "?",
+        url=url,
+        favicon=str(raw.get("favicon", "")),
+        country=str(raw.get("country", "")),
+    )
 
 
 def normalise_language(raw: object) -> str:
@@ -156,6 +182,7 @@ def from_dict(data: dict) -> Config:
     news = data.get("news", {})
     screen = data.get("screen", {})
     photos = data.get("photos", {})
+    radio = data.get("radio", {})
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -181,6 +208,8 @@ def from_dict(data: dict) -> Config:
         screen_on=_check_hhmm(screen.get("on", "")),
         photos_folder=str(photos.get("folder", "")).strip(),
         photos_interval=_check_interval(photos.get("interval"), 5, Config.photos_interval),
+        radio_stations=tuple(_parse_station(s) for s in radio.get("stations", [])),
+        radio_volume=max(0, min(100, int(radio.get("volume", Config.radio_volume)))),
     )
 
 
@@ -234,6 +263,13 @@ def to_dict(cfg: Config) -> dict:
     out["news"] = news
     out["screen"] = {"rotate": cfg.screen_rotate, "off": cfg.screen_off, "on": cfg.screen_on}
     out["photos"] = {"folder": cfg.photos_folder, "interval": cfg.photos_interval}
+    out["radio"] = {
+        "stations": [
+            {"uuid": s.uuid, "name": s.name, "url": s.url, "favicon": s.favicon, "country": s.country}
+            for s in cfg.radio_stations
+        ],
+        "volume": cfg.radio_volume,
+    }
     if cfg.subdivision:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:

@@ -62,7 +62,7 @@ fi
 
 # ------------------------------------------------------------------ 1. packages ---
 say "1/4 Installing system packages (this can take a few minutes on a Raspberry Pi)"
-packages=(git curl python3 python3-venv python3-pip avahi-daemon fonts-noto-core fonts-noto-cjk)
+packages=(git curl python3 python3-venv python3-pip avahi-daemon fonts-noto-core fonts-noto-cjk mpv)
 if [ "$SCREEN" = 1 ]; then
     packages+=(cage wlr-randr)
     # Raspberry Pi OS calls its Chromium "chromium-browser"; Debian and Ubuntu call it "chromium".
@@ -76,8 +76,8 @@ say "2/4 Creating the '$USER_NAME' user"
 if ! id "$USER_NAME" >/dev/null 2>&1; then
     run useradd --system --home-dir "$STATEDIR" --create-home --shell /usr/sbin/nologin "$USER_NAME"
 fi
-# video/render: draw on the screen; input: the touch screen, if any.
-for group in video render input; do
+# video/render: draw on the screen; input: the touch screen, if any; audio: play radio.
+for group in video render input audio; do
     if getent group "$group" >/dev/null; then run usermod -aG "$group" "$USER_NAME"; fi
 done
 run install -d -m 0750 -o "$USER_NAME" -g "$USER_NAME" "$CONFDIR" "$STATEDIR" "$STATEDIR/requests"

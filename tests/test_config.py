@@ -37,11 +37,29 @@ def test_from_dict_full():
         {"key_dates": [{"date": "13-40", "label": "x"}]},
         {"key_dates": [{"date": "banana", "label": "x"}]},
         {"key_dates": [{"date": "03-14", "label": "x", "kind": "party"}]},
+        {"radio": {"stations": [{"uuid": "u1", "name": "x", "url": "not-a-url"}]}},
     ],
 )
 def test_invalid_values_are_rejected(bad):
     with pytest.raises((ValueError, KeyError)):
         config.from_dict(bad)
+
+
+def test_radio_defaults_and_round_trip():
+    cfg = config.Config()
+    assert cfg.radio_stations == () and cfg.radio_volume == 70
+
+    cfg = config.from_dict(
+        {
+            "radio": {
+                "stations": [{"uuid": "u1", "name": " France Musique ", "url": "https://stream/live"}],
+                "volume": 150,  # clamped
+            }
+        }
+    )
+    assert cfg.radio_stations[0].name == "France Musique"
+    assert cfg.radio_volume == 100
+    assert config.to_dict(cfg)["radio"]["stations"][0]["uuid"] == "u1"
 
 
 def test_load_reads_toml(tmp_path):

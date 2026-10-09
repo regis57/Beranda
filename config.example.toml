@@ -48,6 +48,15 @@ enabled = true
 # folder = "/home/pi/Pictures/beranda"
 # interval = 20   # seconds each photo stays on screen
 
+# World radio: favourite stations picked from the settings page (search Radio Browser, add
+# the ones you like). Plays through `mpv` on the Pi itself, not through the browser.
+# [radio]
+# volume = 70   # 0-100
+# [[radio.stations]]
+# uuid = "9617a958-0601-11e8-ae97-52543be04c81"
+# name = "France Inter"
+# url = "https://icecast.radiofrance.fr/franceinter-midfi.mp3"
+
 # Optional: a PIN for the /admin page. That page only opens from your home network anyway.
 # [admin]
 # pin = "2468"
