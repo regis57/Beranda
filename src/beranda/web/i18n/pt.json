@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Configure-me a partir do telemóvel",
-    "text": "Leia este código ou abra este endereço num dispositivo ligado à mesma rede Wi-Fi:"
+    "text": "Leia este código ou abra este endereço num dispositivo ligado à mesma rede Wi-Fi:",
+    "wifi_title": "Ainda sem Wi-Fi? Junte-se ao meu",
+    "wifi_text": "Digitalize este código para se juntar à rede Wi-Fi \"{ssid}\" com o seu telefone e depois siga a página que se abre para escolher o seu próprio Wi-Fi."
   }
 }

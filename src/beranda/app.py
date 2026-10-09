@@ -249,7 +249,7 @@ async def build_state(
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.
-        "setup": setup or {"needed": False, "urls": []},
+        "setup": setup or {"needed": False, "urls": [], "wifi": None},
         "window": {"start": start.isoformat(), "end": end.isoformat()},
         "stale": stale,
         "errors": errors,
@@ -281,7 +281,10 @@ def create_app(
             and runtime.config_path is not None
             and not runtime.config_path.exists()
         )
-        return {"needed": needed, "urls": system.lan_addresses(runtime.cfg.port)}
+        wifi = None if runtime.cfg.demo else system.wifi_setup_status()
+        # No network at all yet: the LAN address above cannot work, so show the Wi-Fi network
+        # to join instead (the beranda-wifi-setup service, if installed, opens it automatically).
+        return {"needed": needed or bool(wifi), "urls": system.lan_addresses(runtime.cfg.port), "wifi": wifi}
 
     @app.get("/api/screen")
     async def screen() -> dict:
@@ -295,6 +298,19 @@ def create_app(
 
         urls = system.lan_addresses(runtime.cfg.port) or ["http://localhost:8080/admin"]
         qr = segno.make(urls[-1], error="m")  # the numeric address works even without .local
+        buffer = io.BytesIO()
+        qr.save(buffer, kind="svg", scale=8, border=2, dark="#111111", light="#ffffff", xmldecl=False)
+        return Response(buffer.getvalue(), media_type="image/svg+xml", headers={"Cache-Control": "no-store"})
+
+    @app.get("/api/setup-wifi-qr.svg")
+    async def setup_wifi_qr() -> Response:
+        """A QR code a phone's camera turns straight into "join this Wi-Fi network" - the
+        standard WIFI: format every phone already understands, no app needed."""
+        import segno
+
+        wifi = system.wifi_setup_status() or {}
+        ssid = str(wifi.get("ssid") or "Beranda setup").replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,")
+        qr = segno.make(f"WIFI:T:nopass;S:{ssid};;", error="m")
         buffer = io.BytesIO()
         qr.save(buffer, kind="svg", scale=8, border=2, dark="#111111", light="#ffffff", xmldecl=False)
         return Response(buffer.getvalue(), media_type="image/svg+xml", headers={"Cache-Control": "no-store"})

@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Cài đặt từ điện thoại của bạn",
-    "text": "Quét mã này, hoặc mở địa chỉ này trên thiết bị cùng mạng Wi-Fi:"
+    "text": "Quét mã này, hoặc mở địa chỉ này trên thiết bị cùng mạng Wi-Fi:",
+    "wifi_title": "Chưa có Wi-Fi? Hãy tham gia mạng của tôi",
+    "wifi_text": "Quét mã này bằng điện thoại để tham gia mạng Wi-Fi \"{ssid}\", sau đó làm theo trang mở ra để chọn Wi-Fi của riêng bạn."
   }
 }

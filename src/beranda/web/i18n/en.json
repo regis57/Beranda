@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Set me up from your phone",
-    "text": "Scan this code, or open this address on a phone or computer connected to the same Wi-Fi:"
+    "text": "Scan this code, or open this address on a phone or computer connected to the same Wi-Fi:",
+    "wifi_title": "No Wi-Fi yet? Join mine",
+    "wifi_text": "Scan this code to join the Wi-Fi network \"{ssid}\" with your phone, then follow the page that opens to pick your own Wi-Fi."
   }
 }

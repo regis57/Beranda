@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Niweke kwa simu yako",
-    "text": "Changanua msimbo huu, au fungua anwani hii kwenye kifaa kilicho kwenye Wi-Fi ileile:"
+    "text": "Changanua msimbo huu, au fungua anwani hii kwenye kifaa kilicho kwenye Wi-Fi ileile:",
+    "wifi_title": "Bado hauna Wi-Fi? Jiunge na yangu",
+    "wifi_text": "Changanua msimbo huu kwa simu yako kujiunga na mtandao wa Wi-Fi \"{ssid}\", kisha fuata ukurasa utakaofunguka ili kuchagua Wi-Fi yako mwenyewe."
   }
 }

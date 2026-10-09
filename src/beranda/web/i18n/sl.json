@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Nastavite me s telefonom",
-    "text": "Skenirajte kodo ali odprite ta naslov na napravi v istem omrežju Wi-Fi:"
+    "text": "Skenirajte kodo ali odprite ta naslov na napravi v istem omrežju Wi-Fi:",
+    "wifi_title": "Še brez Wi-Fi-ja? Pridružite se mojemu",
+    "wifi_text": "Skenirajte to kodo s telefonom, da se povežete z omrežjem Wi-Fi \"{ssid}\", nato na strani, ki se odpre, izberite svoj Wi-Fi."
   }
 }

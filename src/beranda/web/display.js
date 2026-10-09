@@ -522,9 +522,18 @@ function renderPhotos() {
 
 // ---------------------------------------------------------------- first start ---------
 function renderSetup() {
-  const setup = state.setup || { needed: false, urls: [] };
+  const setup = state.setup || { needed: false, urls: [], wifi: null };
   const show = setup.needed || params.get('setup') === 'preview';  // ?setup=preview: see the card
-  $('setup').hidden = !show;
+  // No network at all yet: show "join this Wi-Fi" instead of a LAN address, since there isn't one.
+  const wifiShow = show && !!setup.wifi;
+  $('setup-wifi').hidden = !wifiShow;
+  $('setup').hidden = !show || wifiShow;
+  if (wifiShow) {
+    $('setup-wifi-title').textContent = t('setup.wifi_title');
+    $('setup-wifi-help').textContent = t('setup.wifi_text', { ssid: setup.wifi.ssid });
+    if (!$('setup-wifi-qr').getAttribute('src')) $('setup-wifi-qr').setAttribute('src', '/api/setup-wifi-qr.svg');
+    return;
+  }
   if (!show) return;
   $('setup-title').textContent = t('setup.title');
   $('setup-help').textContent = t('setup.text');

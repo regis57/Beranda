@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Nastavte ma z telefónu",
-    "text": "Naskenujte kód alebo otvorte túto adresu na zariadení v tej istej Wi-Fi:"
+    "text": "Naskenujte kód alebo otvorte túto adresu na zariadení v tej istej Wi-Fi:",
+    "wifi_title": "Zatiaľ bez Wi-Fi? Pripojte sa k mojej sieti",
+    "wifi_text": "Naskenujte tento kód telefónom a pripojte sa k sieti Wi-Fi \"{ssid}\", potom na otvorenej stránke vyberte svoju vlastnú Wi-Fi."
   }
 }

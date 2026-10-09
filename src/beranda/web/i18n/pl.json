@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Skonfiguruj mnie z telefonu",
-    "text": "Zeskanuj kod lub otwórz ten adres na urządzeniu w tej samej sieci Wi-Fi:"
+    "text": "Zeskanuj kod lub otwórz ten adres na urządzeniu w tej samej sieci Wi-Fi:",
+    "wifi_title": "Jeszcze bez Wi-Fi? Połącz się z moją siecią",
+    "wifi_text": "Zeskanuj ten kod, aby połączyć telefon z siecią Wi-Fi \"{ssid}\", a następnie skorzystaj z otwartej strony, aby wybrać własną sieć Wi-Fi."
   }
 }

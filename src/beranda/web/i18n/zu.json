@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Ngilungise ngefoni yakho",
-    "text": "Skena lekhodi, noma uvule leli khelo kuma-foni noma ikhompyutha ekuWi-Fi efanayo:"
+    "text": "Skena lekhodi, noma uvule leli khelo kuma-foni noma ikhompyutha ekuWi-Fi efanayo:",
+    "wifi_title": "Awukabi na-Wi-Fi? Joyina eyami",
+    "wifi_text": "Skena lo khodi ngefoni yakho ukuze ujoyine inethiwekhi ye-Wi-Fi \"{ssid}\", bese ulandela ikhasi elivulekayo ukhethe i-Wi-Fi yakho."
   }
 }

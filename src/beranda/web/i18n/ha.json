@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Saita ni daga wayarka",
-    "text": "Ɗauki hoton nan, ko buɗe wannan adireshin a waya ko kwamfuta da ke kan Wi-Fi iri ɗaya:"
+    "text": "Ɗauki hoton nan, ko buɗe wannan adireshin a waya ko kwamfuta da ke kan Wi-Fi iri ɗaya:",
+    "wifi_title": "Har yanzu babu Wi-Fi? Haɗa da nawa",
+    "wifi_text": "Yi scan ɗin wannan lambar da wayarka don shiga hanyar sadarwar Wi-Fi \"{ssid}\", sannan bi shafin da zai buɗe don zaɓar Wi-Fi naka."
   }
 }

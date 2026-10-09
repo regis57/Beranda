@@ -17,6 +17,8 @@
 #   --source DIR       install from a local copy instead of downloading (for developers)
 #   --no-systemd       do not install the services (containers, tests)
 #   --with-voice       also prepare the optional offline voice-control service
+#   --with-wifi-setup  no Wi-Fi configured yet? let the Pi offer its own "Beranda setup"
+#                      Wi-Fi network to pick one from a phone, with no keyboard at all
 #   --dry-run          print what would be done, change nothing
 set -euo pipefail
 
@@ -29,6 +31,7 @@ USER_NAME="beranda"
 SCREEN=1
 SYSTEMD=1
 VOICE=0
+WIFI_SETUP=0
 DRY=0
 SOURCE=""
 NEW_HOSTNAME=""
@@ -43,12 +46,13 @@ while [ $# -gt 0 ]; do
         --no-screen) SCREEN=0 ;;
         --no-systemd) SYSTEMD=0 ;;
         --with-voice) VOICE=1 ;;
+        --with-wifi-setup) WIFI_SETUP=1 ;;
         --dry-run) DRY=1 ;;
         --hostname) NEW_HOSTNAME="${2:?--hostname needs a name}"; shift ;;
         --branch) BRANCH="${2:?--branch needs a name}"; shift ;;
         --source) SOURCE="${2:?--source needs a folder}"; shift ;;
         --prefix) PREFIX="${2:?}"; shift ;;
-        --help|-h) sed -n '2,25p' "$0"; exit 0 ;;
+        --help|-h) sed -n '2,22p' "$0"; exit 0 ;;
         *) die "unknown option: $1 (try --help)" ;;
     esac
     shift
@@ -72,6 +76,7 @@ if [ "$SCREEN" = 1 ]; then
     if apt-cache show chromium-browser >/dev/null 2>&1; then packages+=(chromium-browser); else packages+=(chromium); fi
 fi
 [ "$VOICE" = 1 ] && packages+=(alsa-utils)
+[ "$WIFI_SETUP" = 1 ] && packages+=(network-manager)
 run apt-get update -q
 run env DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends "${packages[@]}"
 
@@ -131,6 +136,7 @@ if [ "$SYSTEMD" = 1 ]; then
     units=(beranda.service beranda-actions.path beranda-actions.service)
     [ "$SCREEN" = 1 ] && units+=(beranda-kiosk.service)
     [ "$VOICE" = 1 ] && units+=(beranda-voice.service)
+    [ "$WIFI_SETUP" = 1 ] && units+=(beranda-wifi-setup.service)
     for unit in "${units[@]}"; do
         if [ "$DRY" = 1 ]; then
             printf '    $ write /etc/systemd/system/%s\n' "$unit"
@@ -141,6 +147,7 @@ if [ "$SYSTEMD" = 1 ]; then
         fi
     done
     run systemctl daemon-reload
+    [ "$WIFI_SETUP" = 1 ] && run systemctl enable --now beranda-wifi-setup.service
     run systemctl enable --now beranda.service beranda-actions.path
     if [ "$SCREEN" = 1 ]; then
         run systemctl set-default graphical.target
@@ -170,6 +177,14 @@ echo "        http://$name.local:8080/admin"
 [ -n "$ip" ] && echo "        or http://$ip:8080/admin"
 [ "$SCREEN" = 1 ] && echo "    The screen shows the same address and a QR code until you have saved the settings."
 echo "    Something wrong? Run:  beranda doctor"
+if [ "$WIFI_SETUP" = 1 ]; then
+    echo
+    say "Wi-Fi setup is ready."
+    echo "    From now on, if this Pi ever boots with no Wi-Fi and no network cable plugged in,"
+    echo "    it opens its own Wi-Fi network called \"Beranda setup\" for about 15 minutes."
+    echo "    Join it from a phone (the screen shows how, with a QR code) and a page opens by"
+    echo "    itself to pick your real Wi-Fi - no computer, keyboard or terminal needed."
+fi
 if [ "$VOICE" = 1 ]; then
     echo
     say "Voice control was prepared but is not running yet."

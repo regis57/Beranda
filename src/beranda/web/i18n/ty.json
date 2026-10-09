@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Faanaho mai i ta oe niuniu",
-    "text": "Hi'opoa i teie code, aore ra iriti i teie vahi tuatapapa i ni'a i te hoê niuniu aore ra 'opuniraa tei pihai i te hoê Wi-Fi hoê â:"
+    "text": "Hi'opoa i teie code, aore ra iriti i teie vahi tuatapapa i ni'a i te hoê niuniu aore ra 'opuniraa tei pihai i te hoê Wi-Fi hoê â:",
+    "wifi_title": "Aita roa Wi-Fi? A tae mai i ta'u",
+    "wifi_text": "A tutau i teie code na roto i ta oe niuniu no te tae atu i te tapura Wi-Fi \"{ssid}\", i muri iho a pee i te api e iriti no te maiti i to oe iho Wi-Fi."
   }
 }

@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Celularniykimanta allichay",
-    "text": "Kay código watuy, utaq kay direcciónta kichay huk celular utaq computadorapi, kikin Wi-Fi-pi kashanman:"
+    "text": "Kay código watuy, utaq kay direcciónta kichay huk celular utaq computadorapi, kikin Wi-Fi-pi kashanman:",
+    "wifi_title": "Manaraqchu Wi-Fi kanki? Ñuqaypaq tupachikuy",
+    "wifi_text": "Kay código-ta telefonowan escaneay Wi-Fi red \"{ssid}\" nisqaman tupachikunaykipaq, chaymantam kicharikuq pagina-ta qatiy kikin Wi-Fi-ykita akllanaykipaq."
   }
 }

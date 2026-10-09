@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Nustatykite mane telefonu",
-    "text": "Nuskaitykite kodą arba atidarykite adresą įrenginyje, prijungtame prie to paties „Wi-Fi“:"
+    "text": "Nuskaitykite kodą arba atidarykite adresą įrenginyje, prijungtame prie to paties „Wi-Fi“:",
+    "wifi_title": "Dar neturite Wi-Fi? Prisijunkite prie mano",
+    "wifi_text": "Nuskaitykite šį kodą telefonu, kad prisijungtumėte prie Wi-Fi tinklo \"{ssid}\", tada atsidariusiame puslapyje pasirinkite savo Wi-Fi."
   }
 }

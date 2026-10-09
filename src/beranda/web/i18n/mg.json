@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Ahitsio avy amin'ny finday",
-    "text": "Hazavao io kaody io, na sokafy io adiresy io amin'ny finday na solosaina mifandray amin'ny Wi-Fi iray ihany:"
+    "text": "Hazavao io kaody io, na sokafy io adiresy io amin'ny finday na solosaina mifandray amin'ny Wi-Fi iray ihany:",
+    "wifi_title": "Mbola tsy manana Wi-Fi? Midira amiko",
+    "wifi_text": "Sikàna io kaody io amin'ny finday mba hidirana amin'ny tambajotra Wi-Fi \"{ssid}\", avy eo arahy ny pejy misokatra mba hisafidianana ny Wi-Fi-nao manokana."
   }
 }

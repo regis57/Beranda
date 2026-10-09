@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Sett meg opp fra telefonen",
-    "text": "Skann koden, eller åpne adressen på en enhet på samme wifi:"
+    "text": "Skann koden, eller åpne adressen på en enhet på samme wifi:",
+    "wifi_title": "Fortsatt ingen wifi? Koble til min",
+    "wifi_text": "Skann denne koden for å koble telefonen til wifi-nettverket \"{ssid}\", og følg deretter siden som åpnes for å velge ditt eget wifi."
   }
 }

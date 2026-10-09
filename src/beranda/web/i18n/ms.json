@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Tetapkan saya dari telefon anda",
-    "text": "Imbas kod ini, atau buka alamat ini pada peranti dalam Wi-Fi yang sama:"
+    "text": "Imbas kod ini, atau buka alamat ini pada peranti dalam Wi-Fi yang sama:",
+    "wifi_title": "Belum ada Wi-Fi? Sertai rangkaian saya",
+    "wifi_text": "Imbas kod ini dengan telefon anda untuk menyertai rangkaian Wi-Fi \"{ssid}\", kemudian ikuti halaman yang dibuka untuk memilih Wi-Fi anda sendiri."
   }
 }

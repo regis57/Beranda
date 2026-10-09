@@ -95,6 +95,12 @@ HDMI, and a phone or computer on the same Wi-Fi.
 5. **Set it up from your phone**: the screen shows an address and a QR code. Scan it, or open
    `http://beranda.local:8080/admin`, and follow the three steps at the top of the page.
 
+No computer to customise the card, or you'd rather skip typing the Wi-Fi password into Imager?
+Add `--with-wifi-setup` to the install line above (step 4) - if the Pi ever boots with no Wi-Fi
+and no network cable, it offers its own "Beranda setup" Wi-Fi network so you can pick the real
+one from your phone instead, no terminal at all. See [`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md).
+A [ready-to-flash image](pi-gen/README.md) with this already built in is also in the works.
+
 That's it: Beranda starts by itself at every boot, full screen. From the settings page you can
 later **update** it, **restart the screen**, **restart the Pi**, **turn the picture** for a
 screen hung upright, **turn the screen off at night**, and, at the bottom of the page,
@@ -113,7 +119,9 @@ again to repair or update.
 
 Options go after `bash -s --`, for example `... | sudo bash -s -- --no-screen`:
 `--no-screen` (server only, to show it on a tablet or another device), `--hostname kitchen`
-(rename the Pi: `http://kitchen.local:8080/admin`), `--branch NAME`, `--dry-run`.
+(rename the Pi: `http://kitchen.local:8080/admin`), `--with-wifi-setup` (offer a Wi-Fi network
+to join if none is configured yet - see [`docs/WIFI_SETUP.md`](docs/WIFI_SETUP.md)),
+`--branch NAME`, `--dry-run`.
 
 Something wrong? `beranda doctor` checks everything and says what to fix.
 To remove it: `sudo /opt/beranda/src/uninstall.sh` (add `--purge` to delete your settings too).

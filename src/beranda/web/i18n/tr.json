@@ -84,6 +84,8 @@
   },
   "setup": {
     "title": "Beni telefonunuzdan ayarlayın",
-    "text": "Kodu tarayın ya da bu adresi aynı Wi-Fi ağındaki bir cihazda açın:"
+    "text": "Kodu tarayın ya da bu adresi aynı Wi-Fi ağındaki bir cihazda açın:",
+    "wifi_title": "Henüz Wi-Fi yok mu? Benimkine katıl",
+    "wifi_text": "Telefonunuzla bu kodu tarayarak \"{ssid}\" Wi-Fi ağına katılın, ardından açılan sayfadan kendi Wi-Fi'nizi seçin."
   }
 }
