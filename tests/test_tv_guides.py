@@ -36,3 +36,10 @@ async def test_available_keeps_real_guides_and_drops_dead_or_fake_ones():
 
 async def test_available_for_an_unknown_country_makes_no_request():
     assert await tv_guides.available("") == []
+
+
+def test_france_offers_the_light_xmltvfr_files_not_the_124_mb_complete_one():
+    urls = [c["url"] for c in tv_guides.candidates("FR")]
+    assert urls[0] == "https://xmltvfr.fr/xmltv/xmltv_tnt.xml.gz"
+    assert "https://xmltvfr.fr/xmltv/xmltv.xml.gz" not in urls
+    assert len({c["name"] for c in tv_guides.candidates("FR")}) == len(urls)  # no two identical button labels

@@ -260,3 +260,20 @@ def test_the_voice_endpoint_shrugs_off_odd_input(tmp_path):
     client = make(tmp_path, demo=True, voice_enabled=True)
     assert client.post("/api/voice", json={}).json()["intent"] is None
     assert client.post("/api/voice", json={"text": "x" * 5000}).status_code == 200
+
+
+@respx.mock
+def test_ticking_more_channels_is_not_hidden_by_a_cached_shorter_list(tmp_path):
+    """Regression: the cache key ignored the ticked channels, so a second one never appeared."""
+    guide = "https://example.org/guide.xml"
+    xml = (
+        b'<tv><channel id="c1"><display-name>Arte</display-name></channel>'
+        b'<channel id="c2"><display-name>France 5</display-name></channel>'
+        b'<programme start="20261008190000 +0000" stop="20261008210000 +0000" channel="c1"><title>A</title></programme>'
+        b'<programme start="20261008190000 +0000" stop="20261008210000 +0000" channel="c2"><title>B</title></programme></tv>'
+    )
+    respx.get(guide).mock(return_value=httpx.Response(200, content=xml))
+    first = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1",)).get("/api/state").json()
+    assert [p["channel"] for p in first["tv"]["programmes"]] == ["Arte"]
+    second = make(tmp_path, demo=True, tv_xmltv_url=guide, tv_channels=("c1", "c2")).get("/api/state").json()
+    assert [p["channel"] for p in second["tv"]["programmes"]] == ["Arte", "France 5"]

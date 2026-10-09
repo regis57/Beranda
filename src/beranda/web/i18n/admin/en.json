@@ -268,5 +268,6 @@
   "voice_act_weather": "Tell the weather",
   "voice_act_time": "Tell the time",
   "voice_act_tv": "Read tonight's TV",
-  "voice_act_say": "Just answer with a sentence"
+  "voice_act_say": "Just answer with a sentence",
+  "voice_save_note": "After ticking, press Save at the bottom of the page. The microphone button then appears at the bottom right of the main screen within a minute (reload the screen to see it at once)."
 }

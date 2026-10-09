@@ -17,7 +17,7 @@ import asyncio
 
 import httpx
 
-USER_AGENT = "Beranda/0.12 (+https://github.com/regis57/Beranda)"
+USER_AGENT = "Beranda/0.13 (+https://github.com/regis57/Beranda)"
 
 # {cc} = the two-letter country code, lower case; {CC} = upper case.
 # Only worldwide, one-file-per-country sources go here; a country-specific source is added
@@ -25,13 +25,17 @@ USER_AGENT = "Beranda/0.12 (+https://github.com/regis57/Beranda)"
 PER_COUNTRY = (
     ("iptv-epg.org", "https://iptv-epg.org/files/epg-{cc}.xml.gz"),
     ("epg.pw", "https://epg.pw/xmltv/epg_{CC}.xml.gz"),
-    ("epg.pw", "https://epg.pw/xmltv/epg_{CC}.xml"),
     ("open-epg.com", "https://www.open-epg.com/files/{name}1.xml.gz"),
 )
 
 # Community guides built for just one country.
 COUNTRY_EXTRAS: dict[str, tuple[tuple[str, str], ...]] = {
-    "FR": (("xmltvfr.fr", "https://xmltvfr.fr/xmltv/xmltv.xml.gz"),),
+    # xmltvfr.fr also has a "complete" file (xmltv.xml.gz, 15 MB, 124 MB unpacked): far too heavy
+    # for a small Pi, so we offer its two lighter files - the free-to-air (TNT) channels first.
+    "FR": (
+        ("xmltvfr.fr (TNT)", "https://xmltvfr.fr/xmltv/xmltv_tnt.xml.gz"),
+        ("xmltvfr.fr (France)", "https://xmltvfr.fr/xmltv/xmltv_fr.xml.gz"),
+    ),
 }
 
 # open-epg.com names its files by country name (france1.xml.gz); only the common ones.

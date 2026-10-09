@@ -300,7 +300,9 @@ function chineseLunarDate() {
 }
 
 // ---------------------------------------------------------------- agenda ----------------
-function renderAgenda() { if (state) renderUpcoming(); }
+// The TV box and the agenda share the room left in the side column: the TV claims its lines
+// first, the agenda then keeps what fits. Both are redone when fonts, theme or window size change.
+function renderAgenda() { if (state) { renderTv(); renderUpcoming(); } }
 
 function renderUpcoming() {
   const list = $('upcoming');
@@ -353,7 +355,7 @@ function renderUpcoming() {
 }
 
 // ---------------------------------------------------------------- news ------------------
-// One headline at a time, 12 s each, cross-faded. Titles only: no pictures, no links.
+// A few headlines at a time, 12 s each set, cross-faded. Titles only: no pictures, no links.
 const NEWS_MS = 12_000;
 let newsIndex = 0;
 let newsTimer = null;
@@ -375,22 +377,36 @@ function tickerItems() {
   return news;  // TV has its own box now ("Tonight on TV"), see renderTv()
 }
 
+const NEWS_LINES = 3;  // headlines shown together; the next set fades in after NEWS_MS
+
 function showHeadline() {
   const items = tickerItems();
   const box = $('news');
   if (!items.length) { box.hidden = true; return; }
   box.hidden = false;
-  const item = items[newsIndex % items.length];
-  $('news-src').textContent = item.source;
-  $('news-title').textContent = item.title;
-  $('news-age').textContent = item.age;
+  const pages = Math.ceil(items.length / NEWS_LINES);
+  const first = (newsIndex % pages) * NEWS_LINES;
+  $('news-list').replaceChildren(...items.slice(first, first + NEWS_LINES).map((item) => {
+    const li = document.createElement('li');
+    li.className = 'news-row';
+    const src = document.createElement('span');
+    src.className = 'news-src';
+    src.textContent = item.source;
+    const title = document.createElement('span');
+    title.className = 'news-title';
+    title.textContent = item.title;
+    const age = document.createElement('span');
+    age.className = 'news-age';
+    age.textContent = item.age;
+    li.append(src, title, age);
+    return li;
+  }));
 }
 
 function renderNews() {
   clearTimeout(newsTimer);
   showHeadline();
-  const items = tickerItems();
-  if (items.length < 2) return;
+  if (tickerItems().length <= NEWS_LINES) return;
   const box = $('news');
   const next = () => {
     box.classList.add('out');
@@ -405,8 +421,31 @@ function renderNews() {
 // nothing to list, the box says why in plain words instead of staying blank.
 const TV_NOTES = { no_channels: 'tv_no_channels', empty: 'tv_empty', error: 'tv_error' };
 
+const TV_LINES = 10;  // at most this many channels at once; more rotate, a page every few seconds
+let tvPage = 0;
+let tvTimer = null;
+
+function tvRows(items) {
+  return items.map((p) => {
+    const li = document.createElement('li');
+    li.className = 'tv-row';
+    const chan = document.createElement('span');
+    chan.className = 'tv-chan';
+    chan.textContent = p.channel;
+    const time = document.createElement('span');
+    time.className = 'tv-time';
+    time.textContent = p.start;
+    const show = document.createElement('span');
+    show.className = 'tv-show';
+    show.textContent = p.title;
+    li.append(chan, time, show);
+    return li;
+  });
+}
+
 function renderTv() {
   const tv = state?.tv;
+  clearTimeout(tvTimer);
   $('tv').hidden = !tv;
   if (!tv) return;
   $('tv-title').replaceChildren(t('tv_title'));
@@ -423,24 +462,21 @@ function renderTv() {
     $('tv-list').replaceChildren(li);
     return;
   }
-  $('tv-list').replaceChildren(...tv.programmes.slice(0, 6).map((p) => {
-    const li = document.createElement('li');
-    li.className = 'tv-row';
-    const chan = document.createElement('span');
-    chan.className = 'tv-chan';
-    chan.textContent = p.channel;
-    const time = document.createElement('span');
-    time.className = 'tv-time';
-    time.textContent = p.start;
-    const show = document.createElement('span');
-    show.className = 'tv-show';
-    show.textContent = p.title;
-    li.append(chan, time, show);
-    return li;
-  }));
-  // On a narrow, tall screen the box is short: drop the lines that would be cut by its edge.
+  // Show as many channels as fit (up to TV_LINES); if there are more, take turns.
+  const all = tv.programmes;
   const list = $('tv-list');
+  list.replaceChildren(...tvRows(all.slice(0, TV_LINES)));
   while (list.children.length > 1 && $('tv').scrollHeight > $('tv').clientHeight + 1) list.lastElementChild.remove();
+  const size = list.children.length;
+  if (all.length <= size) return;
+  const pages = Math.ceil(all.length / size);
+  const show = () => {
+    tvPage = (tvPage + 1) % pages;
+    list.replaceChildren(...tvRows(all.slice(tvPage * size, tvPage * size + size)));
+    tvTimer = setTimeout(show, NEWS_MS);
+  };
+  tvPage = 0;
+  tvTimer = setTimeout(show, NEWS_MS);
 }
 
 // ---------------------------------------------------------------- "On this day" -------
@@ -673,7 +709,6 @@ async function render(online) {
   renderFacts();
   renderUpcoming();
   renderNews();
-  renderTv();
   renderPhotos();
   renderRadio();
   renderVoice();

@@ -19,8 +19,8 @@ import httpx
 from defusedxml.ElementTree import iterparse
 
 USER_AGENT = "Beranda/0.6 (+https://github.com/regis57/Beranda)"
-MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024
-MAX_DECOMPRESSED_BYTES = 60 * 1024 * 1024
+MAX_DOWNLOAD_BYTES = 25 * 1024 * 1024  # what we keep in memory: the (compressed) file as downloaded
+MAX_DECOMPRESSED_BYTES = 300 * 1024 * 1024  # read as a stream, never held in memory all at once
 MAX_CHANNELS = 3000  # big community guides list well over 500 channels
 MAX_PROGRAMMES = 3000  # a safety net only: ~20 channels x a few shows each is what we actually keep
 
@@ -48,10 +48,40 @@ def _parse_time(raw: str) -> datetime | None:
     return (naive - offset).replace(tzinfo=UTC)
 
 
+class _Capped(io.RawIOBase):
+    """Reads from `source` but refuses to go past `limit` bytes (a "zip bomb" guard)."""
+
+    def __init__(self, source, limit: int) -> None:
+        self._source, self._left = source, limit
+
+    def readable(self) -> bool:
+        return True
+
+    def readinto(self, buffer) -> int:
+        data = self._source.read(min(len(buffer), 1 << 20))
+        self._left -= len(data)
+        if self._left < 0:
+            raise ValueError("XMLTV file is too large once decompressed")
+        buffer[: len(data)] = data
+        return len(data)
+
+
+def _stream(data: bytes):
+    """The guide as a stream of XML, gunzipped on the fly if it is compressed.
+
+    Big guides are 60-120 MB of XML once unpacked: reading them as a stream keeps a small
+    Raspberry Pi from ever holding all of it in memory.
+    """
+    if data[:2] == b"\x1f\x8b":
+        return io.BufferedReader(_Capped(gzip.GzipFile(fileobj=io.BytesIO(data)), MAX_DECOMPRESSED_BYTES))
+    return io.BytesIO(data)
+
+
 async def download(url: str) -> bytes:
-    """The raw guide, gunzipped if it was compressed (by `.gz` or by its magic bytes)."""
+    """The guide exactly as published (still compressed if it was); `channels` and
+    `programmes` unpack it as they read."""
     async with httpx.AsyncClient(
-        timeout=20, follow_redirects=True, headers={"User-Agent": USER_AGENT}
+        timeout=30, follow_redirects=True, headers={"User-Agent": USER_AGENT}
     ) as client, client.stream("GET", url) as response:
         response.raise_for_status()
         chunks, size = [], 0
@@ -60,19 +90,13 @@ async def download(url: str) -> bytes:
             if size > MAX_DOWNLOAD_BYTES:
                 raise ValueError("XMLTV file is too large")
             chunks.append(chunk)
-    data = b"".join(chunks)
-    if url.lower().endswith(".gz") or data[:2] == b"\x1f\x8b":
-        with gzip.GzipFile(fileobj=io.BytesIO(data)) as gz:
-            data = gz.read(MAX_DECOMPRESSED_BYTES + 1)
-        if len(data) > MAX_DECOMPRESSED_BYTES:
-            raise ValueError("XMLTV file is too large once decompressed")
-    return data
+    return b"".join(chunks)
 
 
 def channels(xml_bytes: bytes) -> list[dict]:
     """Every <channel> the guide declares: {id, name}, for the settings page to pick from."""
     found: dict[str, str] = {}
-    for _event, elem in iterparse(io.BytesIO(xml_bytes), events=("end",), forbid_dtd=True):
+    for _event, elem in iterparse(_stream(xml_bytes), events=("end",), forbid_dtd=True):
         if _local(elem.tag) != "channel":
             continue  # leave it for its parent to clear: clearing it here would empty it first
         cid = elem.get("id", "").strip()
@@ -90,7 +114,7 @@ def programmes(xml_bytes: bytes, channel_ids: set[str], start: datetime, end: da
     """<programme>s on the given channels that overlap [start, end), earliest first."""
     names: dict[str, str] = {}
     found: list[dict] = []
-    for _event, elem in iterparse(io.BytesIO(xml_bytes), events=("end",), forbid_dtd=True):
+    for _event, elem in iterparse(_stream(xml_bytes), events=("end",), forbid_dtd=True):
         tag = _local(elem.tag)
         if tag not in ("channel", "programme"):
             continue  # leave it for its parent to clear, or we'd empty it before reading it
@@ -103,7 +127,8 @@ def programmes(xml_bytes: bytes, channel_ids: set[str], start: datetime, end: da
             cid = elem.get("channel", "").strip()
             if cid in channel_ids:
                 begin = _parse_time(elem.get("start", ""))
-                finish = _parse_time(elem.get("stop", "")) or begin
+                # "stop" is optional in XMLTV: with none, assume a short slot rather than drop the show
+                finish = _parse_time(elem.get("stop", "")) or (begin + timedelta(minutes=30) if begin else None)
                 title_el = elem.find("title")
                 title = (title_el.text or "?").strip() if title_el is not None and title_el.text else "?"
                 if begin and finish and begin < end and finish > start:

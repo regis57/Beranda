@@ -37,6 +37,11 @@ Done:
   away (radio results, TV channels with a search box); voice control gets more built-in phrases
   (next/previous station, volume, tonight's TV), your own phrases from the settings page, and a
   step-by-step guide ([docs/VOICE.md](VOICE.md))
+- **v0.13.1**: TV fixes from the second real test: ticking more channels now shows them all (the
+  cache ignored the ticked channels), big guides are unpacked as a stream and parsed off the
+  main thread, the too-heavy xmltvfr.fr "complete" file is replaced by its TNT and France files,
+  the TV box pages through more channels; news shows 3 headlines at once; clock and weather
+  are a little smaller; photo and radio share their row 65/35
 
 Next:
 
