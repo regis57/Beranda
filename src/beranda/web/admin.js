@@ -577,6 +577,9 @@ async function tvFind() {
     const r = await api('/test-tv', { method: 'POST', body: JSON.stringify({ url }) });
     if (!r.ok) { $('tv-message').textContent = t('admin.tv_fail', { err: r.error }); return; }
     tvChannels = r.channels;
+    // Ticks made on another guide mean nothing here (each guide has its own channel codes).
+    const known = new Set(r.channels.map((c) => c.id));
+    tvSelected = new Set([...tvSelected].filter((id) => known.has(id)));
     $('tv-message').textContent = t('admin.tv_ok', { n: r.channels.length });
     renderTvChips();
     markDirty();

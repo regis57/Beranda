@@ -268,5 +268,6 @@
   "voice_act_weather": "Das Wetter sagen",
   "voice_act_time": "Die Uhrzeit sagen",
   "voice_act_tv": "Das heutige TV-Programm vorlesen",
-  "voice_act_say": "Einfach mit einem Satz antworten"
+  "voice_act_say": "Einfach mit einem Satz antworten",
+  "voice_save_note": "Nach dem Ankreuzen unten auf der Seite auf Speichern drücken. Der Mikrofon-Button erscheint dann innerhalb einer Minute unten rechts auf der Hauptansicht (Ansicht neu laden, um ihn sofort zu sehen)."
 }

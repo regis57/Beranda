@@ -217,6 +217,9 @@ Actions possibles : `radio_play`, `radio_stop`, `radio_next`, `radio_prev`, `vol
 
 ## Si ça ne marche pas
 
+- **Pas de bouton micro à l'écran** : la case de l'étape 1 n'est pas cochée, ou Enregistrer n'a pas
+  été pressé. Le bouton n'existe que lorsque la voix est enregistrée comme activée ; il apparaît
+  alors dans la minute (rechargez l'écran pour le voir tout de suite).
 - *« Micro indisponible »* à l'écran : il manque l'étape 3 (page sécurisée) ou 4 (autorisation).
   La page de réglages indique aussi si **cet** appareil peut écouter.
 - Rien n'est compris : parlez près de la tablette et vérifiez la langue d'affichage (case 2).

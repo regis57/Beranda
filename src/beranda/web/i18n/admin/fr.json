@@ -268,5 +268,6 @@
   "voice_act_weather": "Dire la météo",
   "voice_act_time": "Dire l'heure",
   "voice_act_tv": "Lire la télé de ce soir",
-  "voice_act_say": "Répondre par une phrase"
+  "voice_act_say": "Répondre par une phrase",
+  "voice_save_note": "Après avoir coché, appuyez sur Enregistrer en bas de la page. Le bouton micro apparaît alors en bas à droite de l'écran principal dans la minute (rechargez l'écran pour le voir tout de suite)."
 }

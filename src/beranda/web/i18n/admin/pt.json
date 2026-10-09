@@ -268,5 +268,6 @@
   "voice_act_weather": "Dizer a meteorologia",
   "voice_act_time": "Dizer as horas",
   "voice_act_tv": "Ler a TV desta noite",
-  "voice_act_say": "Responder apenas com uma frase"
+  "voice_act_say": "Responder apenas com uma frase",
+  "voice_save_note": "Depois de assinalar, prima Guardar no fim da página. O botão do microfone aparece então em baixo à direita do ecrã principal em cerca de um minuto (recarregue o ecrã para o ver logo)."
 }

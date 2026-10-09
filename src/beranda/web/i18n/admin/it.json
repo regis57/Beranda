@@ -268,5 +268,6 @@
   "voice_act_weather": "Dire il meteo",
   "voice_act_time": "Dire l'ora",
   "voice_act_tv": "Leggere la TV di stasera",
-  "voice_act_say": "Rispondere semplicemente con una frase"
+  "voice_act_say": "Rispondere semplicemente con una frase",
+  "voice_save_note": "Dopo aver spuntato, premi Salva in fondo alla pagina. Il pulsante del microfono compare poi in basso a destra nella schermata principale entro un minuto (ricarica lo schermo per vederlo subito)."
 }

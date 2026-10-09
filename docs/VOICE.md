@@ -214,6 +214,9 @@ Actions: `radio_play`, `radio_stop`, `radio_next`, `radio_prev`, `volume_up`, `v
 
 ## If it does not work
 
+- **No microphone button on the screen**: the box in step 1 is not ticked, or Save was not pressed.
+  The button only exists once voice control is saved as on; it then shows up within a minute
+  (reload the screen to see it at once).
 - *"Microphone unavailable"* on the screen: step 3 (secure page) or step 4 (permission) is missing.
   The settings page also says whether **this** device can listen.
 - Nothing is understood: speak close to the tablet, and check the display language (box 2).

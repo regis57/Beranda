@@ -268,5 +268,6 @@
   "voice_act_weather": "Taja hali ya hewa",
   "voice_act_time": "Taja saa",
   "voice_act_tv": "Soma TV ya usiku huu",
-  "voice_act_say": "Jibu kwa sentensi tu"
+  "voice_act_say": "Jibu kwa sentensi tu",
+  "voice_save_note": "Baada ya kuweka tiki, bonyeza Hifadhi chini ya ukurasa. Kitufe cha maikrofoni kitaonekana chini kulia mwa skrini kuu ndani ya dakika moja (pakia upya skrini ukitaka kukiona mara moja)."
 }

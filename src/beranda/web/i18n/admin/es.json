@@ -268,5 +268,6 @@
   "voice_act_weather": "Decir el tiempo",
   "voice_act_time": "Decir la hora",
   "voice_act_tv": "Leer la tele de esta noche",
-  "voice_act_say": "Responder simplemente con una frase"
+  "voice_act_say": "Responder simplemente con una frase",
+  "voice_save_note": "Tras marcar la casilla, pulsa Guardar al final de la página. El botón del micrófono aparece entonces abajo a la derecha de la pantalla principal en un minuto (recarga la pantalla para verlo al instante)."
 }

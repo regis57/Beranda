@@ -205,14 +205,17 @@ async def build_state(
     if cfg.tv_xmltv_url and not cfg.tv_channels:
         tv = {"status": "no_channels", "programmes": [], "from": "", "to": ""}
     elif cfg.tv_xmltv_url:
-        digest = hashlib.sha1(cfg.tv_xmltv_url.encode()).hexdigest()[:12]
+        # The cache key must change with the guide AND the ticked channels: otherwise ticking more
+        # channels would keep showing the old, shorter list until the cache expires.
+        digest = hashlib.sha1("\n".join((cfg.tv_xmltv_url, *cfg.tv_channels)).encode()).hexdigest()[:12]
         channel_ids = set(cfg.tv_channels)
         prime_start, prime_end = _prime_window(now)
         window = {"from": prime_start.strftime("%H:%M"), "to": prime_end.strftime("%H:%M")}
 
         async def load_tv() -> list[dict]:
             raw = await tv_mod.download(cfg.tv_xmltv_url)
-            found = tv_mod.programmes(raw, channel_ids, prime_start, prime_end)
+            # Parsing a big guide takes seconds on a Pi: do it off the event loop so the page stays responsive.
+            found = await asyncio.to_thread(tv_mod.programmes, raw, channel_ids, prime_start, prime_end)
             picks = tv_mod.prime_time_picks(found, list(cfg.tv_channels), prime_start, prime_end)
             tz = ZoneInfo(loc.timezone)
             return [

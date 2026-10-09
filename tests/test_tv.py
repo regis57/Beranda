@@ -69,7 +69,8 @@ async def test_download_gunzips_a_gz_guide():
     respx.get("https://example.org/guide.xml.gz").mock(
         return_value=httpx.Response(200, content=gzip.compress(XML))
     )
-    assert await tv.download("https://example.org/guide.xml.gz") == XML
+    raw = await tv.download("https://example.org/guide.xml.gz")  # kept as published, unpacked while reading
+    assert [c["id"] for c in tv.channels(raw)] == [c["id"] for c in tv.channels(XML)]
 
 
 @respx.mock
@@ -126,3 +127,20 @@ def test_prime_time_keeps_the_main_programme_of_each_channel_in_the_users_order(
     ]
     picks = tv.prime_time_picks(found, ["b", "a"], start, end)
     assert [(p["channel"], p["title"]) for p in picks] == [("B", "Série"), ("A", "Film")]
+
+
+def test_a_compressed_guide_is_read_as_a_stream_and_capped(monkeypatch):
+    packed = gzip.compress(XML)
+    assert tv.channels(packed) == tv.channels(XML)
+    monkeypatch.setattr(tv, "MAX_DECOMPRESSED_BYTES", 50)  # a "zip bomb" is refused, not unpacked
+    with pytest.raises(ValueError, match="too large"):
+        tv.channels(packed)
+
+
+def test_a_programme_without_a_stop_time_is_kept():
+    xml = b'<tv><channel id="c1"/><programme start="20261008200000 +0000" channel="c1"><title>Film</title></programme></tv>'
+    start = datetime(2026, 10, 8, 19, 0, tzinfo=UTC)
+    end = datetime(2026, 10, 8, 23, 0, tzinfo=UTC)
+    found = tv.programmes(xml, {"c1"}, start, end)
+    assert [p["title"] for p in found] == ["Film"]
+    assert tv.prime_time_picks(found, ["c1"], start, end)  # not dropped for having no length
