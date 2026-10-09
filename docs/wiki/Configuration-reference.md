@@ -13,7 +13,7 @@ key is optional. Example: [config.example.toml](https://github.com/regis57/Beran
 | `mode` | `"auto"` | 3 | `auto` (follows the sun), `light`, `night` |
 | `[location]` `name`, `latitude`, `longitude`, `timezone` | Metz | 1 | your town |
 | `[calendar]` `ics_urls` | `[]` | 5 | private calendar links |
-| `[[key_dates]]` `date`, `label`, `kind` | none | 6 | `MM-DD` or `YYYY-MM-DD`; `birth`, `death`, `anniversary`, `other` |
+| `key_dates` (a list of tables): `date`, `label`, `kind` | none | 6 | `MM-DD` or `YYYY-MM-DD`; `birth`, `death`, `anniversary`, `other` |
 | `[news]` `enabled`, `sources`, `feeds` | on, automatic | 7 | catalogue ids and your own RSS links |
 | `[history]` `enabled` | `true` | 7 | "on this day" |
 | `[photos]` `folder`, `interval`, `dropbox_url` | own folder, 20 s | 8 | |

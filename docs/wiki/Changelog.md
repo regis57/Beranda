@@ -35,7 +35,7 @@ One line per version, newest last. Each one was a pull request on
   radio box gets a "previous station" button; long lists in the settings page can be folded
   away (radio results, TV channels with a search box); voice control gets more built-in phrases
   (next/previous station, volume, tonight's TV), your own phrases from the settings page, and a
-  step-by-step guide ([docs/VOICE.md](VOICE.md))
+  step-by-step guide ([docs/VOICE.md](https://github.com/regis57/Beranda/blob/main/docs/VOICE.md))
 - **v0.13.1**: TV fixes from the second real test: ticking more channels now shows them all (the
   cache ignored the ticked channels), big guides are unpacked as a stream and parsed off the
   main thread, the too-heavy xmltvfr.fr "complete" file is replaced by its TNT and France files,
@@ -94,3 +94,4 @@ One line per version, newest last. Each one was a pull request on
   `docs/wiki/` and is published automatically; the automatic checks pass again (a newer linter and
   a shell-script warning had turned them red since 0.14.0); fix - a first install on a new card
   stopped with an error at its very last step since 0.15.1 (updates were not affected)
+- **v0.15.10**: wiki links fixed (they broke inside tables); the READMEs link to the wiki pages

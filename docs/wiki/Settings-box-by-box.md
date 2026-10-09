@@ -15,7 +15,7 @@ to any box; each box has a **Need help?** link. Press **Save**: the screen follo
 | **8. Photo frame** | *Add photos*, or follow a shared Dropbox folder | Limited by the board, see below |
 | **9. World radio** | Search 50,000 stations, keep favourites | Plays on the screen's speakers |
 | **10. TV tonight** | Pick a free guide for your country, tick channels | Channel names are kept with the settings |
-| **11. Voice control** | Microphone button, your own phrases, *Test the microphone* | Google Chrome only, see [[Voice control|Voice-control]] |
+| **11. Voice control** | Microphone button, your own phrases, *Test the microphone* | Google Chrome only, see [Voice control](Voice-control) |
 | **12. Screen** | Rotation, night hours | On a Pi the HDMI turns off; on a tablet the page goes dark |
 | **13. System** | Version, board, updates, restart screen, reboot | Buttons ask for a second click |
 | **14. Access** | Optional PIN | The page already opens from the home network only |

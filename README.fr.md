@@ -9,7 +9,7 @@ aucun service payant.
 
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
 [![Licence : MIT](https://img.shields.io/badge/licence-MIT-blue)](#licence)
-🇬🇧 [Read in English](README.md)
+🇬🇧 [Read in English](README.md) · 📖 [Manuel complet dans le wiki (en anglais)](https://github.com/regis57/Beranda/wiki) : [Installer](https://github.com/regis57/Beranda/wiki/Install-and-Update) · [Réglages](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) · [Voix](https://github.com/regis57/Beranda/wiki/Voice-control) · [Dépannage](https://github.com/regis57/Beranda/wiki/Troubleshooting) · [État](https://github.com/regis57/Beranda/wiki/Status) · [Feuille de route](https://github.com/regis57/Beranda/wiki/Roadmap)
 
 ![Beranda la nuit](docs/screenshots/v0.14.0-display-night.png)
 
@@ -97,7 +97,7 @@ Ouvrez `http://beranda.local:8080/admin`. Un menu ☰ mène à chaque section ; 
 5. **Agenda, actualité, photos, radio, TV, voix.** Tout est facultatif, chacun dans sa section.
 6. **Utilisateur avancé** (rarement utile). Changer le port `8080` si un autre programme l'utilise déjà, ou repartir de zéro. La page détaille ce qui change avant que vous confirmiez.
 
-Appuyez sur **Enregistrer** : l'écran suit en moins d'une minute. Détails : [docs/USAGE.md](docs/USAGE.md).
+Appuyez sur **Enregistrer** : l'écran suit en moins d'une minute. Chaque boîte expliquée : [Settings, box by box](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) (wiki, en anglais).
 
 ### Relier votre agenda
 
@@ -178,8 +178,8 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 
 ## Aide, contribuer, soutenir
 
-- **Bloqué ?** `beranda doctor`, [docs/USAGE.md](docs/USAGE.md), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues) en joignant le **fichier de diagnostic** (page de réglages → *Utilisateur avancé* → *Télécharger le fichier de diagnostic* ; il ne contient ni mot de passe ni lien privé).
-- **Contribuer** : `pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`. Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/`. [Feuille de route et état](https://github.com/regis57/Beranda/wiki/Roadmap) · [Wiki (en anglais)](https://github.com/regis57/Beranda/wiki).
+- **Bloqué ?** `sudo beranda doctor`, [Dépannage](https://github.com/regis57/Beranda/wiki/Troubleshooting) (wiki), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues) en joignant le **fichier de diagnostic** (page de réglages → *Utilisateur avancé* → *Télécharger le fichier de diagnostic* ; il ne contient ni mot de passe ni lien privé).
+- **Contribuer** : `pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`. Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/`. [Contributing](https://github.com/regis57/Beranda/wiki/Contributing) · [Architecture](https://github.com/regis57/Beranda/wiki/Architecture) · [État](https://github.com/regis57/Beranda/wiki/Status) · [Feuille de route](https://github.com/regis57/Beranda/wiki/Roadmap) (wiki, en anglais).
 - **Soutenir** : Beranda reste libre et gratuit. S'il égaye votre mur, [un café](https://buymeacoffee.com/regis57) est toujours le bienvenu.
 
 ## Crédits

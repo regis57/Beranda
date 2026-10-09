@@ -14,7 +14,7 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 | Microphone: `not-allowed` | permission refused | address bar icon → Microphone → Allow |
 | "No weather warning", always | area of another town, or misspelt | box 4: use the suggested area, press *Test* |
 | TV channels show numbers | guide saved before 0.15.0 | open the TV box once, then *Save* |
-| SD card full | caches, logs, swap file | update (it tidies), or the free-space line in [[Install & Update|Install-and-Update]] |
+| SD card full | caches, logs, swap file | update (it tidies), or the free-space line in [Install & Update](Install-and-Update) |
 | Black screen on the Pi | the screen service stopped | `sudo systemctl restart beranda-kiosk` |
 | Nothing shows a calendar | link expired or wrong | box 5: paste it again, *Test* |
 

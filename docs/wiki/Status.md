@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.15.9 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.15.10 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
