@@ -16,7 +16,6 @@
 #   --branch NAME      install another branch of the repository (default: main)
 #   --source DIR       install from a local copy instead of downloading (for developers)
 #   --no-systemd       do not install the services (containers, tests)
-#   --with-voice       also prepare the optional offline voice-control service
 #   --with-wifi-setup  no Wi-Fi configured yet? let the Pi offer its own "Beranda setup"
 #                      Wi-Fi network to pick one from a phone, with no keyboard at all
 #   --dry-run          print what would be done, change nothing
@@ -30,7 +29,6 @@ STATEDIR="/var/lib/beranda"
 USER_NAME="beranda"
 SCREEN=1
 SYSTEMD=1
-VOICE=0
 WIFI_SETUP=0
 DRY=0
 SOURCE=""
@@ -45,7 +43,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --no-screen) SCREEN=0 ;;
         --no-systemd) SYSTEMD=0 ;;
-        --with-voice) VOICE=1 ;;
+        --with-voice) warn "--with-voice is no longer needed: voice control now runs in the tablet's own browser (see the Voice card in the settings)." ;;
         --with-wifi-setup) WIFI_SETUP=1 ;;
         --dry-run) DRY=1 ;;
         --hostname) NEW_HOSTNAME="${2:?--hostname needs a name}"; shift ;;
@@ -69,13 +67,12 @@ fi
 
 # ------------------------------------------------------------------ 1. packages ---
 say "1/4 Installing system packages (this can take a few minutes on a Raspberry Pi)"
-packages=(git curl python3 python3-venv python3-pip avahi-daemon fonts-noto-core fonts-noto-cjk mpv)
+packages=(git curl python3 python3-venv python3-pip avahi-daemon fonts-noto-core fonts-noto-cjk)
 if [ "$SCREEN" = 1 ]; then
     packages+=(cage wlr-randr)
     # Raspberry Pi OS calls its Chromium "chromium-browser"; Debian and Ubuntu call it "chromium".
     if apt-cache show chromium-browser >/dev/null 2>&1; then packages+=(chromium-browser); else packages+=(chromium); fi
 fi
-[ "$VOICE" = 1 ] && packages+=(alsa-utils)
 [ "$WIFI_SETUP" = 1 ] && packages+=(network-manager)
 run apt-get update -q
 run env DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends "${packages[@]}"
@@ -89,7 +86,7 @@ fi
 for group in video render input audio; do
     if getent group "$group" >/dev/null; then run usermod -aG "$group" "$USER_NAME"; fi
 done
-run install -d -m 0750 -o "$USER_NAME" -g "$USER_NAME" "$CONFDIR" "$STATEDIR" "$STATEDIR/requests"
+run install -d -m 0750 -o "$USER_NAME" -g "$USER_NAME" "$CONFDIR" "$STATEDIR" "$STATEDIR/requests" "$STATEDIR/photos"
 
 # ------------------------------------------------------------------ 3. Beranda ---
 say "3/4 Installing Beranda in $PREFIX"
@@ -105,12 +102,7 @@ else
 fi
 [ -d "$PREFIX/venv" ] || run python3 -m venv "$PREFIX/venv"
 run "$PREFIX/venv/bin/pip" install --quiet --upgrade pip
-if [ "$VOICE" = 1 ]; then
-    run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src[voice]"
-    run install -d -m 0750 -o "$USER_NAME" -g "$USER_NAME" "$STATEDIR/voice"
-else
-    run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src"
-fi
+run "$PREFIX/venv/bin/pip" install --quiet --upgrade "$PREFIX/src"
 run install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
 run install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
 run ln -sf "$PREFIX/venv/bin/beranda" /usr/local/bin/beranda
@@ -135,7 +127,6 @@ if [ "$SYSTEMD" = 1 ]; then
     say "4/4 Starting Beranda now and at every boot"
     units=(beranda.service beranda-actions.path beranda-actions.service)
     [ "$SCREEN" = 1 ] && units+=(beranda-kiosk.service)
-    [ "$VOICE" = 1 ] && units+=(beranda-voice.service)
     [ "$WIFI_SETUP" = 1 ] && units+=(beranda-wifi-setup.service)
     for unit in "${units[@]}"; do
         if [ "$DRY" = 1 ]; then
@@ -184,16 +175,4 @@ if [ "$WIFI_SETUP" = 1 ]; then
     echo "    it opens its own Wi-Fi network called \"Beranda setup\" for about 15 minutes."
     echo "    Join it from a phone (the screen shows how, with a QR code) and a page opens by"
     echo "    itself to pick your real Wi-Fi - no computer, keyboard or terminal needed."
-fi
-if [ "$VOICE" = 1 ]; then
-    echo
-    say "Voice control was prepared but is not running yet."
-    echo "    It needs two files you fetch yourself (they're too big to ship in Beranda):"
-    echo "      - a Vosk speech model for your language, unzipped into $STATEDIR/voice/vosk-model"
-    echo "        (https://alphacephei.com/vosk/models - a 'small' model is enough for a Pi)"
-    echo "      - a Piper voice for your language, saved as $STATEDIR/voice/piper-voice.onnx"
-    echo "        (https://github.com/rhasspy/piper/blob/master/VOICES.md), plus the 'piper'"
-    echo "        program itself (same repository's releases) on the PATH"
-    echo "    Then turn voice control on in the settings page and run:"
-    echo "        sudo systemctl enable --now beranda-voice.service"
 fi

@@ -87,5 +87,9 @@
     "text": "Scansiona questo codice o apri questo indirizzo su un dispositivo collegato allo stesso Wi-Fi:",
     "wifi_title": "Ancora senza Wi-Fi? Unisciti al mio",
     "wifi_text": "Scansiona questo codice per unirti alla rete Wi-Fi \"{ssid}\" con il telefono, poi segui la pagina che si apre per scegliere il tuo Wi-Fi."
-  }
+  },
+  "history_title": "Accadde oggi",
+  "radio_error": "Impossibile riprodurre questa stazione",
+  "voice_listening": "Sto ascoltando…",
+  "voice_unavailable": "Microfono non disponibile – vedi le impostazioni"
 }

@@ -87,5 +87,9 @@
     "text": "Skanna koden eller öppna adressen på en enhet i samma wifi:",
     "wifi_title": "Fortfarande inget wifi? Anslut till mitt",
     "wifi_text": "Skanna den här koden för att ansluta till wifi-nätverket \"{ssid}\" med din telefon, och följ sedan sidan som öppnas för att välja ditt eget wifi."
-  }
+  },
+  "history_title": "På den här dagen",
+  "radio_error": "Det går inte att spela upp den här kanalen",
+  "voice_listening": "Lyssnar…",
+  "voice_unavailable": "Mikrofonen är inte tillgänglig – se inställningarna"
 }

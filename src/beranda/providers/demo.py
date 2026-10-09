@@ -183,3 +183,15 @@ def news(language: str, now: datetime) -> dict:
         for i, title in enumerate(lines)
     ]
     return {"items": items, "sources": len(items)}
+
+
+# "On this day" needs the internet, so the demo shows invented lines, clearly marked as such.
+_HISTORY = {
+    "en": ("A sample event: this is what 'On this day' looks like", "Another sample: one short line per event"),
+    "fr": ("Un exemple : voici à quoi ressemble « Ce jour-là »", "Autre exemple : une courte ligne par événement"),
+}
+
+
+def history(language: str) -> list[dict]:
+    lines = _HISTORY.get(language) or _HISTORY.get(language.split("-")[0]) or _HISTORY["en"]
+    return [{"year": 1900 + 11 * i, "text": line} for i, line in enumerate(lines)]

@@ -125,11 +125,32 @@
       <section class="card" id="sec-photos">
         <h2><span class="num">7</span><span data-i18n="admin.photos"></span></h2>
         <p class="hint" data-i18n="admin.photos_hint"></p>
-        <div class="grid3">
-          <label><span data-i18n="admin.photos_folder"></span><input id="photos-folder" type="text" inputmode="text" spellcheck="false"></label>
-          <label><span data-i18n="admin.photos_interval"></span><input id="photos-interval" type="number" min="5" step="1"></label>
+        <h3 data-i18n="admin.photos_add_title"></h3>
+        <div class="row wrap">
+          <label class="filebtn"><span data-i18n="admin.photos_add"></span>
+            <input id="photos-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+          </label>
+          <span class="hint" id="photos-upload-msg" role="status"></span>
         </div>
-        <p class="hint" id="photos-count"></p>
+        <div class="thumbs" id="photos-grid" aria-live="polite"></div>
+        <p class="hint" id="photos-empty" data-i18n="admin.photos_none"></p>
+        <p class="hint small" id="photos-where"></p>
+
+        <h3 data-i18n="admin.photos_dropbox_title"></h3>
+        <p class="hint" data-i18n="admin.photos_dropbox_hint"></p>
+        <div class="row wrap">
+          <input id="photos-dropbox" type="text" inputmode="url" spellcheck="false" data-ph="admin.photos_dropbox_ph">
+          <button type="button" id="photos-sync" data-i18n="admin.photos_sync"></button>
+        </div>
+        <p class="hint" id="photos-sync-msg" role="status"></p>
+
+        <label class="narrow"><span data-i18n="admin.photos_interval"></span><input id="photos-interval" type="number" min="5" step="1"></label>
+
+        <details class="help"><summary data-i18n="admin.photos_other_folder"></summary>
+          <p class="hint" data-i18n="admin.photos_other_folder_hint"></p>
+          <label><span data-i18n="admin.photos_folder"></span><input id="photos-folder" type="text" inputmode="text" spellcheck="false"></label>
+          <p class="hint" id="photos-count"></p>
+        </details>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.photos_help"></p></details>
       </section>
 
@@ -143,6 +164,7 @@
           <input id="radio-volume" type="range" min="0" max="100" step="5">
         </label>
         <p class="hint" id="radio-now" role="status"></p>
+        <audio id="admin-audio" preload="none"></audio>
         <h3 data-i18n="admin.radio_search"></h3>
         <div class="row wrap">
           <input id="radio-q" type="text" data-ph="admin.radio_search_ph">
@@ -157,6 +179,11 @@
       <section class="card" id="sec-tv">
         <h2><span class="num">9</span><span data-i18n="admin.tv"></span></h2>
         <p class="hint" data-i18n="admin.tv_hint"></p>
+        <h3 data-i18n="admin.tv_suggest_title"></h3>
+        <p class="hint" id="tv-suggest-msg" role="status"></p>
+        <div class="chips" id="tv-suggestions"></div>
+        <button type="button" id="tv-suggest" data-i18n="admin.tv_suggest"></button>
+        <h3 data-i18n="admin.tv_own_title"></h3>
         <div class="row wrap">
           <input id="tv-url" type="text" inputmode="url" spellcheck="false" data-ph="admin.tv_url_ph">
           <button type="button" id="tv-find" data-i18n="admin.tv_find"></button>
@@ -164,10 +191,6 @@
         <p class="hint" id="tv-message" role="status"></p>
         <p class="hint" id="tv-empty" data-i18n="admin.tv_none"></p>
         <div class="chips" id="tv-channels" aria-live="polite"></div>
-        <div class="grid3">
-          <label><span data-i18n="admin.tv_prime_start"></span><input id="tv-start" type="time"></label>
-          <label><span data-i18n="admin.tv_prime_end"></span><input id="tv-end" type="time"></label>
-        </div>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.tv_help"></p></details>
       </section>
 
@@ -175,15 +198,7 @@
         <h2><span class="num">10</span><span data-i18n="admin.voice"></span></h2>
         <p class="hint" data-i18n="admin.voice_hint"></p>
         <label class="check"><input type="checkbox" id="voice-on"><span data-i18n="admin.voice_enabled"></span></label>
-        <div id="voice-body">
-          <label><span data-i18n="admin.voice_wake_word"></span>
-            <select id="voice-wake-word">
-              <option value="hey_jarvis">Hey Jarvis</option>
-              <option value="hey_mycroft">Hey Mycroft</option>
-              <option value="alexa">Alexa</option>
-            </select>
-          </label>
-        </div>
+        <p class="hint" id="voice-check" role="status"></p>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.voice_help"></p></details>
       </section>
 

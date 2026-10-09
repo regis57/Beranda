@@ -87,5 +87,9 @@
     "text": "Escanee este código o abra esta dirección en un móvil u ordenador conectado a la misma wifi:",
     "wifi_title": "¿Aún sin Wi-Fi? Únete al mío",
     "wifi_text": "Escanea este código para unirte a la red Wi-Fi \"{ssid}\" con tu teléfono, luego sigue la página que se abre para elegir tu propio Wi-Fi."
-  }
+  },
+  "history_title": "Un día como hoy",
+  "radio_error": "No se puede reproducir esta emisora",
+  "voice_listening": "Escuchando…",
+  "voice_unavailable": "Micrófono no disponible – mira los ajustes"
 }

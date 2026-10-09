@@ -87,5 +87,9 @@
     "text": "Fọwọ́kàn kóòdù yìí, tàbí ṣí àdírẹ́sì yìí lórí fóònù tàbí kọ̀mpútà tó wà lórí Wi-Fi kan náà:",
     "wifi_title": "Ko si Wi-Fi sibẹ? Darapọ mọ temi",
     "wifi_text": "Fi fóònù rẹ ṣayẹwo koodu yìí láti darapọ̀ mọ́ nẹ́tiwọ́kì Wi-Fi \"{ssid}\", lẹ́yìn náà tẹ̀lé ojú-ìwé tí yóò ṣí láti yan Wi-Fi tìrẹ."
-  }
+  },
+  "history_title": "Ní ọjọ́ yìí",
+  "radio_error": "Kò ṣeé ṣe láti ṣe àgbéjáde ibùdó yìí",
+  "voice_listening": "Mo ń gbọ́…",
+  "voice_unavailable": "Gbohungbohun kò sí – wo àwọn ètò"
 }

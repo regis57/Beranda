@@ -13,6 +13,7 @@ User=@USER@
 Group=@USER@
 Environment=BERANDA_CONFIG=@CONFDIR@/config.toml
 Environment=BERANDA_REQUESTS=@STATEDIR@/requests
+Environment=BERANDA_PHOTOS=@STATEDIR@/photos
 Environment=BERANDA_INSTALL_INFO=@CONFDIR@/install.env
 Environment=BERANDA_WIFI_STATUS=@STATEDIR@/wifi-setup.json
 ExecStart=@PREFIX@/venv/bin/beranda

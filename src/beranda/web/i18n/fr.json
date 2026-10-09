@@ -87,5 +87,9 @@
     "text": "Scannez ce code, ou ouvrez cette adresse sur un téléphone ou un ordinateur connecté au même Wi-Fi :",
     "wifi_title": "Pas encore de Wi-Fi ? Rejoignez le mien",
     "wifi_text": "Scannez ce code pour rejoindre le réseau Wi-Fi « {ssid} » avec votre téléphone, puis suivez la page qui s'ouvre pour choisir votre propre Wi-Fi."
-  }
+  },
+  "history_title": "Ce jour-là",
+  "radio_error": "Impossible de lire cette station",
+  "voice_listening": "J'écoute…",
+  "voice_unavailable": "Micro indisponible – voir les réglages"
 }

@@ -87,5 +87,9 @@
     "text": "I-scan ang code na ito, o buksan ang address na ito sa device na nasa parehong Wi-Fi:",
     "wifi_title": "Wala ka pang Wi-Fi? Sumali sa akin",
     "wifi_text": "I-scan ang code na ito gamit ang iyong telepono para sumali sa Wi-Fi network na \"{ssid}\", pagkatapos sundan ang pahinang bubukas para piliin ang sarili mong Wi-Fi."
-  }
+  },
+  "history_title": "Sa araw na ito",
+  "radio_error": "Hindi mapatugtog ang istasyong ito",
+  "voice_listening": "Nakikinig…",
+  "voice_unavailable": "Hindi magamit ang mikropono – tingnan ang mga setting"
 }

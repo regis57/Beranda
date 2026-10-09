@@ -150,6 +150,7 @@ def test_ics_test_reports_events_and_never_echoes_the_secret(tmp_path):
     respx.get(secret).mock(return_value=httpx.Response(200, text=SAMPLE))
     ok = client.post("/api/admin/test-ics", json={"url": secret}).json()
     assert ok["ok"] is True
+    assert all({"title", "start", "all_day"} <= set(item) for item in ok["next"])
     respx.get(secret).mock(side_effect=httpx.ConnectError(f"cannot reach {secret}"))
     bad = client.post("/api/admin/test-ics", json={"url": secret}).json()
     assert bad == {"ok": False, "error": "ConnectError"}
@@ -167,10 +168,10 @@ def test_photos_count_gives_live_feedback_while_typing(tmp_path):
 
 def test_photos_settings_round_trip(tmp_path):
     client, path = make(tmp_path)
-    body = valid_body(photos={"folder": "/home/pi/pictures", "interval": 30})
+    body = valid_body(photos={"folder": "/home/pi/pictures", "interval": 30, "dropbox_url": ""})
     assert client.put("/api/admin/config", json=body).json() == {"saved": True, "path": str(path)}
     saved = tomllib.loads(path.read_text())
-    assert saved["photos"] == {"folder": "/home/pi/pictures", "interval": 30}
+    assert saved["photos"] == {"folder": "/home/pi/pictures", "interval": 30, "dropbox_url": ""}
 
 
 @respx.mock
@@ -193,27 +194,6 @@ def test_radio_search_failure_is_a_clean_502(tmp_path):
         respx.get(f"{mirror}/json/stations/search").mock(side_effect=httpx.ConnectError("down"))
     client, _ = make(tmp_path)
     assert client.get("/api/admin/radio-search").status_code == 502
-
-
-def test_radio_play_stop_and_status(tmp_path, monkeypatch):
-    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/mpv")
-    monkeypatch.setattr("subprocess.Popen", lambda *a, **kw: _FakeProc())
-    client, _ = make(tmp_path)
-
-    station = {"uuid": "u1", "name": "Test FM", "url": "http://s/live"}
-    played = client.post("/api/admin/radio-play", json=station).json()
-    assert played == {"playing": True, "station": station, "volume": 70}
-    assert client.get("/api/admin/radio-status").json()["playing"] is True
-
-    stopped = client.post("/api/admin/radio-stop").json()
-    assert stopped == {"playing": False, "station": None, "volume": 70}
-
-
-def test_radio_play_without_mpv_is_a_clean_409(tmp_path, monkeypatch):
-    monkeypatch.setattr("shutil.which", lambda name: None)
-    client, _ = make(tmp_path)
-    r = client.post("/api/admin/radio-play", json={"uuid": "u1", "name": "Test", "url": "http://s/live"})
-    assert r.status_code == 409
 
 
 def test_radio_settings_round_trip(tmp_path):
@@ -250,20 +230,18 @@ def test_tv_settings_round_trip(tmp_path):
     client, path = make(tmp_path)
     body = valid_body(
         tv={"url": "https://example.org/guide.xml", "channels": ["c1"], "prime_start": "19:00", "prime_end": "22:00"}
-    )
+    )  # an older settings file may still carry the prime-time hours: they are simply ignored
     assert client.put("/api/admin/config", json=body).json()["saved"] is True
     saved = tomllib.loads(path.read_text())
-    assert saved["tv"] == {
-        "url": "https://example.org/guide.xml", "channels": ["c1"], "prime_start": "19:00", "prime_end": "22:00"
-    }
+    assert saved["tv"] == {"url": "https://example.org/guide.xml", "channels": ["c1"]}
 
 
 def test_voice_settings_round_trip(tmp_path):
     client, path = make(tmp_path)
-    body = valid_body(voice={"enabled": True, "wake_word": "alexa"})
+    body = valid_body(voice={"enabled": True, "wake_word": "alexa"})  # old key: ignored
     assert client.put("/api/admin/config", json=body).json()["saved"] is True
     saved = tomllib.loads(path.read_text())
-    assert saved["voice"] == {"enabled": True, "wake_word": "alexa"}
+    assert saved["voice"] == {"enabled": True}
 
 
 def test_history_settings_round_trip(tmp_path):
@@ -289,3 +267,109 @@ class _FakeProc:
 
     def kill(self):
         self.alive = False
+
+
+# ---- photos: where they live, how to add them, Dropbox ------------------------------------
+JPEG = b"\xff\xd8\xff\xe0" + b"0" * 64
+
+
+def test_the_settings_page_is_told_where_the_photo_folder_is(tmp_path):
+    client, _ = make(tmp_path)
+    info = client.get("/api/admin/config").json()["photos_info"]
+    assert info["folder"] == str(tmp_path / "beranda-photos") and info["custom"] is False
+
+
+def test_a_picture_can_be_sent_listed_shown_and_removed(tmp_path):
+    client, _ = make(tmp_path)
+    sent = client.post("/api/admin/photos", params={"name": "Holiday 1.JPG"}, content=JPEG).json()
+    assert sent == {"saved": "Holiday-1.jpg"}
+    assert client.get("/api/admin/photos").json()["names"] == ["Holiday-1.jpg"]
+    assert client.get("/api/photos/Holiday-1.jpg").content == JPEG  # what the photo tile loads
+    assert client.delete("/api/admin/photos/Holiday-1.jpg").json() == {"deleted": "Holiday-1.jpg"}
+    assert client.get("/api/admin/photos").json()["names"] == []
+
+
+def test_a_file_that_is_not_a_picture_is_refused_politely(tmp_path):
+    client, _ = make(tmp_path)
+    assert client.post("/api/admin/photos", params={"name": "a.jpg"}, content=b"not an image").status_code == 422
+    assert client.post("/api/admin/photos", params={"name": "a.exe"}, content=JPEG).status_code == 422
+    assert client.post("/api/admin/photos", params={"name": "a.jpg"}, content=b"").status_code == 422
+
+
+def test_removing_a_picture_cannot_escape_the_photo_folder(tmp_path):
+    client, _ = make(tmp_path)
+    (tmp_path / "secret.jpg").write_bytes(JPEG)
+    assert client.delete("/api/admin/photos/..%2Fsecret.jpg").status_code == 404
+    assert (tmp_path / "secret.jpg").exists()
+
+
+def test_photo_upload_needs_the_local_network(tmp_path):
+    client, _ = make(tmp_path, client=OUTSIDE)
+    assert client.post("/api/admin/photos", params={"name": "a.jpg"}, content=JPEG).status_code == 403
+
+
+def test_syncing_dropbox_without_a_link_is_a_clean_409(tmp_path):
+    client, _ = make(tmp_path)
+    assert client.post("/api/admin/photos-sync").status_code == 409
+
+
+@respx.mock
+def test_syncing_dropbox_copies_the_pictures_and_reports_back(tmp_path):
+    import io
+    import zipfile
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as zf:
+        zf.writestr("Album/one.jpg", JPEG)
+        zf.writestr("Album/notes.txt", "hello")
+    link = "https://www.dropbox.com/scl/fo/abc/xyz?rlkey=k&dl=0"
+    respx.get("https://www.dropbox.com/scl/fo/abc/xyz").mock(return_value=httpx.Response(200, content=buffer.getvalue()))
+    client, _ = make(tmp_path, photos_dropbox_url=link)
+    result = client.post("/api/admin/photos-sync").json()
+    assert result["ok"] is True and result["added"] == 1
+    assert client.get("/api/admin/photos").json()["names"] == ["dropbox-one.jpg"]
+
+
+@respx.mock
+def test_a_dropbox_failure_is_reported_in_plain_terms(tmp_path):
+    link = "https://www.dropbox.com/scl/fo/abc/xyz?rlkey=k"
+    respx.get("https://www.dropbox.com/scl/fo/abc/xyz").mock(return_value=httpx.Response(200, content=b"<html>"))
+    client, _ = make(tmp_path, photos_dropbox_url=link)
+    result = client.post("/api/admin/photos-sync").json()
+    assert result["ok"] is False and "shared folder" in result["error"]
+
+
+def test_a_link_that_is_not_dropbox_is_refused_when_saving_is_tested(tmp_path):
+    import pytest
+
+    from beranda.providers import photos
+
+    with pytest.raises(ValueError, match="Dropbox"):
+        photos.dropbox_download_url("https://evil.example/x")
+
+
+# ---- TV: the guide is suggested from the country ---------------------------------------------
+@respx.mock
+def test_tv_guides_lists_only_the_addresses_that_really_answer(tmp_path):
+    from beranda.providers import tv_guides
+
+    options = tv_guides.candidates("FR")
+    good = options[0]["url"]
+    for option in options:
+        if option["url"] == good:
+            respx.get(good).mock(return_value=httpx.Response(200, content=b'<?xml version="1.0"?><tv></tv>'))
+        else:
+            respx.get(option["url"]).mock(return_value=httpx.Response(404))
+    client, _ = make(tmp_path)
+    found = client.get("/api/admin/tv-guides", params={"country": "fr"}).json()
+    assert found["country"] == "FR" and [g["url"] for g in found["guides"]] == [good]
+
+
+@respx.mock
+def test_tv_guides_ignores_html_error_pages_served_with_status_200(tmp_path):
+    from beranda.providers import tv_guides
+
+    for option in tv_guides.candidates("FR"):
+        respx.get(option["url"]).mock(return_value=httpx.Response(200, content=b"<html>Not found</html>"))
+    client, _ = make(tmp_path)
+    assert client.get("/api/admin/tv-guides", params={"country": "FR"}).json()["guides"] == []

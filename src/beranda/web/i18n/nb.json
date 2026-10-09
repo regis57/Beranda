@@ -87,5 +87,9 @@
     "text": "Skann koden, eller åpne adressen på en enhet på samme wifi:",
     "wifi_title": "Fortsatt ingen wifi? Koble til min",
     "wifi_text": "Skann denne koden for å koble telefonen til wifi-nettverket \"{ssid}\", og følg deretter siden som åpnes for å velge ditt eget wifi."
-  }
+  },
+  "history_title": "På denne dagen",
+  "radio_error": "Kan ikke spille av denne stasjonen",
+  "voice_listening": "Lytter…",
+  "voice_unavailable": "Mikrofon utilgjengelig – se innstillingene"
 }

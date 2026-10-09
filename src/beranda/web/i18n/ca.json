@@ -87,5 +87,9 @@
     "text": "Escaneja aquest codi o obre aquesta adreça en un dispositiu connectat a la mateixa wifi:",
     "wifi_title": "Encara sense Wi-Fi? Uneix-te al meu",
     "wifi_text": "Escaneja aquest codi per unir-te a la xarxa Wi-Fi \"{ssid}\" amb el telèfon, i després segueix la pàgina que s'obre per triar el teu propi Wi-Fi."
-  }
+  },
+  "history_title": "Un dia com avui",
+  "radio_error": "No es pot reproduir aquesta emissora",
+  "voice_listening": "Escoltant…",
+  "voice_unavailable": "Micròfon no disponible – mireu els paràmetres"
 }

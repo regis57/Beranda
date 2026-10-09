@@ -25,6 +25,12 @@ Done:
 - **v0.11**: Wi-Fi setup with no keyboard (`install.sh --with-wifi-setup`: an open "Beranda
   setup" network and a one-page picker if the Pi boots with no network at all) and a pi-gen
   build definition + CI workflow for a ready-to-flash image with it already built in
+- **v0.12**: what the first real test showed was confusing, fixed. Radio and voice now work in
+  the page of the tablet that shows Beranda (sound and microphone are the tablet's, not the
+  Pi's; `mpv` and the Pi voice service are gone); photos have their own folder, "Add photos"
+  and Dropbox; TV prime time is fixed at 20:00 + 3 h and a guide is suggested for the country;
+  "On this day" comes from Wikipedia in the user's language; the month grid is gone and the
+  agenda looks further ahead
 
 Next:
 
@@ -36,7 +42,8 @@ Next:
 ## What we won't do, and why
 
 - **Google Assistant / "OK Google"**: being retired, SDK restricted.
-- **Google Photos**: Library API closed to this use; use rclone to a local folder instead.
+- **Google Photos / Google Drive / iCloud, directly**: no API lets a small home app read them;
+  "Add photos" (the phone's picker lists those apps), Dropbox links or rclone to a folder instead.
 - **Spotify / Deezer playback**: need a Premium account; optional plugins only.
 - **Blink live view**: unofficial API gives thumbnails/clips, not a live stream.
 - **Alexa**: custom skill needs a cloud endpoint; limited commands.

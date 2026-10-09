@@ -87,5 +87,9 @@
     "text": "Skannaa koodi tai avaa osoite laitteella, joka on samassa wifi-verkossa:",
     "wifi_title": "Ei vielä wifiä? Liity minun verkkooni",
     "wifi_text": "Skannaa tämä koodi liittyäksesi wifi-verkkoon \"{ssid}\" puhelimellasi, ja seuraa sitten avautuvaa sivua valitaksesi omaa wifisi."
-  }
+  },
+  "history_title": "Tänä päivänä",
+  "radio_error": "Tätä asemaa ei voi toistaa",
+  "voice_listening": "Kuuntelen…",
+  "voice_unavailable": "Mikrofoni ei ole käytettävissä – katso asetukset"
 }

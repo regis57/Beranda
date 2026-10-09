@@ -87,5 +87,9 @@
     "text": "Pindai kode ini, atau buka alamat ini di perangkat yang terhubung ke Wi-Fi yang sama:",
     "wifi_title": "Belum ada Wi-Fi? Gabung ke jaringan saya",
     "wifi_text": "Pindai kode ini dengan ponsel Anda untuk bergabung ke jaringan Wi-Fi \"{ssid}\", lalu ikuti halaman yang terbuka untuk memilih Wi-Fi Anda sendiri."
-  }
+  },
+  "history_title": "Pada hari ini",
+  "radio_error": "Stasiun ini tidak dapat diputar",
+  "voice_listening": "Mendengarkan…",
+  "voice_unavailable": "Mikrofon tidak tersedia – lihat pengaturan"
 }

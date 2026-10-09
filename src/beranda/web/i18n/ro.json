@@ -87,5 +87,9 @@
     "text": "Scanează codul sau deschide această adresă pe un dispozitiv conectat la aceeași rețea Wi-Fi:",
     "wifi_title": "Încă nu ai Wi-Fi? Conectează-te la al meu",
     "wifi_text": "Scanează acest cod cu telefonul pentru a te conecta la rețeaua Wi-Fi \"{ssid}\", apoi urmează pagina care se deschide pentru a-ți alege propriul Wi-Fi."
-  }
+  },
+  "history_title": "În această zi",
+  "radio_error": "Această stație nu poate fi redată",
+  "voice_listening": "Ascult…",
+  "voice_unavailable": "Microfon indisponibil – vezi setările"
 }

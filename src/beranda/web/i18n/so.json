@@ -87,5 +87,9 @@
     "text": "Sawir koodhkan, ama ka fur cinwaankan taleefan ama kombuyuutar ku xidhan Wi-Fi-ga isku mid ah:",
     "wifi_title": "Weli ma haysatid Wi-Fi? Ku biir tayda",
     "wifi_text": "Iskaan garee koodkan taleefankaaga si aad ugu biirto shabakadda Wi-Fi \"{ssid}\", ka dibna raac boggii furmaya si aad u dooratid Wi-Fi-gaaga."
-  }
+  },
+  "history_title": "Maalintan",
+  "radio_error": "Idaacaddan lama daari karo",
+  "voice_listening": "Waan dhegaysanayaa…",
+  "voice_unavailable": "Makarafoon lama heli karo – eeg dejinta"
 }
