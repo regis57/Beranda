@@ -1,0 +1,89 @@
+{
+  "today": "I teie mahana",
+  "tomorrow": "Ananahi",
+  "upcoming": "Te haere mai nei",
+  "nothing_upcoming": "Aita e tupu",
+  "all_day": "i te roaraa o te mahana",
+  "loading": "Te utauta ra…",
+  "demo": "faahoho'a",
+  "offline": "aita i te tuati",
+  "no_weather": "Aita te huru-rahi i itea",
+  "feels": "mai te huru",
+  "rain": {
+    "none": "Aita e ua i roto i na hora piti e haere mai nei",
+    "starts": "E haamata te ua i roto i te {min} minuti",
+    "starts_now": "Ua haamata te ua",
+    "stops": "Te ua nei, e faaea i roto i te {min} minuti",
+    "long": "Ua hau atu i na hora e piti",
+    "now": "i teie nei",
+    "in2h": "+2 hora"
+  },
+  "moon": {
+    "new": "Marama apî",
+    "waxing_crescent": "Marama te rahi ra (iti)",
+    "first_quarter": "Tuhaa matamua",
+    "waxing_gibbous": "Marama te rahi ra (fatata i te pae)",
+    "full": "Marama pae",
+    "waning_gibbous": "Marama te iti ra (fatata i te pae)",
+    "last_quarter": "Tuhaa hopea",
+    "waning_crescent": "Marama te iti ra (iti)",
+    "lit": "{pct}% maramarama",
+    "next_full": "Marama pae {date}",
+    "next_new": "Marama apî {date}"
+  },
+  "sun": {
+    "rise": "te hitiaa o te mahana",
+    "set": "te topaaraa o te mahana"
+  },
+  "season": {
+    "in_days": "e taui i roto i te {n} mahana",
+    "tomorrow": "e taui ananahi"
+  },
+  "kind": {
+    "holiday": "Mahana faufaa",
+    "birth": "Fanauraa",
+    "death": "Haamana'oraa",
+    "anniversary": "Tau faufaaraa",
+    "other": "Mahana faufaa"
+  },
+  "wmo": {
+    "0": "Ra'i maramarama",
+    "1": "Maramarama rahi",
+    "2": "Ata'ata iti",
+    "3": "Ata'ata rahi",
+    "45": "Ohu",
+    "48": "Ohu toetoe",
+    "51": "Ua iti",
+    "53": "Ua marere",
+    "55": "Ua marere rahi",
+    "56": "Ua marere toetoe",
+    "57": "Ua marere toetoe rahi",
+    "61": "Ua iti",
+    "63": "Ua",
+    "65": "Ua rahi",
+    "66": "Ua toetoe",
+    "67": "Ua toetoe rahi",
+    "71": "Hiona iti",
+    "73": "Hiona",
+    "75": "Hiona rahi",
+    "77": "Punua hiona",
+    "80": "Ua pupuhi iti",
+    "81": "Ua pupuhi",
+    "82": "Ua pupuhi rahi",
+    "85": "Hiona pupuhi",
+    "86": "Hiona pupuhi rahi",
+    "95": "Mata'i patiri",
+    "96": "Mata'i patiri e hiona",
+    "99": "Mata'i patiri rahi e hiona"
+  },
+  "seasons": {
+    "spring": "Tau apî",
+    "summer": "Tau mahana",
+    "autumn": "Tau mairiraa",
+    "winter": "Tau toetoe"
+  },
+  "setup": {
+    "title": "Faanaho mai i ta oe niuniu",
+    "text": "Hi'opoa i teie code, aore ra iriti i teie vahi tuatapapa i ni'a i te hoê niuniu aore ra 'opuniraa tei pihai i te hoê Wi-Fi hoê â:"
+  }
+}

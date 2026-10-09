@@ -1,0 +1,89 @@
+{
+  "today": "Tey",
+  "tomorrow": "Suba",
+  "upcoming": "Yiy di ñëw",
+  "nothing_upcoming": "Dara julli",
+  "all_day": "bis bu tar",
+  "loading": "Di yebbi…",
+  "demo": "won",
+  "offline": "amul internet",
+  "no_weather": "Altíteeri waxu am",
+  "feels": "mel ni",
+  "rain": {
+    "none": "Taw du wax ci ñaari waxtu yi di ñëw",
+    "starts": "Taw bi dina tàmbali ci {min} miniti",
+    "starts_now": "Taw bi tàmbali na",
+    "stops": "Taw bi di taxaw, dina jóg ci {min} miniti",
+    "long": "Taw gëna ñaari waxtu",
+    "now": "léegi",
+    "in2h": "+ñaar waxtu"
+  },
+  "moon": {
+    "new": "Weer bu bees",
+    "waxing_crescent": "Weer di yokku (tuuti)",
+    "first_quarter": "Ñeenteel bu njëkk",
+    "waxing_gibbous": "Weer di yokku (mujj mat)",
+    "full": "Weer mu mat",
+    "waning_gibbous": "Weer di wàññi (mujj mat)",
+    "last_quarter": "Ñeenteel bu mujj",
+    "waning_crescent": "Weer di wàññi (tuuti)",
+    "lit": "{pct}% leer",
+    "next_full": "Weer mu mat {date}",
+    "next_new": "Weer bu bees {date}"
+  },
+  "sun": {
+    "rise": "feneen jant",
+    "set": "sowu jant"
+  },
+  "season": {
+    "in_days": "dina soppeeku ci {n} fan",
+    "tomorrow": "dina soppeeku suba"
+  },
+  "kind": {
+    "holiday": "Konje",
+    "birth": "Juddu",
+    "death": "Fàttaliku",
+    "anniversary": "At",
+    "other": "Bis bu am solo"
+  },
+  "wmo": {
+    "0": "Asamaan bu set",
+    "1": "Lu ëpp set",
+    "2": "Niir yu néew",
+    "3": "Niir bu bare",
+    "45": "Niir bu suuf",
+    "48": "Niir bu suuf bu sedd",
+    "51": "Taw bu néew",
+    "53": "Taw",
+    "55": "Taw bu bare",
+    "56": "Taw bu sedd",
+    "57": "Taw bu sedd bu bare",
+    "61": "Taw bu néew",
+    "63": "Taw",
+    "65": "Taw bu bare",
+    "66": "Taw bu sedd",
+    "67": "Taw bu sedd bu bare",
+    "71": "Suux bu néew",
+    "73": "Suux",
+    "75": "Suux bu bare",
+    "77": "Doomu suux",
+    "80": "Taw bu gaaw bu néew",
+    "81": "Taw bu gaaw",
+    "82": "Taw bu gaaw bu bare",
+    "85": "Suux bu gaaw",
+    "86": "Suux bu gaaw bu bare",
+    "95": "Tawat ak dënnu",
+    "96": "Tawat ak dënnu ak suux",
+    "99": "Tawat bu metti ak dënnu ak suux"
+  },
+  "seasons": {
+    "spring": "Ngóon tàng",
+    "summer": "Nawet",
+    "autumn": "Noor",
+    "winter": "Noor bu sedd"
+  },
+  "setup": {
+    "title": "Jubbanti ma ci sa telefon",
+    "text": "Nataal kodu bii, walla ubbi adrees bii ci telefon walla ordinatër bu ci réseau Wi-Fi bi:"
+  }
+}

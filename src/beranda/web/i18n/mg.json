@@ -1,0 +1,89 @@
+{
+  "today": "Androany",
+  "tomorrow": "Rahampitso",
+  "upcoming": "Ho avy",
+  "nothing_upcoming": "Tsy misy voalamina",
+  "all_day": "mandritra ny andro",
+  "loading": "Mandefa…",
+  "demo": "fampisehoana",
+  "offline": "tsy mifandray",
+  "no_weather": "Toetrandro tsy hita",
+  "feels": "toy ny",
+  "rain": {
+    "none": "Tsy misy orana amin'ny ora 2 ho avy",
+    "starts": "Hilatsaka ny orana afaka {min} minitra",
+    "starts_now": "Nanomboka ny orana",
+    "stops": "Mandeha ny orana, hitsahatra afaka {min} minitra",
+    "long": "Orana mihoatra ny ora 2",
+    "now": "izao",
+    "in2h": "+ora 2"
+  },
+  "moon": {
+    "new": "Volana vaovao",
+    "waxing_crescent": "Mitombo ny volana (kely)",
+    "first_quarter": "Fahefatra voalohany",
+    "waxing_gibbous": "Mitombo ny volana (saika feno)",
+    "full": "Volana feno",
+    "waning_gibbous": "Mihena ny volana (saika feno)",
+    "last_quarter": "Fahefatra farany",
+    "waning_crescent": "Mihena ny volana (kely)",
+    "lit": "{pct}% mazava",
+    "next_full": "Volana feno {date}",
+    "next_new": "Volana vaovao {date}"
+  },
+  "sun": {
+    "rise": "fiposahan'ny masoandro",
+    "set": "filentehan'ny masoandro"
+  },
+  "season": {
+    "in_days": "hiova afaka andro {n}",
+    "tomorrow": "hiova rahampitso"
+  },
+  "kind": {
+    "holiday": "Fety",
+    "birth": "Fahaterahana",
+    "death": "Fahatsiarovana",
+    "anniversary": "Tsingerin-taona",
+    "other": "Daty manan-danja"
+  },
+  "wmo": {
+    "0": "Lanitra mangarahara",
+    "1": "Mazava ny ankamaroany",
+    "2": "Rahona vitsivitsy",
+    "3": "Rahona be",
+    "45": "Zavona",
+    "48": "Zavona mangatsiaka",
+    "51": "Oram-pangaro kely",
+    "53": "Oram-pangaro",
+    "55": "Oram-pangaro be",
+    "56": "Oram-pangaro mangatsiaka",
+    "57": "Oram-pangaro mangatsiaka be",
+    "61": "Orana kely",
+    "63": "Orana",
+    "65": "Orana be",
+    "66": "Orana mangatsiaka",
+    "67": "Orana mangatsiaka be",
+    "71": "Oram-panala kely",
+    "73": "Oram-panala",
+    "75": "Oram-panala be",
+    "77": "Voam-panala",
+    "80": "Oram-pisaky kely",
+    "81": "Oram-pisaky",
+    "82": "Oram-pisaky be",
+    "85": "Oram-panala mifanesy",
+    "86": "Oram-panala mifanesy be",
+    "95": "Tafio-drivotra misy varatra",
+    "96": "Tafio-drivotra misy varatra sy havandra",
+    "99": "Tafio-drivotra mafy misy varatra sy havandra"
+  },
+  "seasons": {
+    "spring": "Lohataona",
+    "summer": "Fahavaratra",
+    "autumn": "Fararano",
+    "winter": "Ririnina"
+  },
+  "setup": {
+    "title": "Ahitsio avy amin'ny finday",
+    "text": "Hazavao io kaody io, na sokafy io adiresy io amin'ny finday na solosaina mifandray amin'ny Wi-Fi iray ihany:"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "today": "Òní",
+  "tomorrow": "Ọ̀la",
+  "upcoming": "Tó ń bọ̀",
+  "nothing_upcoming": "Kò sí ohun tí a ṣètò",
+  "all_day": "ní gbogbo ọjọ́",
+  "loading": "Ń gbé e wá…",
+  "demo": "àfihàn",
+  "offline": "kò sórí ayélujára",
+  "no_weather": "A kò rí ìwọ̀nba òjò",
+  "feels": "ó dà bíi",
+  "rain": {
+    "none": "Kò ní rọ̀jò ní wákàtí méjì tó ń bọ̀",
+    "starts": "Òjò máa rọ̀ ní ìṣẹ́jú {min}",
+    "starts_now": "Òjò ti bẹ̀rẹ̀",
+    "stops": "Òjò ń rọ̀, yóò dúró ní ìṣẹ́jú {min}",
+    "long": "Òjò ju wákàtí méjì lọ",
+    "now": "nísinsìnyí",
+    "in2h": "+wákàtí 2"
+  },
+  "moon": {
+    "new": "Òṣùpá tuntun",
+    "waxing_crescent": "Òṣùpá ń pọ̀ sí (kékeré)",
+    "first_quarter": "Ìdá mẹ́rin àkọ́kọ́",
+    "waxing_gibbous": "Òṣùpá ń pọ̀ sí (fẹ́rẹ̀ẹ́ kún)",
+    "full": "Òṣùpá kíkún",
+    "waning_gibbous": "Òṣùpá ń dín kù (fẹ́rẹ̀ẹ́ kún)",
+    "last_quarter": "Ìdá mẹ́rin ìkẹ́yìn",
+    "waning_crescent": "Òṣùpá ń dín kù (kékeré)",
+    "lit": "{pct}% ní ìmọ́lẹ̀",
+    "next_full": "Òṣùpá kíkún {date}",
+    "next_new": "Òṣùpá tuntun {date}"
+  },
+  "sun": {
+    "rise": "yíyọ oòrùn",
+    "set": "wọ̀wọ̀ oòrùn"
+  },
+  "season": {
+    "in_days": "yóò yí padà ní ọjọ́ {n}",
+    "tomorrow": "yóò yí padà ní ọ̀la"
+  },
+  "kind": {
+    "holiday": "Ọjọ́ àjọyọ̀",
+    "birth": "Ọjọ́ ìbí",
+    "death": "Ìrántí",
+    "anniversary": "Ayẹyẹ ọdún",
+    "other": "Ọjọ́ pàtàkì"
+  },
+  "wmo": {
+    "0": "Ojú ọjọ́ pọ́nmọ́",
+    "1": "Ó fẹ́rẹ̀ẹ́ pọ́nmọ́",
+    "2": "Ẹ̀ṣújò díẹ̀",
+    "3": "Ẹ̀ṣújò pọ̀",
+    "45": "Ìkùùkuu",
+    "48": "Ìkùùkuu tútù",
+    "51": "Òjò ẹ̀rọlẹ̀ díẹ̀",
+    "53": "Òjò ẹ̀rọlẹ̀",
+    "55": "Òjò ẹ̀rọlẹ̀ púpọ̀",
+    "56": "Òjò ẹ̀rọlẹ̀ tútù",
+    "57": "Òjò ẹ̀rọlẹ̀ tútù púpọ̀",
+    "61": "Òjò díẹ̀",
+    "63": "Òjò",
+    "65": "Òjò púpọ̀",
+    "66": "Òjò tútù",
+    "67": "Òjò tútù púpọ̀",
+    "71": "Yìnyín díẹ̀",
+    "73": "Yìnyín",
+    "75": "Yìnyín púpọ̀",
+    "77": "Èwúkù yìnyín",
+    "80": "Òjò kíákíá díẹ̀",
+    "81": "Òjò kíákíá",
+    "82": "Òjò kíákíá púpọ̀",
+    "85": "Yìnyín kíákíá",
+    "86": "Yìnyín kíákíá púpọ̀",
+    "95": "Ààrá",
+    "96": "Ààrá pẹ̀lú yìnyín",
+    "99": "Ààrá líle pẹ̀lú yìnyín"
+  },
+  "seasons": {
+    "spring": "Ẹ̀ẹ̀rùn tútù",
+    "summer": "Ẹ̀ẹ̀rùn",
+    "autumn": "Ìgbà ìkọ́ewé",
+    "winter": "Ìgbà òtútù"
+  },
+  "setup": {
+    "title": "Ṣe ìtòsí mi láti orí fóònù rẹ",
+    "text": "Fọwọ́kàn kóòdù yìí, tàbí ṣí àdírẹ́sì yìí lórí fóònù tàbí kọ̀mpútà tó wà lórí Wi-Fi kan náà:"
+  }
+}

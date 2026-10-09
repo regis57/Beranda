@@ -1,0 +1,89 @@
+{
+  "today": "Yau",
+  "tomorrow": "Gobe",
+  "upcoming": "Mai zuwa",
+  "nothing_upcoming": "Babu wani abu",
+  "all_day": "dukan yini",
+  "loading": "Ana lodawa…",
+  "demo": "nuni",
+  "offline": "babu yanar gizo",
+  "no_weather": "Ba a samu yanayin iska ba",
+  "feels": "ana ji kamar",
+  "rain": {
+    "none": "Babu ruwan sama a cikin sa'o'i 2 masu zuwa",
+    "starts": "Ruwa zai yi a cikin mintuna {min}",
+    "starts_now": "Ruwa ya fara yi",
+    "stops": "Ana ruwa, zai tsaya a cikin mintuna {min}",
+    "long": "Ruwa fiye da sa'o'i 2",
+    "now": "yanzu",
+    "in2h": "+sa'a 2"
+  },
+  "moon": {
+    "new": "Sabon wata",
+    "waxing_crescent": "Wata yana girma (kadan)",
+    "first_quarter": "Kwata na farko",
+    "waxing_gibbous": "Wata yana girma (kusan cika)",
+    "full": "Cikakken wata",
+    "waning_gibbous": "Wata yana raguwa (kusan cika)",
+    "last_quarter": "Kwata na karshe",
+    "waning_crescent": "Wata yana raguwa (kadan)",
+    "lit": "Haske {pct}%",
+    "next_full": "Cikakken wata {date}",
+    "next_new": "Sabon wata {date}"
+  },
+  "sun": {
+    "rise": "fitowar rana",
+    "set": "faɗuwar rana"
+  },
+  "season": {
+    "in_days": "zai canza bayan kwana {n}",
+    "tomorrow": "zai canza gobe"
+  },
+  "kind": {
+    "holiday": "Hutu",
+    "birth": "Haihuwa",
+    "death": "Tunawa",
+    "anniversary": "Bikin shekara",
+    "other": "Rana muhimmi"
+  },
+  "wmo": {
+    "0": "Sararin sama a sarari",
+    "1": "Kusan a sarari",
+    "2": "Gizagizai kaɗan",
+    "3": "Gajimare",
+    "45": "Hazo",
+    "48": "Hazo mai sanyi",
+    "51": "Ruwa kaɗan",
+    "53": "Ruwan yayyafi",
+    "55": "Ruwan yayyafi mai yawa",
+    "56": "Yayyafi mai sanyi",
+    "57": "Yayyafi mai sanyi sosai",
+    "61": "Ruwan sama kaɗan",
+    "63": "Ruwan sama",
+    "65": "Ruwan sama mai ƴawa",
+    "66": "Ruwan sama mai sanyi",
+    "67": "Ruwan sama mai sanyi sosai",
+    "71": "Ƙanƙara kaɗan",
+    "73": "Ƙanƙara",
+    "75": "Ƙanƙara mai yawa",
+    "77": "Hatsin ƙanƙara",
+    "80": "Ruwan sama kaɗan na ɗan lokaci",
+    "81": "Ruwan sama na ɗan lokaci",
+    "82": "Ruwan sama mai yawa na ɗan lokaci",
+    "85": "Ƙanƙara na ɗan lokaci",
+    "86": "Ƙanƙara mai yawa na ɗan lokaci",
+    "95": "Tsawa da hadari",
+    "96": "Tsawa da ƙanƙara",
+    "99": "Tsawa mai tsanani da ƙanƙara"
+  },
+  "seasons": {
+    "spring": "Bazara",
+    "summer": "Rani",
+    "autumn": "Kaka",
+    "winter": "Hunturu"
+  },
+  "setup": {
+    "title": "Saita ni daga wayarka",
+    "text": "Ɗauki hoton nan, ko buɗe wannan adireshin a waya ko kwamfuta da ke kan Wi-Fi iri ɗaya:"
+  }
+}
