@@ -69,7 +69,7 @@ your phone can pick the right one, with no keyboard ([how it works](docs/WIFI_SE
 <details><summary>Use an old tablet as the screen, installer options, uninstall</summary>
 
 **Tablet or phone as the screen**: install with `--no-screen` on the Pi (or any computer), then open
-`http://beranda.local:8080` in the tablet's browser (Google Chrome recommended, especially for voice) and add it to the home
+`http://beranda.local:8080` in the tablet's browser (Google Chrome recommended: Edge caused trouble) and add it to the home
 screen. The radio and the voice use **the tablet's** speakers and microphone.
 
 Options go after `bash -s --`, for example `... | sudo bash -s -- --no-screen`:
@@ -85,7 +85,7 @@ To remove it: `sudo /opt/beranda/src/uninstall.sh` (add `--purge` to delete your
 
 ## Set it up from your phone
 
-Open `http://beranda.local:8080/admin`. A ☰ menu jumps to any section; every section has a
+Open `http://beranda.local:8080/admin` (**Google Chrome** works best). A ☰ menu jumps to any section; every section has a
 **Need help?** link in plain words. The essentials, in order:
 
 1. **Where are you?** Type your town and pick it. Weather, sun and moon follow.

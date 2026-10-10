@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "O Wi-Fi do Pi está desligado: prima «Ligar o Wi-Fi» acima.",
   "wifi_err_timeout_connect": "A rede não respondeu a tempo (demasiado longe do router?).",
   "wifi_switch_cable": "O Pi continua acessível pelo cabo de rede.",
-  "wifi_detail": "(Mensagem do sistema: {detail})"
+  "wifi_detail": "(Mensagem do sistema: {detail})",
+  "wifi_err_busy": "O Pi está ocupado (há uma atualização ou outra alteração em curso). Tente outra vez dentro de um minuto.",
+  "wifi_err_stuck": "O serviço auxiliar do Pi está bloqueado. No Pi, escreva: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "Dica: o Beranda funciona melhor no Google Chrome. O Microsoft Edge deu problemas (controlo por voz, páginas guardadas de uma versão antiga)."
 }

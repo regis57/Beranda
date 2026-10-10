@@ -105,3 +105,6 @@ One line per version, newest last. Each one was a pull request on
   on from the page (setting the Wi-Fi country from Beranda's country when none is set); browsers no
   longer keep last version's scripts after an update (an empty Wi-Fi box in Edge); the end of an
   update is run by the new version of the root helper, so new steps work at once
+- **v0.16.2**: first real Wi-Fi change made from the settings page (Pi 4, cable to Wi-Fi). A request with no
+  answer now says whether the Pi is busy (an update) or its helper is stuck, with the command to unblock
+  it; Edge users see a gentle tip to use Google Chrome, now the recommended browser everywhere

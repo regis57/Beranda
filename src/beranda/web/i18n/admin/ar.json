@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "الواي فاي في Pi مطفأ: اضغط «تشغيل الواي فاي» في الأعلى.",
   "wifi_err_timeout_connect": "لم تجب الشبكة في الوقت المطلوب (بعيد جدًا عن الراوتر؟).",
   "wifi_switch_cable": "يبقى Pi متاحًا عبر كابل الشبكة.",
-  "wifi_detail": "(رسالة النظام: {detail})"
+  "wifi_detail": "(رسالة النظام: {detail})",
+  "wifi_err_busy": "Pi مشغول (تحديث أو تغيير آخر قيد التنفيذ). حاول مجددًا بعد دقيقة.",
+  "wifi_err_stuck": "خدمة المساعدة في Pi متوقفة. على Pi اكتب: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "نصيحة: يعمل Beranda بأفضل شكل في Google Chrome. سبّب Microsoft Edge مشكلات (التحكم الصوتي، صفحات محفوظة من إصدار أقدم)."
 }

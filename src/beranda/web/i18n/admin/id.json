@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "Wi-Fi Pi mati: tekan “Nyalakan Wi-Fi” di atas.",
   "wifi_err_timeout_connect": "Jaringan tidak menjawab tepat waktu (terlalu jauh dari router?).",
   "wifi_switch_cable": "Pi tetap bisa dijangkau lewat kabel jaringan.",
-  "wifi_detail": "(Pesan sistem: {detail})"
+  "wifi_detail": "(Pesan sistem: {detail})",
+  "wifi_err_busy": "Pi sedang sibuk (ada pembaruan atau perubahan lain yang berjalan). Coba lagi dalam satu menit.",
+  "wifi_err_stuck": "Layanan bantu Pi macet. Di Pi, ketik: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "Tip: Beranda paling baik di Google Chrome. Microsoft Edge pernah bermasalah (kendali suara, halaman tersimpan dari versi lama)."
 }

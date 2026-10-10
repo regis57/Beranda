@@ -72,7 +72,7 @@ propre Wi-Fi « Beranda setup » pour que votre téléphone choisisse le bon, sa
 
 **Tablette ou téléphone comme écran** : installez avec `--no-screen` sur le Pi (ou n'importe quel
 ordinateur), puis ouvrez `http://beranda.local:8080` dans le navigateur de la tablette (Google Chrome
-conseillé, surtout pour la voix) et ajoutez la page à l'écran d'accueil. La radio et la voix utilisent **les haut-parleurs
+conseillé : Edge a posé des soucis) et ajoutez la page à l'écran d'accueil. La radio et la voix utilisent **les haut-parleurs
 et le micro de la tablette**.
 
 Les options se placent après `bash -s --`, par exemple `... | sudo bash -s -- --no-screen` :
@@ -89,7 +89,7 @@ Pour le retirer : `sudo /opt/beranda/src/uninstall.sh` (ajoutez `--purge` pour e
 
 ## Réglez-le depuis votre téléphone
 
-Ouvrez `http://beranda.local:8080/admin`. Un menu ☰ mène à chaque section ; chacune a un lien
+Ouvrez `http://beranda.local:8080/admin` (**Google Chrome** marche le mieux). Un menu ☰ mène à chaque section ; chacune a un lien
 **Besoin d'aide ?** en mots simples. L'essentiel, dans l'ordre :
 
 1. **Où êtes-vous ?** Tapez votre ville et choisissez-la. Météo, soleil et lune suivent.

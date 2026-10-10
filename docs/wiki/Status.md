@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.16.1 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.16.2 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
@@ -18,13 +18,15 @@
 | Weather warnings (MeteoAlarm) | ⚠️ works, area names differ by country | France only; the settings page now spots an area that does not match the town |
 | Limits per board (Pi 2 to Pi 5) | ⚠️ estimates | only the Pi 4 2 GB was measured |
 | Raspberry Pi 3B+, Pi 5, Pi 2, Zero 2 W | ❓ untested | help welcome |
-| Wi-Fi box (add, use now with automatic way back, forget) | ❓ new in 0.16, tested with a simulated Wi-Fi | first try on a Pi: keep a cable at hand |
-| Wi-Fi safety net "Beranda setup" (on by default) | ❓ never tried on a real Pi | |
+| Wi-Fi box: see, search, save a password, use now | ✅ works | real Pi 4: switched from cable to Wi-Fi from the page (October 2026) |
+| Wi-Fi: automatic way back after a failed switch, forget | ⚠️ tested with a simulated Wi-Fi | |
+| Wi-Fi safety net "Beranda setup" (on by default) | ⚠️ installed and running on a real Pi 4; opening it (no network at all) not tried yet | |
 | Ready-to-flash image | ❓ built, never tried on a real Pi | |
 
 ## Known issues
 
-- **Voice on Microsoft Edge** does not work (the browser's own speech service fails). Use Google Chrome.
+- **Use Google Chrome.** Microsoft Edge caused trouble: its speech service fails (no voice control),
+  and it kept an older version of the settings page after an update. Everything was checked in Chrome.
 - **Weather warnings**: the area must be written as MeteoAlarm writes it in your country; use the *Test* button.
 - **8 GB SD cards** are tight: since 0.15.9 every update keeps them tidy, 16 GB is more comfortable.
 - **Self-made certificate**: the first visit to `https://` shows a "not private" warning, once per browser.

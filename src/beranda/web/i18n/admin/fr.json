@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "Le Wi-Fi du Pi est éteint : appuyez sur « Allumer le Wi-Fi » plus haut.",
   "wifi_err_timeout_connect": "Le réseau n'a pas répondu à temps (trop loin de la box ?).",
   "wifi_switch_cable": "Le Pi reste joignable par le câble réseau.",
-  "wifi_detail": "(Message du système : {detail})"
+  "wifi_detail": "(Message du système : {detail})",
+  "wifi_err_busy": "Le Pi est occupé (une mise à jour ou un autre changement est en cours). Réessayez dans une minute.",
+  "wifi_err_stuck": "Le service système du Pi est bloqué. Sur le Pi, tapez : sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "Conseil : Beranda marche le mieux dans Google Chrome. Microsoft Edge a posé des soucis (commande vocale, pages gardées d'une ancienne version)."
 }

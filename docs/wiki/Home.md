@@ -8,7 +8,7 @@ by day, dark at night. Free, open source (MIT), no account, no subscription.
 
 ![Beranda at night](https://raw.githubusercontent.com/regis57/Beranda/main/docs/screenshots/v0.14.0-display-night.png)
 
-**Current version: 0.16.1 (alpha)**, used every day on a Raspberry Pi 4. See [Status](Status).
+**Current version: 0.16.2 (alpha)**, used every day on a Raspberry Pi 4. See [Status](Status).
 
 | I want to... | Go to |
 |---|---|
@@ -21,5 +21,8 @@ by day, dark at night. Free, open source (MIT), no account, no subscription.
 | read the code, or help | [Architecture](Architecture) · [Contributing](Contributing) |
 
 The [README](https://github.com/regis57/Beranda#readme) is the short tour; this wiki is the full manual.
+
+**Browser**: use **Google Chrome** for the settings page and the display. Microsoft Edge caused
+trouble (voice control, pages kept from an older version).
 
 If Beranda brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.

@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "Wi-Fi ya Pi imezimwa: bonyeza “Washa Wi-Fi” hapo juu.",
   "wifi_err_timeout_connect": "Mtandao haukujibu kwa wakati (mbali sana na ruta?).",
   "wifi_switch_cable": "Pi bado inafikika kupitia kebo ya mtandao.",
-  "wifi_detail": "(Ujumbe wa mfumo: {detail})"
+  "wifi_detail": "(Ujumbe wa mfumo: {detail})",
+  "wifi_err_busy": "Pi ina shughuli (sasisho au badiliko jingine linaendelea). Jaribu tena baada ya dakika moja.",
+  "wifi_err_stuck": "Huduma saidizi ya Pi imekwama. Kwenye Pi, andika: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "Kidokezo: Beranda hufanya kazi vizuri zaidi kwenye Google Chrome. Microsoft Edge imeleta matatizo (udhibiti wa sauti, kurasa zilizobaki za toleo la zamani)."
 }

@@ -6,6 +6,9 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
+| A box of the settings page stays empty, odd behaviour in Edge | Edge kept an older version of the page | use Google Chrome; in Edge press Ctrl+F5 |
+| "The Pi is busy" | an update or a Wi-Fi change is running (about 1.5 min for an update) | wait a minute, reload |
+| "The Pi's helper service is stuck" | the root helper failed several times | on the Pi: `sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path` |
 | The settings page does not answer | Beranda restarting, or another port | wait a minute; `sudo beranda doctor` tells the real address |
 | Lost after changing the port | the address changed | open the new one; *Start over* brings back 8080 |
 | `ERR_SSL_PROTOCOL_ERROR` | `https://` on a version before 0.15.2 | update, then use `https://` on the usual port |
