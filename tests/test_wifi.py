@@ -212,3 +212,20 @@ def test_turning_the_radio_on_sets_the_wifi_country_only_when_missing(monkeypatc
     monkeypatch.setattr(wifi, "_run", lambda args, timeout=30: calls.append(args) or subprocess.CompletedProcess(args, 0, "DE", ""))
     assert wifi.radio_on("FR")["country_set"] is False  # a country chosen before is kept
     assert not any("do_wifi_country" in c for c in calls)
+
+
+def test_a_request_without_answer_can_tell_busy_from_stuck(monkeypatch):
+    from beranda import system
+
+    states = {"beranda-actions.service": "activating", "beranda-actions.path": "active"}
+    monkeypatch.setattr("shutil.which", lambda name: "/bin/systemctl")
+
+    def run(args, **kw):
+        return subprocess.CompletedProcess(args, 0, states[args[-1]] + "\n", "")
+
+    monkeypatch.setattr(subprocess, "run", run)
+    assert system.helper_state() == "busy"
+    states["beranda-actions.service"] = "failed"
+    assert system.helper_state() == "stuck"
+    states.update({"beranda-actions.service": "inactive", "beranda-actions.path": "active"})
+    assert system.helper_state() == "ok"

@@ -439,6 +439,12 @@ def router(runtime: Runtime) -> APIRouter:
             json.dump(job, fh)
         return {"job": job_id}
 
+    @api.get("/helper", dependencies=[Depends(guard)])
+    async def helper_state() -> dict:
+        """Is the root helper free, busy (an update or a Wi-Fi change takes a while), or stuck?
+        Any user may ask systemd this; the page uses it to explain a request with no answer."""
+        return {"state": system.helper_state()}
+
     @api.get("/wifi-job/{job_id}", dependencies=[Depends(guard)])
     async def wifi_job_result(job_id: str) -> dict:
         if not wifi_mod.JOB_ID.match(job_id):

@@ -179,3 +179,4 @@ button.danger:disabled { background: transparent; color: var(--ink-2); border-co
 .wifi-list li .tag.on { border-color: var(--ok); color: var(--ok); }
 .wifi-list button.pick { text-align: start; width: 100%; display: flex; gap: .6rem; align-items: center; }
 .bars { font-family: monospace; letter-spacing: -.1em; color: var(--ok); }
+.edge-hint { border: 1px solid var(--line); border-inline-start: 4px solid #ffb300; border-radius: .5rem; padding: .55rem .8rem; margin: 0; }

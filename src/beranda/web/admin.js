@@ -78,11 +78,18 @@ function t(key, vars) {
   for (const [k, v] of Object.entries(vars || {})) s = s.replaceAll(`{${k}}`, v);
   return s;
 }
+// Edge has caused trouble (its speech service, pages kept from an old version): say once, gently.
+function edgeHint() {
+  const isEdge = /\bEdg\//.test(navigator.userAgent);
+  $('edge-hint').hidden = !isEdge;
+  if (isEdge) $('edge-hint').textContent = t('admin.edge_hint');
+}
 function translateStatic() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   for (const el of document.querySelectorAll('[data-ph]')) el.placeholder = t(el.dataset.ph);
   $('open-display').textContent = t('admin.open_display');
   $('menu-label').textContent = t('admin.menu');
+  edgeHint();
   $('coffee-label').textContent = t('admin.coffee');
   $('menu-coffee-label').textContent = `☕ ${t('admin.coffee')}`;
   $('coffee').title = t('admin.coffee_hint');
@@ -866,7 +873,8 @@ function armed(button, run) {
 // The root helper does the work (wifi.py): each request is a small job whose answer is read back.
 // Adding never cuts the current connection; switching goes back by itself if the new one fails.
 const WIFI_ERRORS = new Set(['bad_name', 'bad_password', 'not_saved', 'unknown_network', 'in_use', 'not_forgotten',
-  'switch_failed', 'nmcli_missing', 'timeout', 'not_installed', 'wrong_password', 'not_found', 'radio_off', 'timeout_connect']);
+  'switch_failed', 'nmcli_missing', 'timeout', 'not_installed', 'wrong_password', 'not_found', 'radio_off', 'timeout_connect',
+  'busy', 'stuck']);
 // The system's own words, after ours: useful in a bug report (never holds a password).
 const withDetail = (text, r) => (r && r.detail ? `${text} ${t('admin.wifi_detail', { detail: r.detail })}` : text);
 const wifiText = (code) => t(`admin.wifi_err_${WIFI_ERRORS.has(code) ? code : 'failed'}`);
@@ -881,7 +889,10 @@ async function wifiJob(op, body = {}, seconds = 30) {
       if (answer.done) return answer;
     } catch { /* while the Pi changes network, this page can lose it for a moment: keep asking */ }
   }
-  return { done: true, ok: false, error: 'timeout' };
+  // No answer: say whether the Pi is busy (an update...) or its helper is stuck, not just "no answer".
+  let state = 'unknown';
+  try { ({ state } = await api('/helper')); } catch { /* keep "unknown" */ }
+  return { done: true, ok: false, error: state === 'busy' ? 'busy' : state === 'stuck' ? 'stuck' : 'timeout' };
 }
 const bars = (signal) => (signal == null ? '' : ['▂', '▂▄', '▂▄▆', '▂▄▆█'][Math.min(3, Math.floor(signal / 25))]);
 let wifiState = null;

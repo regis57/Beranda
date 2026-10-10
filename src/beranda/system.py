@@ -79,6 +79,30 @@ def wifi_setup_status() -> dict | None:
         return None
 
 
+def helper_state() -> str:
+    """"busy" (beranda-actions is running something), "stuck" (failed, or its watcher stopped),
+    "ok", or "unknown" (no systemd here)."""
+    import shutil
+    import subprocess
+
+    if not shutil.which("systemctl"):
+        return "unknown"
+
+    def state(unit: str) -> str:
+        try:
+            return subprocess.run(["systemctl", "is-active", unit], capture_output=True, text=True,
+                                  timeout=5, check=False).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            return "unknown"
+
+    service, watcher = state("beranda-actions.service"), state("beranda-actions.path")
+    if service in ("activating", "active", "reloading"):
+        return "busy"
+    if service == "failed" or watcher in ("failed", "inactive"):
+        return "stuck"
+    return "ok" if watcher == "active" else "unknown"
+
+
 def request_action(action: str) -> None:
     if action not in ACTIONS:
         raise ValueError(f"unknown action {action!r}")

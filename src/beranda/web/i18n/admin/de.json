@@ -438,5 +438,8 @@
   "wifi_err_radio_off": "Das WLAN des Pi ist aus: Tippen Sie oben auf „WLAN einschalten“.",
   "wifi_err_timeout_connect": "Das Netz hat nicht rechtzeitig geantwortet (zu weit vom Router?).",
   "wifi_switch_cable": "Der Pi bleibt über das Netzwerkkabel erreichbar.",
-  "wifi_detail": "(Systemmeldung: {detail})"
+  "wifi_detail": "(Systemmeldung: {detail})",
+  "wifi_err_busy": "Der Pi ist beschäftigt (ein Update oder eine andere Änderung läuft). Versuchen Sie es in einer Minute erneut.",
+  "wifi_err_stuck": "Der Hilfsdienst des Pi hängt. Tippen Sie auf dem Pi: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
+  "edge_hint": "Tipp: Beranda läuft am besten in Google Chrome. Microsoft Edge hat Probleme gemacht (Sprachsteuerung, Seiten aus einer älteren Version)."
 }
