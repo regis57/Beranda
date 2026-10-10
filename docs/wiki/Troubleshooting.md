@@ -20,6 +20,7 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 | SD card full | caches, logs, swap file | update (it tidies), or the free-space line in [Install & Update](Install-and-Update) |
 | New box / Wi-Fi password changed | the Pi knows no network in range | wait 2 minutes, join the "Beranda setup" Wi-Fi from a phone, pick the new network |
 | "Use now" on a network did not work | wrong password, out of range | the Pi went back to the previous network by itself; fix the password with *Save this network* |
+| "offline" badge while everything looks current | before 0.16.4: one news source failing (often "news about my town") | update; the diagnostic file names it in its log lines |
 | Black screen on the Pi | the screen service stopped | `sudo systemctl restart beranda-kiosk` |
 | Nothing shows a calendar | link expired or wrong | box 5: paste it again, *Test* |
 

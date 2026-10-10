@@ -113,7 +113,7 @@ async def build_news(cfg: Config, cache: Cache, now: datetime, errors: dict, sta
 
         digest = hashlib.sha1(url.encode()).hexdigest()[:12]
         try:
-            items, is_stale = await cache.get(f"news:{digest}", NEWS_TTL, load)
+            items, is_stale = await cache.get(f"news:{key}:{digest}", NEWS_TTL, load)  # key: names the source in logs
             if is_stale:
                 stale.append(f"news:{key}")
             return items
