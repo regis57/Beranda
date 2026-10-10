@@ -441,5 +441,7 @@
   "wifi_detail": "(Pesan sistem: {detail})",
   "wifi_err_busy": "Pi sedang sibuk (ada pembaruan atau perubahan lain yang berjalan). Coba lagi dalam satu menit.",
   "wifi_err_stuck": "Layanan bantu Pi macet. Di Pi, ketik: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "Tip: Beranda paling baik di Google Chrome. Microsoft Edge pernah bermasalah (kendali suara, halaman tersimpan dari versi lama)."
+  "edge_hint": "Tip: Beranda paling baik di Google Chrome. Microsoft Edge pernah bermasalah (kendali suara, halaman tersimpan dari versi lama).",
+  "w_nameday": "Hari nama besar-besar, di kanan atas",
+  "w_nameday_hint": "Di negara yang merayakan hari nama (Prancis, Jerman, Polandia, Swedia, Hungaria…), dengan nama-nama negara Anda. Besar di kanan atas dengan tema Prancis; dengan tema lain tetap di baris efemeris."
 }

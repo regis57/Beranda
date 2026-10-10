@@ -441,5 +441,7 @@
   "wifi_detail": "(رسالة النظام: {detail})",
   "wifi_err_busy": "Pi مشغول (تحديث أو تغيير آخر قيد التنفيذ). حاول مجددًا بعد دقيقة.",
   "wifi_err_stuck": "خدمة المساعدة في Pi متوقفة. على Pi اكتب: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "نصيحة: يعمل Beranda بأفضل شكل في Google Chrome. سبّب Microsoft Edge مشكلات (التحكم الصوتي، صفحات محفوظة من إصدار أقدم)."
+  "edge_hint": "نصيحة: يعمل Beranda بأفضل شكل في Google Chrome. سبّب Microsoft Edge مشكلات (التحكم الصوتي، صفحات محفوظة من إصدار أقدم).",
+  "w_nameday": "يوم الاسم بخط كبير، أعلى اليمين",
+  "w_nameday_hint": "في البلدان التي تحتفل بيوم الاسم (فرنسا، ألمانيا، بولندا، السويد، المجر…)، بأسماء بلدك. بخط كبير أعلى اليمين مع مظهر فرنسا؛ ومع المظاهر الأخرى يبقى في سطر التقويم اليومي."
 }

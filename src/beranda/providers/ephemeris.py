@@ -46,9 +46,15 @@ def _find(node, key: str):
 
 
 def parse_nameday(payload: dict, country: str) -> str | None:
+    """The names of the day for `country`. The service answers {"data": {"fr": "Ghislain", ...}}
+    (older answers nested them under "namedays"); "n/a" means none today."""
+    code = (country or "").lower()
     names = _find(payload, "namedays") or {}
-    text = names.get((country or "").lower())
-    if not isinstance(text, str):
+    if not isinstance(names.get(code), str):
+        data = payload.get("data") if isinstance(payload, dict) else None
+        names = data if isinstance(data, dict) else {}
+    text = names.get(code)
+    if not isinstance(text, str) or text.strip().lower() in ("n/a", "-", ""):
         return None
     cleaned = ", ".join(part.strip() for part in text.split(",") if part.strip())
     return cleaned or None

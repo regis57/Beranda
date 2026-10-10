@@ -386,3 +386,16 @@ body[data-sleep="true"] .board, body[data-sleep="true"] .setup { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   body { transition: none; }
 }
+
+/* The name day, in big, in the place the France theme leaves free at the top right. */
+.nameday-top { flex: 1 1 auto; min-width: 7rem; max-width: 50%; align-self: center; text-align: end; }
+.nd-label { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent, currentColor); }
+.nd-names { font-size: 1.9rem; line-height: 1.15; overflow-wrap: break-word; hyphens: auto;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+[dir="rtl"] .nameday-top { text-align: start; }
+/* Upright or narrow screens: the sky column is narrow, so the name day goes on its own line. */
+@media (max-aspect-ratio: 1/1), (max-width: 760px) {
+  .sky:has(.nameday-top:not([hidden])) { flex-wrap: wrap; }
+  .nameday-top { flex-basis: 100%; max-width: none; text-align: start; display: flex; align-items: baseline; gap: 0.8rem; }
+  .nd-names { font-size: 1.5rem; }
+}
