@@ -421,6 +421,8 @@ def router(runtime: Runtime) -> APIRouter:
                 job.update(ssid=wifi_mod.check_ssid(body.get("ssid")),
                            password=wifi_mod.check_password(body.get("password", "")),
                            hidden=bool(body.get("hidden")))
+            elif op == "radio_on":
+                job["country"] = runtime.cfg.country.upper()[:2]
             elif op in ("forget", "switch"):
                 if body.get("confirmed") is not True:
                     raise HTTPException(400, "the change must be confirmed")

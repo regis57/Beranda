@@ -95,7 +95,7 @@ def test_switching_goes_back_by_itself_when_the_new_network_fails(monkeypatch):
     failing = FakeNmcli(up_ok=False)
     monkeypatch.setattr(wifi, "_run", failing)
     r = wifi.switch("Bureau")
-    assert r == {"ok": False, "name": "Bureau", "error": "switch_failed", "back_to": "Maison"}
+    assert r["ok"] is False and r["back_to"] == "Maison" and r["error"] == "switch_failed"
     assert failing.calls[-1][-1] == "Maison"  # the last thing done: back to the network that worked
     working = FakeNmcli()
     monkeypatch.setattr(wifi, "_run", working)
@@ -182,3 +182,33 @@ def test_the_installer_accepts_saying_no_to_the_safety_net():
     out = subprocess.run(["bash", str(root / "install.sh"), "--dry-run", "--no-wifi-setup"],
                          capture_output=True, text=True, check=True).stdout
     assert "beranda-wifi-setup" not in out
+
+
+def test_a_failure_says_why_in_plain_words_and_never_shows_the_password():
+    def done(err):
+        return subprocess.CompletedProcess([], 4, "", err)
+
+    assert wifi.why(done("Error: Connection activation failed: Secrets were required, but not provided."))[0] == "wrong_password"
+    assert wifi.why(done("Error: No network with SSID 'Mamie' found."))[0] == "not_found"
+    assert wifi.why(done("Error: Wi-Fi radio is disabled (rfkill)."))[0] == "radio_off"
+    assert wifi.why(done("Error: Timeout expired (45 seconds)"))[0] == "timeout_connect"
+    code, detail = wifi.why(done("Error: bad psk 'hunter2xyz'"), "hunter2xyz")
+    assert code == "wrong_password" and "hunter2xyz" not in detail
+
+
+def test_turning_the_radio_on_sets_the_wifi_country_only_when_missing(monkeypatch):
+    calls = []
+
+    def run(args, timeout=30):
+        calls.append(args)
+        out = "" if args[-1] == "get_wifi_country" else "ok"
+        return subprocess.CompletedProcess(args, 0, out, "")
+
+    monkeypatch.setattr(wifi, "_run", run)
+    monkeypatch.setattr(wifi.shutil, "which", lambda name: f"/usr/bin/{name}")
+    assert wifi.radio_on("FR") == {"ok": True, "country_set": True}
+    assert ["raspi-config", "nonint", "do_wifi_country", "FR"] in calls and ["nmcli", "radio", "wifi", "on"] in calls
+    calls.clear()
+    monkeypatch.setattr(wifi, "_run", lambda args, timeout=30: calls.append(args) or subprocess.CompletedProcess(args, 0, "DE", ""))
+    assert wifi.radio_on("FR")["country_set"] is False  # a country chosen before is kept
+    assert not any("do_wifi_country" in c for c in calls)

@@ -428,5 +428,15 @@
   "wifi_err_nmcli_missing": "Mfumo huu hautumii NetworkManager, kwa hivyo Beranda haiwezi kusimamia Wi-Fi yake.",
   "wifi_err_timeout": "Hakuna jibu kutoka Pi. Pakia ukurasa upya baada ya dakika moja.",
   "wifi_err_not_installed": "Mipangilio ya Wi-Fi hufanya kazi kwenye Pi iliyosakinishwa kwa kisakinishi cha Beranda.",
-  "wifi_err_failed": "Kuna kitu kimeharibika. Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume."
+  "wifi_err_failed": "Kuna kitu kimeharibika. Pakua faili ya uchunguzi (Mtumiaji mwenye ujuzi) na uitume.",
+  "wifi_radio_off": "Wi-Fi ya Pi imezimwa. Kwenye Raspberry Pi OS hili hutokea mara nyingi nchi ya Wi-Fi isipowahi kuwekwa.",
+  "wifi_radio_on": "Washa Wi-Fi",
+  "wifi_radio_done": "Wi-Fi imewashwa. Tafuta mitandao tena.",
+  "wifi_radio_done_country": "Wi-Fi imewashwa, na nchi yako kama nchi ya Wi-Fi (inahitajika kisheria). Tafuta mitandao tena.",
+  "wifi_err_wrong_password": "Nenosiri si sahihi kwa mtandao huu (angalia herufi kubwa na ndogo).",
+  "wifi_err_not_found": "Mtandao huu hauko karibu na Pi kwa sasa.",
+  "wifi_err_radio_off": "Wi-Fi ya Pi imezimwa: bonyeza “Washa Wi-Fi” hapo juu.",
+  "wifi_err_timeout_connect": "Mtandao haukujibu kwa wakati (mbali sana na ruta?).",
+  "wifi_switch_cable": "Pi bado inafikika kupitia kebo ya mtandao.",
+  "wifi_detail": "(Ujumbe wa mfumo: {detail})"
 }

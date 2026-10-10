@@ -428,5 +428,15 @@
   "wifi_err_nmcli_missing": "Sistem ini tidak memakai NetworkManager, jadi Beranda tidak dapat mengelola Wi-Fi-nya.",
   "wifi_err_timeout": "Tidak ada jawaban dari Pi. Muat ulang halaman dalam satu menit.",
   "wifi_err_not_installed": "Pengaturan Wi-Fi bekerja di Pi yang dipasang dengan pemasang Beranda.",
-  "wifi_err_failed": "Ada yang salah. Unduh berkas diagnostik (Pengguna mahir) dan kirimkan."
+  "wifi_err_failed": "Ada yang salah. Unduh berkas diagnostik (Pengguna mahir) dan kirimkan.",
+  "wifi_radio_off": "Wi-Fi Pi mati. Di Raspberry Pi OS ini sering terjadi bila negara Wi-Fi belum pernah disetel.",
+  "wifi_radio_on": "Nyalakan Wi-Fi",
+  "wifi_radio_done": "Wi-Fi menyala. Cari jaringan lagi.",
+  "wifi_radio_done_country": "Wi-Fi menyala, dengan negara Anda sebagai negara Wi-Fi (wajib menurut hukum). Cari jaringan lagi.",
+  "wifi_err_wrong_password": "Kata sandi salah untuk jaringan ini (perhatikan huruf besar-kecil).",
+  "wifi_err_not_found": "Jaringan ini sedang tidak dalam jangkauan Pi.",
+  "wifi_err_radio_off": "Wi-Fi Pi mati: tekan “Nyalakan Wi-Fi” di atas.",
+  "wifi_err_timeout_connect": "Jaringan tidak menjawab tepat waktu (terlalu jauh dari router?).",
+  "wifi_switch_cable": "Pi tetap bisa dijangkau lewat kabel jaringan.",
+  "wifi_detail": "(Pesan sistem: {detail})"
 }

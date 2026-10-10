@@ -24,6 +24,7 @@ import json
 import os
 import re
 import secrets
+import shutil
 import subprocess
 import sys
 import time
@@ -31,7 +32,7 @@ from pathlib import Path
 
 from .wifi_setup import AP_CON_NAME, AP_SSID, scan
 
-OPS = ("status", "scan", "add", "forget", "switch")
+OPS = ("status", "scan", "add", "forget", "switch", "radio_on")
 SWITCH_WAIT_SECONDS = 45
 JOB_ID = re.compile(r"^[0-9a-f]{12}$")
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
@@ -49,6 +50,32 @@ def _terse(line: str) -> list[str]:
     """One line of `nmcli -t` output: fields split on ':', where nmcli writes a ':' inside a
     field as '\\:'."""
     return [part.replace("\\:", ":") for part in re.split(r"(?<!\\):", line)]
+
+
+def why(result: subprocess.CompletedProcess, password: str = "") -> tuple[str, str]:
+    """(code, detail) for a failed nmcli call: a code the page words in plain language, and
+    nmcli's own last line for the diagnostic (never with the password in it)."""
+    text = (result.stderr or result.stdout or "").strip()
+    detail = text.splitlines()[-1] if text else ""
+    if password:
+        detail = detail.replace(password, "***")
+    low = text.lower()
+    if any(k in low for k in ("secrets were required", "802-1x supplicant", "psk", "wrong password", "invalid password")):
+        code = "wrong_password"
+    elif "no network with ssid" in low or "not found" in low:
+        code = "not_found"
+    elif any(k in low for k in ("radio", "rfkill", "wi-fi is disabled", "unavailable", "not available")):
+        code = "radio_off"
+    elif "timeout" in low or "timed out" in low:
+        code = "timeout_connect"
+    else:
+        code = "switch_failed"
+    return code, detail[:200]
+
+
+def log(message: str) -> None:
+    """One line in the system log (journalctl -u beranda-actions); never a password."""
+    print(f"beranda-wifi-job: {message}", file=sys.stderr, flush=True)
 
 
 # ------------------------------------------------------------------ checks ---
@@ -85,6 +112,7 @@ def saved() -> list[dict]:
 def status() -> dict:
     """Which network is in use, how strong, the Pi's address, and whether a cable is plugged in."""
     wifi = {"device": "", "connection": "", "ssid": "", "signal": None}
+    wifi_state = ""
     ethernet = False
     for line in _run(["nmcli", "-t", "-f", "DEVICE,TYPE,STATE,CONNECTION", "device"]).stdout.splitlines():
         parts = _terse(line)
@@ -93,6 +121,7 @@ def status() -> dict:
         device, kind, state, connection = parts[:4]
         if kind == "wifi" and not wifi["device"]:
             wifi["device"] = device
+            wifi_state = state
             if state.startswith("connected"):
                 wifi["connection"] = connection
         elif kind == "ethernet" and state.startswith("connected"):
@@ -110,7 +139,10 @@ def status() -> dict:
                 address = line.split(":", 1)[1].split("/")[0]
                 break
     net = _run(["systemctl", "is-enabled", "beranda-wifi-setup.service"]).stdout.strip()
+    radio = _run(["nmcli", "radio", "wifi"]).stdout.strip()
     return {
+        "radio": radio != "disabled",
+        "wifi_state": wifi_state,
         "available": bool(wifi["device"]),
         "connection": wifi["connection"] if wifi["connection"] != AP_CON_NAME else "",
         "setup_hotspot": wifi["connection"] == AP_CON_NAME,
@@ -144,7 +176,10 @@ def add(ssid: str, password: str, hidden: bool = False) -> dict:
         pass  # an open network: no security section at all
     result = _run(args)
     if result.returncode != 0:
-        raise WifiError("not_saved")
+        _code, detail = why(result, password)
+        log(f"saving {ssid!r} failed: {detail}")
+        return {"ok": False, "error": "not_saved", "detail": detail}
+    log(f"saved {ssid!r}")
     return {"ok": True, "name": name, "updated": bool(known)}
 
 
@@ -172,11 +207,35 @@ def switch(name: str) -> dict:
     result = _run(["nmcli", "--wait", str(SWITCH_WAIT_SECONDS), "connection", "up", "id", name],
                   timeout=SWITCH_WAIT_SECONDS + 15)
     if result.returncode == 0:
+        log(f"now on {name!r}")
         return {"ok": True, "name": name}
+    code, detail = why(result)
+    log(f"could not use {name!r} ({code}): {detail}")
     back = False
     if previous:
         back = _run(["nmcli", "--wait", "30", "connection", "up", "id", previous], timeout=45).returncode == 0
-    return {"ok": False, "name": name, "error": "switch_failed", "back_to": previous if back else ""}
+    return {"ok": False, "name": name, "error": code, "detail": detail, "back_to": previous if back else "",
+            "ethernet": current["ethernet"]}
+
+
+def radio_on(country: str = "") -> dict:
+    """Turn the Wi-Fi radio on. On Raspberry Pi OS it stays off until a Wi-Fi country is set
+    (a legal requirement): set it from Beranda's own country when none is set yet."""
+    done = []
+    if country and re.fullmatch(r"[A-Z]{2}", country) and shutil.which("raspi-config"):
+        current = _run(["raspi-config", "nonint", "get_wifi_country"]).stdout.strip()
+        if not re.fullmatch(r"[A-Z]{2}", current or "") and \
+                _run(["raspi-config", "nonint", "do_wifi_country", country]).returncode == 0:
+            done.append(f"country {country}")
+    if shutil.which("rfkill"):
+        _run(["rfkill", "unblock", "wifi"])
+    result = _run(["nmcli", "radio", "wifi", "on"])
+    if result.returncode != 0:
+        _code, detail = why(result)
+        log(f"could not turn the Wi-Fi on: {detail}")
+        return {"ok": False, "error": "radio_off", "detail": detail}
+    log("Wi-Fi turned on" + (f" ({', '.join(done)})" if done else ""))
+    return {"ok": True, "country_set": bool(done)}
 
 
 def networks_around() -> dict:
@@ -195,6 +254,8 @@ def run_job(job: dict) -> dict:
         return networks_around()
     if op == "add":
         return add(job.get("ssid"), job.get("password", ""), bool(job.get("hidden")))
+    if op == "radio_on":
+        return radio_on(str(job.get("country", "")).upper())
     name = job.get("name")
     if not isinstance(name, str) or not name:
         raise WifiError("unknown_network")
