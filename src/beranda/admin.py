@@ -12,6 +12,7 @@ from __future__ import annotations
 import asyncio
 import hmac
 import ipaddress
+import json
 import logging
 import os
 import tempfile
@@ -27,6 +28,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from . import __version__, diagnostics, system, tls
 from . import config as config_mod
 from . import limits as limits_mod
+from . import wifi as wifi_mod
 from .config import Config
 from .providers import alerts, calendar_ics, news_catalog, photos, radio, seasons, tv, tv_guides
 from .providers import countries as world
@@ -403,6 +405,49 @@ def router(runtime: Runtime) -> APIRouter:
             except (RuntimeError, OSError):
                 pass
         return {"port": port, "restarting": restarting, "screen": screen}
+
+    # --- Wi-Fi: the root helper does the work (see wifi.py); here only a job file and its answer.
+    @api.post("/wifi/{op}", dependencies=[Depends(guard)])
+    async def wifi_job(op: str, body: dict | None = None) -> dict:
+        body = body or {}
+        if op not in wifi_mod.OPS:
+            raise HTTPException(404, "unknown Wi-Fi request")
+        folder = system.requests_dir()
+        if folder is None:
+            raise HTTPException(409, "wifi_not_installed")
+        job: dict = {"op": op}
+        try:
+            if op == "add":
+                job.update(ssid=wifi_mod.check_ssid(body.get("ssid")),
+                           password=wifi_mod.check_password(body.get("password", "")),
+                           hidden=bool(body.get("hidden")))
+            elif op in ("forget", "switch"):
+                if body.get("confirmed") is not True:
+                    raise HTTPException(400, "the change must be confirmed")
+                name = body.get("name")
+                if not isinstance(name, str) or not name or len(name) > 200:
+                    raise wifi_mod.WifiError("unknown_network")
+                job["name"] = name
+        except wifi_mod.WifiError as exc:
+            raise HTTPException(422, f"wifi_{exc}") from exc
+        job_id = wifi_mod.new_job_id()
+        path = folder / f"wifi-{job_id}.json"
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)  # it may hold a password
+        with os.fdopen(fd, "w") as fh:
+            json.dump(job, fh)
+        return {"job": job_id}
+
+    @api.get("/wifi-job/{job_id}", dependencies=[Depends(guard)])
+    async def wifi_job_result(job_id: str) -> dict:
+        if not wifi_mod.JOB_ID.match(job_id):
+            raise HTTPException(404, "unknown job")
+        answer = wifi_mod.results_dir() / f"{job_id}.json"
+        try:
+            return json.loads(answer.read_text())
+        except FileNotFoundError:
+            return {"done": False}
+        except (OSError, ValueError):
+            return {"done": True, "ok": False, "error": "failed"}
 
     @api.post("/diagnostics", dependencies=[Depends(guard)])
     async def diagnostics_file(body: dict) -> Response:

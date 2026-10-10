@@ -18,8 +18,11 @@ Beranda is one small Python web server and two web pages. No build step, no data
         └───────┬───────────────────────────────────────┬──────────────┘
                 │ drops a file in requests/             │ HTTPS to public services
                 ▼                                       ▼
-        beranda-actions (root, 4 words only)    Open-Meteo, MeteoAlarm, feeds, ...
+        beranda-actions (root, fixed words only)  Open-Meteo, MeteoAlarm, feeds, ...
         update · restart-screen · reboot · reset
+        + wifi-<id>.json jobs → beranda-wifi-job (checked, deleted at once)
+
+        beranda-wifi-setup (root): the safety net, opens "Beranda setup" when no network
 ```
 
 ## Pieces
@@ -34,6 +37,7 @@ Beranda is one small Python web server and two web pages. No build step, no data
 | Limits | `src/beranda/limits.py` | board + memory → profile → maximum per list |
 | Secure address | `src/beranda/tls.py` | self-made certificate (openssl), http and https on one port |
 | Diagnostics | `src/beranda/diagnostics.py` | the diagnostic file, recent log lines, screen reports |
+| Wi-Fi | `src/beranda/wifi.py`, `wifi_setup.py` | Wi-Fi jobs run by the root helper (nmcli); the always-on safety net and its setup page |
 | System | `src/beranda/system.py`, `system/` | screen hours, requests to the root service, installer units, kiosk script, `beranda-tidy` |
 | Pages | `src/beranda/web/` | plain ES modules, CSS, translations in `i18n/` |
 
@@ -48,6 +52,8 @@ Beranda is one small Python web server and two web pages. No build step, no data
 ## Security model
 
 - The settings API answers the **home network only**, can ask a **PIN**, and refuses cross-site writes.
-- The server never runs as root. Root actions are four fixed words dropped as files for `beranda-actions`.
+- The server never runs as root. Root actions are fixed words dropped as files for `beranda-actions`;
+  Wi-Fi jobs are small JSON files (mode 0600) that the root runner checks strictly and deletes at once
+  (they may hold a password); answers never contain a password.
 - A strict Content-Security-Policy: the pages load only their own files.
 - Secrets (calendar links, PIN) stay in `config.toml` (mode 0600) and never reach a log or the diagnostic file.

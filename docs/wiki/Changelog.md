@@ -95,3 +95,8 @@ One line per version, newest last. Each one was a pull request on
   a shell-script warning had turned them red since 0.14.0); fix - a first install on a new card
   stopped with an error at its very last step since 0.15.1 (updates were not affected)
 - **v0.15.10**: wiki links fixed (they broke inside tables); the READMEs link to the wiki pages
+- **v0.16.0**: a Wi-Fi box in the settings page: see the network, keep several, add one (never cuts
+  the current one), use one now (goes back by itself if it fails), forget one. The "Beranda setup"
+  safety net is on by default and watches all the time: with no known network for 2 minutes the Pi
+  opens its own Wi-Fi so a phone can pick the right one; it closes again and retries the known
+  networks by itself. Existing installs get it with the Update button

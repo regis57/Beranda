@@ -169,3 +169,13 @@ button.danger:disabled { background: transparent; color: var(--ink-2); border-co
 .impact ul { margin: .4rem 0 0; padding-inline-start: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
 .reset-box ul { margin: 0; padding-inline-start: 1.2rem; display: flex; flex-direction: column; gap: .25rem; font-size: .95rem; }
 .hint a { color: var(--accent); }
+
+/* Wi-Fi box: the network in use, then the known ones and the ones around, each on one line. */
+.wifi-now { margin: .2rem 0; font-size: 1.05rem; font-weight: 600; }
+.wifi-list { list-style: none; margin: .3rem 0 .6rem; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+.wifi-list li { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: .5rem; }
+.wifi-list li .grow { flex: 1 1 10rem; min-width: 0; overflow-wrap: anywhere; }
+.wifi-list li .tag { font-size: .78rem; padding: .05rem .45rem; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); }
+.wifi-list li .tag.on { border-color: var(--ok); color: var(--ok); }
+.wifi-list button.pick { text-align: start; width: 100%; display: flex; gap: .6rem; align-items: center; }
+.bars { font-family: monospace; letter-spacing: -.1em; color: var(--ok); }

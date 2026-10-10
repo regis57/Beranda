@@ -63,8 +63,10 @@ une carte microSD de 8 Go ou plus (16 Go est plus confortable), un écran HDMI, 
    `http://beranda.local:8080/admin`.
 
 Beranda démarre ensuite tout seul à chaque allumage, en plein écran. Un souci ? Lancez `beranda doctor`.
-Pas de Wi-Fi à saisir dans Imager ? Ajoutez `--with-wifi-setup` à la ligne d'installation : le Pi
-propose alors son propre réseau « Beranda setup » ([comment ça marche](docs/WIFI_SETUP.md)).
+**Le Wi-Fi sans souci** : ajoutez, changez ou oubliez des réseaux depuis la page de réglages (boîte 13).
+Et si un jour le Pi ne trouve plus aucun réseau connu (nouvelle box, mot de passe changé), il ouvre son
+propre Wi-Fi « Beranda setup » pour que votre téléphone choisisse le bon, sans clavier
+([comment ça marche](docs/WIFI_SETUP.md), en anglais).
 
 <details><summary>Une vieille tablette comme écran, options de l'installateur, désinstallation</summary>
 
@@ -74,7 +76,7 @@ conseillé, surtout pour la voix) et ajoutez la page à l'écran d'accueil. La r
 et le micro de la tablette**.
 
 Les options se placent après `bash -s --`, par exemple `... | sudo bash -s -- --no-screen` :
-`--no-screen`, `--hostname cuisine`, `--with-wifi-setup`, `--branch NOM`, `--dry-run`.
+`--no-screen`, `--hostname cuisine`, `--no-wifi-setup`, `--branch NOM`, `--dry-run`.
 
 L'installateur ajoute Python, des polices pour toutes les écritures, Cage et Chromium (le navigateur
 plein écran), un utilisateur `beranda` (jamais root) et trois services : le serveur, l'affichage plein

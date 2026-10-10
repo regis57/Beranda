@@ -862,6 +862,128 @@ function armed(button, run) {
     await run();
   });
 }
+// ------------------------------------------------------------------ Wi-Fi ---
+// The root helper does the work (wifi.py): each request is a small job whose answer is read back.
+// Adding never cuts the current connection; switching goes back by itself if the new one fails.
+const WIFI_ERRORS = new Set(['bad_name', 'bad_password', 'not_saved', 'unknown_network', 'in_use', 'not_forgotten',
+  'switch_failed', 'nmcli_missing', 'timeout', 'not_installed']);
+const wifiText = (code) => t(`admin.wifi_err_${WIFI_ERRORS.has(code) ? code : 'failed'}`);
+const wifiCode = (e) => String(e.message || e).replace(/^wifi_/, '');
+async function wifiJob(op, body = {}, seconds = 30) {
+  const { job } = await api(`/wifi/${op}`, { method: 'POST', body: JSON.stringify(body) });
+  const until = Date.now() + seconds * 1000;
+  while (Date.now() < until) {
+    await new Promise((resolve) => { setTimeout(resolve, 1000); });
+    try {
+      const answer = await api(`/wifi-job/${job}`);
+      if (answer.done) return answer;
+    } catch { /* while the Pi changes network, this page can lose it for a moment: keep asking */ }
+  }
+  return { done: true, ok: false, error: 'timeout' };
+}
+const bars = (signal) => (signal == null ? '' : ['▂', '▂▄', '▂▄▆', '▂▄▆█'][Math.min(3, Math.floor(signal / 25))]);
+let wifiState = null;
+async function renderWifi() {
+  const now = $('wifi-now');
+  now.textContent = t('admin.wifi_reading');
+  let s;
+  try { s = await wifiJob('status', {}, 25); } catch (e) { now.textContent = wifiText(wifiCode(e)); return; }
+  if (s.ok === false) { now.textContent = wifiText(s.error); return; }
+  wifiState = s;
+  if (s.setup_hotspot) now.textContent = t('admin.wifi_hotspot_on');
+  else if (!s.available) now.textContent = t(s.ethernet ? 'admin.wifi_cable_only' : 'admin.wifi_no_radio');
+  else if (s.connection) {
+    now.replaceChildren(t('admin.wifi_connected', { name: s.ssid || s.connection }), ' ',
+      el('span', { className: 'bars', textContent: bars(s.signal) }), s.signal == null ? '' : ` ${s.signal} %`);
+  } else now.textContent = t(s.ethernet ? 'admin.wifi_cable_only' : 'admin.wifi_not_connected');
+  $('wifi-net').textContent = [s.address ? t('admin.wifi_address', { ip: s.address }) : '', s.ethernet ? t('admin.wifi_cable') : '',
+    t(s.safety_net ? 'admin.wifi_net_on' : 'admin.wifi_net_off')].filter(Boolean).join(' · ');
+  const list = $('wifi-saved');
+  if (!s.saved.length) { list.replaceChildren(el('li', {}, el('span', { className: 'grow hint', textContent: t('admin.wifi_none_saved') }))); return; }
+  list.replaceChildren(...s.saved.map((n) => {
+    const inUse = n.name === s.connection;
+    const use = el('button', { type: 'button', textContent: t('admin.wifi_use') });
+    use.dataset.i18n = 'admin.wifi_use';
+    use.hidden = inUse;
+    armed(use, () => switchWifi(n));
+    const forget = el('button', { type: 'button', textContent: t('admin.wifi_forget') });
+    forget.dataset.i18n = 'admin.wifi_forget';
+    if (inUse && !s.ethernet) { forget.disabled = true; forget.title = t('admin.wifi_err_in_use'); }
+    armed(forget, () => forgetWifi(n));
+    return el('li', {}, el('span', { className: 'grow', textContent: n.ssid }),
+      inUse ? el('span', { className: 'tag on', textContent: t('admin.wifi_in_use') }) : '', use, forget);
+  }));
+}
+async function scanWifi() {
+  const list = $('wifi-around');
+  list.replaceChildren(el('li', {}, el('span', { className: 'grow hint', textContent: t('admin.wifi_scanning') })));
+  let r;
+  try { r = await wifiJob('scan', {}, 45); } catch (e) { list.replaceChildren(el('li', {}, wifiText(wifiCode(e)))); return; }
+  if (r.ok === false) { list.replaceChildren(el('li', {}, wifiText(r.error))); return; }
+  if (!r.networks.length) { list.replaceChildren(el('li', {}, el('span', { className: 'grow hint', textContent: t('admin.wifi_none_around') }))); return; }
+  list.replaceChildren(...r.networks.map((n) => {
+    const pick = el('button', { type: 'button', className: 'pick' },
+      el('span', { className: 'bars', textContent: bars(n.signal) }),
+      el('span', { className: 'grow', textContent: n.ssid }),
+      n.secured ? '🔒' : el('span', { className: 'tag', textContent: t('admin.wifi_open') }),
+      n.saved ? el('span', { className: 'tag on', textContent: t('admin.wifi_saved_tag') }) : '');
+    pick.addEventListener('click', () => {
+      $('wifi-ssid').value = n.ssid;
+      $('wifi-hidden').checked = false;
+      $('wifi-msg').textContent = n.secured ? '' : t('admin.wifi_open_hint');
+      $('wifi-pass').focus();
+    });
+    return el('li', {}, pick);
+  }));
+}
+async function addWifi() {
+  const msg = $('wifi-msg');
+  const ssid = $('wifi-ssid').value;
+  const password = $('wifi-pass').value;
+  if (!ssid.trim()) { msg.textContent = t('admin.wifi_err_bad_name'); return; }
+  if (password && password.length < 8) { msg.textContent = t('admin.wifi_err_bad_password'); return; }
+  msg.textContent = t('admin.wifi_saving');
+  try {
+    const r = await wifiJob('add', { ssid, password, hidden: $('wifi-hidden').checked }, 30);
+    if (r.ok === false) { msg.textContent = wifiText(r.error); return; }
+    msg.textContent = t(r.updated ? 'admin.wifi_updated_ok' : 'admin.wifi_saved_ok', { name: ssid });
+    $('wifi-pass').value = '';
+    renderWifi();
+  } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
+}
+async function switchWifi(n) {
+  const msg = $('wifi-msg');
+  msg.textContent = t('admin.wifi_switching', { name: n.ssid, address: location.host });
+  msg.scrollIntoView({ block: 'center' });
+  try {
+    const r = await wifiJob('switch', { name: n.name, confirmed: true }, 120);
+    if (r.ok) msg.textContent = t('admin.wifi_switched', { name: n.ssid });
+    else if (r.back_to) msg.textContent = t('admin.wifi_switch_back', { name: n.ssid, back: r.back_to });
+    else msg.textContent = wifiText(r.error);
+  } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
+  renderWifi();
+}
+async function forgetWifi(n) {
+  const msg = $('wifi-msg');
+  try {
+    const r = await wifiJob('forget', { name: n.name, confirmed: true }, 30);
+    msg.textContent = r.ok === false ? wifiText(r.error) : t('admin.wifi_forgotten', { name: n.ssid });
+  } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
+  renderWifi();
+}
+// Read the Wi-Fi state only when its box is looked at (it asks the root helper each time).
+let wifiWatched = false;
+function watchWifiBox() {
+  if (wifiWatched) return;
+  wifiWatched = true;
+  if (!('IntersectionObserver' in window)) { renderWifi(); return; }
+  new IntersectionObserver((entries, observer) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    observer.disconnect();
+    renderWifi();
+  }).observe($('sec-wifi'));
+}
+
 async function renderSystem() {
   const msg = $('sys-message');
   try {
@@ -1121,7 +1243,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); renderVoice(); renderWidgets(); checkAreaMatchesTown(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); watchWifiBox(); renderVoice(); renderWidgets(); checkAreaMatchesTown(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);
@@ -1155,7 +1277,7 @@ async function boot() {
   $('form').addEventListener('change', (e) => {
     if (e.target.id === 'units') unitsTouched = true;
     if (e.target.id === 'language') { languageTouched = true; refreshPreview(); refreshNews(); }
-    if (!['q', 'news-other-country', 'reset-word', 'port-new'].includes(e.target.id)) markDirty();
+    if (!['q', 'news-other-country', 'reset-word', 'port-new', 'wifi-ssid', 'wifi-pass', 'wifi-show', 'wifi-hidden'].includes(e.target.id)) markDirty();
   });
   $('country').addEventListener('change', () => { townEditedByHand(); onCountry(); });
   $('loc-name').addEventListener('change', refreshNews);
@@ -1203,6 +1325,10 @@ async function boot() {
   armed($('port-apply'), changePort);
   $('diag-btn').addEventListener('click', downloadDiagnostics);
   $('voice-test').addEventListener('click', testMicrophone);
+  $('wifi-scan').addEventListener('click', scanWifi);
+  $('wifi-add').addEventListener('click', addWifi);
+  $('wifi-show').addEventListener('change', () => { $('wifi-pass').type = $('wifi-show').checked ? 'text' : 'password'; });
+  for (const id of ['wifi-ssid', 'wifi-pass']) $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addWifi(); } });
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });
   $('w-alerts').addEventListener('change', () => { showWidgetBodies(); checkAreaMatchesTown(); });
   $('w-clock2').addEventListener('change', showWidgetBodies);

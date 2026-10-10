@@ -27,9 +27,10 @@ link with the details in plain words.
 | **10. TV tonight** | Pick a free guide for your country, then tick your channels. |
 | **11. Voice control** | Optional; your own phrases can be added. See [VOICE.md](VOICE.md). |
 | **12. Screen** | Rotation for a screen hung upright (90° or 270°) or upside down (180°), and the hours to turn it off at night. On the Pi the screen itself switches off; on a tablet the page goes dark. |
-| **13. System** | Version, the board Beranda recognised (and so how much it can hold, see the README), *Check for updates*, *Update now*, *Restart the screen*, *Restart the Raspberry Pi*. Each button asks for a second click. They work when Beranda was installed with `install.sh`. |
-| **14. Access** | Optional PIN. |
-| **15. Advanced user** | Change the **port**, see the **secure address** (for the microphone), download a **diagnostic file** and **start over** (see below). |
+| **13. Wi-Fi** | The network in use and its strength; saved networks; *Search networks* and *Save this network*; *Use now* (goes back by itself if it fails); *Forget*. See [WIFI_SETUP.md](WIFI_SETUP.md). |
+| **14. System** | Version, the board Beranda recognised (and so how much it can hold, see the README), *Check for updates*, *Update now*, *Restart the screen*, *Restart the Raspberry Pi*. Each button asks for a second click. They work when Beranda was installed with `install.sh`. |
+| **15. Access** | Optional PIN. |
+| **16. Advanced user** | Change the **port**, see the **secure address** (for the microphone), download a **diagnostic file** and **start over** (see below). |
 
 ### Advanced user: changing the port
 

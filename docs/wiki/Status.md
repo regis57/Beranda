@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.15.10 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.16.0 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
@@ -18,7 +18,9 @@
 | Weather warnings (MeteoAlarm) | ⚠️ works, area names differ by country | France only; the settings page now spots an area that does not match the town |
 | Limits per board (Pi 2 to Pi 5) | ⚠️ estimates | only the Pi 4 2 GB was measured |
 | Raspberry Pi 3B+, Pi 5, Pi 2, Zero 2 W | ❓ untested | help welcome |
-| Wi-Fi setup with no keyboard, ready-to-flash image | ❓ built, never tried on a real Pi | |
+| Wi-Fi box (add, use now with automatic way back, forget) | ❓ new in 0.16, tested with a simulated Wi-Fi | first try on a Pi: keep a cable at hand |
+| Wi-Fi safety net "Beranda setup" (on by default) | ❓ never tried on a real Pi | |
+| Ready-to-flash image | ❓ built, never tried on a real Pi | |
 
 ## Known issues
 

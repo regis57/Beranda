@@ -31,4 +31,6 @@ set, and refuses cross-site writes.
 | `GET /system`, `GET /system/latest` | version, board, port, https, updates |
 | `POST /system/port` | `{port, confirmed}` change the port, restart |
 | `POST /system/{update,restart-screen,reboot,reset}` | ask the root service; `reset` needs `{confirmed}`, erasing data also `{erase_data, confirmed_twice}` |
+| `POST /wifi/{status,scan,add,forget,switch}` | `add`: `{ssid, password, hidden}`; `forget`/`switch`: `{name, confirmed}` → `{job}` |
+| `GET /wifi-job/{id}` | `{done: false}` until the root helper has answered |
 | `POST /diagnostics` | `{client}` → the diagnostic text file |

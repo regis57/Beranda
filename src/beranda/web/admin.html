@@ -291,8 +291,38 @@
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.screen_help"></p></details>
       </section>
 
+      <!-- Wi-Fi: the networks the Pi knows. Adding one never cuts the current connection; switching
+           goes back by itself if the new network does not work. The root helper does the work. -->
+      <section class="card" id="sec-wifi">
+        <h2><span class="num">13</span><span data-i18n="admin.wifi"></span></h2>
+        <p class="hint" data-i18n="admin.wifi_hint"></p>
+        <p class="wifi-now" id="wifi-now" role="status"></p>
+        <p class="hint" id="wifi-net"></p>
+
+        <h3 data-i18n="admin.wifi_saved"></h3>
+        <ul class="wifi-list" id="wifi-saved"></ul>
+
+        <h3 data-i18n="admin.wifi_add"></h3>
+        <p class="hint" data-i18n="admin.wifi_add_hint"></p>
+        <div class="row wrap">
+          <button type="button" id="wifi-scan" data-i18n="admin.wifi_scan"></button>
+        </div>
+        <ul class="wifi-list" id="wifi-around"></ul>
+        <div class="grid2">
+          <label><span data-i18n="admin.wifi_name"></span><input id="wifi-ssid" type="text" maxlength="32" spellcheck="false" autocomplete="off"></label>
+          <label><span data-i18n="admin.wifi_password"></span><input id="wifi-pass" type="password" maxlength="64" autocomplete="new-password"></label>
+        </div>
+        <label class="check"><input type="checkbox" id="wifi-show"><span data-i18n="admin.wifi_show"></span></label>
+        <label class="check"><input type="checkbox" id="wifi-hidden"><span data-i18n="admin.wifi_hidden"></span></label>
+        <div class="row wrap">
+          <button type="button" id="wifi-add" data-i18n="admin.wifi_save"></button>
+        </div>
+        <p class="hint" id="wifi-msg" role="status"></p>
+        <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.wifi_help"></p></details>
+      </section>
+
       <section class="card" id="sec-system">
-        <h2><span class="num">13</span><span data-i18n="admin.system"></span></h2>
+        <h2><span class="num">14</span><span data-i18n="admin.system"></span></h2>
         <p class="hint" id="sys-version"></p>
         <p class="hint" id="sys-device"></p>
         <div class="row wrap" id="sys-buttons">
@@ -305,13 +335,13 @@
       </section>
 
       <section class="card" id="sec-sec">
-        <h2><span class="num">14</span><span data-i18n="admin.security"></span></h2>
+        <h2><span class="num">15</span><span data-i18n="admin.security"></span></h2>
         <label><span data-i18n="admin.pin"></span><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></label>
         <p class="hint" data-i18n="admin.pin_hint"></p>
       </section>
 
       <section class="card" id="sec-adv">
-        <h2><span class="num">15</span><span data-i18n="admin.advanced"></span></h2>
+        <h2><span class="num">16</span><span data-i18n="admin.advanced"></span></h2>
         <p class="hint" data-i18n="admin.advanced_hint"></p>
 
         <h3 data-i18n="admin.port_title"></h3>

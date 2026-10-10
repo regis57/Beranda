@@ -16,8 +16,10 @@
 #   --branch NAME      install another branch of the repository (default: main)
 #   --source DIR       install from a local copy instead of downloading (for developers)
 #   --no-systemd       do not install the services (containers, tests)
-#   --with-wifi-setup  no Wi-Fi configured yet? let the Pi offer its own "Beranda setup"
-#                      Wi-Fi network to pick one from a phone, with no keyboard at all
+#   --no-wifi-setup    do not install the Wi-Fi safety net (on by default on Raspberry Pi OS:
+#                      with no known network for 2 minutes, the Pi opens its own "Beranda
+#                      setup" Wi-Fi so a phone can pick the right one)
+#   --with-wifi-setup  force the safety net on, installing NetworkManager if needed
 #   --dry-run          print what would be done, change nothing
 set -euo pipefail
 
@@ -29,7 +31,7 @@ STATEDIR="/var/lib/beranda"
 USER_NAME="beranda"
 SCREEN=1
 SYSTEMD=1
-WIFI_SETUP=0
+WIFI_SETUP=auto  # the "Beranda setup" safety net: on wherever NetworkManager manages a Wi-Fi radio
 DRY=0
 SOURCE=""
 NEW_HOSTNAME=""
@@ -45,12 +47,13 @@ while [ $# -gt 0 ]; do
         --no-systemd) SYSTEMD=0 ;;
         --with-voice) warn "--with-voice is no longer needed: voice control now runs in the tablet's own browser (see the Voice card in the settings)." ;;
         --with-wifi-setup) WIFI_SETUP=1 ;;
+        --no-wifi-setup) WIFI_SETUP=0 ;;
         --dry-run) DRY=1 ;;
         --hostname) NEW_HOSTNAME="${2:?--hostname needs a name}"; shift ;;
         --branch) BRANCH="${2:?--branch needs a name}"; shift ;;
         --source) SOURCE="${2:?--source needs a folder}"; shift ;;
         --prefix) PREFIX="${2:?}"; shift ;;
-        --help|-h) sed -n '2,22p' "$0"; exit 0 ;;
+        --help|-h) sed -n '2,23p' "$0"; exit 0 ;;
         *) die "unknown option: $1 (try --help)" ;;
     esac
     shift
@@ -72,6 +75,15 @@ if [ "$SCREEN" = 1 ]; then
     packages+=(cage wlr-randr)
     # Raspberry Pi OS calls its Chromium "chromium-browser"; Debian and Ubuntu call it "chromium".
     if apt-cache show chromium-browser >/dev/null 2>&1; then packages+=(chromium-browser); else packages+=(chromium); fi
+fi
+# The Wi-Fi safety net: on by default where NetworkManager already runs the network (Raspberry
+# Pi OS since Bookworm) and there is a Wi-Fi radio; never forced onto a machine that uses
+# another network tool.
+if [ "$WIFI_SETUP" = auto ]; then
+    WIFI_SETUP=0
+    if systemctl is-active --quiet NetworkManager 2>/dev/null && nmcli -t -f TYPE device 2>/dev/null | grep -qx wifi; then
+        WIFI_SETUP=1
+    fi
 fi
 [ "$WIFI_SETUP" = 1 ] && packages+=(network-manager)
 run apt-get update -q
@@ -120,6 +132,7 @@ USER=$USER_NAME
 CONFDIR=$CONFDIR
 STATEDIR=$STATEDIR
 SCREEN=$SCREEN
+WIFI_SETUP=$WIFI_SETUP
 COMMIT=$commit
 INFO
     chmod 0644 "$CONFDIR/install.env"
@@ -176,9 +189,9 @@ echo "        http://$name.local:$port/admin"
 echo "    Something wrong? Run:  beranda doctor"
 if [ "$WIFI_SETUP" = 1 ]; then
     echo
-    say "Wi-Fi setup is ready."
-    echo "    From now on, if this Pi ever boots with no Wi-Fi and no network cable plugged in,"
-    echo "    it opens its own Wi-Fi network called \"Beranda setup\" for about 15 minutes."
+    say "Wi-Fi safety net is on."
+    echo "    From now on, if this Pi has no network for 2 minutes (no known Wi-Fi in range, a new box,"
+    echo "    a changed password...), it opens its own Wi-Fi network called \"Beranda setup\"."
     echo "    Join it from a phone (the screen shows how, with a QR code) and a page opens by"
     echo "    itself to pick your real Wi-Fi - no computer, keyboard or terminal needed."
 fi
