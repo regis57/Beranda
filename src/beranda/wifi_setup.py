@@ -37,13 +37,18 @@ DNSMASQ_DROPIN = Path("/etc/NetworkManager/dnsmasq-shared.d/beranda-captive.conf
 # Where the main web server learns whether the hotspot is up right now (see write_status below).
 STATUS_FILE_ENV = "BERANDA_WIFI_STATUS"
 DEFAULT_STATUS_FILE = Path("/var/lib/beranda/wifi-setup.json")
-# How long to wait for an existing Wi-Fi/Ethernet connection before giving up and starting the
-# access point, and how often to re-check for a successful connection once it is up.
+# How long with no connection at all before the "Beranda setup" network opens: short on a Pi
+# that knows no Wi-Fi yet (first start), longer once it knows one (a box restarting takes a
+# minute or two, and must not be mistaken for a lost network).
 CONNECT_GRACE_SECONDS = 45
+LOST_GRACE_SECONDS = 2 * 60
 POLL_SECONDS = 3
-# Give up on the AP (and retry the whole wait-then-AP cycle) after this long with nobody setting
-# it up, so a Pi left unattended near no Wi-Fi at all does not broadcast an open network forever.
+CHECK_SECONDS = 15  # while connected, a look every 15 s is plenty
+# How long the setup network stays open before Beranda closes it and tries the known networks
+# again (one radio cannot do both at once): long for a first setup, short when known networks
+# exist, so the Pi comes back by itself as soon as the usual Wi-Fi is back.
 AP_TIMEOUT_SECONDS = 15 * 60
+AP_RETRY_SECONDS = 5 * 60
 
 
 def status_file() -> Path:
@@ -61,6 +66,14 @@ class Network:
 
 def _run(args: list[str]) -> subprocess.CompletedProcess:
     return subprocess.run(args, capture_output=True, text=True, check=False)
+
+
+def knows_a_wifi() -> bool:
+    """True when at least one Wi-Fi network is saved (not counting the setup network)."""
+    out = _run(["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]).stdout
+    return any(
+        line.endswith(":802-11-wireless") and not line.startswith(f"{AP_CON_NAME}:") for line in out.splitlines()
+    )
 
 
 def is_connected() -> bool:
@@ -304,43 +317,60 @@ def create_portal_app():
 # -------------------------------------------------------------------- the real-hardware loop ---
 
 
+def grace_seconds() -> int:
+    return LOST_GRACE_SECONDS if knows_a_wifi() else CONNECT_GRACE_SECONDS
+
+
+def open_seconds() -> int:
+    return AP_RETRY_SECONDS if knows_a_wifi() else AP_TIMEOUT_SECONDS
+
+
 def main() -> None:  # pragma: no cover - needs a real Wi-Fi radio
-    """Run once at boot. Waits briefly for a connection that is already there (Ethernet, or a
-    Wi-Fi network already saved from a previous setup); if none shows up, becomes the "Beranda
-    setup" access point and serves the setup page until someone connects, or until it has waited
-    long enough that it gives up and tries the quiet wait again instead of staying open forever.
+    """The safety net, always running: watches the connection, and when there has been none
+    for a while (2 minutes once a Wi-Fi is known, 45 seconds on a first start), opens the
+    "Beranda setup" network with its one-page Wi-Fi picker. It closes it once a connection
+    exists, or after a while to let the Pi try its known networks again, and keeps watching.
     """
     import threading
 
     import uvicorn
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s wifi-setup: %(message)s")
-
-    waited = 0
-    while waited < CONNECT_GRACE_SECONDS:
-        if is_connected():
-            log.info("already connected; nothing to do")
-            return
-        time_mod.sleep(POLL_SECONDS)
-        waited += POLL_SECONDS
-
-    log.info("no network found after %ss; starting the setup access point %r", CONNECT_GRACE_SECONDS, AP_SSID)
-    start_hotspot()
-    server = uvicorn.Server(uvicorn.Config(create_portal_app(), host="0.0.0.0", port=80, log_level="warning"))
-    thread = threading.Thread(target=server.run, daemon=True)
-    thread.start()
-    try:
-        waited = 0
-        while waited < AP_TIMEOUT_SECONDS:
+    write_status(None)
+    while True:
+        lost = 0
+        while lost < grace_seconds():
             if is_connected():
-                log.info("connected; stopping the setup access point")
-                return
-            time_mod.sleep(POLL_SECONDS)
-            waited += POLL_SECONDS
-        log.info("nobody finished setup in time; stopping the access point and trying again later")
-    finally:
-        server.should_exit = True
-        stop_hotspot()
+                lost = 0
+                time_mod.sleep(CHECK_SECONDS)
+            else:
+                time_mod.sleep(POLL_SECONDS)
+                lost += POLL_SECONDS
+        log.info("no network for %ss; opening the setup network %r", lost, AP_SSID)
+        start_hotspot()
+        server = uvicorn.Server(uvicorn.Config(create_portal_app(), host="0.0.0.0", port=80, log_level="warning"))
+        thread = threading.Thread(target=server.run, daemon=True)
+        thread.start()
+        try:
+            waited, limit = 0, open_seconds()
+            while waited < limit:
+                if is_connected() and not _hotspot_only():
+                    log.info("connected; closing the setup network")
+                    break
+                time_mod.sleep(POLL_SECONDS)
+                waited += POLL_SECONDS
+            else:
+                log.info("nobody used the setup network; trying the known networks again")
+        finally:
+            server.should_exit = True
+            thread.join(5)
+            stop_hotspot()
+
+
+def _hotspot_only() -> bool:
+    """While the setup network is up, NetworkManager calls the Pi "connected" (to itself)."""
+    out = _run(["nmcli", "-t", "-f", "NAME", "connection", "show", "--active"]).stdout.split()
+    return out == [AP_CON_NAME]
 
 
 if __name__ == "__main__":

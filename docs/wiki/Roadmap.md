@@ -6,7 +6,7 @@ comes first. Order agreed in October 2026.
 ## Now - 0.16
 
 1. **Test on other boards**: Raspberry Pi 3B+ and Pi 5, and tune Chromium for the Pi 3.
-2. **First real try of the Wi-Fi setup** (`--with-wifi-setup`) and of the **ready-to-flash image**.
+2. **First real try of the Wi-Fi box and of the safety net** (both new in 0.16), and of the **ready-to-flash image**.
 3. Turn the per-board limits from estimates into measurements.
 
 ## Next

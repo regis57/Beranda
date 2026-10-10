@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "beranda"
-version = "0.15.10"
+version = "0.16.0"
 description = "A lean, beautiful, offline-tolerant dashboard for a smart mirror or a big tablet. Runs on a Raspberry Pi 3B."
 readme = "README.md"
 license = { text = "MIT" }
@@ -36,6 +36,7 @@ dev = ["pytest>=8", "pytest-asyncio>=0.23", "respx>=0.21", "playwright>=1.44", "
 [project.scripts]
 beranda = "beranda.__main__:main"
 beranda-wifi-setup = "beranda.wifi_setup:main"
+beranda-wifi-job = "beranda.wifi:job_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

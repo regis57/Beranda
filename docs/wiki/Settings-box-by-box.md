@@ -17,9 +17,22 @@ to any box; each box has a **Need help?** link. Press **Save**: the screen follo
 | **10. TV tonight** | Pick a free guide for your country, tick channels | Channel names are kept with the settings |
 | **11. Voice control** | Microphone button, your own phrases, *Test the microphone* | Google Chrome only, see [Voice control](Voice-control) |
 | **12. Screen** | Rotation, night hours | On a Pi the HDMI turns off; on a tablet the page goes dark |
-| **13. System** | Version, board, updates, restart screen, reboot | Buttons ask for a second click |
-| **14. Access** | Optional PIN | The page already opens from the home network only |
-| **15. Advanced user** | Port, secure address, diagnostic file, start over | Every consequence is spelled out before you confirm |
+| **13. Wi-Fi** | The network in use, saved networks, add / use now / forget | Adding never cuts the current one; switching goes back by itself if it fails |
+| **14. System** | Version, board, updates, restart screen, reboot | Buttons ask for a second click |
+| **15. Access** | Optional PIN | The page already opens from the home network only |
+| **16. Advanced user** | Port, secure address, diagnostic file, start over | Every consequence is spelled out before you confirm |
+
+## Wi-Fi
+
+- **See** the network in use, its strength, the Pi's address, a cable if any, and whether the safety net is on.
+- **Add**: *Search networks*, tap yours, type the password, *Save this network*. It is only remembered:
+  the current connection is never cut. Hidden networks: type the name and tick *Hidden network*.
+- **Use now**: tries the network for 45 seconds and goes back to the previous one if it fails.
+- **Forget**: not the one in use, unless a cable is plugged in.
+- **Safety net** (on by default): no known network for 2 minutes → the Pi opens its own Wi-Fi
+  "Beranda setup" with a page to pick the right network. Details: [docs/WIFI_SETUP.md](https://github.com/regis57/Beranda/blob/main/docs/WIFI_SETUP.md).
+
+Networks and passwords are kept by NetworkManager (the Pi's own system), never by Beranda.
 
 ## Advanced user
 

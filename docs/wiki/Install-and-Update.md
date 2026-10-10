@@ -24,7 +24,8 @@ Put them after `bash -s --`, for example `... | sudo bash -s -- --no-screen`.
 |---|---|
 | `--no-screen` | server only: show Beranda on a tablet or another device |
 | `--hostname kitchen` | renames the Pi: `http://kitchen.local:8080/admin` |
-| `--with-wifi-setup` | if the Pi ever boots with no network, it opens its own "Beranda setup" Wi-Fi ([guide](https://github.com/regis57/Beranda/blob/main/docs/WIFI_SETUP.md)) |
+| `--no-wifi-setup` | do not install the Wi-Fi safety net (on by default, see below) |
+| `--with-wifi-setup` | force the safety net on, installing NetworkManager if needed |
 | `--branch NAME` | install another branch |
 | `--dry-run` | print what would be done, change nothing |
 
@@ -38,10 +39,19 @@ root), and these services:
 | `beranda` | the web server: display page and settings page |
 | `beranda-kiosk` | the full-screen browser on the HDMI screen |
 | `beranda-actions` | a tiny root service that only runs the buttons of the settings page (update, restart screen, reboot, start over) |
-| `beranda-wifi-setup` | optional, see `--with-wifi-setup` |
+| `beranda-wifi-setup` | the Wi-Fi safety net: with no known network for 2 minutes, opens "Beranda setup" (on by default where NetworkManager runs the Wi-Fi) |
 
 Files: the program in `/opt/beranda`, your settings in `/etc/beranda/config.toml` (private), photos and
 cache in `/var/lib/beranda`.
+
+## Wi-Fi
+
+Add, switch and forget networks from the settings page, box **13 · Wi-Fi**. Networks are kept by the
+Pi's own system and survive restarts and updates. If one day the Pi finds no known network for two
+minutes (new box, changed password), it opens its own Wi-Fi **"Beranda setup"**: join it from a phone
+and pick the right network, no keyboard needed. Guide: [docs/WIFI_SETUP.md](https://github.com/regis57/Beranda/blob/main/docs/WIFI_SETUP.md).
+
+No Wi-Fi typed into Imager? Plug a network cable in for the installation, then add the Wi-Fi from box 13.
 
 ## An old tablet as the screen
 

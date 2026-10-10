@@ -5,7 +5,7 @@ tablet that shows Beranda** — never the Raspberry Pi's.
 
 ## How to use it, step by step
 
-1. Open the settings page, box **10 · Voice control**, tick **Show the microphone button** and
+1. Open the settings page, box **11 · Voice control**, tick **Show the microphone button** and
    press **Save**.
 2. On the tablet, open Beranda in **Google Chrome**. (Edge offers it too, but its speech service
    often answers "network" and does not work; Firefox and Safari do not offer it to web pages.) (Firefox and Safari do not offer speech
@@ -195,7 +195,7 @@ stations (box 8) can be started.
 
 ## Adding your own phrases
 
-In box **10**, under **Your own phrases**, press **+ Add a phrase**:
+In box **11**, under **Your own phrases**, press **+ Add a phrase**:
 
 1. type what *you* will say (for example *good night*, *wake me up*, *what's for tonight*);
 2. choose what should happen: start the radio (and which favourite), stop it, next or previous

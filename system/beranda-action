@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Run the requests left by the settings page in the requests folder. Only these words are
-# understood: update, restart-screen, reboot, reset. Anything else is deleted and ignored.
+# understood: update, restart-screen, reboot, reset; and Wi-Fi jobs (wifi-<id>.json), handed to
+# beranda-wifi-job which checks them strictly. Anything else is deleted and ignored.
 set -euo pipefail
 
 # shellcheck source=/dev/null
@@ -13,6 +14,12 @@ log() { echo "beranda-action: $*"; }
 for file in "$requests"/*; do
     [ -e "$file" ] || continue
     action="$(basename "$file")"
+    if [[ "$action" =~ ^wifi-[0-9a-f]{12}\.json$ ]]; then
+        # a Wi-Fi job from the settings page: the runner reads it, deletes it at once, answers
+        BERANDA_WIFI_JOBS="$STATEDIR/wifi-jobs" "$PREFIX/venv/bin/beranda-wifi-job" "$file" || log "wifi job failed"
+        rm -f -- "$file"
+        continue
+    fi
     rm -f -- "$file"
     case "$action" in
         update)
@@ -23,6 +30,20 @@ for file in "$requests"/*; do
             install -m 0755 "$PREFIX/src/system/beranda-kiosk" "$PREFIX/bin/beranda-kiosk"
             install -m 0755 "$PREFIX/src/system/beranda-action" "$PREFIX/bin/beranda-action"
             install -m 0755 "$PREFIX/src/system/beranda-tidy" "$PREFIX/bin/beranda-tidy"
+            # the Wi-Fi safety net, now on by default: added to older installs, unless refused
+            if [ "${WIFI_SETUP:-auto}" != 0 ] && [ ! -f /etc/systemd/system/beranda-wifi-setup.service ] \
+                && systemctl is-active --quiet NetworkManager && nmcli -t -f TYPE device | grep -qx wifi; then
+                sed -e "s|@PREFIX@|$PREFIX|g" -e "s|@STATEDIR@|$STATEDIR|g" \
+                    "$PREFIX/src/system/beranda-wifi-setup.service.in" > /etc/systemd/system/beranda-wifi-setup.service
+                systemctl daemon-reload
+                systemctl enable --now beranda-wifi-setup.service || true
+                log "Wi-Fi safety net turned on"
+            elif [ -f /etc/systemd/system/beranda-wifi-setup.service ]; then
+                sed -e "s|@PREFIX@|$PREFIX|g" -e "s|@STATEDIR@|$STATEDIR|g" \
+                    "$PREFIX/src/system/beranda-wifi-setup.service.in" > /etc/systemd/system/beranda-wifi-setup.service
+                systemctl daemon-reload
+                systemctl try-restart beranda-wifi-setup.service || true
+            fi
             # keep the SD card from filling up (caches, old versions, log size, swap file)
             env PREFIX="$PREFIX" "$PREFIX/bin/beranda-tidy" || true
             sed -i "s/^COMMIT=.*/COMMIT=$(git -C "$PREFIX/src" rev-parse --short HEAD)/" /etc/beranda/install.env

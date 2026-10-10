@@ -62,8 +62,9 @@ HDMI, and your phone or computer on the same Wi-Fi.
    `http://beranda.local:8080/admin`.
 
 Beranda then starts by itself at every boot, full screen. Something wrong? Run `beranda doctor`.
-No Wi-Fi to type into Imager? Add `--with-wifi-setup` to the install line and the Pi offers its
-own "Beranda setup" network ([how it works](docs/WIFI_SETUP.md)).
+**Wi-Fi made easy**: add, switch or forget networks from the settings page (box 13). And if one day
+the Pi finds no known network (new box, changed password), it opens its own "Beranda setup" Wi-Fi so
+your phone can pick the right one, with no keyboard ([how it works](docs/WIFI_SETUP.md)).
 
 <details><summary>Use an old tablet as the screen, installer options, uninstall</summary>
 
@@ -72,7 +73,7 @@ own "Beranda setup" network ([how it works](docs/WIFI_SETUP.md)).
 screen. The radio and the voice use **the tablet's** speakers and microphone.
 
 Options go after `bash -s --`, for example `... | sudo bash -s -- --no-screen`:
-`--no-screen`, `--hostname kitchen`, `--with-wifi-setup`, `--branch NAME`, `--dry-run`.
+`--no-screen`, `--hostname kitchen`, `--no-wifi-setup`, `--branch NAME`, `--dry-run`.
 
 The installer adds Python, fonts for every script, Cage and Chromium (the full-screen browser),
 a `beranda` user (never root), and three services: the server, the full-screen display, and a small
