@@ -87,10 +87,24 @@ def test_feed_countries():
     [
         {"data": {"dates": {"day": 9, "month": 10}, "namedays": {"fr": "Denis", "de": "Dionys"}}},
         {"day": 9, "month": 10, "namedays": {"fr": "Denis"}},
+        # what nameday.abalin.net really answers (checked October 2026)
+        {"success": True, "message": "Namedays for 10-09", "data": {"fr": "Denis", "de": "Dionysius", "bg": "n/a"}},
     ],
 )
 def test_the_nameday_is_found_however_the_service_nests_it(payload):
     assert ephemeris.parse_nameday(payload, "FR") == "Denis"
+
+
+def test_no_name_today_gives_nothing():
+    assert ephemeris.parse_nameday({"success": True, "data": {"bg": "n/a"}}, "BG") is None
+
+
+def test_the_name_day_option_is_saved_and_reaches_the_screen():
+    from beranda import config
+
+    cfg = config.from_dict({"widgets": {"nameday_top": False}})
+    assert cfg.widget_nameday_top is False and config.to_dict(cfg)["widgets"]["nameday_top"] is False
+    assert config.from_dict({}).widget_nameday_top is True
 
 
 def test_a_country_without_a_nameday_gives_nothing():
@@ -143,7 +157,7 @@ def test_state_carries_air_alerts_and_nameday_when_switched_on(tmp_path):
     assert state["air"]["aqi"] == 10 or state["air"]["source"] == "demo"  # demo mode uses invented air data
     assert state["alerts"]["status"] == "ok" and state["alerts"]["items"]
     assert state["ephemeris"]["nameday"]
-    assert state["widgets"] == {"chart": True, "second_clock": ""}
+    assert state["widgets"] == {"chart": True, "second_clock": "", "ephemeris": True, "nameday_top": True}
 
 
 @respx.mock

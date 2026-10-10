@@ -110,6 +110,7 @@ class Config:
     widget_alerts: bool = False  # official weather warnings (MeteoAlarm, Europe) for `alerts_area`
     alerts_area: str = ""  # the name of your area as MeteoAlarm writes it, e.g. "Moselle"
     widget_ephemeris: bool = True  # name day, length of the day, the local calendar
+    widget_nameday_top: bool = True  # the name day in big at the top right (France theme), in name-day countries
     second_clock: str = ""  # a second time zone ("Asia/Jakarta"), small, under the date; "" = off
     voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
@@ -321,6 +322,7 @@ def from_dict(data: dict) -> Config:
         widget_alerts=bool(widgets.get("alerts", False)),
         alerts_area=" ".join(str(widgets.get("alerts_area", "")).split())[:80],
         widget_ephemeris=bool(widgets.get("ephemeris", True)),
+        widget_nameday_top=bool(widgets.get("nameday_top", True)),
         second_clock=_check_timezone(widgets.get("second_clock", "")),
         voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[: cap.voice_commands]),
         voice_enabled=bool(voice.get("enabled", False)),
@@ -412,6 +414,7 @@ def to_dict(cfg: Config) -> dict:
         "alerts": cfg.widget_alerts,
         "alerts_area": cfg.alerts_area,
         "ephemeris": cfg.widget_ephemeris,
+        "nameday_top": cfg.widget_nameday_top,
         "second_clock": cfg.second_clock,
     }
     if cfg.subdivision:

@@ -8,7 +8,7 @@ to any box; each box has a **Need help?** link. Press **Save**: the screen follo
 | **1. Where are you?** | Town, position, time zone | Picking a town also resets the region and the warnings area |
 | **2. Country and language** | Public holidays, first day of the week, news suggestions, screen language | A region only matters for regional holidays |
 | **3. Look** | 15 themes, live preview; *Auto* follows the sun | Each theme tells the season its own way |
-| **4. Extras of the main screen** | 24 h graph, air/UV/pollen, weather warnings, ephemeris, second clock | Each can be switched off; the page warns if the warnings area belongs to another town |
+| **4. Extras of the main screen** | 24 h graph, air/UV/pollen, weather warnings, ephemeris, name day in big (France theme), second clock | Each can be switched off; the page warns if the warnings area belongs to another town |
 | **5. Your calendar** | Private iCal/ICS links (Google, Apple, Outlook, Nextcloud, Proton), *Test* | Read only; keep the link secret |
 | **6. Dates that matter** | Births, anniversaries; `2018-06-02` shows the years, `06-02` repeats | |
 | **7. News headlines** | *Choose for me*, 140 free feeds, your own RSS | Titles only, no tracking |

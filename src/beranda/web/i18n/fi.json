@@ -160,7 +160,7 @@
     "quiet": "No weather warning"
   },
   "eph": {
-    "nameday": "Name day",
+    "nameday": "Nimipäivä",
     "daylight": "Daylight",
     "calendar": "Calendar"
   }

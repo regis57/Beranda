@@ -441,5 +441,7 @@
   "wifi_detail": "(Ujumbe wa mfumo: {detail})",
   "wifi_err_busy": "Pi ina shughuli (sasisho au badiliko jingine linaendelea). Jaribu tena baada ya dakika moja.",
   "wifi_err_stuck": "Huduma saidizi ya Pi imekwama. Kwenye Pi, andika: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "Kidokezo: Beranda hufanya kazi vizuri zaidi kwenye Google Chrome. Microsoft Edge imeleta matatizo (udhibiti wa sauti, kurasa zilizobaki za toleo la zamani)."
+  "edge_hint": "Kidokezo: Beranda hufanya kazi vizuri zaidi kwenye Google Chrome. Microsoft Edge imeleta matatizo (udhibiti wa sauti, kurasa zilizobaki za toleo la zamani).",
+  "w_nameday": "Siku ya jina kwa herufi kubwa, juu kulia",
+  "w_nameday_hint": "Katika nchi zinazosherehekea siku za majina (Ufaransa, Ujerumani, Polandi, Uswidi, Hungaria…), kwa majina ya nchi yako. Kwa herufi kubwa juu kulia na mandhari ya Ufaransa; kwa mandhari mengine hubaki kwenye mstari wa efemeridi."
 }

@@ -441,5 +441,7 @@
   "wifi_detail": "(System message: {detail})",
   "wifi_err_busy": "The Pi is busy (an update or another change is running). Try again in a minute.",
   "wifi_err_stuck": "The Pi's helper service is stuck. On the Pi, type: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "Tip: Beranda works best in Google Chrome. Microsoft Edge has caused trouble (voice control, pages kept from an older version)."
+  "edge_hint": "Tip: Beranda works best in Google Chrome. Microsoft Edge has caused trouble (voice control, pages kept from an older version).",
+  "w_nameday": "Name day in big, at the top right",
+  "w_nameday_hint": "In the countries that celebrate name days (France, Germany, Poland, Sweden, Hungary…), with the names of your country. In big at the top right with the France theme; with the other themes it stays in the ephemeris line."
 }

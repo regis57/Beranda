@@ -108,3 +108,8 @@ One line per version, newest last. Each one was a pull request on
 - **v0.16.2**: first real Wi-Fi change made from the settings page (Pi 4, cable to Wi-Fi). A request with no
   answer now says whether the Pi is busy (an update) or its helper is stuck, with the command to unblock
   it; Edge users see a gentle tip to use Google Chrome, now the recommended browser everywhere
+- **v0.16.3**: the name day is back. The name-day service answers in a shape Beranda did not read, so the
+  "Name day" line had never appeared on a real Pi: fixed, against the real answer. With the France theme it
+  now shows in big at the top right (where the theme leaves room), in the countries that celebrate name
+  days and with their own names; a new option in "Extras of the main screen" turns it off. The languages of
+  those countries get their own word for it (Imieniny, Namnsdag, Svátek, Névnap...)

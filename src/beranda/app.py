@@ -282,7 +282,9 @@ async def build_state(
                 alerts = {"status": "error", "items": []}
 
     ephemeris = None
-    if cfg.widget_ephemeris:
+    # the name day in big only goes where the theme leaves room (France: see display.js)
+    nameday_top = cfg.widget_nameday_top and (theme or cfg.theme) == "france"
+    if cfg.widget_ephemeris or nameday_top:
         ephemeris = eph_mod.daylight(now, loc.latitude, loc.longitude, loc.timezone)
         ephemeris["nameday"] = None
         if cfg.demo and eph_mod.has_nameday(cfg.country):
@@ -290,7 +292,7 @@ async def build_state(
         elif eph_mod.has_nameday(cfg.country):
             try:
                 ephemeris["nameday"], _stale = await cache.get(
-                    f"nameday:{cfg.country.upper()}:{today.isoformat()}",
+                    f"nameday2:{cfg.country.upper()}:{today.isoformat()}",  # "2": not the empty answers kept by 0.14-0.16
                     HISTORY_TTL,
                     lambda: eph_mod.fetch_nameday(cfg.country, today.month, today.day),
                 )
@@ -327,7 +329,10 @@ async def build_state(
         "alerts": alerts,
         "ephemeris": ephemeris,
         # Which optional extras are on (the page shows only these), and the second time zone.
-        "widgets": {"chart": cfg.widget_chart, "second_clock": cfg.second_clock},
+        "widgets": {
+            "chart": cfg.widget_chart, "second_clock": cfg.second_clock,
+            "ephemeris": cfg.widget_ephemeris, "nameday_top": cfg.widget_nameday_top,
+        },
         # Radio plays in the page itself (the tablet's speakers), so the page needs the list.
         "radio": {
             "stations": [{"uuid": st.uuid, "name": st.name, "url": st.url} for st in cfg.radio_stations],

@@ -421,11 +421,26 @@ function spanText(seconds) {
   return m ? `${m} min ${pad2(seconds % 60)} s` : `${seconds} s`;
 }
 
+// The name day in big at the top right: only where the theme leaves that place free (France),
+// only in the countries that celebrate name days (the server sends one only there), if wanted.
+function nameDayOnTop() {
+  const w = state?.widgets || {};
+  return Boolean(state?.ephemeris?.nameday && w.nameday_top !== false && state.season?.kind === 'republican');
+}
+function renderNameDay() {
+  const on = nameDayOnTop();
+  $('nameday-top').hidden = !on;
+  if (!on) return;
+  $('nd-label').textContent = t('eph.nameday');
+  $('nd-names').textContent = state.ephemeris.nameday;
+}
+
 function renderEph() {
   const e = state?.ephemeris;
   const rows = [];
-  if (e) {
-    if (e.nameday) rows.push([t('eph.nameday'), e.nameday]);
+  renderNameDay();
+  if (e && state?.widgets?.ephemeris !== false) {
+    if (e.nameday && !nameDayOnTop()) rows.push([t('eph.nameday'), e.nameday]);
     if (e.daylight_min != null) {
       const text = `${Math.floor(e.daylight_min / 60)} h ${pad2(e.daylight_min % 60)}`;
       const delta = e.delta_s ? ` (${e.delta_s > 0 ? '+' : '−'}${spanText(Math.abs(e.delta_s))})` : '';

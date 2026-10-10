@@ -441,5 +441,7 @@
   "wifi_detail": "(Mensagem do sistema: {detail})",
   "wifi_err_busy": "O Pi está ocupado (há uma atualização ou outra alteração em curso). Tente outra vez dentro de um minuto.",
   "wifi_err_stuck": "O serviço auxiliar do Pi está bloqueado. No Pi, escreva: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "Dica: o Beranda funciona melhor no Google Chrome. O Microsoft Edge deu problemas (controlo por voz, páginas guardadas de uma versão antiga)."
+  "edge_hint": "Dica: o Beranda funciona melhor no Google Chrome. O Microsoft Edge deu problemas (controlo por voz, páginas guardadas de uma versão antiga).",
+  "w_nameday": "Onomástico em grande, no canto superior direito",
+  "w_nameday_hint": "Nos países que celebram o dia do nome (França, Alemanha, Polónia, Suécia, Hungria…), com os nomes do seu país. Em grande no canto superior direito com o tema França; com os outros temas fica na linha das efemérides."
 }

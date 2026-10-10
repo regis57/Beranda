@@ -441,5 +441,7 @@
   "wifi_detail": "(Mensaje del sistema: {detail})",
   "wifi_err_busy": "La Pi está ocupada (hay una actualización u otro cambio en curso). Vuelve a intentarlo en un minuto.",
   "wifi_err_stuck": "El servicio auxiliar de la Pi está bloqueado. En la Pi, escribe: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
-  "edge_hint": "Consejo: Beranda funciona mejor en Google Chrome. Microsoft Edge ha dado problemas (control por voz, páginas guardadas de una versión anterior)."
+  "edge_hint": "Consejo: Beranda funciona mejor en Google Chrome. Microsoft Edge ha dado problemas (control por voz, páginas guardadas de una versión anterior).",
+  "w_nameday": "Santoral en grande, arriba a la derecha",
+  "w_nameday_hint": "En los países que celebran el santo (Francia, Alemania, Polonia, Suecia, Hungría…), con los nombres de tu país. En grande arriba a la derecha con el tema Francia; con los demás temas se queda en la línea de efemérides."
 }
