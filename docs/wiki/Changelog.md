@@ -100,3 +100,8 @@ One line per version, newest last. Each one was a pull request on
   safety net is on by default and watches all the time: with no known network for 2 minutes the Pi
   opens its own Wi-Fi so a phone can pick the right one; it closes again and retries the known
   networks by itself. Existing installs get it with the Update button
+- **v0.16.1**: Wi-Fi fixes from the first real test: a failure now says why (wrong password, not in
+  range, radio off, too slow) with the system's own message; a switched-off Wi-Fi radio can be turned
+  on from the page (setting the Wi-Fi country from Beranda's country when none is set); browsers no
+  longer keep last version's scripts after an update (an empty Wi-Fi box in Edge); the end of an
+  update is run by the new version of the root helper, so new steps work at once

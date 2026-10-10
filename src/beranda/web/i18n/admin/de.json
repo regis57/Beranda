@@ -428,5 +428,15 @@
   "wifi_err_nmcli_missing": "Dieses System nutzt nicht NetworkManager, daher kann Beranda sein WLAN nicht verwalten.",
   "wifi_err_timeout": "Keine Antwort vom Pi. Laden Sie die Seite in einer Minute neu.",
   "wifi_err_not_installed": "Die WLAN-Einstellungen funktionieren auf einem Pi, der mit dem Installationsprogramm von Beranda eingerichtet wurde.",
-  "wifi_err_failed": "Etwas ist schiefgelaufen. Laden Sie die Diagnosedatei herunter (Fortgeschrittene) und schicken Sie sie."
+  "wifi_err_failed": "Etwas ist schiefgelaufen. Laden Sie die Diagnosedatei herunter (Fortgeschrittene) und schicken Sie sie.",
+  "wifi_radio_off": "Das WLAN des Pi ist ausgeschaltet. Unter Raspberry Pi OS passiert das oft, wenn nie ein WLAN-Land eingestellt wurde.",
+  "wifi_radio_on": "WLAN einschalten",
+  "wifi_radio_done": "Das WLAN ist an. Suchen Sie erneut nach Netzen.",
+  "wifi_radio_done_country": "Das WLAN ist an, mit Ihrem Land als WLAN-Land (gesetzlich vorgeschrieben). Suchen Sie erneut nach Netzen.",
+  "wifi_err_wrong_password": "Falsches Passwort für dieses Netz (auf Groß- und Kleinschreibung achten).",
+  "wifi_err_not_found": "Dieses Netz ist gerade nicht in Reichweite des Pi.",
+  "wifi_err_radio_off": "Das WLAN des Pi ist aus: Tippen Sie oben auf „WLAN einschalten“.",
+  "wifi_err_timeout_connect": "Das Netz hat nicht rechtzeitig geantwortet (zu weit vom Router?).",
+  "wifi_switch_cable": "Der Pi bleibt über das Netzwerkkabel erreichbar.",
+  "wifi_detail": "(Systemmeldung: {detail})"
 }

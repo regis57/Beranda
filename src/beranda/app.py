@@ -373,6 +373,11 @@ def create_app(
         response.headers["Content-Security-Policy"] = CSP
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
+        if request.url.path.startswith("/static/"):
+            # Ask the browser to check for a newer copy every time (cheap: an unchanged file
+            # answers "not modified"). Otherwise a browser may keep last version's scripts after
+            # an update, and a new box of the settings page stays empty.
+            response.headers["Cache-Control"] = "no-cache"
         return response
 
     def setup_info() -> dict:

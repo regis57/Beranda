@@ -298,6 +298,10 @@
         <p class="hint" data-i18n="admin.wifi_hint"></p>
         <p class="wifi-now" id="wifi-now" role="status"></p>
         <p class="hint" id="wifi-net"></p>
+        <!-- The Pi's Wi-Fi radio is off (on Raspberry Pi OS: often because no Wi-Fi country was ever set). -->
+        <div class="row wrap" id="wifi-radio-row" hidden>
+          <button type="button" id="wifi-radio" data-i18n="admin.wifi_radio_on"></button>
+        </div>
 
         <h3 data-i18n="admin.wifi_saved"></h3>
         <ul class="wifi-list" id="wifi-saved"></ul>

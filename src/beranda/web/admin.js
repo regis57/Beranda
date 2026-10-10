@@ -866,7 +866,9 @@ function armed(button, run) {
 // The root helper does the work (wifi.py): each request is a small job whose answer is read back.
 // Adding never cuts the current connection; switching goes back by itself if the new one fails.
 const WIFI_ERRORS = new Set(['bad_name', 'bad_password', 'not_saved', 'unknown_network', 'in_use', 'not_forgotten',
-  'switch_failed', 'nmcli_missing', 'timeout', 'not_installed']);
+  'switch_failed', 'nmcli_missing', 'timeout', 'not_installed', 'wrong_password', 'not_found', 'radio_off', 'timeout_connect']);
+// The system's own words, after ours: useful in a bug report (never holds a password).
+const withDetail = (text, r) => (r && r.detail ? `${text} ${t('admin.wifi_detail', { detail: r.detail })}` : text);
 const wifiText = (code) => t(`admin.wifi_err_${WIFI_ERRORS.has(code) ? code : 'failed'}`);
 const wifiCode = (e) => String(e.message || e).replace(/^wifi_/, '');
 async function wifiJob(op, body = {}, seconds = 30) {
@@ -890,7 +892,9 @@ async function renderWifi() {
   try { s = await wifiJob('status', {}, 25); } catch (e) { now.textContent = wifiText(wifiCode(e)); return; }
   if (s.ok === false) { now.textContent = wifiText(s.error); return; }
   wifiState = s;
-  if (s.setup_hotspot) now.textContent = t('admin.wifi_hotspot_on');
+  $('wifi-radio-row').hidden = s.radio !== false && s.wifi_state !== 'unavailable';
+  if (s.radio === false || s.wifi_state === 'unavailable') now.textContent = t('admin.wifi_radio_off');
+  else if (s.setup_hotspot) now.textContent = t('admin.wifi_hotspot_on');
   else if (!s.available) now.textContent = t(s.ethernet ? 'admin.wifi_cable_only' : 'admin.wifi_no_radio');
   else if (s.connection) {
     now.replaceChildren(t('admin.wifi_connected', { name: s.ssid || s.connection }), ' ',
@@ -945,7 +949,7 @@ async function addWifi() {
   msg.textContent = t('admin.wifi_saving');
   try {
     const r = await wifiJob('add', { ssid, password, hidden: $('wifi-hidden').checked }, 30);
-    if (r.ok === false) { msg.textContent = wifiText(r.error); return; }
+    if (r.ok === false) { msg.textContent = withDetail(wifiText(r.error), r); return; }
     msg.textContent = t(r.updated ? 'admin.wifi_updated_ok' : 'admin.wifi_saved_ok', { name: ssid });
     $('wifi-pass').value = '';
     renderWifi();
@@ -958,8 +962,12 @@ async function switchWifi(n) {
   try {
     const r = await wifiJob('switch', { name: n.name, confirmed: true }, 120);
     if (r.ok) msg.textContent = t('admin.wifi_switched', { name: n.ssid });
-    else if (r.back_to) msg.textContent = t('admin.wifi_switch_back', { name: n.ssid, back: r.back_to });
-    else msg.textContent = wifiText(r.error);
+    else {
+      const why = r.error === 'switch_failed' ? '' : `${wifiText(r.error)} `;
+      const after = r.back_to ? t('admin.wifi_switch_back', { name: n.ssid, back: r.back_to })
+        : r.ethernet ? t('admin.wifi_switch_cable', { name: n.ssid }) : wifiText('switch_failed');
+      msg.textContent = withDetail(`${why}${after}`, r);
+    }
   } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
   renderWifi();
 }
@@ -968,6 +976,15 @@ async function forgetWifi(n) {
   try {
     const r = await wifiJob('forget', { name: n.name, confirmed: true }, 30);
     msg.textContent = r.ok === false ? wifiText(r.error) : t('admin.wifi_forgotten', { name: n.ssid });
+  } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
+  renderWifi();
+}
+async function radioOn() {
+  const msg = $('wifi-msg');
+  msg.textContent = t('admin.wifi_saving');
+  try {
+    const r = await wifiJob('radio_on', {}, 30);
+    msg.textContent = r.ok ? t(r.country_set ? 'admin.wifi_radio_done_country' : 'admin.wifi_radio_done') : withDetail(wifiText(r.error), r);
   } catch (e) { msg.textContent = wifiText(wifiCode(e)); }
   renderWifi();
 }
@@ -1327,6 +1344,7 @@ async function boot() {
   $('voice-test').addEventListener('click', testMicrophone);
   $('wifi-scan').addEventListener('click', scanWifi);
   $('wifi-add').addEventListener('click', addWifi);
+  $('wifi-radio').addEventListener('click', radioOn);
   $('wifi-show').addEventListener('change', () => { $('wifi-pass').type = $('wifi-show').checked ? 'text' : 'password'; });
   for (const id of ['wifi-ssid', 'wifi-pass']) $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addWifi(); } });
   $('port-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('port-apply').click(); } });

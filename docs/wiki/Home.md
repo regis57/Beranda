@@ -8,7 +8,7 @@ by day, dark at night. Free, open source (MIT), no account, no subscription.
 
 ![Beranda at night](https://raw.githubusercontent.com/regis57/Beranda/main/docs/screenshots/v0.14.0-display-night.png)
 
-**Current version: 0.16.0 (alpha)**, used every day on a Raspberry Pi 4. See [Status](Status).
+**Current version: 0.16.1 (alpha)**, used every day on a Raspberry Pi 4. See [Status](Status).
 
 | I want to... | Go to |
 |---|---|
