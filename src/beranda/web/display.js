@@ -946,7 +946,10 @@ function renderStatus(online) {
   demo.hidden = !state?.demo;
   demo.textContent = t('demo');
   const off = $('badge-offline');
-  off.hidden = online && !(state?.stale?.length);
+  // Only when the Pi cannot be reached, or the essentials (weather, calendar) are old copies:
+  // one news feed out of several failing for a while is no reason to say "offline".
+  const essential = (state?.stale || []).some((s) => s === 'weather' || s.startsWith('calendar'));
+  off.hidden = online && !essential;
   off.textContent = t('offline');
   // Open-Meteo's free tier requires attribution.
   const credit = state?.weather?.source === 'Open-Meteo' ? ' · Open-Meteo' : '';

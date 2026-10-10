@@ -113,3 +113,8 @@ One line per version, newest last. Each one was a pull request on
   now shows in big at the top right (where the theme leaves room), in the countries that celebrate name
   days and with their own names; a new option in "Extras of the main screen" turns it off. The languages of
   those countries get their own word for it (Imieniny, Namnsdag, Svátek, Névnap...)
+- **v0.16.4**: calmer with a failing source (found with a diagnostic file): "news about my town" (GDELT)
+  was asked again every minute, twice, and kept refusing. Now a source that fails is left alone for a
+  while (2 to 15 minutes) while its last good copy stays on screen, and two screens asking at once share
+  one request. The "offline" badge only shows when the Pi cannot be reached or the weather or calendar
+  are old copies; the log names the failing news source
