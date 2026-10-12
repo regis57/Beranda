@@ -1,0 +1,22 @@
+# Dependabot watches what Beranda depends on and opens a pull request when something it uses
+# has a newer version - and straight away when a version has a known security flaw.
+version: 2
+updates:
+  # The Python libraries (fastapi, httpx, icalendar...).
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+
+  # The actions that run in CI: these run with access to the repository, so they matter as much.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "ci"

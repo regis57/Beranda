@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.16.4 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.16.5 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
@@ -34,7 +34,15 @@
 Found something else? [Open an issue](https://github.com/regis57/Beranda/issues) and attach the diagnostic
 file (settings page → *Advanced user*).
 
+## Security
+
+Beranda is a home-network app that never runs as root, so the checks are aimed at that: the
+linter's security rules, CodeQL on every pull request and weekly, Dependabot on the libraries and
+the CI actions, shellcheck on the installer and the root services. How to report a problem, and
+what Beranda is and is not built to withstand:
+[SECURITY.md](https://github.com/regis57/Beranda/blob/main/SECURITY.md).
+
 ## Quality
 
-489 automated tests and a linter run on every change; the installer is tested on a fresh Ubuntu
+510 automated tests and a linter (with its security rules on) run on every change; the installer is tested on a fresh Ubuntu
 machine in GitHub Actions, and every news feed of the catalogue is checked weekly. Every change goes through a pull request.

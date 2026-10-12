@@ -56,4 +56,6 @@ Beranda is one small Python web server and two web pages. No build step, no data
   Wi-Fi jobs are small JSON files (mode 0600) that the root runner checks strictly and deletes at once
   (they may hold a password); answers never contain a password.
 - A strict Content-Security-Policy: the pages load only their own files.
+- The services that run as root set their own PATH, so a named command ("nmcli") can only ever be
+  found in root-owned folders.
 - Secrets (calendar links, PIN) stay in `config.toml` (mode 0600) and never reach a log or the diagnostic file.

@@ -12,8 +12,8 @@ beranda --demo            # http://localhost:8080 and /admin
 ## Checks (run before every pull request)
 
 ```bash
-pytest                    # about 490 tests
-ruff check src tests scripts
+pytest                    # about 510 tests
+ruff check src tests scripts   # includes the security rules (S, B, BLE, ASYNC, DTZ)
 node --check src/beranda/web/*.js
 ```
 
@@ -27,6 +27,9 @@ Screenshots: `python scripts/screenshot.py` and `python scripts/screenshot_admin
    A workflow publishes it to the GitHub wiki when the change reaches `main`.
 3. Words for people come first: every message, hint and doc in plain language ("ease" is the master word).
 4. Say honestly what could not be tried on real hardware.
+5. Security: CodeQL reads every pull request, and the linter's security rules are on. When one of
+   them flags something that is deliberate, do not just silence it - write next to it, in a
+   sentence, why it is safe here. See [SECURITY.md](https://github.com/regis57/Beranda/blob/main/SECURITY.md).
 
 ## Common additions
 

@@ -128,13 +128,13 @@ def port_is_free(host: str, port: int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
-            s.bind((host or "0.0.0.0", port))
+            s.bind((host or "0.0.0.0", port))  # noqa: S104 - the address the server itself uses
         except OSError:
             return False
     return True
 
 
-def port_problem(port: object, current: int, host: str = "0.0.0.0") -> str | None:
+def port_problem(port: object, current: int, host: str = "0.0.0.0") -> str | None:  # noqa: S104
     """Why this port cannot be used, as a short code the settings page translates; None if fine.
     Codes: "range" (not a number from 1024 to 65535), "same" (already the one in use) and
     "busy" (another program is listening there)."""

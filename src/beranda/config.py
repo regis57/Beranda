@@ -83,7 +83,7 @@ class Config:
     ics_urls: tuple[str, ...] = ()
     key_dates: tuple[KeyDate, ...] = ()
     demo: bool = False
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # noqa: S104 - on purpose: a phone on the home network must reach it
     port: int = 8080
     cache_dir: Path = Path.home() / ".cache" / "beranda"
     admin_pin: str = ""  # optional PIN for the admin page; empty = open to the home network
@@ -299,7 +299,7 @@ def from_dict(data: dict) -> Config:
         ics_urls=tuple(data.get("calendar", {}).get("ics_urls", []))[: cap.calendars],
         key_dates=tuple(_parse_key_date(k) for k in data.get("key_dates", [])[: cap.key_dates]),
         demo=bool(data.get("demo", False)),
-        host=server.get("host", "0.0.0.0"),
+        host=server.get("host", "0.0.0.0"),  # noqa: S104 - see the comment on Config.host
         port=int(server.get("port", 8080)),
         cache_dir=cache_dir,
         admin_pin=str(data.get("admin", {}).get("pin", "")),

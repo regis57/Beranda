@@ -82,8 +82,10 @@ def note_display(event: str, browser: str) -> None:
 def _short_browser(agent: str) -> str:
     """'Edge 154 on Windows' rather than the whole user-agent line."""
     agent = agent or ""
-    for name, mark in (("Edge", "Edg/"), ("Opera", "OPR/"), ("Samsung", "SamsungBrowser/"), ("Firefox", "Firefox/"),
-                       ("Chrome", "Chrome/"), ("Safari", "Version/")):
+    for name, mark in (  # noqa: B007 - `name` is what the loop looks for; it is read after the loop
+        ("Edge", "Edg/"), ("Opera", "OPR/"), ("Samsung", "SamsungBrowser/"), ("Firefox", "Firefox/"),
+        ("Chrome", "Chrome/"), ("Safari", "Version/"),
+    ):
         if mark in agent:
             version = agent.split(mark, 1)[1].split(".", 1)[0]
             break

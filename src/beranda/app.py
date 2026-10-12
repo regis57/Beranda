@@ -111,7 +111,7 @@ async def build_news(cfg: Config, cache: Cache, now: datetime, errors: dict, sta
                     item["source"] = item["host"].removeprefix("www.")
             return items
 
-        digest = hashlib.sha1(url.encode()).hexdigest()[:12]
+        digest = hashlib.sha1(url.encode(), usedforsecurity=False).hexdigest()[:12]
         try:
             items, is_stale = await cache.get(f"news:{key}:{digest}", NEWS_TTL, load)  # key: names the source in logs
             if is_stale:
@@ -155,7 +155,7 @@ async def build_state(
     if cfg.demo:
         events = demo.events(today, _iso_offset(now), cfg.language)
     for index, url in enumerate(cfg.ics_urls):
-        digest = hashlib.sha1(url.encode()).hexdigest()[:12]
+        digest = hashlib.sha1(url.encode(), usedforsecurity=False).hexdigest()[:12]
 
         async def load(url=url, index=index) -> list[dict]:
             text = await calendar_ics.download(url)
@@ -212,7 +212,9 @@ async def build_state(
     elif cfg.tv_xmltv_url:
         # The cache key must change with the guide AND the ticked channels: otherwise ticking more
         # channels would keep showing the old, shorter list until the cache expires.
-        digest = hashlib.sha1("\n".join((cfg.tv_xmltv_url, *cfg.tv_channels)).encode()).hexdigest()[:12]
+        digest = hashlib.sha1(
+            "\n".join((cfg.tv_xmltv_url, *cfg.tv_channels)).encode(), usedforsecurity=False
+        ).hexdigest()[:12]
         channel_ids = set(cfg.tv_channels)
         prime_start, prime_end = _prime_window(now)
         window = {"from": prime_start.strftime("%H:%M"), "to": prime_end.strftime("%H:%M")}

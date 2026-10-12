@@ -348,7 +348,10 @@ def main() -> None:  # pragma: no cover - needs a real Wi-Fi radio
                 lost += POLL_SECONDS
         log.info("no network for %ss; opening the setup network %r", lost, AP_SSID)
         start_hotspot()
-        server = uvicorn.Server(uvicorn.Config(create_portal_app(), host="0.0.0.0", port=80, log_level="warning"))
+        server = uvicorn.Server(
+            # the setup network is the only one there is: answer on it (S104 is the point here)
+            uvicorn.Config(create_portal_app(), host="0.0.0.0", port=80, log_level="warning")  # noqa: S104
+        )
         thread = threading.Thread(target=server.run, daemon=True)
         thread.start()
         try:

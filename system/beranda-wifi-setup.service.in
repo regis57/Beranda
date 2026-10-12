@@ -12,6 +12,8 @@ Before=beranda.service
 
 [Service]
 Type=simple
+# Same reason as beranda-actions: a fixed, root-owned PATH.
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 Environment=BERANDA_WIFI_STATUS=@STATEDIR@/wifi-setup.json
 ExecStart=@PREFIX@/venv/bin/beranda-wifi-setup
 Restart=always

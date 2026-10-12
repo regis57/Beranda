@@ -5,4 +5,6 @@ Description=Beranda requests from the settings page
 
 [Service]
 Type=oneshot
+# Commands are named, not written out in full: say exactly where root looks for them.
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStart=@PREFIX@/bin/beranda-action

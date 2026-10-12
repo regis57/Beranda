@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "beranda"
-version = "0.16.4"
+version = "0.16.5"
 description = "A lean, beautiful, offline-tolerant dashboard for a smart mirror or a big tablet. Runs on a Raspberry Pi 3B."
 readme = "README.md"
 license = { text = "MIT" }
@@ -51,3 +51,25 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+# Beyond the default checks, the ones that catch real trouble rather than style:
+# S = security (flake8-bandit), B = likely bugs, BLE = catching every exception blindly,
+# ASYNC = calls that freeze the server while they run, DTZ = dates with no time zone,
+# RUF100 = "noqa" comments that no longer apply to anything.
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "S", "B", "BLE", "ASYNC", "DTZ", "RUF100"]
+ignore = [
+  # Every command in Beranda is run from a list of arguments, never as a line handed to a
+  # shell, so nothing a user types can ever become part of a command. S603 flags them all.
+  "S603",
+  # Commands are named ("nmcli"), not written out in full ("/usr/bin/nmcli"), because the
+  # path differs between systems. The services that run as root set their own PATH (see
+  # system/beranda-actions.service.in), which is the part that actually matters.
+  "S607",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests are meant to assert, and to use made-up passwords and commands.
+"tests/*" = ["S101", "S105", "S106", "S108", "E402"]
+# Developer scripts (screenshots, feed checks) are never installed on a Pi.
+"scripts/*" = ["S101", "S310"]
