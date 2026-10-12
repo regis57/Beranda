@@ -76,8 +76,22 @@ def test_connect_reports_the_failure_reason(monkeypatch):
         subprocess, "run",
         lambda args, **kw: _Result(returncode=1, stderr="Error: Secrets were required, but not provided.\n"),
     )
-    ok, message = connect("Home Wifi", "wrong")
+    ok, message = connect("Home Wifi", "wrong-but-long-enough")
     assert ok is False and "Secrets" in message
+
+
+def test_connect_refuses_a_password_that_cannot_be_right(monkeypatch):
+    """A Wi-Fi password is at least 8 characters: say so instead of bothering the radio."""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: (_ for _ in ()).throw(AssertionError("should not run nmcli")))
+    ok, message = connect("Home Wifi", "short")
+    assert ok is False and "8 to 63" in message
+
+
+def test_connect_refuses_a_name_that_looks_like_an_option(monkeypatch):
+    """A name starting with a dash would be read by nmcli as one of its own options."""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: (_ for _ in ()).throw(AssertionError("should not run nmcli")))
+    ok, _message = connect("--help", "")
+    assert ok is False
 
 
 def test_connect_with_no_network_name_fails_fast(monkeypatch):
@@ -112,7 +126,7 @@ def test_portal_page_is_served_and_lists_scanned_networks(monkeypatch):
 def test_portal_connect_endpoint_calls_nmcli_and_reports_back(monkeypatch):
     monkeypatch.setattr(subprocess, "run", lambda *a, **kw: _Result(returncode=0))
     client = TestClient(create_portal_app())
-    result = client.post("/api/connect", json={"ssid": "Home Wifi", "password": "x"}).json()
+    result = client.post("/api/connect", json={"ssid": "Home Wifi", "password": "letmein-please"}).json()
     assert result == {"ok": True, "message": "connected"}
 
 

@@ -130,3 +130,11 @@ One line per version, newest last. Each one was a pull request on
   only looks at new commits. The whole history came back clean
 - **v0.16.7**: every action used by CI is now named by the exact commit it is, instead of by a tag
   that its owner could move onto other code. Dependabot keeps them current
+- **v0.16.8**: went through everything the new code scanner flagged. One shared check now
+  decides whether an address Beranda is given is safe to download from (http or https only,
+  a real site name, no hidden password), and calendar links go through it too - they were the
+  one kind that was never checked. The Wi-Fi setup page now refuses a network name or a
+  password that cannot be right instead of asking the radio to try it. Smaller ones: answer
+  files are readable by their owner alone, nothing but the type of a problem is ever written
+  to a log, and the few places that really do use a path or an address chosen by the owner now
+  say in a sentence why that is safe.

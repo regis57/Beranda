@@ -9,6 +9,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import limits as limits_mod
+from .urls import checked_calendar_url, checked_url, checked_url_or_empty
 
 # Countries whose weeks conventionally start on Sunday (the rest start on Monday).
 SUNDAY_FIRST = {
@@ -198,10 +199,7 @@ def normalise_language(raw: object) -> str:
 
 
 def _check_feed(url: str) -> str:
-    url = url.strip()
-    if not url.lower().startswith(("http://", "https://")):
-        raise ValueError(f"a news feed must start with http:// or https://, got {url[:60]!r}")
-    return url
+    return checked_url(url, "news feed address")
 
 
 def _check_interval(value: object, minimum: int, default: int) -> int:
@@ -212,17 +210,11 @@ def _check_interval(value: object, minimum: int, default: int) -> int:
 
 
 def _check_share_url(value: object, what: str) -> str:
-    url = str(value or "").strip()
-    if url and not url.lower().startswith(("http://", "https://")):
-        raise ValueError(f"the {what} address must start with http:// or https://, got {url[:60]!r}")
-    return url
+    return checked_url_or_empty(value, f"{what} address")
 
 
 def _check_tv_url(value: object) -> str:
-    url = str(value or "").strip()
-    if url and not url.lower().startswith(("http://", "https://")):
-        raise ValueError(f"the TV guide address must start with http:// or https://, got {url[:60]!r}")
-    return url
+    return checked_url_or_empty(value, "TV guide address")
 
 
 def _check_rotate(value: object) -> int:
@@ -286,6 +278,9 @@ def from_dict(data: dict) -> Config:
         raise ValueError(f"limits profile must be auto or one of {', '.join(limits_mod.PROFILES)}")
     cap = limits_mod.resolve(profile)  # a safety net: a file edited by hand never overloads a small Pi
     own_feeds = tuple(_check_feed(str(u)) for u in news.get("feeds", []))[: cap.news_sources]
+    # Where the downloaded copies are kept. Like the photo folder, this is a path the owner
+    # chooses on purpose (a USB stick, another disk); Beranda runs as its own user, so it can
+    # only write where that user may write.
     cache_dir = Path(data.get("cache_dir", Config.cache_dir)).expanduser()
 
     return Config(
@@ -296,7 +291,11 @@ def from_dict(data: dict) -> Config:
         units=units,
         theme=data.get("theme", "japan"),
         mode=mode,
-        ics_urls=tuple(data.get("calendar", {}).get("ics_urls", []))[: cap.calendars],
+        # Calendar links go through the same check as everything else Beranda downloads.
+        ics_urls=tuple(
+            checked_calendar_url(u)
+            for u in data.get("calendar", {}).get("ics_urls", [])[: cap.calendars]
+        ),
         key_dates=tuple(_parse_key_date(k) for k in data.get("key_dates", [])[: cap.key_dates]),
         demo=bool(data.get("demo", False)),
         host=server.get("host", "0.0.0.0"),  # noqa: S104 - see the comment on Config.host

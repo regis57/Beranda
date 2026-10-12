@@ -61,21 +61,30 @@ class Cache:
         except (OSError, ValueError, KeyError):
             return None
 
-    def _write_disk(self, key: str, saved_at: float, value: Any) -> None:
+    def _write_disk(self, key: str, saved_at: float, value: Any, name: str) -> None:
         try:
             self._path(key).write_text(
                 json.dumps({"saved_at": saved_at, "value": value}), encoding="utf-8"
             )
         except (OSError, TypeError) as exc:
-            log.debug("could not persist cache key %s: %s", key, exc)
+            # The type of the problem only, never its message: a message can quote the
+            # value that failed, and a calendar's "secret address" must never reach a log.
+            log.debug("could not save %s to disk (%s)", name, type(exc).__name__)
 
     async def get(
         self,
         key: str,
         ttl: float,
         fetch: Callable[[], Awaitable[Any]],
+        name: str = "a source",
     ) -> tuple[Any, bool]:
-        """Return (value, stale). Raises only if there is nothing to fall back on."""
+        """Return (value, stale). Raises only if there is nothing to fall back on.
+
+        `name` is what a log line calls this source ("weather", "calendar"...). It is kept
+        apart from `key` on purpose: a key can hold the town's coordinates or a digest of a
+        private address, and the log - which ends up in the diagnostic file people share -
+        only ever needs to know *which kind* of source failed.
+        """
         # One fetch at a time per source: two screens asking at the same second share it.
         async with self._locks.setdefault(key, asyncio.Lock()):
             now = time.time()
@@ -89,16 +98,16 @@ class Cache:
                 value = await fetch()
             except Exception as exc:
                 if entry:
-                    # Log the exception type only: messages from httpx contain the full URL,
-                    # and an ICS "secret address" must never end up in a log file.
+                    # The name and the type of the problem only: messages from httpx hold the
+                    # full address, and a calendar's "secret address" must never reach a log.
                     wait = min(max(ttl / 4, RETRY_MIN), RETRY_MAX)
                     self._failed[key] = now + wait
                     log.warning("fetch %s failed (%s); serving the last good copy, next try in %d min",
-                                key, type(exc).__name__, round(wait / 60))
+                                name, type(exc).__name__, round(wait / 60))
                     self._memory[key] = entry
                     return entry[1], True
                 raise
             self._failed.pop(key, None)
             self._memory[key] = (now, value)
-            self._write_disk(key, now, value)
+            self._write_disk(key, now, value, name)
             return value, False

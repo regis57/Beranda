@@ -48,3 +48,29 @@ def test_two_screens_asking_at_once_share_one_fetch(tmp_path):
         assert results == [("data", False), ("data", False)] and len(calls) == 1
 
     asyncio.run(run())
+
+
+def test_a_failure_is_logged_by_name_never_by_key(tmp_path, monkeypatch, caplog):
+    """The key can hold the town's coordinates, and the log ends up in the diagnostic file
+    people share: a failure names the kind of source and the type of problem, nothing more."""
+    clock = [1000.0]
+    monkeypatch.setattr(cache_mod.time, "time", lambda: clock[0])
+    key = "weather:49.234:6.271:metric"
+
+    async def ok():
+        return {"t": 12}
+
+    async def down():
+        raise ConnectionError("https://api.example.org/forecast?latitude=49.234&longitude=6.271")
+
+    async def run():
+        c = Cache(tmp_path)
+        await c.get(key, 600, ok, name="weather")
+        clock[0] += 601
+        await c.get(key, 600, down, name="weather")
+
+    with caplog.at_level("WARNING", logger="beranda.cache"):
+        asyncio.run(run())
+    text = caplog.text
+    assert "weather" in text and "ConnectionError" in text
+    assert "49.234" not in text and "6.271" not in text and "example.org" not in text

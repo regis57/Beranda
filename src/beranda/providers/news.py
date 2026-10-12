@@ -12,6 +12,8 @@ from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 
 import httpx
+
+from beranda.urls import checked_url
 from defusedxml import ElementTree
 
 USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
@@ -86,6 +88,9 @@ def parse(xml_text: bytes | str, source_name: str) -> list[dict]:
 
 
 async def fetch(url: str) -> bytes:
+    # Checked once more here, not only when the settings were saved: a file edited by hand
+    # must never be able to point Beranda at anything but a plain web address.
+    url = checked_url(url, "news feed address")
     async with httpx.AsyncClient(
         timeout=10, follow_redirects=True, headers={"User-Agent": USER_AGENT}
     ) as client, client.stream("GET", url) as response:

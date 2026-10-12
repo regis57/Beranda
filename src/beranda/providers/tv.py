@@ -18,6 +18,8 @@ from datetime import UTC, datetime, timedelta
 import httpx
 from defusedxml.ElementTree import iterparse
 
+from beranda.urls import checked_url
+
 USER_AGENT = "Beranda/0.6 (+https://github.com/regis57/Beranda)"
 MAX_DOWNLOAD_BYTES = 25 * 1024 * 1024  # what we keep in memory: the (compressed) file as downloaded
 MAX_DECOMPRESSED_BYTES = 300 * 1024 * 1024  # read as a stream, never held in memory all at once
@@ -80,6 +82,8 @@ def _stream(data: bytes):
 async def download(url: str) -> bytes:
     """The guide exactly as published (still compressed if it was); `channels` and
     `programmes` unpack it as they read."""
+    # Checked again here, not only when the settings were saved (see news.fetch).
+    url = checked_url(url, "TV guide address")
     async with httpx.AsyncClient(
         timeout=30, follow_redirects=True, headers={"User-Agent": USER_AGENT}
     ) as client, client.stream("GET", url) as response:
