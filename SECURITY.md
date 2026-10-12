@@ -46,5 +46,6 @@ patch, so the fix for anything found goes into the next version.
 
 Every change runs automated tests, a linter with its security rules switched on, shellcheck on the
 installer and the root services, and a full install on a clean machine. CodeQL reads the Python and
-the JavaScript on every pull request and once a week. Dependabot watches the libraries and the CI
+the JavaScript on every pull request and once a week, and gitleaks reads every commit ever made,
+looking for anything shaped like a password or a key. Dependabot watches the libraries and the CI
 actions. See [Contributing](https://github.com/regis57/Beranda/wiki/Contributing).

@@ -125,3 +125,6 @@ One line per version, newest last. Each one was a pull request on
   actions, the CI token can only read, and the root services set their own PATH. A SECURITY.md says how
   to report a problem privately. One real bug found on the way: unpacking a Dropbox folder of photos
   froze the screen and the settings page for as long as it took; it now runs out of the way
+- **v0.16.6**: gitleaks joins the checks: it reads every commit ever made, looking for anything shaped
+  like a password, a key or a token. GitHub's own scanner only knows the shapes of known providers and
+  only looks at new commits. The whole history came back clean
