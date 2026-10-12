@@ -9,7 +9,7 @@ aucun service payant.
 
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
 [![Licence : MIT](https://img.shields.io/badge/licence-MIT-blue)](#licence)
-🇬🇧 [Read in English](README.md) · 📖 [Manuel complet dans le wiki (en anglais)](https://github.com/regis57/Beranda/wiki) : [Installer](https://github.com/regis57/Beranda/wiki/Install-and-Update) · [Réglages](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) · [Voix](https://github.com/regis57/Beranda/wiki/Voice-control) · [Dépannage](https://github.com/regis57/Beranda/wiki/Troubleshooting) · [État](https://github.com/regis57/Beranda/wiki/Status) · [Feuille de route](https://github.com/regis57/Beranda/wiki/Roadmap)
+🇬🇧 [Read in English](README.md) · 📖 [Manuel complet dans le wiki (en anglais)](https://github.com/regis57/Beranda/wiki) : [Installer](https://github.com/regis57/Beranda/wiki/Install-and-Update) · [Réglages](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) · [Voix](https://github.com/regis57/Beranda/wiki/Voice-control) · [Dépannage](https://github.com/regis57/Beranda/wiki/Troubleshooting) · [État](https://github.com/regis57/Beranda/wiki/Status) · [Feuille de route](https://github.com/regis57/Beranda/wiki/Roadmap) · [Sécurité](https://github.com/regis57/Beranda/wiki/Security)
 
 ![Beranda la nuit](docs/screenshots/v0.14.0-display-night.png)
 
@@ -169,14 +169,21 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 | lire le port utilisé | `sudo grep -A3 '\[server\]' /etc/beranda/config.toml` |
 | libérer de la place sur la carte SD (fait aussi à chaque mise à jour) | `sudo apt clean && sudo apt autoremove --purge && sudo journalctl --vacuum-size=50M` |
 
-## Vie privée
+## Vie privée et sécurité
 
-- La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN. N'ouvrez pas le port 8080 vers internet.
+- La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN
+  (mettez-en un si des invités utilisent votre Wi-Fi). **N'ouvrez jamais le port de Beranda sur votre box** :
+  il est fait pour la maison, pas pour internet.
 - Vos réglages restent sur votre Pi. Il ne parle qu'aux services que vous utilisez : Open-Meteo
   (météo, air), votre agenda, les flux choisis et, si vous les activez, GDELT (« actualité de ma ville »
   envoie le nom de votre ville), MeteoAlarm (vigilances), nameday.abalin.net (fêtes), Wikipédia,
   Radio Browser et votre guide TV.
 - La voix utilise le service de reconnaissance de votre navigateur (Chrome et Edge envoient le son à leur éditeur). Beranda ne garde rien.
+- Beranda ne tourne jamais en root, ne construit jamais une commande avec ce que vous tapez, et ne met
+  jamais vos liens d'agenda ni votre PIN dans un journal. Chaque modification est vérifiée par des tests,
+  CodeQL, gitleaks et Dependabot. Tout ce qui le protège, et ses limites connues :
+  [Security](https://github.com/regis57/Beranda/wiki/Security) (en anglais).
+  Une faille ? [Signalez-la en privé](https://github.com/regis57/Beranda/security/advisories/new).
 
 ## Aide, contribuer, soutenir
 

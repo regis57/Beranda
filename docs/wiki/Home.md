@@ -17,6 +17,7 @@ by day, dark at night. Free, open source (MIT), no account, no subscription.
 | talk to it | [Voice control](Voice-control) |
 | change its Wi-Fi | [Settings: Wi-Fi](Settings-box-by-box#wi-fi) |
 | fix something that does not work | [Troubleshooting](Troubleshooting) |
+| know how it is protected, and what to do | [Security](Security) |
 | know what is coming | [Roadmap](Roadmap) |
 | read the code, or help | [Architecture](Architecture) · [Contributing](Contributing) |
 

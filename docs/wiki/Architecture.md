@@ -33,6 +33,7 @@ Beranda is one small Python web server and two web pages. No build step, no data
 | Settings API | `src/beranda/admin.py` | `/api/admin/*`, guarded |
 | Settings | `src/beranda/config.py` | `config.toml` ⇄ frozen `Config`; validated, trimmed to the limits |
 | Cache | `src/beranda/cache.py` | each provider call: fresh data, or the last good copy marked stale |
+| Address check | `src/beranda/urls.py` | the one check every downloaded address passes (http/https, a site, no password) |
 | Providers | `src/beranda/providers/` | one module per source or calendar (weather, ICS, news, TV, seasons...) |
 | Limits | `src/beranda/limits.py` | board + memory → profile → maximum per list |
 | Secure address | `src/beranda/tls.py` | self-made certificate (openssl), http and https on one port |
@@ -59,3 +60,11 @@ Beranda is one small Python web server and two web pages. No build step, no data
 - The services that run as root set their own PATH, so a named command ("nmcli") can only ever be
   found in root-owned folders.
 - Secrets (calendar links, PIN) stay in `config.toml` (mode 0600) and never reach a log or the diagnostic file.
+  The answers of the root runner are 0600 too, handed to the web server's user.
+- Every address Beranda downloads from is checked when the settings are saved and again just before
+  the download (`urls.py`). Downloads are size-capped; XML is read with `defusedxml`.
+- A log line names the kind of source ("weather") and the type of problem, never the cache key (it can
+  hold the town's coordinates) nor an exception message (it can hold a secret address).
+- The display, `/api/state` and `/api/photos/*` are not behind the guard: the tablet must reach them.
+  Only `/api/report` and the settings API check for the home network.
+- Everything, for users and in plain words: [Security](Security).

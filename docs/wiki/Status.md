@@ -39,11 +39,15 @@ file (settings page → *Advanced user*).
 Beranda is a home-network app that never runs as root, so the checks are aimed at that: the
 linter's security rules, CodeQL on every pull request and weekly, gitleaks over the whole history
 (nothing found), Dependabot on the libraries and the CI actions, shellcheck on the installer and the
-root services. How to report a problem, and
-what Beranda is and is not built to withstand:
+root services. In October 2026 every CodeQL alert was gone through: the real ones were fixed in
+0.16.8, the deliberate ones explained in the code and closed.
+
+Known limits, said plainly: wrong PINs are not counted yet, and the screen (agenda, photos) answers
+any device on the home network. Everything that protects Beranda, what it is not built to withstand,
+and what you should do: [Security](Security). To report a problem:
 [SECURITY.md](https://github.com/regis57/Beranda/blob/main/SECURITY.md).
 
 ## Quality
 
-510 automated tests and a linter (with its security rules on) run on every change; the installer is tested on a fresh Ubuntu
+527 automated tests and a linter (with its security rules on) run on every change; the installer is tested on a fresh Ubuntu
 machine in GitHub Actions, and every news feed of the catalogue is checked weekly. Every change goes through a pull request.
