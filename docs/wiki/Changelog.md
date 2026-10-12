@@ -128,3 +128,5 @@ One line per version, newest last. Each one was a pull request on
 - **v0.16.6**: gitleaks joins the checks: it reads every commit ever made, looking for anything shaped
   like a password, a key or a token. GitHub's own scanner only knows the shapes of known providers and
   only looks at new commits. The whole history came back clean
+- **v0.16.7**: every action used by CI is now named by the exact commit it is, instead of by a tag
+  that its owner could move onto other code. Dependabot keeps them current
