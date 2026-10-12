@@ -10,7 +10,8 @@ Found a problem? Please tell us privately first:
 ## In one minute: what you should do
 
 1. **Keep it at home.** Never open ("forward") Beranda's port on your router. It is made for your
-   home network, not for the internet.
+   home network, not for the internet; since 0.16.9 it refuses strangers anyway, but there is no
+   reason to invite them.
 2. **Set a PIN** (settings page → *Access*) if people you do not fully trust use your Wi-Fi:
    guests, flatmates, a shared building network. Choose **6 digits or more**.
 3. **Keep it up to date**: settings page → *System* → *Update*. Fixes arrive that way.
@@ -20,14 +21,45 @@ Found a problem? Please tell us privately first:
 
 ## What protects your Beranda
 
+### Who Beranda answers
+
+**Your home network, and nobody else.** Every page and every piece of data - the screen, your agenda,
+your photos, the settings page - answers only addresses from a home network (`192.168.x.x`,
+`10.x.x.x` and the like) and the Pi itself. From anywhere else, the only answer is "Beranda only
+answers devices on its own home network", with nothing behind it. So even a port opened on the
+router by mistake shows a stranger nothing.
+
 ### The settings page
 
 | Protection | What it means for you |
 |---|---|
-| **Home network only** | The settings page and its API answer only addresses from a home network (`192.168.x.x`, `10.x.x.x` and the like). From anywhere else, the answer is "refused". |
 | **Optional PIN** | Once set, every change needs it. It is compared in a way that does not leak, digit by digit, how close a guess was. |
+| **Wrong PINs are counted** | See just below. |
 | **No changes from other websites** | A website open in another tab of your browser cannot send changes to your Beranda: a change must come from Beranda's own page. |
 | **Size limits** | Lists (calendars, feeds, photos...) are capped to what your board can carry, so a mistake, or a file edited by hand, cannot overload a small Pi. See [the limits per board](https://github.com/regis57/Beranda#what-your-raspberry-pi-can-hold). |
+
+### Wrong PINs: what happens
+
+Counted **one phone or computer at a time**, so a guest's laptop guessing never locks *your* phone out:
+
+| Wrong PINs from that device | What happens |
+|---|---|
+| 1 to 4 | "Wrong PIN", try again |
+| 5th | that device waits **1 minute**; the page says how long |
+| each one after that | the wait **doubles**: 2, 4, 8, 16, 32 minutes, then **1 hour** at most |
+| the right PIN | the slate is wiped clean for that device |
+
+- While a device waits, no PIN is even looked at - not even the right one - otherwise waiting would
+  not slow a guesser down.
+- **Typing the same wrong PIN again counts once**: a tab left open with an old PIN, or a PIN just
+  changed on another phone, does not lock you out.
+- **Switching devices to guess faster does not help**: the whole house gets at most **20 wrong PINs in
+  any hour**, all devices together. Past that, the settings page waits for everyone until that hour is
+  over. People who simply mistype never get anywhere near it.
+- A device that stopped guessing a day ago starts fresh. Nothing is ever locked for good, and there is
+  nothing to unlock by hand: just wait, or restart Beranda on the Pi (`sudo systemctl restart beranda`),
+  which clears every wait.
+- Forgot the PIN? See [Troubleshooting](Troubleshooting).
 
 ### The Raspberry Pi itself
 
@@ -104,11 +136,12 @@ Being clear about the limits matters as much as the protections:
 
 - **Someone already on your home network who knows the PIN**, or anyone with the Pi or its SD card in
   their hands. The SD card is not encrypted.
-- **The screen itself is open to your home network.** The display page, its data (your agenda, the
-  news) and your photos answer any device on your network, with no PIN: that is how a tablet shows
-  them. One more reason never to open the port on your router.
-- **Wrong PINs are not counted yet.** Someone on your network could try PIN after PIN. A 6-digit PIN
-  or longer makes that slow; a limit is a planned improvement.
+- **On your home network, the screen is open.** The display page, its data (your agenda, the news)
+  and your photos answer any device on your network, with no PIN: that is how a tablet shows them.
+  Strangers outside your network get nothing.
+- **A PIN of 4 digits only slows a determined guesser down.** With the waits above, trying every
+  4-digit PIN takes about three weeks even for someone switching devices all the time (more than a
+  year from a single device); every 6-digit PIN, more than five years. Choose 6 digits or more.
 - **Over `http://`, the PIN crosses your home network unencrypted.** Your Wi-Fi password protects it
   from outside; if you do not trust everyone on your network, open the settings page with `https://`.
 - **While "Beranda setup" is open, it is an open network.** Anyone close enough can join it during
@@ -120,7 +153,7 @@ Nothing reaches the `main` branch without going through a pull request and these
 
 | Check | What it looks for | When |
 |---|---|---|
-| **Automated tests** (about 530) | Beranda doing what it should, including refusing what it should | every change |
+| **Automated tests** (about 540) | Beranda doing what it should, including refusing what it should | every change |
 | **ruff**, with its security rules on | risky patterns in Python: shell commands, unsafe temporary files, swallowed errors, dates without a time zone... | every change |
 | **shellcheck** | mistakes in the installer and the root scripts | every change |
 | **A full install** | the one-line installer, on a fresh Ubuntu machine | every change |

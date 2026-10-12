@@ -171,9 +171,9 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 
 ## Vie privée et sécurité
 
-- La page de réglages ne s'ouvre que depuis votre réseau à la maison, et peut demander un code PIN
-  (mettez-en un si des invités utilisent votre Wi-Fi). **N'ouvrez jamais le port de Beranda sur votre box** :
-  il est fait pour la maison, pas pour internet.
+- Beranda ne répond qu'à votre réseau à la maison (l'écran et les photos aussi), et la page de réglages
+  peut demander un code PIN (mettez-en un si des invités utilisent votre Wi-Fi ; après 5 erreurs, l'appareil
+  doit patienter). **N'ouvrez jamais le port de Beranda sur votre box** : il est fait pour la maison, pas pour internet.
 - Vos réglages restent sur votre Pi. Il ne parle qu'aux services que vous utilisez : Open-Meteo
   (météo, air), votre agenda, les flux choisis et, si vous les activez, GDELT (« actualité de ma ville »
   envoie le nom de votre ville), MeteoAlarm (vigilances), nameday.abalin.net (fêtes), Wikipédia,

@@ -22,7 +22,7 @@ def make(tmp_path, **kw) -> TestClient:
     kw.setdefault("widget_air", False)  # the optional extras have their own tests below
     kw.setdefault("widget_ephemeris", False)
     cfg = replace(Config(), cache_dir=tmp_path / "cache", **kw)
-    return TestClient(create_app(cfg, now_fn=lambda: NOW))
+    return TestClient(create_app(cfg, now_fn=lambda: NOW), client=("127.0.0.1", 50000))
 
 
 def test_health_and_index(tmp_path):

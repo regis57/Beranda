@@ -21,6 +21,9 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 | New box / Wi-Fi password changed | the Pi knows no network in range | wait 2 minutes, join the "Beranda setup" Wi-Fi from a phone, pick the new network |
 | "Use now" on a network did not work | wrong password, out of range | the Pi went back to the previous network by itself; fix the password with *Save this network* |
 | "offline" badge while everything looks current | before 0.16.4: one news source failing (often "news about my town") | update; the diagnostic file names it in its log lines |
+| "Too many wrong PINs" | 5 wrong PINs from this phone or computer | wait the minutes shown (other devices are not affected); restarting Beranda on the Pi also clears it |
+| Forgot the PIN | | on the Pi: `sudo sed -i '/^pin = /d' /etc/beranda/config.toml && sudo systemctl restart beranda`, then set a new one in box 15 |
+| "Beranda only answers devices on its own home network" | the phone is on mobile data, a guest network or a VPN | join the same Wi-Fi as the mirror, turn the VPN off |
 | Black screen on the Pi | the screen service stopped | `sudo systemctl restart beranda-kiosk` |
 | Nothing shows a calendar | link expired or wrong | box 5: paste it again, *Test* |
 

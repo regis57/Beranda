@@ -164,8 +164,9 @@ change, or after *Start over*, which brings the port back to 8080). Then, as nee
 
 ## Privacy and security
 
-- The settings page only opens from your home network, and can ask for a PIN (set one if guests use
-  your Wi-Fi). **Never open Beranda's port on your router**: it is made for your home, not the internet.
+- Beranda only answers your home network (the screen and the photos too), and the settings page can
+  ask for a PIN (set one if guests use your Wi-Fi; after 5 wrong tries a device has to wait).
+  **Never open Beranda's port on your router**: it is made for your home, not the internet.
 - Your settings stay on your Pi. It only talks to the services you use: Open-Meteo (weather, air),
   your calendar, the feeds you chose, and, if you switch them on, GDELT ("news about my town" sends the name of your town),
   MeteoAlarm (warnings), nameday.abalin.net (name days), Wikipedia, Radio Browser and your TV guide.

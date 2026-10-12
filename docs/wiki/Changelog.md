@@ -138,3 +138,8 @@ One line per version, newest last. Each one was a pull request on
   files are readable by their owner alone, nothing but the type of a problem is ever written
   to a log, and the few places that really do use a path or an address chosen by the owner now
   say in a sentence why that is safe.
+- **v0.16.9**: Beranda now answers the home network only for everything - the screen, its data and the
+  photos as much as the settings page - so a port opened on the router by mistake shows strangers
+  nothing. Wrong PINs are counted, one phone or computer at a time: after 5, that device waits 1 minute,
+  then twice as long each time (up to 1 hour), and the page says how long; the whole house gets at most
+  20 wrong PINs in any hour. A PIN with an unusual letter no longer makes the page fail

@@ -24,8 +24,9 @@ patch, so the fix for anything found goes into the next version.
 
 ## What Beranda is built to withstand
 
-- **The settings page answers the home network only**, and can ask for a PIN. It is not meant to
-  be reachable from the internet; do not forward its port on your router.
+- **Beranda answers the home network only** - the screen and the photos as much as the settings
+  page - and the settings page can ask for a PIN. Wrong PINs are counted per device, with waits
+  that grow. It is not meant to be reachable from the internet; do not forward its port on your router.
 - **The web server never runs as root.** The few things that need root (update, restart, reboot,
   start over, Wi-Fi changes) are fixed requests dropped as files for a separate root service,
   which checks each one and refuses anything else.

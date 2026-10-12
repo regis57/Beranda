@@ -114,6 +114,7 @@ async function api(path, opts = {}) {
     try { detail = (await res.json()).detail || ''; } catch { /* not JSON */ }
     const err = new Error(detail || `HTTP ${res.status}`);
     err.status = res.status;
+    err.wait = Number(res.headers.get('Retry-After')) || 0; // seconds, after too many wrong PINs
     throw err;
   }
   return res.json();
@@ -1376,22 +1377,30 @@ async function boot() {
   });
   window.addEventListener('resize', fitPreview);
   window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+  // After 5 wrong PINs this phone or computer has to wait a while: say how long, in minutes.
+  const gateError = (err) => {
+    const minutes = Math.max(1, Math.ceil((err.wait || 60) / 60));
+    $('gate-error').textContent = err.status === 429 ? t('admin.pin_wait', { n: minutes }) : t('admin.pin_wrong');
+    $('gate-error').hidden = false;
+  };
   $('gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     pin = $('pin-input').value;
     try { await start(); try { sessionStorage.setItem('beranda-pin', pin); } catch { /* ignore */ } }
-    catch { $('gate-error').textContent = t('admin.pin_wrong'); $('gate-error').hidden = false; }
+    catch (err) { gateError(err); }
   });
 
   try {
     const status = await api('/status');
+    if (status.wait > 0) throw Object.assign(new Error('wait'), { status: 429, wait: status.wait });
     if (status.pin_required && !pin) throw Object.assign(new Error('pin'), { status: 401 });
     await start();
   } catch (err) {
     $('gate').hidden = false;
-    if (err.status === 401) {
+    if (err.status === 401 || err.status === 429) {
       $('gate-label').textContent = t('admin.enter_pin');
       $('gate-btn').textContent = t('admin.unlock');
+      if (err.status === 429) gateError(err);
     } else {
       const text = err.status === 403 ? t('admin.forbidden') : `${t('admin.error')}: ${err.message}`;
       $('gate-form').replaceChildren(el('p', { className: 'error', textContent: text }));

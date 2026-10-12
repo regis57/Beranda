@@ -1,9 +1,11 @@
 # API reference
 
-All JSON. `/api/admin/*` answers the home network only, needs the PIN (header `X-Beranda-Pin`) when one is
-set, and refuses cross-site writes.
+All JSON. **Everything** answers the home network only: any other address gets `403` and one plain
+sentence. `/api/admin/*` also needs the PIN (header `X-Beranda-Pin`) when one is set, and refuses
+cross-site writes. After too many wrong PINs a device gets `429` with a `Retry-After` header
+(seconds), and its PIN is not looked at until then - see [Security](Security#wrong-pins-what-happens).
 
-## Display (open on the home network)
+## Display (open on the home network, no PIN)
 
 | Route | Use |
 |---|---|
@@ -19,7 +21,7 @@ set, and refuses cross-site writes.
 
 | Route | Use |
 |---|---|
-| `GET /status` | is a PIN needed |
+| `GET /status` | `{pin_required, wait}`: is a PIN needed, and how many seconds this device must still wait |
 | `GET /config`, `PUT /config` | read / save the settings (422 with a plain sentence if invalid or over the limits) |
 | `GET /geocode?q=` | town search |
 | `POST /test-ics`, `/test-feed`, `/test-tv`, `/test-alerts` | try a calendar, a feed, a TV guide, a warnings area |

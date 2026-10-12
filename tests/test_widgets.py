@@ -143,7 +143,7 @@ def test_an_unknown_time_zone_is_refused():
 # ---- the state endpoint ----------------------------------------------------------------------------
 def client(tmp_path, **kw):
     cfg = replace(Config(), cache_dir=tmp_path / "cache", news_enabled=False, history_enabled=False, **kw)
-    return TestClient(create_app(cfg, now_fn=lambda: NOW))
+    return TestClient(create_app(cfg, now_fn=lambda: NOW), client=("127.0.0.1", 50000))
 
 
 @respx.mock

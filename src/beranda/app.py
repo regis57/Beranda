@@ -15,10 +15,10 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 
-from . import __version__, diagnostics, system
+from . import __version__, access, diagnostics, system
 from .admin import Runtime
 from .admin import router as admin_router
 from .cache import Cache
@@ -382,7 +382,14 @@ def create_app(
 
     @app.middleware("http")
     async def security_headers(request: Request, call_next):
-        response = await call_next(request)
+        # Home network only, for everything: the screen, its data and the photos as much as the
+        # settings page. A port opened on the router by mistake then shows strangers nothing.
+        if not access.is_home(request.client.host if request.client else None):
+            response = PlainTextResponse(
+                "Beranda only answers devices on its own home network.", status_code=403
+            )
+        else:
+            response = await call_next(request)
         response.headers["Content-Security-Policy"] = CSP
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
@@ -454,11 +461,7 @@ def create_app(
     @app.post("/api/report")
     async def report(request: Request, body: dict) -> JSONResponse:
         """The display page tells what went wrong on its side (microphone, page errors), for the
-        diagnostic file. Home network only, a short line, nothing else is kept."""
-        from .admin import _is_local
-
-        if not _is_local(request.client.host if request.client else None):
-            return JSONResponse({"detail": "home network only"}, status_code=403)
+        diagnostic file. Home network only (like everything), a short line, nothing else is kept."""
         diagnostics.note_display(str(body.get("event", ""))[:200], request.headers.get("user-agent", ""))
         return JSONResponse({"ok": True})
 
