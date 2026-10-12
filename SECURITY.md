@@ -1,5 +1,8 @@
 # Reporting a security problem
 
+> Everything that protects Beranda, its known limits and what you should do, in plain words:
+> **[Security, in the wiki](https://github.com/regis57/Beranda/wiki/Security)**.
+
 Thank you for looking. If you think you have found a way to break into Beranda, or to reach
 something it should keep private, please tell us **privately first**, so it can be fixed before
 it is public.

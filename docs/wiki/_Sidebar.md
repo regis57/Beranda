@@ -10,6 +10,7 @@
 - [Status](Status)
 - [Roadmap](Roadmap)
 - [Changelog](Changelog)
+- [Security](Security)
 
 **Develop**
 - [Architecture](Architecture)

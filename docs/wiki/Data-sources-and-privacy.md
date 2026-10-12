@@ -23,6 +23,8 @@ Public holidays, sun, moon and seasons are computed on the Pi.
 
 - Opens from the home network only; optional PIN. **Never forward the port to the internet.**
 - Calendar links and the PIN live in `config.toml` (readable by Beranda only) and never reach a log.
+- Another website open in your browser cannot change your settings.
+- More, and the known limits: [Security](Security).
 
 ## The diagnostic file contains / does not contain
 
