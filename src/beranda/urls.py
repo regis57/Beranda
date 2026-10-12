@@ -6,6 +6,13 @@ network. Even so, each address is checked twice: once when the settings are save
 typing mistake is caught while the person is still looking at the screen, and once again
 just before the download, so an address put straight into the file by hand can never send
 Beranda somewhere it should not go.
+
+Why not a list of allowed sites? Because pointing Beranda at your own sources is the
+feature: your own calendar, the news site you like, a TV guide served by another box at
+home (or by tvheadend on the same Pi). A code scanner will keep saying "the address comes
+from the user" - it does, on purpose. What the "test this link" buttons send back is only
+ever what reads as a calendar, a feed or a guide, never the page itself, so they cannot be
+used to read some other page on the home network either.
 """
 
 from __future__ import annotations

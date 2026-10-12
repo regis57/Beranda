@@ -113,7 +113,7 @@ async def build_news(cfg: Config, cache: Cache, now: datetime, errors: dict, sta
 
         digest = hashlib.sha1(url.encode(), usedforsecurity=False).hexdigest()[:12]
         try:
-            items, is_stale = await cache.get(f"news:{key}:{digest}", NEWS_TTL, load)  # key: names the source in logs
+            items, is_stale = await cache.get(f"news:{key}:{digest}", NEWS_TTL, load, name=f"news feed {key}")
             if is_stale:
                 stale.append(f"news:{key}")
             return items
@@ -144,6 +144,7 @@ async def build_state(
                 f"weather:{loc.latitude:.3f}:{loc.longitude:.3f}:{cfg.units}",
                 WEATHER_TTL,
                 lambda: weather_mod.fetch(loc.latitude, loc.longitude, cfg.units),
+                name="weather",  # never the key itself in a log: it holds the town's coordinates
             )
             if is_stale:
                 stale.append("weather")
@@ -162,7 +163,7 @@ async def build_state(
             return calendar_ics.events_from_ics(text, start, end, loc.timezone, index)
 
         try:
-            got, is_stale = await cache.get(f"ics:{digest}:{start}:{end}", CALENDAR_TTL, load)
+            got, is_stale = await cache.get(f"ics:{digest}:{start}:{end}", CALENDAR_TTL, load, name="calendar")
             events.extend(got)
             if is_stale:
                 stale.append(f"calendar:{index}")
@@ -193,7 +194,9 @@ async def build_state(
             return await history_mod.fetch(cfg.language, today.month, today.day)
 
         try:
-            history, is_stale = await cache.get(f"history:{cfg.language}:{today.isoformat()}", HISTORY_TTL, load_history)
+            history, is_stale = await cache.get(
+                f"history:{cfg.language}:{today.isoformat()}", HISTORY_TTL, load_history, name="history"
+            )
             if is_stale:
                 stale.append("history")
         except Exception as exc:  # noqa: BLE001 - Wikidata being slow or down must not blank the screen
@@ -236,7 +239,7 @@ async def build_state(
             ]
 
         try:
-            got, is_stale = await cache.get(f"tv:{digest}:{prime_start.date()}", TV_TTL, load_tv)
+            got, is_stale = await cache.get(f"tv:{digest}:{prime_start.date()}", TV_TTL, load_tv, name="TV guide")
             tv = {"status": "ok" if got else "empty", "programmes": got, **window}
             if is_stale:
                 stale.append("tv")
@@ -255,6 +258,7 @@ async def build_state(
                 f"air:{loc.latitude:.2f}:{loc.longitude:.2f}:{us_scale}",
                 AIR_TTL,
                 lambda: air_mod.fetch(loc.latitude, loc.longitude, us_scale),
+                name="air quality",
             )
             if is_stale:
                 stale.append("air")
@@ -274,7 +278,8 @@ async def build_state(
         else:
             try:
                 every, is_stale = await cache.get(
-                    f"alerts:{cfg.country.upper()}", ALERTS_TTL, lambda: alerts_mod.fetch(cfg.country, now)
+                    f"alerts:{cfg.country.upper()}", ALERTS_TTL, lambda: alerts_mod.fetch(cfg.country, now),
+                    name="weather warnings",
                 )
                 alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area)}
                 if is_stale:
@@ -297,6 +302,7 @@ async def build_state(
                     f"nameday2:{cfg.country.upper()}:{today.isoformat()}",  # "2": not the empty answers kept by 0.14-0.16
                     HISTORY_TTL,
                     lambda: eph_mod.fetch_nameday(cfg.country, today.month, today.day),
+                    name="name day",
                 )
             except Exception as exc:  # noqa: BLE001
                 errors["nameday"] = type(exc).__name__
