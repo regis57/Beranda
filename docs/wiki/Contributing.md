@@ -29,7 +29,10 @@ Screenshots: `python scripts/screenshot.py` and `python scripts/screenshot_admin
 4. Say honestly what could not be tried on real hardware.
 5. Security: CodeQL reads every pull request, and the linter's security rules are on. When one of
    them flags something that is deliberate, do not just silence it - write next to it, in a
-   sentence, why it is safe here. See [SECURITY.md](https://github.com/regis57/Beranda/blob/main/SECURITY.md).
+   sentence, why it is safe here.
+6. CI actions are named by the exact commit they are, not by a tag (`@11d5960...  # v4.4.0`): a tag
+   can be moved to point at other code, and these run with access to the repository. Dependabot
+   keeps the commit and the comment up to date, so there is nothing to do by hand. See [SECURITY.md](https://github.com/regis57/Beranda/blob/main/SECURITY.md).
 
 ## Common additions
 
