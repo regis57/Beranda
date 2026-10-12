@@ -49,3 +49,14 @@ installer and the root services, and a full install on a clean machine. CodeQL r
 the JavaScript on every pull request and once a week, and gitleaks reads every commit ever made,
 looking for anything shaped like a password or a key. Dependabot watches the libraries and the CI
 actions. See [Contributing](https://github.com/regis57/Beranda/wiki/Contributing).
+
+When one of those checks flags something that turns out to be deliberate, it is not quietly
+switched off: the reason is written next to the code, in one sentence, so the next person reading
+it does not have to guess. Three things in Beranda are deliberate and will keep being flagged:
+
+- **It listens on every address.** It has to - a phone on the home network must be able to reach it.
+- **The photo folder and the folder for downloaded copies are paths you choose.** Choosing them is
+  the point. Beranda runs as its own user, so it can only read and write what that user can.
+- **It downloads from addresses you give it** - a calendar, a news feed, a TV guide. That is the
+  whole feature. Every one of them goes through the same check first: http or https only, a real
+  site name, no password hidden in the address, nothing invisible (see `src/beranda/urls.py`).

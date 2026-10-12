@@ -271,7 +271,9 @@ def _write_result(folder: Path, job_id: str, result: dict, owner: tuple[int, int
     folder.mkdir(parents=True, exist_ok=True)
     tmp = folder / f".{job_id}.tmp"
     tmp.write_text(json.dumps(result))
-    os.chmod(tmp, 0o640)
+    # Owner only. The next line hands the file to the web server's own user, so nobody
+    # else on the Pi - not even its group - ever needs to be able to read it.
+    os.chmod(tmp, 0o600)
     if owner:
         os.chown(tmp, *owner)
     os.replace(tmp, folder / f"{job_id}.json")

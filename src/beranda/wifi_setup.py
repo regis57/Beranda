@@ -64,7 +64,40 @@ class Network:
     secured: bool
 
 
+_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _usable_name(ssid: object) -> str:
+    """The network name, refused unless it looks like a real one.
+
+    A Wi-Fi name is at most 32 bytes and holds no invisible characters, and it may not start
+    with a dash, which nmcli would read as one of its own options. Every command below is
+    run from a list of words, never through a shell, so nothing typed on the setup page can
+    turn into a second command - but a name is still checked before it is used.
+    """
+    name = ssid if isinstance(ssid, str) else ""
+    if not name or len(name.encode()) > 32 or _CONTROL.search(name) or name.startswith("-"):
+        return ""
+    return name
+
+
+def _usable_password(password: object) -> str | None:
+    """'' for an open network, 8 to 63 characters for WPA, or 64 hexadecimal digits.
+
+    `None` means "this cannot be a Wi-Fi password", so we do not even try.
+    """
+    if password in (None, ""):
+        return ""
+    if not isinstance(password, str) or _CONTROL.search(password):
+        return None
+    if 8 <= len(password) <= 63 or re.fullmatch(r"[0-9a-fA-F]{64}", password):
+        return password
+    return None
+
+
 def _run(args: list[str]) -> subprocess.CompletedProcess:
+    """Run one command, given as a list of words. Never a line handed to a shell, so no text
+    a person types can ever become part of the command itself."""
     return subprocess.run(args, capture_output=True, text=True, check=False)
 
 
@@ -118,11 +151,15 @@ def scan() -> list[Network]:
 
 def connect(ssid: str, password: str) -> tuple[bool, str]:
     """Try to join `ssid`. Never logs or returns the password, success or not."""
-    if not ssid:
+    name = _usable_name(ssid)
+    if not name:
         return False, "no network name given"
-    args = ["nmcli", "device", "wifi", "connect", ssid]
-    if password:
-        args += ["password", password]
+    secret = _usable_password(password)
+    if secret is None:
+        return False, "that password cannot be right (8 to 63 characters)"
+    args = ["nmcli", "device", "wifi", "connect", name]
+    if secret:
+        args += ["password", secret]
     result = _run(args)
     if result.returncode == 0:
         return True, "connected"

@@ -54,7 +54,14 @@ def default_folder() -> Path:
 
 
 def effective_folder(configured: str) -> Path:
-    """The folder in use: the one chosen on the settings page, or Beranda's own."""
+    """The folder in use: the one chosen on the settings page, or Beranda's own.
+
+    Choosing the folder is the whole point of the box, so this really is a path the owner
+    of the mirror types in - there is no list to check it against. Two things keep it safe:
+    the settings page only answers on the home network, and Beranda runs as its own user,
+    which can only read what that user can read. `list_photos` and `resolve` below then
+    make sure that only picture files inside that one folder are ever opened.
+    """
     return Path(configured).expanduser() if configured.strip() else default_folder()
 
 

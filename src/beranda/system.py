@@ -104,12 +104,15 @@ def helper_state() -> str:
 
 
 def request_action(action: str) -> None:
-    if action not in ACTIONS:
+    # The file name is taken from our own list of fixed words, never from the text that was
+    # asked for, so no name a caller invents can ever become part of a path.
+    name = next((known for known in ACTIONS if known == action), None)
+    if name is None:
         raise ValueError(f"unknown action {action!r}")
     folder = requests_dir()
     if folder is None:
         raise RuntimeError("not installed with install.sh")
-    (folder / action).write_text(datetime.now(UTC).isoformat())
+    (folder / name).write_text(datetime.now(UTC).isoformat())
 
 
 async def latest_version(branch: str = "main") -> str | None:
@@ -124,7 +127,13 @@ async def latest_version(branch: str = "main") -> str | None:
 
 
 def port_is_free(host: str, port: int) -> bool:
-    """True when nothing is listening on that port yet (we try to take it, then let go)."""
+    """True when nothing is listening on that port yet (we try to take it, then let go).
+
+    This asks the question for the very address the server is about to listen on, which on a
+    mirror is every address at once ("0.0.0.0"): a phone, a tablet and the mirror itself all
+    have to be able to reach it over the home network. It opens nothing - it takes the port
+    for a fraction of a second and hands it straight back.
+    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:

@@ -67,7 +67,9 @@ class Cache:
                 json.dumps({"saved_at": saved_at, "value": value}), encoding="utf-8"
             )
         except (OSError, TypeError) as exc:
-            log.debug("could not persist cache key %s: %s", key, exc)
+            # The type of the problem only, never its message: a message can quote the
+            # value that failed, and a calendar's "secret address" must never reach a log.
+            log.debug("could not save cache key %s to disk (%s)", key, type(exc).__name__)
 
     async def get(
         self,

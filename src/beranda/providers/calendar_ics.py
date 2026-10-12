@@ -15,6 +15,8 @@ import httpx
 import recurring_ical_events
 from icalendar import Calendar
 
+from beranda.urls import checked_url
+
 USER_AGENT = "Beranda/0.4 (+https://github.com/regis57/Beranda)"
 MAX_ICS_BYTES = 8 * 1024 * 1024  # a Pi 3B should not be fed a 200 MB calendar
 
@@ -42,7 +44,8 @@ async def download(url: str) -> str:
     async with httpx.AsyncClient(
         timeout=15, headers={"User-Agent": USER_AGENT}, follow_redirects=True
     ) as client:
-        response = await client.get(normalise_url(url))
+        # Checked again here, not only when the settings were saved (see news.fetch).
+        response = await client.get(checked_url(normalise_url(url), "calendar address"))
         response.raise_for_status()
         if len(response.content) > MAX_ICS_BYTES:
             raise ValueError("calendar file is too large")

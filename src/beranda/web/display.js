@@ -44,8 +44,14 @@ async function loadStrings(code) {
   const full = m[2] ? `${m[1]}-${m[2].toUpperCase()}` : m[1];
   if (loadedLang === full) return;
   const get = async (name) => {
-    try { const r = await fetch(`/static/i18n/${name}.json`); return r.ok ? await r.json() : {}; }
-    catch { return {}; }
+    // A language code and nothing else: two or three small letters, and at most one dash
+    // followed by two capitals. Checked again here, right where the address is built, so
+    // the only thing this can ever ask for is one of the translation files Beranda ships.
+    if (!/^[a-z]{2,3}(-[A-Z]{2})?$/.test(name)) return {};
+    try {
+      const r = await fetch(`/static/i18n/${encodeURIComponent(name)}.json`);
+      return r.ok ? await r.json() : {};
+    } catch { return {}; }
   };
   // English is the fallback for any string a translation does not have yet.
   let merged = await get('en');

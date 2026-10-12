@@ -449,7 +449,11 @@ def router(runtime: Runtime) -> APIRouter:
     async def wifi_job_result(job_id: str) -> dict:
         if not wifi_mod.JOB_ID.match(job_id):
             raise HTTPException(404, "unknown job")
-        answer = wifi_mod.results_dir() / f"{job_id}.json"
+        # The answer is looked for among the files that are actually there, and the path we
+        # read is one of those real file names. Nothing the browser sent becomes a path.
+        answer = next((f for f in wifi_mod.results_dir().glob("*.json") if f.stem == job_id), None)
+        if answer is None:
+            return {"done": False}
         try:
             return json.loads(answer.read_text())
         except FileNotFoundError:
