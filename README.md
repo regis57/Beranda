@@ -180,7 +180,7 @@ change, or after *Start over*, which brings the port back to 8080). Then, as nee
 
 - **Stuck?** `sudo beranda doctor`, [Troubleshooting](https://github.com/regis57/Beranda/wiki/Troubleshooting), or [open an issue](https://github.com/regis57/Beranda/issues) and attach the **diagnostic file** (settings page → *Advanced user* → *Download the diagnostic file*; it holds no password or private link).
 - **Contribute**: start with [Contributing](https://github.com/regis57/Beranda/wiki/Contributing) and [Architecture](https://github.com/regis57/Beranda/wiki/Architecture). A new language is one JSON file in `src/beranda/web/i18n/`. [Status](https://github.com/regis57/Beranda/wiki/Status) · [Roadmap](https://github.com/regis57/Beranda/wiki/Roadmap).
-- **Support**: Beranda stays free and open source. If it brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.
+- **Support**: Beranda stays free and open source. If it brightens your wall, [a beer](https://buymeacoffee.com/regis57) is always welcome.
 
 ## Credits
 

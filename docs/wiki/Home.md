@@ -26,4 +26,4 @@ The [README](https://github.com/regis57/Beranda#readme) is the short tour; this 
 **Browser**: use **Google Chrome** for the settings page and the display. Microsoft Edge caused
 trouble (voice control, pages kept from an older version).
 
-If Beranda brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.
+If Beranda brightens your wall, [a beer](https://buymeacoffee.com/regis57) is always welcome.

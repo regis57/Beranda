@@ -91,7 +91,7 @@ function translateStatic() {
   $('menu-label').textContent = t('admin.menu');
   edgeHint();
   $('coffee-label').textContent = t('admin.coffee');
-  $('menu-coffee-label').textContent = `☕ ${t('admin.coffee')}`;
+  $('menu-coffee-label').textContent = `🍺 ${t('admin.coffee')}`;
   $('coffee').title = t('admin.coffee_hint');
   buildMenu();
   document.title = `Beranda · ${t('admin.title')}`;

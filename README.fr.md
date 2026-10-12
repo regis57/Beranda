@@ -189,7 +189,7 @@ changement de port, ou après *Repartir de zéro*, qui remet le port à 8080). E
 
 - **Bloqué ?** `sudo beranda doctor`, [Dépannage](https://github.com/regis57/Beranda/wiki/Troubleshooting) (wiki), ou [ouvrez une issue](https://github.com/regis57/Beranda/issues) en joignant le **fichier de diagnostic** (page de réglages → *Utilisateur avancé* → *Télécharger le fichier de diagnostic* ; il ne contient ni mot de passe ni lien privé).
 - **Contribuer** : `pip install -e ".[dev]"`, puis `pytest` et `ruff check src tests scripts`. Une nouvelle langue, c'est un fichier JSON dans `src/beranda/web/i18n/`. [Contributing](https://github.com/regis57/Beranda/wiki/Contributing) · [Architecture](https://github.com/regis57/Beranda/wiki/Architecture) · [État](https://github.com/regis57/Beranda/wiki/Status) · [Feuille de route](https://github.com/regis57/Beranda/wiki/Roadmap) (wiki, en anglais).
-- **Soutenir** : Beranda reste libre et gratuit. S'il égaye votre mur, [un café](https://buymeacoffee.com/regis57) est toujours le bienvenu.
+- **Soutenir** : Beranda reste libre et gratuit. S'il égaye votre mur, [une bière](https://buymeacoffee.com/regis57) est toujours la bienvenue.
 
 ## Crédits
 
