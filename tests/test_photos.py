@@ -159,3 +159,45 @@ def test_a_dropbox_page_instead_of_a_zip_is_explained(tmp_path):
     with pytest.raises(photos.PhotoError) as caught:
         photos.extract_zip(io.BytesIO(b"<html>sign in</html>"), tmp_path)
     assert caught.value.code == "link"
+
+
+def test_unpacking_a_dropbox_folder_does_not_freeze_the_screen(tmp_path, monkeypatch):
+    """Unzipping is slow on a Pi. While it runs, the server must keep answering: the display
+    asks for its data every minute, and the settings page must not look dead. So we watch a
+    small clock ticking alongside and make sure it never stops for long."""
+    import asyncio
+    import time
+    from itertools import pairwise
+
+    import httpx
+    import respx
+
+    link = "https://www.dropbox.com/scl/fo/abc/h?rlkey=x"
+    unzip_seconds = 0.4
+    beats = []
+
+    def slow_unzip(fileobj, folder, limit):
+        time.sleep(unzip_seconds)  # stands for a real folder of pictures
+        return {"added": 1, "removed": 0, "total": 1}
+
+    monkeypatch.setattr(photos, "extract_zip", slow_unzip)
+
+    async def heartbeat():
+        while True:
+            beats.append(time.monotonic())
+            await asyncio.sleep(0.02)
+
+    async def run():
+        with respx.mock:
+            respx.get(photos.dropbox_download_url(link)).mock(
+                return_value=httpx.Response(200, content=b"PK\x05\x06" + b"\0" * 18)
+            )
+            clock = asyncio.create_task(heartbeat())
+            await photos.sync_dropbox(link, tmp_path)
+            clock.cancel()
+
+    asyncio.run(run())
+    longest_silence = max(b - a for a, b in pairwise(beats))
+    assert longest_silence < unzip_seconds / 2, (
+        f"the server stopped answering for {longest_silence:.2f}s while the pictures were unpacked"
+    )

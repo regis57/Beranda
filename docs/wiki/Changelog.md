@@ -118,3 +118,10 @@ One line per version, newest last. Each one was a pull request on
   while (2 to 15 minutes) while its last good copy stays on screen, and two screens asking at once share
   one request. The "offline" badge only shows when the Pi cannot be reached or the weather or calendar
   are old copies; the log names the failing news source
+- **v0.16.5**: security housekeeping. The linter's security rules are switched on (they were not),
+  and where something looks risky but is deliberate - listening on the home network, naming a command
+  rather than writing out its path - the reason is now written next to it. CodeQL reads the Python and
+  the JavaScript on every pull request and once a week, Dependabot watches the libraries and the CI
+  actions, the CI token can only read, and the root services set their own PATH. A SECURITY.md says how
+  to report a problem privately. One real bug found on the way: unpacking a Dropbox folder of photos
+  froze the screen and the settings page for as long as it took; it now runs out of the way

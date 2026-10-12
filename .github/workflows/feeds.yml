@@ -12,6 +12,10 @@ on:
       - "src/beranda/providers/news.py"
       - "scripts/check_feeds.py"
 
+# These jobs only read the code: the token they get can do nothing else.
+permissions:
+  contents: read
+
 jobs:
   check:
     # Pinned, not "ubuntu-latest": GitHub retires the previous Ubuntu image from

@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+# These jobs only read the code: the token they get can do nothing else.
+permissions:
+  contents: read
+
 jobs:
   test:
     # Pinned, not "ubuntu-latest": GitHub retires the previous Ubuntu image from "latest"

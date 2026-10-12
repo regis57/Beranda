@@ -17,6 +17,8 @@ Syncthing can also keep a folder filled by themselves (then point the settings p
 
 from __future__ import annotations
 
+import asyncio
+
 import os
 import re
 import tempfile
@@ -173,7 +175,7 @@ async def sync_dropbox(link: str, folder: Path, limit: int = MAX_PHOTOS) -> dict
     Returns {"added": n, "removed": n, "total": n}.
     """
     url = dropbox_download_url(link)
-    folder.mkdir(parents=True, exist_ok=True)
+    await asyncio.to_thread(folder.mkdir, parents=True, exist_ok=True)
     with tempfile.TemporaryFile() as tmp:
         async with httpx.AsyncClient(
             timeout=60, follow_redirects=True, headers={"User-Agent": USER_AGENT}
@@ -186,7 +188,8 @@ async def sync_dropbox(link: str, folder: Path, limit: int = MAX_PHOTOS) -> dict
                     raise PhotoError("big", "that Dropbox folder is too big (400 MB at most)")
                 tmp.write(chunk)
         tmp.seek(0)
-        return extract_zip(tmp, folder, limit)
+        # Unpacking is slow on a Pi: off the event loop, so the screen keeps answering.
+        return await asyncio.to_thread(extract_zip, tmp, folder, limit)
 
 
 def extract_zip(fileobj, folder: Path, limit: int = MAX_PHOTOS) -> dict:
