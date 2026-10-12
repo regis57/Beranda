@@ -155,7 +155,7 @@ def test_state_merges_headlines_and_survives_a_dead_feed(tmp_path):
     from zoneinfo import ZoneInfo
 
     now = datetime(2026, 10, 9, 0, 30, tzinfo=ZoneInfo("Europe/Paris"))
-    state = TestClient(create_app(cfg, now_fn=lambda: now)).get("/api/state").json()
+    state = TestClient(create_app(cfg, now_fn=lambda: now), client=("127.0.0.1", 50000)).get("/api/state").json()
     assert [i["title"] for i in state["news"]["items"]] == ["First & bold headline", "Older one"]
     assert state["news"]["items"][0]["source"] == "g1"  # the catalog name wins
     assert state["errors"]["news:folha"] == "ConnectError"
@@ -163,13 +163,13 @@ def test_state_merges_headlines_and_survives_a_dead_feed(tmp_path):
 
 def test_demo_news_is_localised(tmp_path):
     cfg = replace(Config(), cache_dir=tmp_path, demo=True, language="pt-BR")
-    state = TestClient(create_app(cfg)).get("/api/state").json()
+    state = TestClient(create_app(cfg), client=("127.0.0.1", 50000)).get("/api/state").json()
     assert state["news"]["items"][0]["title"].startswith("Biblioteca")
 
 
 def test_news_can_be_switched_off(tmp_path):
     cfg = replace(Config(), cache_dir=tmp_path, demo=True, news_enabled=False)
-    assert TestClient(create_app(cfg)).get("/api/state").json()["news"] is None
+    assert TestClient(create_app(cfg), client=("127.0.0.1", 50000)).get("/api/state").json()["news"] is None
 
 
 # ---------------------------------------------------------------- news: settings page

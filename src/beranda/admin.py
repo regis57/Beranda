@@ -2,7 +2,7 @@
 
 Safety, because this endpoint can change what the mirror does and holds secret calendar links:
   * only addresses from a private network (or this machine) are accepted;
-  * an optional PIN, sent in the X-Beranda-Pin header;
+  * an optional PIN, sent in the X-Beranda-Pin header; wrong PINs are counted (see access.py);
   * writes must come from the same origin (no cross-site form posts);
   * the config file is written atomically and readable only by its owner.
 """
@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import asyncio
 import hmac
-import ipaddress
 import json
 import logging
 import os
@@ -25,7 +24,7 @@ import httpx
 import tomli_w
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from . import __version__, diagnostics, system, tls
+from . import __version__, access, diagnostics, system, tls
 from . import config as config_mod
 from . import limits as limits_mod
 from . import wifi as wifi_mod
@@ -57,6 +56,7 @@ class Runtime:
     state_fn: object | None = None  # reads what the display shows now (set by create_app), for the diagnostic file
     cache: object | None = None  # the downloaded-data cache (set by create_app), emptied by "erase data"
     listening_port: int = field(init=False, default=0)  # the port this server really listens on
+    pins: access.PinAttempts = field(default_factory=access.PinAttempts)  # wrong PINs, per device
 
     def __post_init__(self) -> None:
         self.listening_port = self.cfg.port  # a new port saved later only applies after a restart
@@ -95,14 +95,8 @@ class Runtime:
             await asyncio.sleep(DROPBOX_EVERY_SECONDS)
 
 
-def _is_local(host: str | None) -> bool:
-    try:
-        ip = ipaddress.ip_address(host or "")
-    except ValueError:
-        return False
-    if ip.version == 6 and ip.ipv4_mapped:
-        ip = ip.ipv4_mapped
-    return ip.is_private or ip.is_loopback or ip.is_link_local
+# The rule itself lives in access.py, shared with the screen; the old name stays for callers.
+_is_local = access.is_home
 
 
 def write_config(path: Path, cfg: Config) -> None:
@@ -130,15 +124,30 @@ def router(runtime: Runtime) -> APIRouter:
             if origin and urlparse(origin).netloc != request.headers.get("host"):
                 raise HTTPException(403, "cross-origin request refused")
         pin = runtime.cfg.admin_pin
-        if pin and not hmac.compare_digest(request.headers.get("x-beranda-pin", ""), pin):
+        if not pin:
+            return
+        device = request.client.host if request.client else ""
+        wait = runtime.pins.wait_left(device)
+        if wait:  # not even looked at: otherwise waiting would not slow a guesser down at all
+            raise HTTPException(429, "too many wrong PINs", headers={"Retry-After": str(wait)})
+        given = request.headers.get("x-beranda-pin", "")
+        # Compared as bytes: the same time whatever the guess, and no crash on unusual letters.
+        if not hmac.compare_digest(given.encode(), pin.encode()):
+            if given:  # no PIN at all is not a guess
+                wait = runtime.pins.failed(device, given)
+                if wait:  # that was one too many: say so now, not at the next try
+                    raise HTTPException(429, "too many wrong PINs", headers={"Retry-After": str(wait)})
             raise HTTPException(401, "PIN required")
+        runtime.pins.succeeded(device)
 
     @api.get("/status")
     async def status(request: Request) -> dict:
         """Open to the local network without a PIN: tells the page whether to ask for one."""
         if not _is_local(request.client.host if request.client else None):
             raise HTTPException(403, "admin is only available from your home network")
-        return {"pin_required": bool(runtime.cfg.admin_pin)}
+        device = request.client.host if request.client else ""
+        # "wait": seconds this device must still wait after too many wrong PINs (0 = none).
+        return {"pin_required": bool(runtime.cfg.admin_pin), "wait": runtime.pins.wait_left(device)}
 
     @api.get("/config", dependencies=[Depends(guard)])
     async def get_config() -> dict:

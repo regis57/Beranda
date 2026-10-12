@@ -51,8 +51,9 @@ def test_outside_addresses_are_refused(tmp_path):
     assert client.get("/api/admin/config").status_code == 403
     assert client.get("/api/admin/status").status_code == 403
     assert client.put("/api/admin/config", json=valid_body()).status_code == 403
-    # the display itself stays reachable
-    assert client.get("/api/state").status_code == 200
+    # since 0.16.9 the screen, its data and the photos answer the home network only, too
+    for path in ("/", "/admin", "/api/state", "/api/photos/a.jpg", "/api/health", "/static/display.js"):
+        assert client.get(path).status_code == 403, path
 
 
 def test_loopback_and_ipv4_mapped_ipv6_count_as_local():

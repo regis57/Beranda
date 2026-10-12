@@ -62,7 +62,7 @@
   "radio_no_result": "Nenhuma estação encontrada",
   "feed_ok": "Funciona: {n} manchetes. A mais recente: {first}",
   "pin": "PIN das configurações (opcional)",
-  "pin_hint": "Esta página só abre pela rede da sua casa. Um PIN acrescenta mais um cadeado. Deixe vazio para não mudar nada.",
+  "pin_hint": "Esta página só abre pela rede da sua casa. Um PIN acrescenta mais um cadeado: depois de 5 erros, esse celular ou computador precisa esperar um pouco antes de tentar de novo. Deixe vazio para não mudar nada.",
   "save": "Salvar",
   "saved": "Salvo. O espelho se atualiza em menos de um minuto.",
   "unsaved": "Alterações ainda não salvas",
@@ -107,5 +107,6 @@
   "tv_fail": "Não foi possível ler esse guia ({err}).",
   "tv_none": "Ainda sem canais — cole acima o endereço de um guia e clique em “Encontrar canais”.",
   "voice": "Controle por voz",
-  "reset_prompt": "Para recomeçar do zero, digite abaixo a palavra «{word}»."
+  "reset_prompt": "Para recomeçar do zero, digite abaixo a palavra «{word}».",
+  "pin_wait": "PIN errado muitas vezes. Este celular ou computador pode tentar de novo em {n} min."
 }

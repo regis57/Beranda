@@ -33,6 +33,7 @@ Beranda is one small Python web server and two web pages. No build step, no data
 | Settings API | `src/beranda/admin.py` | `/api/admin/*`, guarded |
 | Settings | `src/beranda/config.py` | `config.toml` ⇄ frozen `Config`; validated, trimmed to the limits |
 | Cache | `src/beranda/cache.py` | each provider call: fresh data, or the last good copy marked stale |
+| Access | `src/beranda/access.py` | home network only (`is_home`), wrong PINs counted per device (`PinAttempts`) |
 | Address check | `src/beranda/urls.py` | the one check every downloaded address passes (http/https, a site, no password) |
 | Providers | `src/beranda/providers/` | one module per source or calendar (weather, ICS, news, TV, seasons...) |
 | Limits | `src/beranda/limits.py` | board + memory → profile → maximum per list |
@@ -65,6 +66,9 @@ Beranda is one small Python web server and two web pages. No build step, no data
   the download (`urls.py`). Downloads are size-capped; XML is read with `defusedxml`.
 - A log line names the kind of source ("weather") and the type of problem, never the cache key (it can
   hold the town's coordinates) nor an exception message (it can hold a secret address).
-- The display, `/api/state` and `/api/photos/*` are not behind the guard: the tablet must reach them.
-  Only `/api/report` and the settings API check for the home network.
+- Every request from outside the home network is refused by a middleware in `app.py`, before any
+  route runs (screen, data, photos, settings). The settings guard checks again.
+- Wrong PINs are counted per device (`access.PinAttempts`): 5 free, then 1 min doubling up to 1 h,
+  and never more than 20 in any hour for the whole house (then everyone waits until the hour is over). A waiting device gets `429` + `Retry-After`
+  without its PIN being looked at.
 - Everything, for users and in plain words: [Security](Security).

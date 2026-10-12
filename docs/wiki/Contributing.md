@@ -12,7 +12,7 @@ beranda --demo            # http://localhost:8080 and /admin
 ## Checks (run before every pull request)
 
 ```bash
-pytest                    # about 530 tests
+pytest                    # about 540 tests
 ruff check src tests scripts   # includes the security rules (S, B, BLE, ASYNC, DTZ)
 node --check src/beranda/web/*.js
 ```
