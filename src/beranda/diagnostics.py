@@ -140,7 +140,13 @@ def device_lines() -> list[str]:
         f"python: {platform.python_version()}",
     ]
     if shutil.which("systemctl"):
-        out.append("services: " + ", ".join(f"{name}={_service_state(name)}" for name in SERVICES))
+        states = {name: _service_state(name) for name in SERVICES}
+        # No screen plugged in (a Pi used over SSH): the full-screen display has nothing to do,
+        # so it is left out rather than shown as a fault. If it runs anyway, it is shown.
+        if system.screen_plugged_in() is False and states["beranda-kiosk"] != "active":
+            del states["beranda-kiosk"]
+            out.append("screen: none plugged in (the full-screen display service is not needed)")
+        out.append("services: " + ", ".join(f"{name}={state}" for name, state in states.items()))
     return [line for line in out if line]
 
 

@@ -45,6 +45,9 @@ def _services() -> list[str]:
     lines = []
     for unit, what in (("beranda", "the server"), ("beranda-kiosk", "the full-screen display")):
         state = subprocess.run(["systemctl", "is-active", unit], capture_output=True, text=True, check=False).stdout.strip()
+        if unit == "beranda-kiosk" and state != "active" and system.screen_plugged_in() is False:
+            lines.append(f"{OK} no screen plugged in: the full-screen display is not needed")
+            continue
         if state == "active":
             lines.append(f"{OK} {what} is running ({unit})")
         elif state in {"inactive", "unknown", ""} and unit == "beranda-kiosk":

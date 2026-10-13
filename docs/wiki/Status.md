@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.16.9 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.16.10 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
@@ -50,5 +50,5 @@ and what you should do: [Security](Security). To report a problem:
 
 ## Quality
 
-540 automated tests and a linter (with its security rules on) run on every change; the installer is tested on a fresh Ubuntu
+545 automated tests and a linter (with its security rules on) run on every change; the installer is tested on a fresh Ubuntu
 machine in GitHub Actions, and every news feed of the catalogue is checked weekly. Every change goes through a pull request.
