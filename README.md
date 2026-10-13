@@ -6,7 +6,7 @@
 clock, weather, your calendar, the news, your photos, the radio and tonight's TV. Light by day,
 dark at night. **Free**: no account, no subscription, no paid service.
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-regis57-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/regis57)
+<a href="https://buymeacoffee.com/regis57"><img height="32" alt="Buy me a beer" src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20beer&emoji=%F0%9F%8D%BA&slug=regis57&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue)](#licence)
 🇫🇷 [Lire en français](README.fr.md) · 📖 [Full manual in the wiki](https://github.com/regis57/Beranda/wiki): [Install](https://github.com/regis57/Beranda/wiki/Install-and-Update) · [Settings](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) · [Voice](https://github.com/regis57/Beranda/wiki/Voice-control) · [Troubleshooting](https://github.com/regis57/Beranda/wiki/Troubleshooting) · [Status](https://github.com/regis57/Beranda/wiki/Status) · [Roadmap](https://github.com/regis57/Beranda/wiki/Roadmap) · [Security](https://github.com/regis57/Beranda/wiki/Security)
 
@@ -180,7 +180,7 @@ change, or after *Start over*, which brings the port back to 8080). Then, as nee
 
 - **Stuck?** `sudo beranda doctor`, [Troubleshooting](https://github.com/regis57/Beranda/wiki/Troubleshooting), or [open an issue](https://github.com/regis57/Beranda/issues) and attach the **diagnostic file** (settings page → *Advanced user* → *Download the diagnostic file*; it holds no password or private link).
 - **Contribute**: start with [Contributing](https://github.com/regis57/Beranda/wiki/Contributing) and [Architecture](https://github.com/regis57/Beranda/wiki/Architecture). A new language is one JSON file in `src/beranda/web/i18n/`. [Status](https://github.com/regis57/Beranda/wiki/Status) · [Roadmap](https://github.com/regis57/Beranda/wiki/Roadmap).
-- **Support**: Beranda stays free and open source. If it brightens your wall, [a coffee](https://buymeacoffee.com/regis57) is always welcome.
+- **Support**: Beranda stays free and open source. If it brightens your wall, [a beer](https://buymeacoffee.com/regis57) is always welcome.
 
 ## Credits
 
