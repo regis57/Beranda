@@ -126,6 +126,23 @@ async def latest_version(branch: str = "main") -> str | None:
     return match.group(1) if match else None
 
 
+def screen_plugged_in(drm_folder: str = "/sys/class/drm") -> bool | None:
+    """Is a screen plugged into the Pi (HDMI, ...)? None when the system cannot say.
+
+    Linux lists every video output in `/sys/class/drm`, each with a `status` that reads
+    "connected" or "disconnected". A Pi used only over SSH, with nothing plugged in, has none
+    connected: then the full-screen display service has nothing to do, and the diagnostic file
+    and `beranda doctor` leave it out instead of making it look like a fault.
+    """
+    outputs = list(Path(drm_folder).glob("card*-*/status"))
+    if not outputs:
+        return None  # not a machine that reports it: keep showing everything
+    try:
+        return any(o.read_text().strip() == "connected" for o in outputs)
+    except OSError:
+        return None
+
+
 def port_is_free(host: str, port: int) -> bool:
     """True when nothing is listening on that port yet (we try to take it, then let go).
 

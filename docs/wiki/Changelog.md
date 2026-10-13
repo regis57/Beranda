@@ -143,3 +143,6 @@ One line per version, newest last. Each one was a pull request on
   nothing. Wrong PINs are counted, one phone or computer at a time: after 5, that device waits 1 minute,
   then twice as long each time (up to 1 hour), and the page says how long; the whole house gets at most
   20 wrong PINs in any hour. A PIN with an unusual letter no longer makes the page fail
+- **v0.16.10**: on a Raspberry Pi with no screen plugged in (used over SSH only), the diagnostic file and
+  `beranda doctor` no longer show the full-screen display service as a fault: it has nothing to do
+  there. If the Pi cannot tell, or the service runs anyway, nothing changes
