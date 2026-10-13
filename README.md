@@ -6,7 +6,7 @@
 clock, weather, your calendar, the news, your photos, the radio and tonight's TV. Light by day,
 dark at night. **Free**: no account, no subscription, no paid service.
 
-<a href="https://buymeacoffee.com/regis57"><img height="32" alt="Buy me a beer" src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20beer&emoji=%F0%9F%8D%BA&slug=regis57&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>
+<a href="https://buymeacoffee.com/regis57"><img height="20" alt="Buy me a beer" src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20beer&emoji=%F0%9F%8D%BA&slug=regis57&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue)](#licence)
 🇫🇷 [Lire en français](README.fr.md) · 📖 [Full manual in the wiki](https://github.com/regis57/Beranda/wiki): [Install](https://github.com/regis57/Beranda/wiki/Install-and-Update) · [Settings](https://github.com/regis57/Beranda/wiki/Settings-box-by-box) · [Voice](https://github.com/regis57/Beranda/wiki/Voice-control) · [Troubleshooting](https://github.com/regis57/Beranda/wiki/Troubleshooting) · [Status](https://github.com/regis57/Beranda/wiki/Status) · [Roadmap](https://github.com/regis57/Beranda/wiki/Roadmap) · [Security](https://github.com/regis57/Beranda/wiki/Security)
 
