@@ -174,6 +174,7 @@
     "news": "Vijesti",
     "read_day": "Pročitaj dan naglas",
     "no_news": "Trenutno nema vijesti",
-    "tap_for_sound": "Dodirnite zaslon jednom kako bi Beranda mogla govoriti."
+    "tap_for_sound": "Dodirnite zaslon jednom kako bi Beranda mogla govoriti.",
+    "wake_stopped": "Riječ za buđenje se zaustavila: nešto drugo je uzelo mikrofon. Gumb i dalje radi."
   }
 }

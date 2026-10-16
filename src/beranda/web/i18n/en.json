@@ -174,6 +174,7 @@
     "news": "News",
     "read_day": "Read the day out loud",
     "no_news": "No news right now",
-    "tap_for_sound": "Touch the screen once so Beranda may speak."
+    "tap_for_sound": "Touch the screen once so Beranda may speak.",
+    "wake_stopped": "The wake word stopped: something else took the microphone. The button still works."
   }
 }

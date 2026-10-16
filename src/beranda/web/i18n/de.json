@@ -174,6 +174,7 @@
     "news": "Nachrichten",
     "read_day": "Den Tag vorlesen",
     "no_news": "Gerade keine Nachrichten",
-    "tap_for_sound": "Berühren Sie den Bildschirm einmal, damit Beranda sprechen darf."
+    "tap_for_sound": "Berühren Sie den Bildschirm einmal, damit Beranda sprechen darf.",
+    "wake_stopped": "Das Weckwort hat aufgehört: etwas anderes hat das Mikrofon genommen. Der Knopf geht noch."
   }
 }

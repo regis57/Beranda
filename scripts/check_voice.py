@@ -111,6 +111,13 @@ def main() -> int:
         page.wait_for_timeout(900)
         want(len(page.evaluate("window.__spoken")) > 1, "the wake word answers, out loud")
 
+        # "Somebody took the microphone" after it worked: that passes, so try again later.
+        # Right at the start it means there is none: give up rather than ask for ever.
+        page.wait_for_timeout(5200)
+        page.evaluate("window.__fail('audio-capture')")
+        page.wait_for_timeout(3000)
+        want(page.evaluate("window.__live") == 1, "a microphone taken away for a moment is waited for, not given up")
+
         before = page.evaluate("window.__log.filter((x) => x === 'start').length")
         for _ in range(4):
             page.evaluate("window.__fail('network')")
@@ -119,6 +126,34 @@ def main() -> int:
         tries = page.evaluate("window.__log.filter((x) => x === 'start').length") - before
         want(tries <= 8, f"a failing speech service is left alone (asked again {tries} times, not dozens)")
         want(page.evaluate("window.__log.filter((x) => x === 'REFUSED').length") == 0, "the browser never refuses a listening")
+        page.close()
+
+        # The browser sometimes answers nothing at all to the button: no words, no error, no end.
+        # The microphone must still come back to the wake word afterwards.
+        page = browser.new_page(viewport={"width": 1280, "height": 800})
+        page.add_init_script(STAND_IN)
+        page.goto(f"http://127.0.0.1:{port}/")
+        page.wait_for_timeout(2500)
+        page.click("#mic")
+        page.wait_for_timeout(1000)
+        want(page.evaluate("window.__live") == 1, "the button is listening")
+        page.wait_for_timeout(14_000)  # the page gives up on a silent browser after 12 s
+        want(page.evaluate("window.__live") == 1, "a browser that answers nothing does not keep the microphone for ever")
+        want(page.evaluate("window.__hear('beranda quelle heure est-il')"), "the wake word is listening again")
+
+        page.close()
+
+        # Two Beranda screens in the SAME browser (the same tabs, the same storage): one listens,
+        # the other waits its turn, because the browser gives the microphone to one of them only.
+        together = browser.new_context(viewport={"width": 1280, "height": 800})
+        together.add_init_script(STAND_IN)
+        first, second = together.new_page(), together.new_page()
+        first.goto(f"http://127.0.0.1:{port}/")
+        first.wait_for_timeout(2500)
+        second.goto(f"http://127.0.0.1:{port}/")
+        second.wait_for_timeout(3500)
+        listening = first.evaluate("window.__live") + second.evaluate("window.__live")
+        want(listening == 1, f"two screens in one browser share the microphone ({listening} listening, want 1)")
         browser.close()
     server.should_exit = True
     if problems:

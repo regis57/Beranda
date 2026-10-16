@@ -174,6 +174,7 @@
     "news": "Izindaba",
     "read_day": "Funda usuku ngokuzwakalayo",
     "no_news": "Azikho izindaba okwamanje",
-    "tap_for_sound": "Thinta isikrini kanye ukuze iBeranda ikwazi ukukhuluma."
+    "tap_for_sound": "Thinta isikrini kanye ukuze iBeranda ikwazi ukukhuluma.",
+    "wake_stopped": "Igama lokuvusa limile: okunye kuthathe imakrofoni. Inkinobho isasebenza."
   }
 }

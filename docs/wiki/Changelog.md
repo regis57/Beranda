@@ -172,3 +172,11 @@ One line per version, newest last. Each one was a pull request on
   once" instead of saying nothing. The microphone button wears a ring while the wake word is on,
   the settings page says plainly what an always-open microphone costs, and a new check
   (`scripts/check_voice.py`, in CI) makes sure the two listenings never fight again
+- **v0.17.4**: three things learnt from a real diagnostic file, where the wake word stopped after
+  15 seconds every time with "audio-capture". A microphone taken away *after* it worked is now
+  waited for and tried again (it is usually another window, or the system's own voice assistant);
+  only right at the start does Beranda conclude there is none. Several Beranda screens in one
+  browser no longer fight over the microphone: the newest listens, the others wait and take over
+  by themselves. And a browser that answers nothing at all to the microphone button no longer
+  keeps the microphone for ever: after 12 seconds it goes back to the wake word. The screen says
+  in words when the wake word stops, instead of a code
