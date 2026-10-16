@@ -172,6 +172,7 @@
     "volume": "Skaļums",
     "mute": "Izslēgt skaņu",
     "news": "Ziņas",
-    "read_day": "Nolasīt dienu skaļi"
+    "read_day": "Nolasīt dienu skaļi",
+    "no_news": "Pašlaik ziņu nav"
   }
 }

@@ -172,6 +172,7 @@
     "volume": "Hlasitost",
     "mute": "Ztlumit",
     "news": "Zprávy",
-    "read_day": "Přečíst den nahlas"
+    "read_day": "Přečíst den nahlas",
+    "no_news": "Momentálně žádné zprávy"
   }
 }

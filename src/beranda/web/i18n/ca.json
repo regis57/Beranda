@@ -172,6 +172,7 @@
     "volume": "Volum",
     "mute": "Silenciar",
     "news": "Notícies",
-    "read_day": "Llegir el dia en veu alta"
+    "read_day": "Llegir el dia en veu alta",
+    "no_news": "Cap notícia ara mateix"
   }
 }

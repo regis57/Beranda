@@ -172,6 +172,7 @@
     "volume": "Helitugevus",
     "mute": "Vaigista",
     "news": "Uudised",
-    "read_day": "Loe päev ette"
+    "read_day": "Loe päev ette",
+    "no_news": "Praegu uudiseid pole"
   }
 }

@@ -158,3 +158,9 @@ One line per version, newest last. Each one was a pull request on
   white on black at night, on top of any style) and *read the day out loud* (a speaker button on the
   screen, and the voice command "read me the day", in the 10 voice languages: the date, the time,
   the weather, today's events and the warnings)
+- **v0.17.2**: speak without touching the screen: a **wake word** ("Beranda") in box 11, heard by
+  the tablet's own microphone. **Nine more phrases** in the 10 voice languages: the date, today's and
+  tomorrow's events, the headlines, bigger / normal text, high contrast / normal colours, be quiet.
+  A **printable one-page guide** of everything you can say, in the screen's language, with your own
+  phrases (box 11 → *Open the printable guide*; print or save as PDF). And **arrows** to put radio
+  favourites and TV channels in the order you want: prime time follows it

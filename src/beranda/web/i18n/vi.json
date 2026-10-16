@@ -172,6 +172,7 @@
     "volume": "Âm lượng",
     "mute": "Tắt tiếng",
     "news": "Tin tức",
-    "read_day": "Đọc to hôm nay"
+    "read_day": "Đọc to hôm nay",
+    "no_news": "Hiện chưa có tin tức"
   }
 }

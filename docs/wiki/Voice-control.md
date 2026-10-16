@@ -12,6 +12,28 @@ Beranda listens with the **microphone of the device that shows it** (tablet or c
 The other way round step 3: a one-time Chrome setting,
 `chrome://flags/#unsafely-treat-insecure-origin-as-secure` with Beranda's `http://` address.
 
+## Without touching the screen: the wake word
+
+Box 11 → *Speak without touching the screen* → type a word, say **Beranda**, and Save. Reload the
+screen on the tablet once. From then on the tablet listens all the time (with its own microphone,
+through the browser's speech service): say the word, then your sentence, in one breath
+("Beranda, what's the weather") or in two (say "Beranda", wait for *Listening…*, then speak).
+A word of two syllables or more works best; a very short one wakes it up by mistake. Leave the
+box empty to keep the microphone button only.
+
+## What you can say
+
+Box 11 → **Open the printable guide**: one A4 page, in the language the screen listens in, with
+every phrase grouped (the day, the radio, looks and quiet), plus your own phrases. *Print / save
+as PDF* uses the browser's own print dialog. Put it next to the mirror.
+
+Out of the box, in 10 languages (English, French, German, Spanish, Italian, Portuguese, Brazilian
+Portuguese, Arabic, Swahili, Indonesian): the time, the date, the weather, today's events,
+tomorrow's events, read the whole day, the headlines, tonight's TV; play / stop / next / previous
+station, louder / quieter; bigger text, normal text, high contrast, normal colours, be quiet.
+"Bigger" and "high contrast" said out loud stay on that tablet (until said back); to make them
+permanent for every screen, use box 17.
+
 ## When it does not work
 
 In the **same browser**, settings page → Voice control → **Test the microphone on this device**.

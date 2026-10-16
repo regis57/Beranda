@@ -172,6 +172,7 @@
     "volume": "Hangerő",
     "mute": "Némítás",
     "news": "Hírek",
-    "read_day": "A nap felolvasása"
+    "read_day": "A nap felolvasása",
+    "no_news": "Most nincs hír"
   }
 }

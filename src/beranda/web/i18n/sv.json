@@ -172,6 +172,7 @@
     "volume": "Volym",
     "mute": "Ljud av",
     "news": "Nyheter",
-    "read_day": "Läs upp dagen"
+    "read_day": "Läs upp dagen",
+    "no_news": "Inga nyheter just nu"
   }
 }

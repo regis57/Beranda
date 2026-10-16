@@ -172,6 +172,7 @@
     "volume": "Volum",
     "mute": "Fără sunet",
     "news": "Știri",
-    "read_day": "Citește ziua cu voce tare"
+    "read_day": "Citește ziua cu voce tare",
+    "no_news": "Nicio știre deocamdată"
   }
 }

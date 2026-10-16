@@ -240,10 +240,10 @@ def test_tv_settings_round_trip(tmp_path):
 
 def test_voice_settings_round_trip(tmp_path):
     client, path = make(tmp_path)
-    body = valid_body(voice={"enabled": True, "wake_word": "alexa"})  # old key: ignored
+    body = valid_body(voice={"enabled": True, "wake_word": "Beranda"})
     assert client.put("/api/admin/config", json=body).json()["saved"] is True
     saved = tomllib.loads(path.read_text())
-    assert saved["voice"] == {"enabled": True, "commands": []}
+    assert saved["voice"] == {"enabled": True, "wake_word": "Beranda", "commands": []}
 
 
 def test_history_settings_round_trip(tmp_path):

@@ -208,6 +208,7 @@
         <h2><span class="num">9</span><span data-i18n="admin.radio"></span></h2>
         <p class="hint" data-i18n="admin.radio_hint"></p>
         <h3 data-i18n="admin.radio_favorites"></h3>
+        <p class="hint" id="radio-order-hint" data-i18n="admin.order_hint"></p>
         <div id="radio-list"></div>
         <p class="hint" id="radio-empty" data-i18n="admin.radio_none"></p>
         <label class="volume-row"><span data-i18n="admin.radio_volume"></span>
@@ -257,6 +258,12 @@
         </div>
         <div class="chips scroll" id="tv-channels" aria-live="polite"></div>
         <p class="hint" id="tv-more" hidden></p>
+        <!-- The ticked channels, in the order they will show on the screen: arrows move them. -->
+        <div id="tv-order-box" hidden>
+          <h3 data-i18n="admin.tv_order_title"></h3>
+          <p class="hint" data-i18n="admin.order_hint"></p>
+          <div id="tv-order"></div>
+        </div>
         <details class="help"><summary data-i18n="admin.help"></summary><p data-i18n="admin.tv_help"></p></details>
       </section>
 
@@ -271,7 +278,15 @@
           <button type="button" id="voice-test" data-i18n="admin.voice_test"></button>
         </div>
         <p class="hint" id="voice-test-msg" role="status"></p>
+        <h3 data-i18n="admin.wake_title"></h3>
+        <p class="hint" data-i18n="admin.wake_hint"></p>
+        <label class="narrow"><span data-i18n="admin.wake_word"></span><input id="wake-word" type="text" maxlength="30" spellcheck="false" data-ph="admin.wake_ph"></label>
+        <p class="hint" data-i18n="admin.wake_note"></p>
         <h3 data-i18n="admin.voice_defaults_title"></h3>
+        <p class="hint" id="voice-guide-hint"></p>
+        <div class="row wrap">
+          <a class="button" id="voice-guide-link" href="/static/voice-guide.html" target="_blank" rel="noopener" data-i18n="admin.voice_guide_open"></a>
+        </div>
         <details class="help">
           <summary id="voice-defaults-summary"></summary>
           <div id="voice-defaults" class="voice-defaults"></div>

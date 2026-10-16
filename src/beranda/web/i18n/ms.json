@@ -172,6 +172,7 @@
     "volume": "Kelantangan",
     "mute": "Senyapkan",
     "news": "Berita",
-    "read_day": "Bacakan hari ini"
+    "read_day": "Bacakan hari ini",
+    "no_news": "Tiada berita buat masa ini"
   }
 }

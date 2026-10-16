@@ -172,6 +172,7 @@
     "volume": "Sauti",
     "mute": "Nyamazisha",
     "news": "Habari",
-    "read_day": "Soma siku kwa sauti"
+    "read_day": "Soma siku kwa sauti",
+    "no_news": "Hakuna habari kwa sasa"
   }
 }
