@@ -172,6 +172,7 @@
     "volume": "Lakas ng tunog",
     "mute": "I-mute",
     "news": "Balita",
-    "read_day": "Basahin ang araw nang malakas"
+    "read_day": "Basahin ang araw nang malakas",
+    "no_news": "Walang balita ngayon"
   }
 }

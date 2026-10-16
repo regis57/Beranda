@@ -33,6 +33,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("volume down", "quieter", "turn it down"),
         "tv": ("tv tonight", "what's on tonight", "on tv", "television"),
         "read_day": ("read me the day", "read the day", "what's my day", "read the screen"),
+        "date": ('what day is it', "what's the date", "today's date", 'which day is it'),
+        "agenda": ('what do i have today', 'my agenda', "today's agenda", "what's planned today", "what's on today"),
+        "tomorrow": ('what do i have tomorrow', "tomorrow's agenda", "what's planned tomorrow", "what's on tomorrow", 'tomorrow'),
+        "news": ('read the news', 'the news', 'headlines', "what's in the news"),
+        "bigger": ('bigger', 'larger text', 'bigger text', 'zoom in'),
+        "smaller": ('smaller', 'smaller text', 'normal text', 'zoom out'),
+        "contrast_on": ('high contrast', 'more contrast', 'black and white'),
+        "contrast_off": ('normal contrast', 'normal colours', 'normal colors', 'colours back'),
+        "quiet": ('be quiet', 'stop talking', 'shut up', 'enough'),
     },
     "fr": {
         "weather": ("quel temps fait-il", "météo", "previsions"),
@@ -45,6 +54,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("moins fort", "baisse le son", "baisse le volume"),
         "tv": ("à la télé", "programme tv", "programme télé", "télévision"),
         "read_day": ("lis-moi la journée", "lis moi la journée", "lis la journée", "lis l'écran", "ma journée"),
+        "date": ('quel jour on est', 'quel jour sommes-nous', 'on est quel jour', 'la date', 'quelle est la date'),
+        "agenda": ("qu'est-ce que j'ai aujourd'hui", 'mon agenda', 'agenda du jour', "qu'est-ce qui est prévu aujourd'hui", "au programme aujourd'hui"),
+        "tomorrow": ("qu'est-ce que j'ai demain", 'agenda de demain', "qu'est-ce qui est prévu demain", 'demain'),
+        "news": ('lis les nouvelles', 'lis les actualités', 'les nouvelles', 'les actualités', 'les titres'),
+        "bigger": ('plus gros', 'plus grand', 'texte plus gros', 'agrandis'),
+        "smaller": ('plus petit', 'texte plus petit', 'texte normal', 'taille normale'),
+        "contrast_on": ('fort contraste', 'plus de contraste', 'noir et blanc'),
+        "contrast_off": ('contraste normal', 'couleurs normales', 'remets les couleurs'),
+        "quiet": ('tais-toi', 'silence', 'arrête de parler', 'chut'),
     },
     "de": {
         "weather": ("wie ist das wetter", "wetter", "vorhersage"),
@@ -57,6 +75,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("leiser",),
         "tv": ("fernsehprogramm", "im fernsehen", "tv-programm", "fernsehen"),
         "read_day": ("lies mir den tag vor", "lies den tag", "lies den bildschirm", "mein tag"),
+        "date": ('welcher tag ist heute', 'welches datum haben wir', 'das datum', 'welcher tag ist es'),
+        "agenda": ('was habe ich heute', 'mein kalender', 'termine heute', 'was steht heute an'),
+        "tomorrow": ('was habe ich morgen', 'termine morgen', 'was steht morgen an', 'morgen'),
+        "news": ('lies die nachrichten', 'die nachrichten', 'schlagzeilen', 'was gibt es neues'),
+        "bigger": ('größer', 'größerer text', 'text größer', 'vergrößern'),
+        "smaller": ('kleiner', 'kleinerer text', 'normaler text', 'normale größe'),
+        "contrast_on": ('hoher kontrast', 'mehr kontrast', 'schwarz-weiß', 'schwarz weiß'),
+        "contrast_off": ('normaler kontrast', 'normale farben', 'farben zurück'),
+        "quiet": ('sei still', 'ruhe', 'hör auf zu reden', 'genug'),
     },
     "es": {
         "weather": ("qué tiempo hace", "tiempo", "pronóstico"),
@@ -69,6 +96,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("baja el volumen", "más bajo", "baja"),
         "tv": ("en la tele", "programa de tv", "televisión"),
         "read_day": ("léeme el día", "lee el día", "lee la pantalla", "mi día"),
+        "date": ('qué día es hoy', 'qué fecha es', 'la fecha', 'qué día es'),
+        "agenda": ('qué tengo hoy', 'mi agenda', 'agenda de hoy', 'qué hay previsto hoy'),
+        "tomorrow": ('qué tengo mañana', 'agenda de mañana', 'qué hay previsto mañana', 'mañana'),
+        "news": ('lee las noticias', 'las noticias', 'titulares', 'qué hay de nuevo'),
+        "bigger": ('más grande', 'texto más grande', 'agranda', 'aumentar'),
+        "smaller": ('más pequeño', 'texto más pequeño', 'texto normal', 'tamaño normal'),
+        "contrast_on": ('alto contraste', 'más contraste', 'blanco y negro'),
+        "contrast_off": ('contraste normal', 'colores normales', 'devuelve los colores'),
+        "quiet": ('cállate', 'silencio', 'deja de hablar', 'basta'),
     },
     "it": {
         "weather": ("che tempo fa", "meteo", "previsioni"),
@@ -81,6 +117,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("abbassa il volume", "più piano", "volume giù"),
         "tv": ("stasera in tv", "programma tv", "in tv", "televisione"),
         "read_day": ("leggimi la giornata", "leggi la giornata", "leggi lo schermo", "la mia giornata"),
+        "date": ('che giorno è oggi', 'che giorno è', 'la data', 'qual è la data'),
+        "agenda": ('cosa ho oggi', 'la mia agenda', 'agenda di oggi', "cosa c'è in programma oggi"),
+        "tomorrow": ('cosa ho domani', 'agenda di domani', "cosa c'è in programma domani", 'domani'),
+        "news": ('leggi le notizie', 'le notizie', 'i titoli', "cosa c'è di nuovo"),
+        "bigger": ('più grande', 'testo più grande', 'ingrandisci'),
+        "smaller": ('più piccolo', 'testo più piccolo', 'testo normale', 'dimensione normale'),
+        "contrast_on": ('alto contrasto', 'più contrasto', 'bianco e nero'),
+        "contrast_off": ('contrasto normale', 'colori normali', 'rimetti i colori'),
+        "quiet": ('zitto', 'silenzio', 'smetti di parlare', 'basta'),
     },
     "pt": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -93,6 +138,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
         "tv": ("na televisão", "programação", "na tv", "televisão"),
         "read_day": ("lê-me o dia", "lê o dia", "lê o ecrã", "o meu dia"),
+        "date": ('que dia é hoje', 'qual é a data', 'a data', 'que dia é'),
+        "agenda": ('o que tenho hoje', 'a minha agenda', 'agenda de hoje', 'o que está previsto hoje'),
+        "tomorrow": ('o que tenho amanhã', 'agenda de amanhã', 'o que está previsto amanhã', 'amanhã'),
+        "news": ('lê as notícias', 'as notícias', 'os títulos', 'o que há de novo'),
+        "bigger": ('maior', 'texto maior', 'aumenta', 'ampliar'),
+        "smaller": ('mais pequeno', 'texto mais pequeno', 'texto normal', 'tamanho normal'),
+        "contrast_on": ('alto contraste', 'mais contraste', 'preto e branco'),
+        "contrast_off": ('contraste normal', 'cores normais', 'repõe as cores'),
+        "quiet": ('cala-te', 'silêncio', 'pára de falar', 'chega'),
     },
     "pt-BR": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -105,6 +159,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
         "tv": ("na televisão", "programação", "na tv", "televisão"),
         "read_day": ("leia meu dia", "leia o dia", "leia a tela", "meu dia"),
+        "date": ('que dia é hoje', 'qual é a data', 'a data', 'que dia é'),
+        "agenda": ('o que eu tenho hoje', 'minha agenda', 'agenda de hoje', 'o que está previsto hoje'),
+        "tomorrow": ('o que eu tenho amanhã', 'agenda de amanhã', 'o que está previsto amanhã', 'amanhã'),
+        "news": ('leia as notícias', 'as notícias', 'as manchetes', 'o que há de novo'),
+        "bigger": ('maior', 'texto maior', 'aumenta', 'ampliar'),
+        "smaller": ('menor', 'texto menor', 'texto normal', 'tamanho normal'),
+        "contrast_on": ('alto contraste', 'mais contraste', 'preto e branco'),
+        "contrast_off": ('contraste normal', 'cores normais', 'volta as cores'),
+        "quiet": ('fica quieto', 'silêncio', 'para de falar', 'chega'),
     },
     "ar": {
         "weather": ("كيف حال الطقس", "الطقس", "توقعات"),
@@ -117,6 +180,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("اخفض الصوت",),
         "tv": ("برنامج التلفاز", "على التلفاز", "التلفزيون"),
         "read_day": ("اقرأ لي اليوم", "اقرأ اليوم", "اقرأ الشاشة", "يومي"),
+        "date": ('ما هو تاريخ اليوم', 'ما اليوم', 'التاريخ', 'أي يوم اليوم'),
+        "agenda": ('ماذا لدي اليوم', 'مواعيدي', 'مواعيد اليوم', 'ما المخطط اليوم'),
+        "tomorrow": ('ماذا لدي غدا', 'ماذا لدي غدًا', 'مواعيد الغد', 'غدا', 'غدًا'),
+        "news": ('اقرأ الأخبار', 'الأخبار', 'العناوين', 'ما الجديد'),
+        "bigger": ('أكبر', 'نص أكبر', 'كبّر', 'كبر'),
+        "smaller": ('أصغر', 'نص أصغر', 'نص عادي', 'الحجم العادي'),
+        "contrast_on": ('تباين عال', 'تباين عالٍ', 'أبيض وأسود'),
+        "contrast_off": ('تباين عادي', 'الألوان العادية', 'أعد الألوان'),
+        "quiet": ('اصمت', 'صمت', 'توقف عن الكلام', 'كفى'),
     },
     "sw": {
         "weather": ("hali ya hewa", "utabiri"),
@@ -129,6 +201,15 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("punguza sauti",),
         "tv": ("kwenye tv", "televisheni"),
         "read_day": ("nisomee siku", "soma siku", "soma skrini", "siku yangu"),
+        "date": ('leo ni tarehe gani', 'tarehe', 'leo ni siku gani', 'ni siku gani'),
+        "agenda": ('nina nini leo', 'ratiba yangu', 'ratiba ya leo', 'kuna nini leo'),
+        "tomorrow": ('nina nini kesho', 'ratiba ya kesho', 'kuna nini kesho', 'kesho'),
+        "news": ('soma habari', 'habari', 'vichwa vya habari', 'kuna nini kipya'),
+        "bigger": ('kubwa zaidi', 'maandishi makubwa', 'kuza'),
+        "smaller": ('ndogo zaidi', 'maandishi madogo', 'maandishi ya kawaida', 'ukubwa wa kawaida'),
+        "contrast_on": ('utofauti mkubwa', 'nyeusi na nyeupe'),
+        "contrast_off": ('utofauti wa kawaida', 'rangi za kawaida', 'rudisha rangi'),
+        "quiet": ('nyamaza', 'kimya', 'acha kuongea', 'inatosha'),
     },
     "id": {
         "weather": ("bagaimana cuacanya", "cuaca", "ramalan"),
@@ -141,13 +222,25 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_down": ("turunkan volume", "lebih pelan"),
         "tv": ("acara tv", "di tv", "televisi"),
         "read_day": ("bacakan hari ini", "baca hari ini", "baca layar", "hari saya"),
+        "date": ('hari ini tanggal berapa', 'tanggal berapa', 'tanggalnya', 'hari apa ini'),
+        "agenda": ('ada apa hari ini', 'agenda saya', 'agenda hari ini', 'jadwal hari ini'),
+        "tomorrow": ('ada apa besok', 'agenda besok', 'jadwal besok', 'besok'),
+        "news": ('bacakan berita', 'berita', 'judul berita', 'apa yang baru'),
+        "bigger": ('lebih besar', 'teks lebih besar', 'perbesar'),
+        "smaller": ('lebih kecil', 'teks lebih kecil', 'teks normal', 'ukuran normal'),
+        "contrast_on": ('kontras tinggi', 'lebih kontras', 'hitam putih'),
+        "contrast_off": ('kontras normal', 'warna normal', 'kembalikan warna'),
+        "quiet": ('diam', 'tenang', 'berhenti bicara', 'cukup'),
     },
 }
 
 
 def _normalise(text: str) -> str:
+    """Lower case, one space between words, and no dashes or punctuation: a speech service
+    writes "tais-toi" or "tais toi" as it pleases, and both must mean the same."""
     text = unicodedata.normalize("NFKC", text).lower().strip()
-    return re.sub(r"\s+", " ", text)
+    text = re.sub(r"[-–—,;:!?.]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def parse_intent(text: str, language: str = "en") -> dict | None:
@@ -161,6 +254,7 @@ def parse_intent(text: str, language: str = "en") -> dict | None:
         key=lambda pair: -len(pair[1]),
     )
     for intent, trig in candidates:
+        trig = _normalise(trig)  # "tais-toi" in the list, "tais toi" from the microphone: the same
         idx = text.find(trig)
         if idx == -1:
             continue
@@ -173,6 +267,7 @@ def parse_intent(text: str, language: str = "en") -> dict | None:
 
 # A heard station name rarely matches a saved favourite letter for letter (mishears, accents,
 # word order); below this similarity we'd rather say "not found" than play the wrong station.
+PAGE_INTENTS = ("read_day", "date", "agenda", "tomorrow", "news", "bigger", "smaller", "contrast_on", "contrast_off", "quiet")
 MATCH_THRESHOLD = 0.4
 
 _RESPONSES: dict[str, dict[str, str]] = {
@@ -400,9 +495,10 @@ def answer(
         return {"intent": name, "reply": _tv_reply(language, tv), "action": None}
     if name == "radio_stop":
         return {"intent": name, "reply": _t(language, "radio_stopped"), "action": {"type": "radio_stop"}}
-    if name == "read_day":
-        # The page reads its own screen out loud: it already shows everything, in the right words.
-        return {"intent": name, "reply": "", "action": {"type": "read_day"}}
+    if name in PAGE_INTENTS:
+        # Done by the page itself: it has the agenda, the headlines and the looks on screen already,
+        # in the right words, so it speaks or changes them without a round trip.
+        return {"intent": name, "reply": "", "action": {"type": name}}
     if name in ("radio_next", "radio_prev", "volume_up", "volume_down"):
         return {"intent": name, "reply": _t(language, "ok"), "action": {"type": name}}
 

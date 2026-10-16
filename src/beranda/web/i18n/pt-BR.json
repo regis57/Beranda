@@ -48,6 +48,7 @@
     "volume": "Volume",
     "mute": "Silenciar",
     "news": "Notícias",
-    "read_day": "Ler o dia em voz alta"
+    "read_day": "Ler o dia em voz alta",
+    "no_news": "Sem notícias no momento"
   }
 }

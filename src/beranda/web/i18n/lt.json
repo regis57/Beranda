@@ -172,6 +172,7 @@
     "volume": "Garsumas",
     "mute": "Nutildyti",
     "news": "Naujienos",
-    "read_day": "Perskaityti dieną garsiai"
+    "read_day": "Perskaityti dieną garsiai",
+    "no_news": "Šiuo metu naujienų nėra"
   }
 }

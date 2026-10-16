@@ -172,6 +172,7 @@
     "volume": "Glasnoća",
     "mute": "Isključi zvuk",
     "news": "Vijesti",
-    "read_day": "Pročitaj dan naglas"
+    "read_day": "Pročitaj dan naglas",
+    "no_news": "Trenutno nema vijesti"
   }
 }

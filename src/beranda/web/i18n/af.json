@@ -172,6 +172,7 @@
     "volume": "Volume",
     "mute": "Demp",
     "news": "Nuus",
-    "read_day": "Lees die dag hardop"
+    "read_day": "Lees die dag hardop",
+    "no_news": "Geen nuus op die oomblik nie"
   }
 }

@@ -172,6 +172,7 @@
     "volume": "Volume",
     "mute": "Mute",
     "news": "News",
-    "read_day": "Read the day out loud"
+    "read_day": "Read the day out loud",
+    "no_news": "No news right now"
   }
 }

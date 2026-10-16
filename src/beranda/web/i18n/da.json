@@ -172,6 +172,7 @@
     "volume": "Lydstyrke",
     "mute": "Slå lyd fra",
     "news": "Nyheder",
-    "read_day": "Læs dagen højt"
+    "read_day": "Læs dagen højt",
+    "no_news": "Ingen nyheder lige nu"
   }
 }

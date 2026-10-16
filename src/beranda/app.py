@@ -350,6 +350,7 @@ async def build_state(
             "volume": cfg.radio_volume,
         },
         "voice": cfg.voice_enabled,
+        "wake_word": cfg.voice_wake_word if cfg.voice_enabled else "",
         # Screen hours: the page goes dark, and on the Pi the kiosk also turns the HDMI off.
         "sleep": not system.screen_should_be_on(cfg, now),
         # First start: the screen shows where to open the settings, with a QR code.

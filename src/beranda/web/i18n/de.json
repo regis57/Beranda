@@ -172,6 +172,7 @@
     "volume": "Lautstärke",
     "mute": "Stumm",
     "news": "Nachrichten",
-    "read_day": "Den Tag vorlesen"
+    "read_day": "Den Tag vorlesen",
+    "no_news": "Gerade keine Nachrichten"
   }
 }

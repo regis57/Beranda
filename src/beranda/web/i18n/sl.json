@@ -172,6 +172,7 @@
     "volume": "Glasnost",
     "mute": "Utišaj",
     "news": "Novice",
-    "read_day": "Preberi dan na glas"
+    "read_day": "Preberi dan na glas",
+    "no_news": "Trenutno ni novic"
   }
 }

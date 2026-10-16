@@ -172,6 +172,7 @@
     "volume": "Volume",
     "mute": "Silenzio",
     "news": "Notizie",
-    "read_day": "Leggere la giornata ad alta voce"
+    "read_day": "Leggere la giornata ad alta voce",
+    "no_news": "Nessuna notizia al momento"
   }
 }

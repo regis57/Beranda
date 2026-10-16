@@ -912,13 +912,7 @@ async function listen() {
     const answer = await response.json();
     toast(`« ${heard} »\n${answer.reply}`);
     voice.speak(answer.reply, lang);
-    if (answer.action?.type === 'read_day') readDay();
-    if (answer.action?.type === 'radio_play') radio.play(answer.action);
-    if (answer.action?.type === 'radio_stop') radio.stop();
-    if (answer.action?.type === 'radio_next') skip(1);
-    if (answer.action?.type === 'radio_prev') skip(-1);
-    if (answer.action?.type === 'volume_up') nudgeVolume(15);
-    if (answer.action?.type === 'volume_down') nudgeVolume(-15);
+    doAction(answer.action);
   } catch (err) {
     // microphone blocked, none plugged in, or the browser's speech service unreachable: the short code
     // tells which, and the settings page (Voice control, "Test the microphone") explains it in words
@@ -930,13 +924,89 @@ async function listen() {
   }
 }
 $('mic').addEventListener('click', listen);
-function renderVoice() { $('mic').hidden = !state.voice; }
+
+// What a sentence makes the page do. The server only names the action; the page has the
+// agenda, the headlines and the looks on screen, so it speaks or changes them itself.
+function doAction(action) {
+  const type = action?.type;
+  if (!type) return;
+  const say = (text) => { toast(text, 12000); voice.speak(text, lang); };
+  const now = new Date();
+  const dayLine = (date, label) => {
+    const key = dayKey(date);
+    const events = [
+      ...state.special_days.filter((d) => d.date === key).map((d) => d.label),
+      ...state.events.filter((e) => e.start.slice(0, 10) === key).map((e) =>
+        e.all_day ? e.title : `${dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start))} ${e.title}`),
+    ];
+    return `${label}: ${events.length ? events.join('. ') : t('nothing_upcoming')}.`;
+  };
+  const actions = {
+    read_day: readDay,
+    date: () => say(dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now)),
+    agenda: () => say(dayLine(now, t('today'))),
+    tomorrow: () => say(dayLine(new Date(now.getTime() + 86_400_000), t('tomorrow'))),
+    news: () => { const items = (state.news?.items || []).slice(0, 3).map((i) => i.title); say(items.length ? items.join('. ') + '.' : t('a11y.no_news')); },
+    bigger: () => setLook({ large_text: true }),
+    smaller: () => setLook({ large_text: false }),
+    contrast_on: () => setLook({ high_contrast: true }),
+    contrast_off: () => setLook({ high_contrast: false }),
+    quiet: () => { window.speechSynthesis?.cancel(); $('toast').hidden = true; },
+    radio_play: () => radio.play(action),
+    radio_stop: () => radio.stop(),
+    radio_next: () => skip(1),
+    radio_prev: () => skip(-1),
+    volume_up: () => nudgeVolume(15),
+    volume_down: () => nudgeVolume(-15),
+  };
+  actions[type]?.();
+}
+
+// Said out loud ("bigger", "high contrast"), a look is kept on this tablet only (the page
+// cannot change the settings file: that needs the settings page, and maybe its PIN).
+let lookOverride = {};
+try { lookOverride = JSON.parse(localStorage.getItem('beranda-look') || '{}'); } catch { lookOverride = {}; }
+function setLook(change) {
+  lookOverride = { ...lookOverride, ...change };
+  try { localStorage.setItem('beranda-look', JSON.stringify(lookOverride)); } catch { /* private window: this time only */ }
+  applyAccessibility();
+}
+
+// The wake word: the tablet listens all the time for it, then takes the sentence that follows.
+let wake = null;
+let wakeWord = '';
+function renderVoice() {
+  $('mic').hidden = !state.voice;
+  const word = state.voice ? (state.wake_word || '') : '';
+  if (word === wakeWord) return;
+  wakeWord = word;
+  wake?.stop();
+  wake = null;
+  if (!word || voice.availability() !== 'ok') return;
+  wake = voice.wakeListener({
+    lang, word,
+    onWake: () => { toast(t('voice_listening'), 8000); },
+    onCommand: async (said) => {
+      toast(`« ${said} »`, 0);
+      try {
+        const response = await fetch('/api/voice', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: said }),
+        });
+        const answer = await response.json();
+        toast(`« ${said} »\n${answer.reply}`);
+        voice.speak(answer.reply, lang);
+        doAction(answer.action);
+      } catch (err) { toast(`${t('voice_unavailable')} (${err.message || err})`, 9000); }
+    },
+    onError: (why) => { report(`wake word: ${why}`); toast(`${t('voice_unavailable')} (${why})`, 9000); },
+  });
+}
 
 // ---------------------------------------------------------------- accessibility ----------
 // Three switches from the settings page. They are classes on <body>, so every theme keeps
 // working: "large" scales the root font, "contrast" replaces the theme's colours.
 function applyAccessibility() {
-  const a = state.accessibility || {};
+  const a = { ...(state.accessibility || {}), ...lookOverride };
   document.documentElement.toggleAttribute('data-a11y-large', !!a.large_text);  // the root font: rem follows
   document.body.classList.toggle('a11y-contrast', !!a.high_contrast);
   $('read-day').hidden = !a.read_aloud;

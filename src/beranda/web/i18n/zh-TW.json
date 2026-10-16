@@ -63,6 +63,7 @@
     "volume": "音量",
     "mute": "靜音",
     "news": "新聞",
-    "read_day": "朗讀今天"
+    "read_day": "朗讀今天",
+    "no_news": "目前沒有新聞"
   }
 }

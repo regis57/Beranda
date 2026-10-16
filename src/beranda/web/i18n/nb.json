@@ -172,6 +172,7 @@
     "volume": "Volum",
     "mute": "Demp",
     "news": "Nyheter",
-    "read_day": "Les opp dagen"
+    "read_day": "Les opp dagen",
+    "no_news": "Ingen nyheter akkurat nå"
   }
 }

@@ -172,6 +172,7 @@
     "volume": "Ivolumu",
     "mute": "Thulisa",
     "news": "Izindaba",
-    "read_day": "Funda usuku ngokuzwakalayo"
+    "read_day": "Funda usuku ngokuzwakalayo",
+    "no_news": "Azikho izindaba okwamanje"
   }
 }

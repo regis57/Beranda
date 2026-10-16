@@ -172,6 +172,7 @@
     "volume": "Ses",
     "mute": "Sessiz",
     "news": "Haberler",
-    "read_day": "Günü sesli oku"
+    "read_day": "Günü sesli oku",
+    "no_news": "Şu anda haber yok"
   }
 }

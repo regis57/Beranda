@@ -172,6 +172,7 @@
     "volume": "Głośność",
     "mute": "Wycisz",
     "news": "Wiadomości",
-    "read_day": "Przeczytaj dzień na głos"
+    "read_day": "Przeczytaj dzień na głos",
+    "no_news": "Brak wiadomości na razie"
   }
 }

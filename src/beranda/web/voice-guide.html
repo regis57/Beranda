@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beranda · What you can say</title>
+  <link rel="icon" href="/static/favicon.svg">
+  <!-- One page per language, made to be printed or saved as a PDF (the browser's own "Print"
+       does that). The phrases come from the server, in the language the screen listens in. -->
+  <!-- Styles live in their own file: the pages only accept their own files (a strict CSP). -->
+  <link rel="stylesheet" href="/static/voice-guide.css">
+</head>
+<body>
+  <div class="tools">
+    <button type="button" class="main" id="print">Print / save as PDF</button>
+    <label>Language <select id="lang"></select></label>
+  </div>
+  <article class="sheet">
+    <header><h1>Beranda <small id="subtitle"></small></h1><span id="date"></span></header>
+    <p class="how" id="how"></p>
+    <div class="grid" id="groups"></div>
+    <footer><span id="own"></span><span>beranda · github.com/regis57/Beranda</span></footer>
+  </article>
+  <script type="module" src="/static/voice-guide.js"></script>
+</body>
+</html>

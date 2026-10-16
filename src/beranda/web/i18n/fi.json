@@ -172,6 +172,7 @@
     "volume": "Äänenvoimakkuus",
     "mute": "Mykistä",
     "news": "Uutiset",
-    "read_day": "Lue päivä ääneen"
+    "read_day": "Lue päivä ääneen",
+    "no_news": "Ei uutisia juuri nyt"
   }
 }

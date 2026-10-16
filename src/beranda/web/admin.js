@@ -532,7 +532,7 @@ async function refreshPhotosCount() {
 let radioStations = [];
 const adminRadio = createRadio($('admin-audio'), () => renderRadioFavorites());
 
-function stationRow(station, { onRemove } = {}) {
+function stationRow(station, { onRemove, arrows } = {}) {
   const snap = adminRadio.snapshot();
   const here = snap.station?.url === station.url;
   const playing = here && (snap.status === 'playing' || snap.status === 'loading');
@@ -540,19 +540,35 @@ function stationRow(station, { onRemove } = {}) {
   btn.addEventListener('click', () => (playing ? adminRadio.stop() : adminRadio.play(station)));
   const label = el('span', {}, station.name, station.country ? el('small', { textContent: ` (${regionName(station.country)})` }) : '');
   const kids = [label, btn];
+  if (arrows) kids.push(...arrows);
   if (onRemove) {
     const rm = el('button', { type: 'button', textContent: '✕', title: t('admin.remove') });
     rm.addEventListener('click', onRemove);
     kids.push(rm);
   }
-  return el('div', { className: 'item radio' }, ...kids);
+  return el('div', { className: `item radio${arrows ? ' ordered' : ''}` }, ...kids);
 }
 
+// Two arrows that move one line up or down in a list; the first "up" and the last "down" are
+// disabled. Keyboard-friendly, unlike dragging, so anyone can put their favourites first.
+function moveButtons(index, count, move) {
+  const up = el('button', { type: 'button', className: 'move', textContent: '▲', title: t('admin.move_up'), disabled: index === 0 });
+  const down = el('button', { type: 'button', className: 'move', textContent: '▼', title: t('admin.move_down'), disabled: index === count - 1 });
+  up.setAttribute('aria-label', t('admin.move_up'));
+  down.setAttribute('aria-label', t('admin.move_down'));
+  up.addEventListener('click', () => move(index, index - 1));
+  down.addEventListener('click', () => move(index, index + 1));
+  return [up, down];
+}
+function swap(list, a, b) { const copy = [...list]; [copy[a], copy[b]] = [copy[b], copy[a]]; return copy; }
+
 function renderRadioFavorites() {
-  $('radio-list').replaceChildren(...radioStations.map((s) => stationRow(s, {
+  $('radio-list').replaceChildren(...radioStations.map((s, i) => stationRow(s, {
     onRemove: () => { radioStations = radioStations.filter((x) => x.uuid !== s.uuid); renderRadioFavorites(); markDirty(); },
+    arrows: moveButtons(i, radioStations.length, (a, b) => { radioStations = swap(radioStations, a, b); renderRadioFavorites(); markDirty(); }),
   })));
   $('radio-empty').hidden = radioStations.length > 0;
+  $('radio-order-hint').hidden = radioStations.length < 2;
   const snap = adminRadio.snapshot();
   $('radio-now').textContent = snap.status === 'playing' ? t('admin.radio_now_playing', { name: snap.station.name })
     : snap.status === 'loading' ? t('admin.loading')
@@ -644,6 +660,18 @@ function renderTvChips() {
   $('tv-channels').hidden = !tvOpen;
   $('tv-count').textContent = t('admin.tv_count', { n: tvChannels.length, k: tvSelected.size });
   $('tv-toggle').textContent = tvOpen ? t('admin.hide_list') : t('admin.show_list');
+  renderTvOrder();
+}
+
+// The ticked channels in the order the screen will use (the Set keeps insertion order):
+// a line each, with arrows. Prime time on the screen follows this order.
+function renderTvOrder() {
+  const ids = [...tvSelected];
+  $('tv-order-box').hidden = ids.length < 2;
+  const nameOf = (id) => tvChannels.find((c) => c.id === id)?.name || id;
+  $('tv-order').replaceChildren(...ids.map((id, i) => el('div', { className: 'item ordered' },
+    el('span', { textContent: nameOf(id), title: id }),
+    ...moveButtons(i, ids.length, (a, b) => { tvSelected = new Set(swap(ids, a, b)); renderTvOrder(); markDirty(); }))));
 }
 
 // Which free guides exist for the chosen country? The server tries each known address and
@@ -713,7 +741,8 @@ function watchTvBox() {
 // Beranda only stores whether voice control is on. Listening happens in the browser of the
 // tablet that shows the display, so here we just tell whether THIS device could do it.
 let voiceCommands = [];
-const VOICE_ACTIONS = ['radio_play', 'radio_stop', 'radio_next', 'radio_prev', 'volume_up', 'volume_down', 'weather', 'time', 'tv', 'say'];
+const VOICE_ACTIONS = ['radio_play', 'radio_stop', 'radio_next', 'radio_prev', 'volume_up', 'volume_down', 'weather', 'time', 'tv',
+  'read_day', 'date', 'agenda', 'tomorrow', 'news', 'bigger', 'smaller', 'contrast_on', 'contrast_off', 'quiet', 'say'];
 
 function renderVoiceCommands() {
   $('voice-commands').replaceChildren(...voiceCommands.map((c, i) => {
@@ -745,6 +774,8 @@ async function renderVoiceDefaults() {
   try {
     const r = await api(`/voice-commands?language=${encodeURIComponent($('language').value)}`);
     $('voice-defaults-summary').textContent = t('admin.voice_defaults_show', { language: languageName(r.language) });
+    $('voice-guide-hint').textContent = t('admin.voice_guide_hint', { language: languageName(r.language) });
+    $('voice-guide-link').href = `/static/voice-guide.html?language=${encodeURIComponent(r.language)}`;
     const dl = el('dl');
     for (const [intent, phrases] of Object.entries(r.commands)) {
       dl.append(el('dt', { textContent: t(`admin.voice_act_${intent}`) }), el('dd', { textContent: phrases.map((p) => `« ${p} »`).join('  ·  ') }));
@@ -756,6 +787,7 @@ async function renderVoiceDefaults() {
 function renderVoice() {
   const voice = cfg.voice || { enabled: false };
   $('voice-on').checked = !!voice.enabled;
+  $('wake-word').value = voice.wake_word || '';
   $('voice-check').hidden = !voice.enabled;
   const availability = voiceApi.availability();
   // Edge offers speech recognition but its service often fails ("network"): say so before the person tries.
@@ -1237,6 +1269,7 @@ function collect() {
   body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected], names: tvNames };
   body.voice = {
     enabled: $('voice-on').checked,
+    wake_word: $('wake-word').value.trim(),
     commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
   };
   body.widgets = collectWidgets();

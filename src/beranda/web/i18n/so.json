@@ -172,6 +172,7 @@
     "volume": "Codka",
     "mute": "Aamusi",
     "news": "Wararka",
-    "read_day": "Akhri maalinta cod dheer"
+    "read_day": "Akhri maalinta cod dheer",
+    "no_news": "Hadda war ma jiro"
   }
 }

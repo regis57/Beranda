@@ -172,6 +172,7 @@
     "volume": "Hlasitosť",
     "mute": "Stlmiť",
     "news": "Správy",
-    "read_day": "Prečítať deň nahlas"
+    "read_day": "Prečítať deň nahlas",
+    "no_news": "Momentálne žiadne správy"
   }
 }
