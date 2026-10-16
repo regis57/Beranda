@@ -175,6 +175,9 @@
     "read_day": "Karanta ranar da ƙarfi",
     "no_news": "Babu labari a yanzu",
     "tap_for_sound": "Taɓa allon sau ɗaya don Beranda ta iya magana.",
-    "wake_stopped": "Kalmar tashi ta tsaya: wani abu ya ɗauki makirufo. Maɓallin yana aiki har yanzu."
+    "wake_stopped": "Kalmar tashi ta tsaya: wani abu ya ɗauki makirufo. Maɓallin yana aiki har yanzu.",
+    "mic_none": "Ba a sami makirufo a wannan na'urar ba.",
+    "mic_blocked": "An toshe makirufo don wannan shafin.",
+    "mic_offline": "Ba a iya isa ga sabis na murya na burauza ba."
   }
 }

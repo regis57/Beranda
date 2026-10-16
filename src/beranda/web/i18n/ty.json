@@ -175,6 +175,9 @@
     "read_day": "A tai'o i te mahana ma te reo",
     "no_news": "Aita e parau api i teie nei",
     "tap_for_sound": "A fāfā i te mata hō'ē taime nō te Beranda ia nehenehe e parau.",
-    "wake_stopped": "Ua faaea te parau faaara: te tahi atu mea ua rave i te mikoro. Te ohipa noa ra te pitopito."
+    "wake_stopped": "Ua faaea te parau faaara: te tahi atu mea ua rave i te mikoro. Te ohipa noa ra te pitopito.",
+    "mic_none": "Aita i itehia te mikoro i ni'a i teie mātini.",
+    "mic_blocked": "Ua ôpanihia te mikoro no teie 'api.",
+    "mic_offline": "'Aita e nehenehe e tae i te taviniraa reo a te mātini."
   }
 }

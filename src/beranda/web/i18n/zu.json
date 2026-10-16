@@ -175,6 +175,9 @@
     "read_day": "Funda usuku ngokuzwakalayo",
     "no_news": "Azikho izindaba okwamanje",
     "tap_for_sound": "Thinta isikrini kanye ukuze iBeranda ikwazi ukukhuluma.",
-    "wake_stopped": "Igama lokuvusa limile: okunye kuthathe imakrofoni. Inkinobho isasebenza."
+    "wake_stopped": "Igama lokuvusa limile: okunye kuthathe imakrofoni. Inkinobho isasebenza.",
+    "mic_none": "Ayikho imakrofoni etholakele kule divayisi.",
+    "mic_blocked": "Imakrofoni ivinjelwe kuleli khasi.",
+    "mic_offline": "Insizakalo yenkulumo yesiphequluli ayitholakali."
   }
 }

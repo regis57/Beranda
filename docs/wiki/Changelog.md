@@ -153,7 +153,7 @@ One line per version, newest last. Each one was a pull request on
   on the screen (weather, agenda, warnings, news) is announced; a clear ring shows where the keyboard
   is; the settings page stops moving for people who asked their system for less motion. Both pages
   are now checked against the accessibility rules (WCAG 2.1 AA) on every change
-- **v0.17.1**: a box **17. Accessibility** on the settings page: *large text* (everything about 1.4
+- **v0.17.1**: a box **Accessibility** on the settings page (16 since 0.17.5): *large text* (everything about 1.4
   times bigger; the 24 h graph and the air row step aside), *high contrast* (black on white by day,
   white on black at night, on top of any style) and *read the day out loud* (a speaker button on the
   screen, and the voice command "read me the day", in the 10 voice languages: the date, the time,
@@ -180,3 +180,9 @@ One line per version, newest last. Each one was a pull request on
   by themselves. And a browser that answers nothing at all to the microphone button no longer
   keeps the microphone for ever: after 12 seconds it goes back to the wake word. The screen says
   in words when the wake word stops, instead of a code
+- **v0.17.5**: the settings page numbered its boxes 15, 17, 16: *Accessibility* is now **16** and
+  *Advanced user* **17**, last as it should be. The settings page also says "no microphone found on
+  this device" before anybody switches voice control on, instead of a green tick and a failure
+  afterwards (a browser lists its microphones without asking permission). And the screen says what
+  a microphone problem means - no microphone, blocked, speech service unreachable - rather than the
+  browser's own code

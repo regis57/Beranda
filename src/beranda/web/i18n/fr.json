@@ -175,6 +175,9 @@
     "read_day": "Lire la journée à voix haute",
     "no_news": "Pas d'actualités pour le moment",
     "tap_for_sound": "Touchez l'écran une fois pour que Beranda puisse parler.",
-    "wake_stopped": "Le mot d'éveil s'est arrêté : autre chose a pris le micro. Le bouton marche toujours."
+    "wake_stopped": "Le mot d'éveil s'est arrêté : autre chose a pris le micro. Le bouton marche toujours.",
+    "mic_none": "Aucun micro trouvé sur cet appareil.",
+    "mic_blocked": "Le micro est bloqué pour cette page.",
+    "mic_offline": "Le service vocal du navigateur est injoignable."
   }
 }

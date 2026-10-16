@@ -154,6 +154,29 @@ def main() -> int:
         second.wait_for_timeout(3500)
         listening = first.evaluate("window.__live") + second.evaluate("window.__live")
         want(listening == 1, f"two screens in one browser share the microphone ({listening} listening, want 1)")
+        together.close()
+
+        # A computer with no microphone at all: say so in words, before and after.
+        nomic = browser.new_context(viewport={"width": 1100, "height": 900})
+        nomic.add_init_script(STAND_IN + """
+            navigator.mediaDevices.enumerateDevices = async () => [{ kind: 'videoinput' }];
+            FakeRec.prototype.start = function () { setTimeout(() => this.onerror && this.onerror({ error: 'audio-capture' }), 30); };
+        """)
+        settings = nomic.new_page()
+        settings.goto(f"http://127.0.0.1:{port}/admin")
+        settings.wait_for_timeout(2500)
+        want("microphone" in settings.text_content("#voice-check").lower()
+             or "micro" in settings.text_content("#voice-check").lower(),
+             "the settings page says there is no microphone before anyone switches voice on")
+        want(settings.eval_on_selector_all("#form h2 .num", "e => e.map((x) => Number(x.textContent))")
+             == list(range(1, 18)), "the boxes are numbered in order")
+        screen = nomic.new_page()
+        screen.goto(f"http://127.0.0.1:{port}/")
+        screen.wait_for_timeout(2500)
+        screen.click("#mic")
+        screen.wait_for_timeout(800)
+        said = screen.text_content("#toast")
+        want("audio-capture" not in said and len(said) > 10, f"the screen says what is wrong, not a code ({said!r})")
         browser.close()
     server.should_exit = True
     if problems:

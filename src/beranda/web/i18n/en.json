@@ -175,6 +175,9 @@
     "read_day": "Read the day out loud",
     "no_news": "No news right now",
     "tap_for_sound": "Touch the screen once so Beranda may speak.",
-    "wake_stopped": "The wake word stopped: something else took the microphone. The button still works."
+    "wake_stopped": "The wake word stopped: something else took the microphone. The button still works.",
+    "mic_none": "No microphone found on this device.",
+    "mic_blocked": "The microphone is blocked for this page.",
+    "mic_offline": "The browser's speech service cannot be reached."
   }
 }

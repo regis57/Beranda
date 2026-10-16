@@ -175,6 +175,9 @@
     "read_day": "Loe päev ette",
     "no_news": "Praegu uudiseid pole",
     "tap_for_sound": "Puudutage ekraani korra, et Beranda saaks rääkida.",
-    "wake_stopped": "Äratussõna peatus: mikrofoni võttis midagi muud. Nupp töötab endiselt."
+    "wake_stopped": "Äratussõna peatus: mikrofoni võttis midagi muud. Nupp töötab endiselt.",
+    "mic_none": "Sellest seadmest ei leitud mikrofoni.",
+    "mic_blocked": "Mikrofon on sellel lehel blokeeritud.",
+    "mic_offline": "Brauseri kõneteenus pole kättesaadav."
   }
 }

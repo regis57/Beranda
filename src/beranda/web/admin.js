@@ -794,6 +794,12 @@ function renderVoice() {
   const edge = /\bEdg\//.test(navigator.userAgent);
   $('voice-check').textContent = t(`admin.voice_check_${availability}`) + (availability === 'insecure' ? ` ${t('admin.voice_check_tip')}` : '')
     + (edge ? ` ${t('admin.voice_edge')}` : '');
+  // "This device can listen" is not enough: it may simply have no microphone plugged in.
+  if (availability === 'ok') {
+    voiceApi.microphoneExists().then((exists) => {
+      if (!exists) $('voice-check').textContent = t('admin.voice_err_audio_capture');
+    });
+  }
   voiceCommands = (voice.commands || []).map((c) => ({ ...c }));
   renderVoiceCommands();
   renderVoiceDefaults();

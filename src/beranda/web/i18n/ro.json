@@ -175,6 +175,9 @@
     "read_day": "Citește ziua cu voce tare",
     "no_news": "Nicio știre deocamdată",
     "tap_for_sound": "Atingeți ecranul o dată pentru ca Beranda să poată vorbi.",
-    "wake_stopped": "Cuvântul de activare s-a oprit: altceva a luat microfonul. Butonul încă funcționează."
+    "wake_stopped": "Cuvântul de activare s-a oprit: altceva a luat microfonul. Butonul încă funcționează.",
+    "mic_none": "Nu s-a găsit niciun microfon pe acest dispozitiv.",
+    "mic_blocked": "Microfonul este blocat pentru această pagină.",
+    "mic_offline": "Serviciul vocal al browserului nu poate fi contactat."
   }
 }
