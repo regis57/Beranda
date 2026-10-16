@@ -40,12 +40,18 @@ Sound → Input and pick the **Hands-Free** entry of that device — or plug it 
 its USB dongle, which always works. On Windows, also check Privacy & security → Microphone →
 "Let desktop apps access your microphone".
 
-**A computer only lends its microphone to one thing at a time.** If the wake word stops after a
-few seconds with `audio-capture`, something else took it. On Windows the usual causes are another
-window doing speech, **voice activation** (Settings → Privacy & security → Speech, and the
-"wake word" settings of Cortana or Copilot), or an app holding the microphone. Several Beranda
-screens open in the same browser also share one microphone: the newest one listens, the others
-wait and take over by themselves if it is closed.
+**A browser has one microphone.** Chrome lets a single page listen at a time; a second one is
+cut off, and "the microphone works but heard nothing" is what that looks like. So all the
+Beranda pages in a browser agree among themselves: the **first** screen with a wake word keeps
+the microphone, other screens wait (and take over at once if it is closed), and the microphone
+button or the settings page's *Test* borrows it for a moment and gives it back. The little
+preview of the screen on the settings page never listens at all. One thing they cannot agree
+across: two different addresses for the same Pi (`rp4.local` and `192.168.1.x`) are, for the
+browser, two different sites: open Beranda with one address only.
+
+If the wake word stops after a few seconds with `audio-capture`, something outside the browser
+took the microphone. On Windows the usual causes are **voice activation** (Settings → Privacy &
+security → Speech, and the "wake word" settings of Cortana or Copilot), or an app holding it.
 
 ## What you can say
 

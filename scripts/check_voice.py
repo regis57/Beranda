@@ -54,6 +54,61 @@ window.__fail = (e) => { const r = window.__latest(); if (r) { r.onerror({ error
 """
 
 
+# The tests with several pages need what Chrome really does: ONE microphone for the whole
+# browser. The pages ask the test itself (exposed functions) whether they may have it; a
+# second recognition, in any page, is cut off ("aborted") exactly as Chrome cuts it off.
+SHARED = """
+window.__mine = null;
+class SharedRec {
+  start() {
+    this.rid = Math.random().toString(36).slice(2);
+    window.__micTake(this.rid).then((ok) => {
+      if (!ok) { this.onerror && this.onerror({ error: 'aborted' }); this.onend && this.onend(); return; }
+      this.running = true; window.__mine = this; this.onstart && this.onstart();
+    });
+  }
+  stop() {
+    if (!this.running) return;
+    this.running = false; window.__micGive(this.rid);
+    if (window.__mine === this) window.__mine = null;
+    setTimeout(() => this.onend && this.onend(), 0);
+  }
+}
+window.SpeechRecognition = SharedRec;
+Object.defineProperty(window, 'isSecureContext', { value: true });
+navigator.mediaDevices.enumerateDevices = async () => [{ kind: 'audioinput', label: 'USB speakerphone' }];
+window.speechSynthesis.speak = (u) => { if (u.onstart) u.onstart(); };
+window.__hear = (t) => { const r = window.__mine; if (!r) return false;
+  r.onresult({ resultIndex: 0, results: [[{ transcript: t }]] }); if (!r.continuous) r.stop(); return true; };
+"""
+
+
+def shared_microphone(context):
+    """Expose one browser-wide microphone to every page of `context`; returns its counters."""
+    mic = {"holder": None, "page": None, "cut": 0}
+
+    def take(source, rid: str) -> bool:
+        if mic["holder"] in (None, rid):
+            mic["holder"], mic["page"] = rid, source["page"]
+            return True
+        mic["cut"] += 1
+        return False
+
+    def give(source, rid: str) -> None:
+        if mic["holder"] == rid:
+            mic["holder"] = mic["page"] = None
+
+    def closed(page) -> None:  # closing a tab frees its microphone, as in a real browser
+        if mic["page"] is page:
+            mic["holder"] = mic["page"] = None
+
+    context.expose_binding("__micTake", take)
+    context.expose_binding("__micGive", give)
+    context.on("page", lambda page: page.on("close", closed))
+    context.add_init_script(SHARED)
+    return mic
+
+
 def free_port() -> int:
     with closing(socket.socket()) as s:
         s.bind(("127.0.0.1", 0))
@@ -143,17 +198,49 @@ def main() -> int:
 
         page.close()
 
-        # Two Beranda screens in the SAME browser (the same tabs, the same storage): one listens,
-        # the other waits its turn, because the browser gives the microphone to one of them only.
+        # Two Beranda screens in the SAME browser, sharing ONE microphone as in Chrome. The first
+        # keeps it; the second waits. And they must stay that way, not take it from each other
+        # every few seconds (v0.17.4-0.17.6 did, and nothing was ever heard).
         together = browser.new_context(viewport={"width": 1280, "height": 800})
-        together.add_init_script(STAND_IN)
+        mic = shared_microphone(together)
         first, second = together.new_page(), together.new_page()
         first.goto(f"http://127.0.0.1:{port}/")
         first.wait_for_timeout(2500)
         second.goto(f"http://127.0.0.1:{port}/")
-        second.wait_for_timeout(3500)
-        listening = first.evaluate("window.__live") + second.evaluate("window.__live")
-        want(listening == 1, f"two screens in one browser share the microphone ({listening} listening, want 1)")
+        second.wait_for_timeout(3000)
+        holders = [first.evaluate("window.__mine !== null"), second.evaluate("window.__mine !== null")]
+        want(holders == [True, False], f"the first screen keeps the microphone, the second waits ({holders})")
+        cut_before = mic["cut"]
+        first.wait_for_timeout(7000)
+        want(mic["cut"] - cut_before <= 1, f"the two screens do not take it from each other (cut off {mic['cut'] - cut_before} times in 7 s)")
+        want(first.evaluate("window.__mine !== null"), "the first screen still holds it 7 s later")
+
+        # The settings page shows a little copy of the screen as a preview. That copy must never
+        # listen: it was a hidden second screen holding the microphone (found in v0.17.6).
+        settings = together.new_page()
+        settings.goto(f"http://127.0.0.1:{port}/admin")
+        settings.wait_for_timeout(3000)
+        preview_listens = settings.frame_locator("#preview").locator("body").evaluate("() => window.__mine !== null")
+        want(not preview_listens, "the preview on the settings page never takes the microphone")
+        want(first.evaluate("window.__mine !== null"), "the real screen keeps the microphone while the settings page is open")
+
+        # The settings page, in another tab, tests the microphone while a screen's wake word
+        # holds it: the screen must step aside, the test must hear, and the screen take it back.
+        settings.click("#voice-test")
+        settings.wait_for_timeout(1800)
+        want(settings.evaluate("window.__mine !== null"), "the settings test gets the microphone from the screen in another tab")
+        settings.evaluate("window.__hear('bonjour beranda')")
+        settings.wait_for_timeout(600)
+        msg = settings.text_content("#voice-test-msg")
+        want("bonjour" in msg.lower(), f"the settings test hears what is said ({msg!r})")
+        first.wait_for_timeout(2500)
+        want(first.evaluate("window.__mine !== null"), "the screen takes the microphone back after the test")
+
+        # The screen that held it is closed: the other one takes over by itself.
+        first.goto("about:blank")  # leaving the page, as closing the tab does
+        first.close()
+        second.wait_for_timeout(3000)
+        want(second.evaluate("window.__mine !== null"), "when the first screen is closed, the second one takes over at once")
         together.close()
 
         # A computer with no microphone at all: say so in words, before and after.

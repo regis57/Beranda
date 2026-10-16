@@ -191,3 +191,14 @@ One line per version, newest last. Each one was a pull request on
   names the three real reasons - a Bluetooth headset not in "hands-free" mode, Windows refusing
   microphones to desktop programs, another program holding it - and the screen says "the browser
   cannot use the microphone" rather than claiming there is none
+
+- **v0.17.7**: the real reason voice control failed from 0.17.2 on: the little **preview of the
+  screen on the settings page** is a full copy of the screen, and it started its own wake word.
+  A browser has one microphone, so that hidden copy held it, the real screen fought it, and the
+  settings page's microphone test "worked but heard nothing". The preview never listens or speaks
+  now. The way pages share the one microphone is rewritten: the first screen keeps it (they no
+  longer take it from each other every few seconds), the button or the settings test borrows it
+  from any tab and gives it back to the screen that had it, a closed screen lets go at once, and
+  a microphone that never started is no longer mistaken for one that "worked first". A check in
+  CI now simulates Chrome's single microphone across tabs; it fails on 0.17.6 with exactly the
+  message the owner saw

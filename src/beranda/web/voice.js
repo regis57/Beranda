@@ -21,9 +21,28 @@ const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 // A browser allows ONE listening at a time. The wake word listens all the time, so the
 // microphone button has to borrow the microphone from it and give it back afterwards;
 // otherwise both fail silently and nothing works any more.
-let running = null;
-const LOCK = 'beranda-wake-owner';
+let running = null;  // the wake word of this page, if any
+
+// ONE microphone for the whole browser. Chrome lets a single page listen at a time: a second
+// one gets cut off ("aborted", or nothing heard). So every Beranda page in this browser - the
+// screens and the settings page - agrees through one note kept in the browser's storage:
+//   * a "once" note: a button or the settings test is listening right now. Everybody else
+//     steps aside, whatever they were doing; it lasts 15 s at most.
+//   * a "wake" note: the screen whose wake word holds the microphone. The FIRST screen keeps
+//     it and refreshes it every 4 s; the others wait, and take over if it is closed (12 s).
+// Two different addresses for the same Pi (rp4.local and 192.168.1.x) do not share a note:
+// open Beranda with one address only.
+const NOTE = 'beranda-microphone';
 const me = Math.random().toString(36).slice(2);
+const ONCE_MS = 15_000;
+const WAKE_MS = 12_000;
+function readNote() { try { return JSON.parse(localStorage.getItem(NOTE) || 'null'); } catch { return null; } }
+function writeNote(note) {
+  try { if (note) localStorage.setItem(NOTE, JSON.stringify(note)); else localStorage.removeItem(NOTE); } catch { /* no storage */ }
+}
+const freshOnce = (n) => n?.kind === 'once' && Date.now() - n.at < ONCE_MS;
+const freshWake = (n) => n?.kind === 'wake' && Date.now() - n.at < WAKE_MS;
+const sleep = (ms) => new Promise((ok) => { setTimeout(ok, ms); });
 
 // A device with no microphone at all answers "audio-capture" to everything, after the fact.
 // The browser lists its microphones without asking permission, so the settings page can say
@@ -43,11 +62,26 @@ export function availability() {
 
 // Listen once; resolves with the text heard ('' if nothing was said), rejects with a short
 // error name ('not-allowed' when the microphone is blocked, ...).
-export function listenOnce(lang) {
+export async function listenOnce(lang) {
+  // Ask every Beranda page in this browser to step aside, and wait a moment if a wake word
+  // somewhere else holds the microphone: starting while it still listens would get us cut off.
+  const before = readNote();
+  const id = `${me}-once`;
+  // Whoever held the microphone before gets it back afterwards, rather than every screen
+  // rushing for it at once.
+  const restore = freshWake(before) ? before : null;
+  writeNote({ id, kind: 'once', at: Date.now() });
+  running?.pause();
+  if (freshWake(before) && before.id !== me) await sleep(900);
   return new Promise((resolve, reject) => {
-    running?.pause();  // the wake word steps aside: one listening at a time
     let over = false;
-    const give_back = () => { if (over) return; over = true; clearTimeout(guard); running?.resume(); };
+    const give_back = () => {
+      if (over) return;
+      over = true;
+      clearTimeout(guard);
+      if (readNote()?.id === id) writeNote(restore && { ...restore, at: Date.now() });  // only our own note
+      running?.resume();
+    };
     // A browser sometimes answers nothing at all: no words, no error, no end. Without this the
     // microphone would stay borrowed for ever and the wake word would never listen again.
     const guard = setTimeout(() => { try { rec.stop(); } catch { /* already */ } failed(new Error('no answer')); }, 12_000);
@@ -65,32 +99,36 @@ export function listenOnce(lang) {
   });
 }
 
-// Keep listening, all the time, for one word ("Beranda"); what follows it in the same breath
-// is the command. If only the word was said, the next sentence is the command. The browser
-// stops a long listen now and then (silence, a hiccup): `onend` simply starts it again.
-// Nothing is sent anywhere by Beranda; the browser's own speech service does the listening.
 export function wakeListener({ lang, word, onWake, onCommand, onError, onState }) {
   if (!Recognition) return { stop() {}, pause() {}, resume() {} };
   const wake = normalise(word);
   let rec = null;
-  let stopped = false;
-  let paused = false;
-  let awake = false;  // the word was heard on its own: the next sentence is the command
-  let fails = 0;      // failures in a row; the wait doubles, so a service that is down is left alone
+  let live = false;       // a recognition of ours is running right now
+  let stopped = false;    // for good (turned off, or gave up)
+  let borrowed = false;   // this page's own button is listening
+  let yielded = false;    // another page holds the microphone
+  let awake = false;      // the word was heard on its own: the next sentence is the command
+  let fails = 0;          // failures in a row; the wait doubles, so a failing service is left alone
   let timer = 0;
   let listening_since = 0;
+  let said_last = '';
+  // Only changes go to the diagnostic file: one line per change, not one per restart.
+  const state = (what) => { if (what !== said_last) { said_last = what; onState?.(what); } };
 
+  const wanted = () => !stopped && !borrowed && !yielded;
+  const halt = () => { clearTimeout(timer); if (live) { try { rec?.stop(); } catch { /* already */ } } };
   const later = (ms) => { clearTimeout(timer); timer = setTimeout(start, ms); };
-  const give_up = (why) => { stopped = true; clearTimeout(timer); onState?.('stopped'); onError(why); };
+  const give_up = (why) => { stopped = true; halt(); state('stopped'); onError(why); };
 
   function start() {
-    if (stopped || paused) return;
+    if (!wanted() || live) return;
+    listening_since = 0;  // set when the browser says it really started
     rec = new Recognition();
     rec.lang = lang;
     rec.continuous = true;
     rec.interimResults = false;
     rec.maxAlternatives = 1;
-    rec.onstart = () => { listening_since = Date.now(); onState?.('listening'); };
+    rec.onstart = () => { listening_since = Date.now(); state('listening'); };
     rec.onresult = (event) => {
       fails = 0;  // it answered: start counting again from zero
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
@@ -109,53 +147,54 @@ export function wakeListener({ lang, word, onWake, onCommand, onError, onState }
       // "The microphone could not be used." When it comes after a while of listening fine, it is
       // something else taking the microphone (another window, the system's own voice assistant):
       // that passes, so wait and try again. Right at the start, it means there is none: give up.
-      const worked_first = Date.now() - listening_since > 5000;
+      const worked_first = listening_since > 0 && Date.now() - listening_since > 5000;
       if (why === 'audio-capture' && !worked_first) return give_up(why);
       if (why === 'not-allowed' || why === 'service-not-allowed') return give_up(why);
       if (why === 'no-speech' || why === 'aborted') return;  // normal: nobody spoke, or we stopped it
       fails += 1;
-      onState?.(`error ${why} (${fails})`);
+      state(`error ${why} (${fails})`);
       if (fails >= MAX_FAILS) give_up(`${why} x${fails}`);
     };
     // The browser ends a long listen by itself (silence, a hiccup, its service): start again,
     // at once when all is well, waiting longer and longer when it keeps failing.
-    rec.onend = () => { if (!stopped && !paused) later(fails ? Math.min(1000 * 2 ** fails, 60_000) : 400); };
-    try { rec.start(); } catch (err) { fails += 1; if (fails >= MAX_FAILS) give_up(err.message || String(err)); else later(2000); }
+    rec.onend = () => { live = false; if (wanted()) later(fails ? Math.min(1000 * 2 ** fails, 60_000) : 400); };
+    try { rec.start(); live = true; } catch (err) {
+      fails += 1;
+      if (fails >= MAX_FAILS) give_up(err.message || String(err)); else later(2000);
+    }
   }
 
+  // Who may listen? Looked at every 1.5 s, and at once when another page changes the note.
+  function look() {
+    if (stopped) return;
+    const note = readNote();
+    const other = (freshOnce(note) && note.id !== `${me}-once`) || (freshWake(note) && note.id !== me);
+    if (other && !yielded) {
+      yielded = true;
+      halt();
+      state(note.kind === 'once' ? 'lent to a test or a button' : 'another screen has the microphone');
+      return;
+    }
+    if (other) return;
+    if (!freshOnce(note)) writeNote({ id: me, kind: 'wake', at: Date.now() });  // free, or ours: keep it
+    if (yielded) { yielded = false; state('taking the microphone back'); later(600); }
+  }
+  const tick = setInterval(() => { if (stopped) { clearInterval(tick); return; } look(); }, 1500);
+  window.addEventListener('storage', (event) => { if (event.key === NOTE) look(); });
+
   const self = {
-    stop() { stopped = true; clearTimeout(timer); try { rec?.stop(); } catch { /* already stopped */ } },
-    // The browser allows one listening at a time: the microphone button borrows it, then gives it back.
-    pause() { if (paused) return; paused = true; clearTimeout(timer); onState?.('paused'); try { rec?.stop(); } catch { /* already */ } },
-    resume() { if (!paused || stopped) return; paused = false; later(600); },
+    stop() { stopped = true; halt(); clearInterval(tick); if (readNote()?.id === me) writeNote(null); },
+    // This page's own button borrows the microphone, then gives it back.
+    pause() { if (borrowed) return; borrowed = true; halt(); },
+    resume() { if (!borrowed || stopped) return; borrowed = false; later(600); },
   };
   running = self;
-  // Several Beranda screens open in the same browser would ask for the microphone at the same
-  // time, and the browser gives it to one and "audio-capture" to the others. The newest screen
-  // takes it; the others wait, and take over by themselves if that one is closed.
-  const claim = () => { try { localStorage.setItem(LOCK, JSON.stringify({ id: me, at: Date.now() })); } catch { /* no storage: just listen */ } };
-  const owner = () => {
-    try {
-      const held = JSON.parse(localStorage.getItem(LOCK) || 'null');
-      return !held || held.id === me || Date.now() - held.at > 12_000 ? null : held.id;
-    } catch { return null; }
-  };
-  claim();
-  setInterval(() => { if (!stopped) claim(); }, 4000);
-  const watch = setInterval(() => {
-    if (stopped) return clearInterval(watch);
-    const other = owner();
-    if (other && !paused) { onState?.('another screen has the microphone'); self.pause(); }
-    else if (!other && paused) { onState?.('taking the microphone back'); self.resume(); }
-  }, 2000);
-  if (owner()) { paused = true; onState?.('another screen has the microphone'); return self; }
-  start();
+  window.addEventListener('pagehide', () => self.stop());
+  look();
+  if (wanted()) start();
   return self;
 }
 
-// Browsers refuse to make a sound on a page nobody has touched yet (the same rule that stops
-// a video playing by itself). A wall display is never touched, so the first answer can be
-// silent: `onSilent` is called then, and the page says "touch the screen once".
 export function speak(text, lang, onSilent) {
   if (!('speechSynthesis' in window) || !text) return;
   window.speechSynthesis.cancel();

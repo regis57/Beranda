@@ -7,6 +7,10 @@ import * as voice from '/static/voice.js';
 const POLL_MS = 60_000;
 const RETRY_MS = 5_000;
 const params = new URLSearchParams(location.search);
+// The settings page shows this screen in a small frame, as a preview. That copy must never
+// listen or speak: a browser has one microphone, and a hidden second screen holding it was
+// enough to make voice control fail everywhere else (the real screen, the microphone test).
+const PREVIEW = params.has('preview') || window.self !== window.top;
 
 let state = null;
 let strings = {};
@@ -892,6 +896,7 @@ function toast(text, ms = 6000) {
 }
 
 async function listen() {
+  if (PREVIEW) return;
   const mic = $('mic');
   if (mic.classList.contains('listening')) return;
   if (voice.availability() !== 'ok') {
@@ -985,6 +990,7 @@ function micProblem(code) {
 
 function renderVoice() {
   $('mic').hidden = !state.voice;
+  if (PREVIEW) return;  // a picture of the screen: no microphone, ever
   const word = state.voice ? (state.wake_word || '') : '';
   if (word === wakeWord) return;
   wakeWord = word;
@@ -1053,6 +1059,7 @@ function readDay() {
 // reason, the screen then asks for one touch.
 let soundAllowed = false;
 function sayOutLoud(text) {
+  if (PREVIEW) return;
   voice.speak(text, lang, () => {
     if (soundAllowed) return;
     toast(`${text}\n\n${t('a11y.tap_for_sound')}`, 15000);
