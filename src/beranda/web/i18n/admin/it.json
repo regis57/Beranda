@@ -444,5 +444,13 @@
   "wifi_err_stuck": "Il servizio di supporto del Pi è bloccato. Sul Pi digita: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Consiglio: Beranda funziona meglio in Google Chrome. Microsoft Edge ha dato problemi (controllo vocale, pagine rimaste di una versione precedente).",
   "w_nameday": "Onomastico in grande, in alto a destra",
-  "w_nameday_hint": "Nei paesi che festeggiano l'onomastico (Francia, Germania, Polonia, Svezia, Ungheria…), con i nomi del tuo paese. In grande in alto a destra con il tema Francia; con gli altri temi resta nella riga delle effemeridi."
+  "w_nameday_hint": "Nei paesi che festeggiano l'onomastico (Francia, Germania, Polonia, Svezia, Ungheria…), con i nomi del tuo paese. In grande in alto a destra con il tema Francia; con gli altri temi resta nella riga delle effemeridi.",
+  "a11y": "Accessibilità",
+  "a11y_hint": "Per chi vede male o non può leggere lo schermo. Le tre opzioni funzionano con qualsiasi stile.",
+  "a11y_large": "Testo grande",
+  "a11y_large_hint": "Tutto circa 1,4 volte più grande. Alcuni riquadri mostrano un po' meno.",
+  "a11y_contrast": "Alto contrasto",
+  "a11y_contrast_hint": "Nero su bianco di giorno, bianco su nero di notte, senza grigi tenui né decorazioni.",
+  "a11y_read": "Leggere la giornata ad alta voce",
+  "a11y_read_hint": "Un pulsante altoparlante sullo schermo legge l'ora, il meteo, gli impegni del giorno e le allerte. Anche a voce: «leggimi la giornata»."
 }

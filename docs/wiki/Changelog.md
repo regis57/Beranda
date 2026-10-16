@@ -153,3 +153,8 @@ One line per version, newest last. Each one was a pull request on
   on the screen (weather, agenda, warnings, news) is announced; a clear ring shows where the keyboard
   is; the settings page stops moving for people who asked their system for less motion. Both pages
   are now checked against the accessibility rules (WCAG 2.1 AA) on every change
+- **v0.17.1**: a box **17. Accessibility** on the settings page: *large text* (everything about 1.4
+  times bigger; the 24 h graph and the air row step aside), *high contrast* (black on white by day,
+  white on black at night, on top of any style) and *read the day out loud* (a speaker button on the
+  screen, and the voice command "read me the day", in the 10 voice languages: the date, the time,
+  the weather, today's events and the warnings)

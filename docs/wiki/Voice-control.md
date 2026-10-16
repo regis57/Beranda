@@ -7,7 +7,7 @@ Beranda listens with the **microphone of the device that shows it** (tablet or c
    ("network"); Firefox and Safari do not offer it to web pages.
 3. Use the **secure address**: `https://` instead of `http://`, same address and port. The first
    time, accept the "not private" warning (*Advanced* → *Continue*): the certificate is made by Beranda.
-4. Tap the round microphone, allow it, speak: "what's the weather", "play France Inter", "next station"...
+4. Tap the round microphone, allow it, speak: "what's the weather", "play France Inter", "next station", "read me the day"...
 
 The other way round step 3: a one-time Chrome setting,
 `chrome://flags/#unsafely-treat-insecure-origin-as-secure` with Beranda's `http://` address.

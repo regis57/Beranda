@@ -444,5 +444,13 @@
   "wifi_err_stuck": "O serviço auxiliar do Pi está bloqueado. No Pi, escreva: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Dica: o Beranda funciona melhor no Google Chrome. O Microsoft Edge deu problemas (controlo por voz, páginas guardadas de uma versão antiga).",
   "w_nameday": "Onomástico em grande, no canto superior direito",
-  "w_nameday_hint": "Nos países que celebram o dia do nome (França, Alemanha, Polónia, Suécia, Hungria…), com os nomes do seu país. Em grande no canto superior direito com o tema França; com os outros temas fica na linha das efemérides."
+  "w_nameday_hint": "Nos países que celebram o dia do nome (França, Alemanha, Polónia, Suécia, Hungria…), com os nomes do seu país. Em grande no canto superior direito com o tema França; com os outros temas fica na linha das efemérides.",
+  "a11y": "Acessibilidade",
+  "a11y_hint": "Para quem vê mal ou não consegue ler o ecrã. As três opções funcionam com qualquer estilo.",
+  "a11y_large": "Texto grande",
+  "a11y_large_hint": "Tudo cerca de 1,4 vezes maior. Algumas caixas mostram um pouco menos.",
+  "a11y_contrast": "Alto contraste",
+  "a11y_contrast_hint": "Preto sobre branco de dia, branco sobre preto à noite, sem cinzentos pálidos nem decoração.",
+  "a11y_read": "Ler o dia em voz alta",
+  "a11y_read_hint": "Um botão de altifalante no ecrã lê a hora, o tempo, os compromissos do dia e os avisos. Também por voz: «lê-me o dia»."
 }

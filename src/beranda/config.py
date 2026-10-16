@@ -112,6 +112,11 @@ class Config:
     alerts_area: str = ""  # the name of your area as MeteoAlarm writes it, e.g. "Moselle"
     widget_ephemeris: bool = True  # name day, length of the day, the local calendar
     widget_nameday_top: bool = True  # the name day in big at the top right (France theme), in name-day countries
+    # For people who see badly or cannot read the screen: bigger text, black-on-white colours,
+    # and a button (plus a voice command) that reads the day out loud.
+    a11y_large_text: bool = False
+    a11y_high_contrast: bool = False
+    a11y_read_aloud: bool = False
     second_clock: str = ""  # a second time zone ("Asia/Jakarta"), small, under the date; "" = off
     voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
@@ -273,6 +278,7 @@ def from_dict(data: dict) -> Config:
     voice = data.get("voice", {})
     history = data.get("history", {})
     widgets = data.get("widgets", {})
+    a11y = data.get("accessibility", {})
     profile = str(data.get("limits", {}).get("profile", "auto")).lower()
     if profile != "auto" and profile not in limits_mod.PROFILES:
         raise ValueError(f"limits profile must be auto or one of {', '.join(limits_mod.PROFILES)}")
@@ -322,6 +328,9 @@ def from_dict(data: dict) -> Config:
         alerts_area=" ".join(str(widgets.get("alerts_area", "")).split())[:80],
         widget_ephemeris=bool(widgets.get("ephemeris", True)),
         widget_nameday_top=bool(widgets.get("nameday_top", True)),
+        a11y_large_text=bool(a11y.get("large_text", False)),
+        a11y_high_contrast=bool(a11y.get("high_contrast", False)),
+        a11y_read_aloud=bool(a11y.get("read_aloud", False)),
         second_clock=_check_timezone(widgets.get("second_clock", "")),
         voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[: cap.voice_commands]),
         voice_enabled=bool(voice.get("enabled", False)),
@@ -407,6 +416,9 @@ def to_dict(cfg: Config) -> dict:
     out["history"] = {"enabled": cfg.history_enabled}
     if cfg.limits_profile != "auto":
         out["limits"] = {"profile": cfg.limits_profile}
+    out["accessibility"] = {
+        "large_text": cfg.a11y_large_text, "high_contrast": cfg.a11y_high_contrast, "read_aloud": cfg.a11y_read_aloud,
+    }
     out["widgets"] = {
         "chart": cfg.widget_chart,
         "air": cfg.widget_air,

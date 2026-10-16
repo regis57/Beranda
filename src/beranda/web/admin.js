@@ -769,6 +769,13 @@ function renderVoice() {
 
 // ------------------------------------------------------------------ widgets ---
 // Small optional extras of the main screen. Each one can be switched off.
+function renderAccessibility() {
+  const a = cfg.accessibility || {};
+  $('a11y-large').checked = !!a.large_text;
+  $('a11y-contrast').checked = !!a.high_contrast;
+  $('a11y-read').checked = !!a.read_aloud;
+}
+
 function renderWidgets() {
   const w = cfg.widgets || {};
   $('w-chart').checked = w.chart !== false;
@@ -1233,6 +1240,7 @@ function collect() {
     commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
   };
   body.widgets = collectWidgets();
+  body.accessibility = { large_text: $('a11y-large').checked, high_contrast: $('a11y-contrast').checked, read_aloud: $('a11y-read').checked };
   body.screen = { rotate: Number($('rotate').value), off: $('off-at').value, on: $('on-at').value };
   if ($('subdivision').value) body.subdivision = $('subdivision').value;
   if ($('pin').value !== '') body.pin = $('pin').value;
@@ -1276,7 +1284,7 @@ async function save(event) {
 
 // ------------------------------------------------------------------ boot -----
 function renderAll() {
-  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); watchWifiBox(); renderVoice(); renderWidgets(); checkAreaMatchesTown(); renderScreen(); renderSystem();
+  renderPlace(); renderRegion(); renderLook(); renderCalendarGuide(); renderNews(); renderPhotos(); renderRadio(); renderTv(); watchTvBox(); watchWifiBox(); renderVoice(); renderWidgets(); renderAccessibility(); checkAreaMatchesTown(); renderScreen(); renderSystem();
   $('ics-list').replaceChildren();
   $('key-list').replaceChildren();
   for (const u of cfg.calendar.ics_urls) addIcsRow(u);

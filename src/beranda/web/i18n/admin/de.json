@@ -444,5 +444,13 @@
   "wifi_err_stuck": "Der Hilfsdienst des Pi hängt. Tippen Sie auf dem Pi: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Tipp: Beranda läuft am besten in Google Chrome. Microsoft Edge hat Probleme gemacht (Sprachsteuerung, Seiten aus einer älteren Version).",
   "w_nameday": "Namenstag groß, oben rechts",
-  "w_nameday_hint": "In Ländern, die Namenstage feiern (Frankreich, Deutschland, Polen, Schweden, Ungarn …), mit den Namen Ihres Landes. Groß oben rechts mit dem Design Frankreich; bei den anderen Designs bleibt er in der Zeile der Ephemeride."
+  "w_nameday_hint": "In Ländern, die Namenstage feiern (Frankreich, Deutschland, Polen, Schweden, Ungarn …), mit den Namen Ihres Landes. Groß oben rechts mit dem Design Frankreich; bei den anderen Designs bleibt er in der Zeile der Ephemeride.",
+  "a11y": "Barrierefreiheit",
+  "a11y_hint": "Für Menschen, die schlecht sehen oder den Bildschirm nicht lesen können. Alle drei passen zu jedem Stil.",
+  "a11y_large": "Großer Text",
+  "a11y_large_hint": "Alles etwa 1,4-mal größer. Manche Kästen zeigen etwas weniger.",
+  "a11y_contrast": "Hoher Kontrast",
+  "a11y_contrast_hint": "Schwarz auf Weiß am Tag, Weiß auf Schwarz nachts, kein blasses Grau, keine Verzierung.",
+  "a11y_read": "Den Tag vorlesen",
+  "a11y_read_hint": "Ein Lautsprecher-Knopf auf dem Bildschirm liest Uhrzeit, Wetter, Termine und Warnungen vor. Auch per Stimme: „lies mir den Tag vor“."
 }

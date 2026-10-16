@@ -68,6 +68,7 @@ async function loadStrings(code) {
     if (el) el.setAttribute('aria-label', t(key));
   }
   $('mic').setAttribute('aria-label', t('a11y.microphone'));
+  $('read-day').setAttribute('aria-label', t('a11y.read_day'));
 }
 
 function t(key, vars) {
@@ -911,6 +912,7 @@ async function listen() {
     const answer = await response.json();
     toast(`« ${heard} »\n${answer.reply}`);
     voice.speak(answer.reply, lang);
+    if (answer.action?.type === 'read_day') readDay();
     if (answer.action?.type === 'radio_play') radio.play(answer.action);
     if (answer.action?.type === 'radio_stop') radio.stop();
     if (answer.action?.type === 'radio_next') skip(1);
@@ -929,6 +931,41 @@ async function listen() {
 }
 $('mic').addEventListener('click', listen);
 function renderVoice() { $('mic').hidden = !state.voice; }
+
+// ---------------------------------------------------------------- accessibility ----------
+// Three switches from the settings page. They are classes on <body>, so every theme keeps
+// working: "large" scales the root font, "contrast" replaces the theme's colours.
+function applyAccessibility() {
+  const a = state.accessibility || {};
+  document.documentElement.toggleAttribute('data-a11y-large', !!a.large_text);  // the root font: rem follows
+  document.body.classList.toggle('a11y-contrast', !!a.high_contrast);
+  $('read-day').hidden = !a.read_aloud;
+}
+
+// What the screen says when asked to read the day: the same words as on the screen, in order.
+export function daySummary() {
+  const now = new Date();
+  const parts = [dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now),
+    dtf({ hour: '2-digit', minute: '2-digit' }).format(now)];
+  const w = state.weather;
+  if (w?.current) parts.push(`${t(`wmo.${w.current.code}`)}, ${Math.round(w.current.temp)}°`);
+  const warnings = (state.alerts?.items || []).map((x) => `${t(`alerts.kind.${x.kind}`)} ${t(`alerts.level.${x.level}`)}`);
+  if (warnings.length) parts.push(warnings.join(', '));
+  const today = dayKey(now);
+  const events = [
+    ...state.special_days.filter((d) => d.date === today).map((d) => d.label),
+    ...state.events.filter((e) => e.start.slice(0, 10) === today).map((e) =>
+      e.all_day ? e.title : `${dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start))} ${e.title}`),
+  ];
+  parts.push(events.length ? `${t('today')}: ${events.join('. ')}` : t('nothing_upcoming'));
+  return parts.join('. ') + '.';
+}
+function readDay() {
+  const text = daySummary();
+  toast(text, 12000);
+  voice.speak(text, lang);
+}
+$('read-day').addEventListener('click', readDay);
 
 // ---------------------------------------------------------------- first start ---------
 function renderSetup() {
@@ -999,6 +1036,7 @@ async function render(online) {
   await loadStrings(lang);
   applyTheme();
   applyMode();
+  applyAccessibility();
   renderClock();
   renderWeather();
   renderSky();

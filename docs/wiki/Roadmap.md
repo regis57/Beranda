@@ -11,8 +11,8 @@ comes first. Order agreed in October 2026.
 
 ## Next
 
-- **Accessibility, second pass**: a box in the settings with large text, high contrast and
-  "read me the day" out loud; then more voice commands, without touching the screen.
+- **Accessibility, third pass**: more voice commands without touching the screen (a wake word,
+  or the microphone on the Pi itself), and a try with a real screen reader.
 
 - **Offline voice on the Pi** (Vosk): the page sends the sound to the Pi, which recognises it.
   Works in any browser (Edge, Firefox, Safari), no Google or Microsoft, the voice never leaves home.

@@ -32,6 +32,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("volume up", "louder", "turn it up"),
         "volume_down": ("volume down", "quieter", "turn it down"),
         "tv": ("tv tonight", "what's on tonight", "on tv", "television"),
+        "read_day": ("read me the day", "read the day", "what's my day", "read the screen"),
     },
     "fr": {
         "weather": ("quel temps fait-il", "météo", "previsions"),
@@ -43,6 +44,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("plus fort", "monte le son", "augmente le volume"),
         "volume_down": ("moins fort", "baisse le son", "baisse le volume"),
         "tv": ("à la télé", "programme tv", "programme télé", "télévision"),
+        "read_day": ("lis-moi la journée", "lis moi la journée", "lis la journée", "lis l'écran", "ma journée"),
     },
     "de": {
         "weather": ("wie ist das wetter", "wetter", "vorhersage"),
@@ -54,6 +56,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("lauter",),
         "volume_down": ("leiser",),
         "tv": ("fernsehprogramm", "im fernsehen", "tv-programm", "fernsehen"),
+        "read_day": ("lies mir den tag vor", "lies den tag", "lies den bildschirm", "mein tag"),
     },
     "es": {
         "weather": ("qué tiempo hace", "tiempo", "pronóstico"),
@@ -65,6 +68,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("sube el volumen", "más fuerte", "más alto", "sube"),
         "volume_down": ("baja el volumen", "más bajo", "baja"),
         "tv": ("en la tele", "programa de tv", "televisión"),
+        "read_day": ("léeme el día", "lee el día", "lee la pantalla", "mi día"),
     },
     "it": {
         "weather": ("che tempo fa", "meteo", "previsioni"),
@@ -76,6 +80,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("alza il volume", "più forte", "volume su"),
         "volume_down": ("abbassa il volume", "più piano", "volume giù"),
         "tv": ("stasera in tv", "programma tv", "in tv", "televisione"),
+        "read_day": ("leggimi la giornata", "leggi la giornata", "leggi lo schermo", "la mia giornata"),
     },
     "pt": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -87,6 +92,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("aumenta o volume", "mais alto", "mais forte"),
         "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
         "tv": ("na televisão", "programação", "na tv", "televisão"),
+        "read_day": ("lê-me o dia", "lê o dia", "lê o ecrã", "o meu dia"),
     },
     "pt-BR": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -98,6 +104,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("aumenta o volume", "mais alto", "mais forte"),
         "volume_down": ("diminui o volume", "mais baixo", "mais fraco"),
         "tv": ("na televisão", "programação", "na tv", "televisão"),
+        "read_day": ("leia meu dia", "leia o dia", "leia a tela", "meu dia"),
     },
     "ar": {
         "weather": ("كيف حال الطقس", "الطقس", "توقعات"),
@@ -109,6 +116,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("ارفع الصوت",),
         "volume_down": ("اخفض الصوت",),
         "tv": ("برنامج التلفاز", "على التلفاز", "التلفزيون"),
+        "read_day": ("اقرأ لي اليوم", "اقرأ اليوم", "اقرأ الشاشة", "يومي"),
     },
     "sw": {
         "weather": ("hali ya hewa", "utabiri"),
@@ -120,6 +128,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("ongeza sauti",),
         "volume_down": ("punguza sauti",),
         "tv": ("kwenye tv", "televisheni"),
+        "read_day": ("nisomee siku", "soma siku", "soma skrini", "siku yangu"),
     },
     "id": {
         "weather": ("bagaimana cuacanya", "cuaca", "ramalan"),
@@ -131,6 +140,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "volume_up": ("naikkan volume", "lebih keras"),
         "volume_down": ("turunkan volume", "lebih pelan"),
         "tv": ("acara tv", "di tv", "televisi"),
+        "read_day": ("bacakan hari ini", "baca hari ini", "baca layar", "hari saya"),
     },
 }
 
@@ -390,6 +400,9 @@ def answer(
         return {"intent": name, "reply": _tv_reply(language, tv), "action": None}
     if name == "radio_stop":
         return {"intent": name, "reply": _t(language, "radio_stopped"), "action": {"type": "radio_stop"}}
+    if name == "read_day":
+        # The page reads its own screen out loud: it already shows everything, in the right words.
+        return {"intent": name, "reply": "", "action": {"type": "read_day"}}
     if name in ("radio_next", "radio_prev", "volume_up", "volume_down"):
         return {"intent": name, "reply": _t(language, "ok"), "action": {"type": name}}
 

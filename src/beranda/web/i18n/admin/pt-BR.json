@@ -108,5 +108,13 @@
   "tv_none": "Ainda sem canais — cole acima o endereço de um guia e clique em “Encontrar canais”.",
   "voice": "Controle por voz",
   "reset_prompt": "Para recomeçar do zero, digite abaixo a palavra «{word}».",
-  "pin_wait": "PIN errado muitas vezes. Este celular ou computador pode tentar de novo em {n} min."
+  "pin_wait": "PIN errado muitas vezes. Este celular ou computador pode tentar de novo em {n} min.",
+  "a11y": "Acessibilidade",
+  "a11y_hint": "Para quem enxerga mal ou não consegue ler a tela. As três opções funcionam com qualquer estilo.",
+  "a11y_large": "Texto grande",
+  "a11y_large_hint": "Tudo cerca de 1,4 vezes maior. Algumas caixas mostram um pouco menos.",
+  "a11y_contrast": "Alto contraste",
+  "a11y_contrast_hint": "Preto no branco de dia, branco no preto à noite, sem cinzas claros nem enfeites.",
+  "a11y_read": "Ler o dia em voz alta",
+  "a11y_read_hint": "Um botão de alto-falante na tela lê a hora, o tempo, os compromissos do dia e os alertas. Também por voz: «leia meu dia»."
 }
