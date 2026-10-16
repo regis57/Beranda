@@ -176,7 +176,7 @@
     "no_news": "Nu geen nieuws",
     "tap_for_sound": "Raak het scherm één keer aan zodat Beranda mag spreken.",
     "wake_stopped": "Het wekwoord is gestopt: iets anders heeft de microfoon. De knop werkt nog.",
-    "mic_none": "Geen microfoon op dit apparaat gevonden.",
+    "mic_none": "De browser kan de microfoon niet gebruiken – zie de instellingen.",
     "mic_blocked": "De microfoon is geblokkeerd voor deze pagina.",
     "mic_offline": "De spraakdienst van de browser is onbereikbaar."
   }

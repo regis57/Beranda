@@ -484,5 +484,6 @@
   "tv_order_title": "Orden en la pantalla",
   "order_hint": "Las flechas suben o bajan una línea: la primera se muestra primero.",
   "move_up": "Subir",
-  "move_down": "Bajar"
+  "move_down": "Bajar",
+  "voice_err_mic_unusable": "Este dispositivo sí tiene micrófono, pero el navegador no puede usarlo. Tres causas habituales. (1) Unos auriculares o un altavoz Bluetooth: Windows solo presta su micrófono en modo «manos libres» — abra Configuración → Sistema → Sonido → Entrada y elija la entrada «Hands-Free» de ese aparato, o conéctelo por cable o con su llave USB, que siempre funciona. (2) Windows → Privacidad y seguridad → Micrófono: «Permitir que las aplicaciones de escritorio accedan al micrófono» debe estar activado. (3) Otro programa tiene el micrófono: ciérrelo."
 }

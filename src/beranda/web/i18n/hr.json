@@ -176,7 +176,7 @@
     "no_news": "Trenutno nema vijesti",
     "tap_for_sound": "Dodirnite zaslon jednom kako bi Beranda mogla govoriti.",
     "wake_stopped": "Riječ za buđenje se zaustavila: nešto drugo je uzelo mikrofon. Gumb i dalje radi.",
-    "mic_none": "Na ovom uređaju nije pronađen mikrofon.",
+    "mic_none": "Preglednik ne može koristiti mikrofon – pogledajte postavke.",
     "mic_blocked": "Mikrofon je blokiran za ovu stranicu.",
     "mic_offline": "Govorna usluga preglednika nije dostupna."
   }

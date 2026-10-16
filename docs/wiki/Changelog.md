@@ -186,3 +186,8 @@ One line per version, newest last. Each one was a pull request on
   afterwards (a browser lists its microphones without asking permission). And the screen says what
   a microphone problem means - no microphone, blocked, speech service unreachable - rather than the
   browser's own code
+- **v0.17.6**: "no microphone was found" was the wrong thing to say to a computer that clearly has
+  one. When the browser refuses the microphone but the device lists one, the settings page now
+  names the three real reasons - a Bluetooth headset not in "hands-free" mode, Windows refusing
+  microphones to desktop programs, another program holding it - and the screen says "the browser
+  cannot use the microphone" rather than claiming there is none

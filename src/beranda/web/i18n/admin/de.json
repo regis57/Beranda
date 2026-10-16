@@ -484,5 +484,6 @@
   "tv_order_title": "Reihenfolge auf dem Bildschirm",
   "order_hint": "Die Pfeile schieben eine Zeile nach oben oder unten: die erste wird zuerst gezeigt.",
   "move_up": "Nach oben",
-  "move_down": "Nach unten"
+  "move_down": "Nach unten",
+  "voice_err_mic_unusable": "Dieses Gerät hat ein Mikrofon, aber der Browser kann es nicht benutzen. Drei übliche Gründe. (1) Ein Bluetooth-Headset oder Freisprecher: Windows gibt dessen Mikrofon nur im „Freisprech“-Modus frei — Einstellungen → System → Sound → Eingabe, dort den „Hands-Free“-Eintrag wählen, oder per Kabel bzw. USB-Stick anschließen, was immer klappt. (2) Windows → Datenschutz und Sicherheit → Mikrofon: „Desktop-Apps den Zugriff auf Ihr Mikrofon erlauben“ muss an sein. (3) Ein anderes Programm hält das Mikrofon: schließen Sie es."
 }

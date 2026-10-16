@@ -176,7 +176,7 @@
     "no_news": "Sem notícias de momento",
     "tap_for_sound": "Toque no ecrã uma vez para o Beranda poder falar.",
     "wake_stopped": "A palavra de ativação parou: outra coisa ficou com o microfone. O botão ainda funciona.",
-    "mic_none": "Nenhum microfone encontrado neste aparelho.",
+    "mic_none": "O navegador não consegue usar o microfone – veja as definições.",
     "mic_blocked": "O microfone está bloqueado para esta página.",
     "mic_offline": "O serviço de voz do navegador está inacessível."
   }

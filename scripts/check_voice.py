@@ -177,6 +177,23 @@ def main() -> int:
         screen.wait_for_timeout(800)
         said = screen.text_content("#toast")
         want("audio-capture" not in said and len(said) > 10, f"the screen says what is wrong, not a code ({said!r})")
+        nomic.close()
+
+        # A microphone IS there (a Bluetooth headset) but the browser cannot capture from it:
+        # "plug one in" would be the wrong advice, so the settings page must say something else.
+        listed = browser.new_context(viewport={"width": 1100, "height": 900})
+        listed.add_init_script(STAND_IN + """
+            navigator.mediaDevices.enumerateDevices = async () => [{ kind: 'audioinput', label: 'Bluetooth headset' }];
+            FakeRec.prototype.start = function () { setTimeout(() => this.onerror && this.onerror({ error: 'audio-capture' }), 30); };
+        """)
+        bt = listed.new_page()
+        bt.goto(f"http://127.0.0.1:{port}/admin")
+        bt.wait_for_timeout(2500)
+        bt.click("#voice-test")
+        bt.wait_for_timeout(1200)
+        advice = bt.text_content("#voice-test-msg")
+        want(len(advice) > 120 and "Bluetooth" in advice,
+             "a microphone that is there but unusable gets the right advice, not \"plug one in\"")
         browser.close()
     server.should_exit = True
     if problems:
