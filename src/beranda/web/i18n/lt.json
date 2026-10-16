@@ -176,7 +176,7 @@
     "no_news": "Šiuo metu naujienų nėra",
     "tap_for_sound": "Vieną kartą palieskite ekraną, kad Beranda galėtų kalbėti.",
     "wake_stopped": "Žadinimo žodis sustojo: mikrofoną paėmė kas kita. Mygtukas vis dar veikia.",
-    "mic_none": "Šiame įrenginyje mikrofono nerasta.",
+    "mic_none": "Naršyklė negali naudoti mikrofono – žiūrėkite nustatymus.",
     "mic_blocked": "Šiam puslapiui mikrofonas užblokuotas.",
     "mic_offline": "Nepavyksta pasiekti naršyklės kalbos paslaugos."
   }

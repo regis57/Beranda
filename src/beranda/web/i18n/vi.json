@@ -176,7 +176,7 @@
     "no_news": "Hiện chưa có tin tức",
     "tap_for_sound": "Chạm vào màn hình một lần để Beranda có thể nói.",
     "wake_stopped": "Từ đánh thức đã dừng: thứ khác đã lấy micrô. Nút vẫn hoạt động.",
-    "mic_none": "Không tìm thấy micrô trên thiết bị này.",
+    "mic_none": "Trình duyệt không dùng được micrô – xem cài đặt.",
     "mic_blocked": "Micrô bị chặn cho trang này.",
     "mic_offline": "Không thể kết nối dịch vụ giọng nói của trình duyệt."
   }

@@ -484,5 +484,6 @@
   "tv_order_title": "Mpangilio kwenye skrini",
   "order_hint": "Mishale husogeza mstari juu au chini: wa kwanza huonyeshwa kwanza.",
   "move_up": "Sogeza juu",
-  "move_down": "Sogeza chini"
+  "move_down": "Sogeza chini",
+  "voice_err_mic_unusable": "Kifaa hiki kina kipaza sauti, lakini kivinjari hakiwezi kukitumia. Sababu tatu za kawaida. (1) Vipokea sauti au spika ya Bluetooth: Windows hukopesha kipaza sauti chake tu katika hali ya “hands-free” — fungua Mipangilio → Mfumo → Sauti → Ingizo kisha chagua kiingilio cha “Hands-Free” cha kifaa hicho, au kiunganishe kwa kebo au kidole chake cha USB, jambo linalofanya kazi kila wakati. (2) Windows → Faragha na usalama → Kipaza sauti: “Ruhusu programu za eneo-kazi kufikia kipaza sauti” lazima iwe imewashwa. (3) Programu nyingine imeshika kipaza sauti: ifunge."
 }

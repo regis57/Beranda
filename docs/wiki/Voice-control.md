@@ -33,6 +33,13 @@ while you hold it.
 itself and Beranda starts it again; when its service keeps failing, Beranda waits longer and
 longer and finally gives up with a message rather than asking every second.
 
+**A Bluetooth headset is two devices in one.** In music mode it has no microphone at all; Windows
+only lends its microphone in "hands-free" mode, which also makes the sound poorer. If the browser
+answers `audio-capture` while the computer clearly has a microphone, open Settings → System →
+Sound → Input and pick the **Hands-Free** entry of that device — or plug it in by cable or with
+its USB dongle, which always works. On Windows, also check Privacy & security → Microphone →
+"Let desktop apps access your microphone".
+
 **A computer only lends its microphone to one thing at a time.** If the wake word stops after a
 few seconds with `audio-capture`, something else took it. On Windows the usual causes are another
 window doing speech, **voice activation** (Settings → Privacy & security → Speech, and the

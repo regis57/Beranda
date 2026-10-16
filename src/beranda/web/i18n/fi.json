@@ -176,7 +176,7 @@
     "no_news": "Ei uutisia juuri nyt",
     "tap_for_sound": "Kosketa näyttöä kerran, jotta Beranda voi puhua.",
     "wake_stopped": "Herätyssana pysähtyi: jokin muu otti mikrofonin. Painike toimii yhä.",
-    "mic_none": "Tästä laitteesta ei löytynyt mikrofonia.",
+    "mic_none": "Selain ei voi käyttää mikrofonia – katso asetukset.",
     "mic_blocked": "Mikrofoni on estetty tällä sivulla.",
     "mic_offline": "Selaimen puhepalveluun ei saada yhteyttä."
   }

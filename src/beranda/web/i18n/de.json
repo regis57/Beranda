@@ -176,7 +176,7 @@
     "no_news": "Gerade keine Nachrichten",
     "tap_for_sound": "Berühren Sie den Bildschirm einmal, damit Beranda sprechen darf.",
     "wake_stopped": "Das Weckwort hat aufgehört: etwas anderes hat das Mikrofon genommen. Der Knopf geht noch.",
-    "mic_none": "Kein Mikrofon auf diesem Gerät gefunden.",
+    "mic_none": "Der Browser kann das Mikrofon nicht benutzen – siehe Einstellungen.",
     "mic_blocked": "Das Mikrofon ist für diese Seite gesperrt.",
     "mic_offline": "Der Sprachdienst des Browsers ist nicht erreichbar."
   }

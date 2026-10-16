@@ -484,5 +484,6 @@
   "tv_order_title": "Ordre à l'écran",
   "order_hint": "Les flèches montent ou descendent une ligne : la première est affichée en premier.",
   "move_up": "Monter",
-  "move_down": "Descendre"
+  "move_down": "Descendre",
+  "voice_err_mic_unusable": "Cet appareil a bien un micro, mais le navigateur n’arrive pas à s’en servir. Trois causes habituelles. (1) Un casque ou un haut-parleur Bluetooth : Windows ne prête son micro qu’en mode « mains libres » — ouvrez Paramètres → Système → Son → Entrée et choisissez l’entrée « Hands-Free » de cet appareil, ou branchez-le en câble ou avec sa clé USB, ce qui marche toujours. (2) Windows → Confidentialité et sécurité → Microphone : « Autoriser les applications de bureau à accéder à votre micro » doit être activé. (3) Un autre programme garde le micro : fermez-le."
 }

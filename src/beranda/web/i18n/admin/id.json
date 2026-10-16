@@ -484,5 +484,6 @@
   "tv_order_title": "Urutan di layar",
   "order_hint": "Panah memindahkan satu baris ke atas atau ke bawah: yang pertama ditampilkan lebih dulu.",
   "move_up": "Naik",
-  "move_down": "Turun"
+  "move_down": "Turun",
+  "voice_err_mic_unusable": "Perangkat ini punya mikrofon, tetapi browser tidak bisa memakainya. Tiga sebab yang biasa. (1) Headset atau speakerphone Bluetooth: Windows hanya meminjamkan mikrofonnya dalam mode “hands-free” — buka Pengaturan → Sistem → Suara → Input lalu pilih entri “Hands-Free” perangkat itu, atau sambungkan lewat kabel atau dongle USB-nya, yang selalu berhasil. (2) Windows → Privasi & keamanan → Mikrofon: “Izinkan aplikasi desktop mengakses mikrofon” harus aktif. (3) Program lain sedang memakai mikrofon: tutup program itu."
 }

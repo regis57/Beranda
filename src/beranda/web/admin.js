@@ -1165,6 +1165,10 @@ async function testMicrophone() {
     const code = String(e.message || e);
     msg.textContent = MIC_ERRORS[code] ? t(`admin.voice_err_${MIC_ERRORS[code]}`) : t('admin.voice_err_other', { code });
     if (code === 'network' && /\bEdg\//.test(navigator.userAgent)) msg.textContent = t('admin.voice_edge');
+    // "No microphone" is the wrong thing to say when the computer clearly has one: then the
+    // browser is being kept away from it (a Bluetooth one not in hands-free mode, Windows
+    // refusing microphones to desktop programs, another program holding it).
+    if (code === 'audio-capture' && await voiceApi.microphoneExists()) msg.textContent = t('admin.voice_err_mic_unusable');
     noteProblem(`microphone test: ${code}`);
   }
 }

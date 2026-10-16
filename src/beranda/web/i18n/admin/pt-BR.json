@@ -148,5 +148,6 @@
   "tv_order_title": "Ordem na tela",
   "order_hint": "As setas sobem ou descem uma linha: a primeira é mostrada primeiro.",
   "move_up": "Subir",
-  "move_down": "Descer"
+  "move_down": "Descer",
+  "voice_err_mic_unusable": "Este aparelho tem microfone, mas o navegador não consegue usá-lo. Três causas comuns. (1) Fone ou caixa Bluetooth: o Windows só empresta o microfone no modo «mãos-livres» — abra Configurações → Sistema → Som → Entrada e escolha a entrada «Hands-Free» desse aparelho, ou ligue-o por cabo ou com o dongle USB, o que sempre funciona. (2) Windows → Privacidade e segurança → Microfone: «Permitir que aplicativos da área de trabalho acessem o microfone» precisa estar ligado. (3) Outro programa está com o microfone: feche-o."
 }
