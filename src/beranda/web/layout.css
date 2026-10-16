@@ -403,3 +403,26 @@ body[data-sleep="true"] .board, body[data-sleep="true"] .setup { opacity: 0; }
 
 /* Keyboard users must always see where they are: one clear ring, the same everywhere. */
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---- Accessibility switches (settings page, box 17). Classes on <body>, on top of any theme. ---- */
+/* Large text: everything about 1.4 times bigger. The grid is in rem, so it follows. */
+html[data-a11y-large] { font-size: clamp(17px, (0.8vw + 0.7vh) * 1.4, 36px); }
+@media (min-aspect-ratio: 17/10) {
+  html[data-a11y-large] { font-size: clamp(17px, (0.45vw + 1.05vh) * 1.4, 36px); }
+}
+/* High contrast: the theme's colours are replaced by black on white (white on black at night),
+   with no faint greys and no decorative picture behind the text. */
+body.a11y-contrast {
+  --bg: #ffffff; --ink: #000000; --ink-2: #000000; --ink-3: #1a1a1a; --line: #000000;
+  --accent: #000000; --rain: #0033cc; --card: #ffffff;
+  background-image: none;
+}
+html[data-mode="night"] body.a11y-contrast {
+  --bg: #000000; --ink: #ffffff; --ink-2: #ffffff; --ink-3: #e6e6e6; --line: #ffffff;
+  --accent: #ffffff; --rain: #80b3ff; --card: #000000;
+}
+body.a11y-contrast * { text-shadow: none !important; }
+body.a11y-contrast .round { border: 2px solid var(--ink); }
+/* With text that big there is no room left for the 24 h graph and the air row: they go, the
+   week and the agenda stay (the settings page says so next to the switch). */
+html[data-a11y-large] .feature { display: none; }

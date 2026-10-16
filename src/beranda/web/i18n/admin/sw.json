@@ -444,5 +444,13 @@
   "wifi_err_stuck": "Huduma saidizi ya Pi imekwama. Kwenye Pi, andika: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Kidokezo: Beranda hufanya kazi vizuri zaidi kwenye Google Chrome. Microsoft Edge imeleta matatizo (udhibiti wa sauti, kurasa zilizobaki za toleo la zamani).",
   "w_nameday": "Siku ya jina kwa herufi kubwa, juu kulia",
-  "w_nameday_hint": "Katika nchi zinazosherehekea siku za majina (Ufaransa, Ujerumani, Polandi, Uswidi, Hungaria…), kwa majina ya nchi yako. Kwa herufi kubwa juu kulia na mandhari ya Ufaransa; kwa mandhari mengine hubaki kwenye mstari wa efemeridi."
+  "w_nameday_hint": "Katika nchi zinazosherehekea siku za majina (Ufaransa, Ujerumani, Polandi, Uswidi, Hungaria…), kwa majina ya nchi yako. Kwa herufi kubwa juu kulia na mandhari ya Ufaransa; kwa mandhari mengine hubaki kwenye mstari wa efemeridi.",
+  "a11y": "Ufikivu",
+  "a11y_hint": "Kwa watu wasioona vizuri, au wasioweza kusoma skrini. Zote tatu hufanya kazi na mtindo wowote.",
+  "a11y_large": "Maandishi makubwa",
+  "a11y_large_hint": "Kila kitu ni kikubwa mara 1.4 hivi. Visanduku vingine huonyesha kidogo zaidi.",
+  "a11y_contrast": "Utofauti mkubwa",
+  "a11y_contrast_hint": "Nyeusi juu ya nyeupe mchana, nyeupe juu ya nyeusi usiku, bila kijivu hafifu wala mapambo.",
+  "a11y_read": "Soma siku kwa sauti",
+  "a11y_read_hint": "Kitufe cha spika kwenye skrini husoma saa, hali ya hewa, matukio ya siku na tahadhari. Pia kwa sauti: \"nisomee siku\"."
 }

@@ -444,5 +444,13 @@
   "wifi_err_stuck": "The Pi's helper service is stuck. On the Pi, type: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Tip: Beranda works best in Google Chrome. Microsoft Edge has caused trouble (voice control, pages kept from an older version).",
   "w_nameday": "Name day in big, at the top right",
-  "w_nameday_hint": "In the countries that celebrate name days (France, Germany, Poland, Sweden, Hungary…), with the names of your country. In big at the top right with the France theme; with the other themes it stays in the ephemeris line."
+  "w_nameday_hint": "In the countries that celebrate name days (France, Germany, Poland, Sweden, Hungary…), with the names of your country. In big at the top right with the France theme; with the other themes it stays in the ephemeris line.",
+  "a11y": "Accessibility",
+  "a11y_hint": "For people who see badly, or cannot read the screen. All three work together with any style.",
+  "a11y_large": "Large text",
+  "a11y_large_hint": "Everything about 1.4 times bigger. Some boxes show a little less.",
+  "a11y_contrast": "High contrast",
+  "a11y_contrast_hint": "Black on white by day, white on black at night, no faint greys, no decoration.",
+  "a11y_read": "Read the day out loud",
+  "a11y_read_hint": "A speaker button on the screen reads the time, the weather, the day's events and the warnings. Also by voice: \"read me the day\"."
 }

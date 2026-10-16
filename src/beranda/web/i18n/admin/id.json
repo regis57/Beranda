@@ -444,5 +444,13 @@
   "wifi_err_stuck": "Layanan bantu Pi macet. Di Pi, ketik: sudo systemctl reset-failed beranda-actions.service beranda-actions.path && sudo systemctl restart beranda-actions.path",
   "edge_hint": "Tip: Beranda paling baik di Google Chrome. Microsoft Edge pernah bermasalah (kendali suara, halaman tersimpan dari versi lama).",
   "w_nameday": "Hari nama besar-besar, di kanan atas",
-  "w_nameday_hint": "Di negara yang merayakan hari nama (Prancis, Jerman, Polandia, Swedia, Hungaria…), dengan nama-nama negara Anda. Besar di kanan atas dengan tema Prancis; dengan tema lain tetap di baris efemeris."
+  "w_nameday_hint": "Di negara yang merayakan hari nama (Prancis, Jerman, Polandia, Swedia, Hungaria…), dengan nama-nama negara Anda. Besar di kanan atas dengan tema Prancis; dengan tema lain tetap di baris efemeris.",
+  "a11y": "Aksesibilitas",
+  "a11y_hint": "Untuk orang yang penglihatannya kurang, atau tidak bisa membaca layar. Ketiganya cocok dengan gaya apa pun.",
+  "a11y_large": "Teks besar",
+  "a11y_large_hint": "Semuanya sekitar 1,4 kali lebih besar. Beberapa kotak menampilkan sedikit lebih sedikit.",
+  "a11y_contrast": "Kontras tinggi",
+  "a11y_contrast_hint": "Hitam di atas putih pada siang hari, putih di atas hitam pada malam hari, tanpa abu-abu pucat atau hiasan.",
+  "a11y_read": "Bacakan hari ini dengan suara",
+  "a11y_read_hint": "Tombol pengeras suara di layar membacakan jam, cuaca, acara hari ini, dan peringatan. Juga dengan suara: \"bacakan hari ini\"."
 }

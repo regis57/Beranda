@@ -341,6 +341,9 @@ async def build_state(
             "chart": cfg.widget_chart, "second_clock": cfg.second_clock,
             "ephemeris": cfg.widget_ephemeris, "nameday_top": cfg.widget_nameday_top,
         },
+        "accessibility": {
+            "large_text": cfg.a11y_large_text, "high_contrast": cfg.a11y_high_contrast, "read_aloud": cfg.a11y_read_aloud,
+        },
         # Radio plays in the page itself (the tablet's speakers), so the page needs the list.
         "radio": {
             "stations": [{"uuid": st.uuid, "name": st.name, "url": st.url} for st in cfg.radio_stations],
