@@ -16,6 +16,7 @@ pytest                    # about 540 tests
 ruff check src tests scripts   # includes the security rules (S, B, BLE, ASYNC, DTZ)
 node --check src/beranda/web/*.js
 npm i --no-save axe-core && python scripts/check_a11y.py   # accessibility rules + the Tab key (needs playwright)
+python scripts/check_voice.py                              # one listening at a time, and the wait grows when it fails
 ```
 
 Screenshots: `python scripts/screenshot.py` and `python scripts/screenshot_admin.py` (Playwright).

@@ -173,6 +173,7 @@
     "mute": "Ljud av",
     "news": "Nyheter",
     "read_day": "Läs upp dagen",
-    "no_news": "Inga nyheter just nu"
+    "no_news": "Inga nyheter just nu",
+    "tap_for_sound": "Rör skärmen en gång så att Beranda får tala."
   }
 }

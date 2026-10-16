@@ -19,7 +19,19 @@ screen on the tablet once. From then on the tablet listens all the time (with it
 through the browser's speech service): say the word, then your sentence, in one breath
 ("Beranda, what's the weather") or in two (say "Beranda", wait for *Listening…*, then speak).
 A word of two syllables or more works best; a very short one wakes it up by mistake. Leave the
-box empty to keep the microphone button only.
+box empty to keep the microphone button only. While it is on, the microphone button on the screen
+wears a ring, so an always-listening microphone is never invisible.
+
+**Know what it costs, before you switch it on.** The tablet holds its microphone open all the
+time, and Chrome sends **everything it hears** to Google to turn it into text, not only your
+commands. Chrome shows "microphone in use" for as long as it lasts, the battery drains faster,
+and a television nearby can wake it up. Beranda itself keeps nothing, and the Raspberry Pi hears
+nothing. If any of that bothers you, empty the box: the microphone button alone only listens
+while you hold it.
+
+**It is the browser's own listening**, and it is not reliable: Chrome stops a long listen by
+itself and Beranda starts it again; when its service keeps failing, Beranda waits longer and
+longer and finally gives up with a message rather than asking every second.
 
 ## What you can say
 

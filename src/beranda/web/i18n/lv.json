@@ -173,6 +173,7 @@
     "mute": "Izslēgt skaņu",
     "news": "Ziņas",
     "read_day": "Nolasīt dienu skaļi",
-    "no_news": "Pašlaik ziņu nav"
+    "no_news": "Pašlaik ziņu nav",
+    "tap_for_sound": "Pieskarieties ekrānam vienreiz, lai Beranda varētu runāt."
   }
 }

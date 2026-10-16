@@ -173,6 +173,7 @@
     "mute": "Isključi zvuk",
     "news": "Vijesti",
     "read_day": "Pročitaj dan naglas",
-    "no_news": "Trenutno nema vijesti"
+    "no_news": "Trenutno nema vijesti",
+    "tap_for_sound": "Dodirnite zaslon jednom kako bi Beranda mogla govoriti."
   }
 }

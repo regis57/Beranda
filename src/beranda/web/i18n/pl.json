@@ -173,6 +173,7 @@
     "mute": "Wycisz",
     "news": "Wiadomości",
     "read_day": "Przeczytaj dzień na głos",
-    "no_news": "Brak wiadomości na razie"
+    "no_news": "Brak wiadomości na razie",
+    "tap_for_sound": "Dotknij ekranu raz, aby Beranda mogła mówić."
   }
 }

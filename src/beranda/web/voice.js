@@ -11,6 +11,17 @@
 // settings page says how to allow it.
 
 const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const MAX_FAILS = 6;  // failures in a row before the wake word gives up and says so
+
+// Lower case, no accents, no punctuation: a speech service writes "Béranda," or "tais-toi"
+// as it pleases, and all of those must match the same word.
+const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^\p{L}\p{N}\s']/gu, ' ').replace(/\s+/g, ' ').trim();
+
+// A browser allows ONE listening at a time. The wake word listens all the time, so the
+// microphone button has to borrow the microphone from it and give it back afterwards;
+// otherwise both fail silently and nothing works any more.
+let running = null;
 
 export function availability() {
   if (!Recognition) return 'unsupported';
@@ -22,15 +33,20 @@ export function availability() {
 // error name ('not-allowed' when the microphone is blocked, ...).
 export function listenOnce(lang) {
   return new Promise((resolve, reject) => {
+    running?.pause();  // the wake word steps aside: one listening at a time
+    let over = false;
+    const give_back = () => { if (over) return; over = true; running?.resume(); };
+    const done = (text) => { give_back(); resolve(text); };
+    const failed = (err) => { give_back(); reject(err); };
     const rec = new Recognition();
     rec.lang = lang;
     rec.interimResults = false;
     rec.maxAlternatives = 1;
     let heard = '';
     rec.onresult = (event) => { heard = event.results[0]?.[0]?.transcript || ''; };
-    rec.onerror = (event) => { if (event.error !== 'no-speech' && event.error !== 'aborted') reject(new Error(event.error)); };
-    rec.onend = () => resolve(heard);
-    try { rec.start(); } catch (err) { reject(err); }
+    rec.onerror = (event) => { if (event.error !== 'no-speech' && event.error !== 'aborted') failed(new Error(event.error)); };
+    rec.onend = () => done(heard);
+    try { rec.start(); } catch (err) { failed(err); }
   });
 }
 
@@ -38,22 +54,29 @@ export function listenOnce(lang) {
 // is the command. If only the word was said, the next sentence is the command. The browser
 // stops a long listen now and then (silence, a hiccup): `onend` simply starts it again.
 // Nothing is sent anywhere by Beranda; the browser's own speech service does the listening.
-export function wakeListener({ lang, word, onWake, onCommand, onError }) {
-  if (!Recognition) return { stop() {} };
-  const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}\s']/gu, ' ').replace(/\s+/g, ' ').trim();
+export function wakeListener({ lang, word, onWake, onCommand, onError, onState }) {
+  if (!Recognition) return { stop() {}, pause() {}, resume() {} };
   const wake = normalise(word);
   let rec = null;
   let stopped = false;
-  let awake = false;  // the word was heard, the next sentence is the command
-  let restartAt = 0;
-  const start = () => {
-    if (stopped) return;
+  let paused = false;
+  let awake = false;  // the word was heard on its own: the next sentence is the command
+  let fails = 0;      // failures in a row; the wait doubles, so a service that is down is left alone
+  let timer = 0;
+
+  const later = (ms) => { clearTimeout(timer); timer = setTimeout(start, ms); };
+  const give_up = (why) => { stopped = true; clearTimeout(timer); onState?.('stopped'); onError(why); };
+
+  function start() {
+    if (stopped || paused) return;
     rec = new Recognition();
     rec.lang = lang;
     rec.continuous = true;
     rec.interimResults = false;
     rec.maxAlternatives = 1;
+    rec.onstart = () => { onState?.('listening'); };
     rec.onresult = (event) => {
+      fails = 0;  // it answered: start counting again from zero
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
         const said = normalise(event.results[i][0]?.transcript || '');
         if (!said) continue;
@@ -66,20 +89,47 @@ export function wakeListener({ lang, word, onWake, onCommand, onError }) {
       }
     };
     rec.onerror = (event) => {
-      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') { stopped = true; onError(event.error); }
-      else if (event.error !== 'no-speech' && event.error !== 'aborted') restartAt = Date.now() + 5000;  // network...: not at once
+      const why = event.error;
+      if (why === 'not-allowed' || why === 'service-not-allowed' || why === 'audio-capture') return give_up(why);
+      if (why === 'no-speech' || why === 'aborted') return;  // normal: nobody spoke, or we stopped it
+      fails += 1;
+      onState?.(`error ${why} (${fails})`);
+      if (fails >= MAX_FAILS) give_up(`${why} x${fails}`);
     };
-    rec.onend = () => { if (!stopped) setTimeout(start, Math.max(300, restartAt - Date.now())); };
-    try { rec.start(); } catch (err) { onError(err.message || String(err)); }
+    // The browser ends a long listen by itself (silence, a hiccup, its service): start again,
+    // at once when all is well, waiting longer and longer when it keeps failing.
+    rec.onend = () => { if (!stopped && !paused) later(fails ? Math.min(1000 * 2 ** fails, 60_000) : 400); };
+    try { rec.start(); } catch (err) { fails += 1; if (fails >= MAX_FAILS) give_up(err.message || String(err)); else later(2000); }
+  }
+
+  const self = {
+    stop() { stopped = true; clearTimeout(timer); try { rec?.stop(); } catch { /* already stopped */ } },
+    // The browser allows one listening at a time: the microphone button borrows it, then gives it back.
+    pause() { if (paused) return; paused = true; clearTimeout(timer); onState?.('paused'); try { rec?.stop(); } catch { /* already */ } },
+    resume() { if (!paused || stopped) return; paused = false; later(600); },
   };
+  running = self;
   start();
-  return { stop() { stopped = true; try { rec?.stop(); } catch { /* already */ } } };
+  return self;
 }
 
-export function speak(text, lang) {
+// Browsers refuse to make a sound on a page nobody has touched yet (the same rule that stops
+// a video playing by itself). A wall display is never touched, so the first answer can be
+// silent: `onSilent` is called then, and the page says "touch the screen once".
+export function speak(text, lang, onSilent) {
   if (!('speechSynthesis' in window) || !text) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
+  let started = false;
+  utterance.onstart = () => { started = true; };
   window.speechSynthesis.speak(utterance);
+  if (onSilent) setTimeout(() => { if (!started) onSilent(); }, 1200);
+}
+
+// A touch, a click or a key is enough to let sound out afterwards: say nothing out loud,
+// which is enough for the browser to count it as "the person asked for sound".
+export function allowSound() {
+  if (!('speechSynthesis' in window)) return;
+  try { window.speechSynthesis.speak(new SpeechSynthesisUtterance('')); } catch { /* nothing to do */ }
 }

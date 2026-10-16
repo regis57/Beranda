@@ -40,6 +40,8 @@ jobs:
       - run: pip install -e ".[dev]" playwright && python -m playwright install --with-deps chromium
       - run: npm i --no-save axe-core@4.10.2
       - run: python scripts/check_a11y.py
+      # One listening at a time: the wake word must give the microphone back to the button.
+      - run: python scripts/check_voice.py
 
   # The installer, for real, on a fresh Ubuntu machine with systemd (all but the screen part).
   installer:

@@ -173,6 +173,7 @@
     "mute": "Mykistä",
     "news": "Uutiset",
     "read_day": "Lue päivä ääneen",
-    "no_news": "Ei uutisia juuri nyt"
+    "no_news": "Ei uutisia juuri nyt",
+    "tap_for_sound": "Kosketa näyttöä kerran, jotta Beranda voi puhua."
   }
 }

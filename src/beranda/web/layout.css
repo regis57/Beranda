@@ -426,3 +426,7 @@ body.a11y-contrast .round { border: 2px solid var(--ink); }
 /* With text that big there is no room left for the 24 h graph and the air row: they go, the
    week and the agenda stay (the settings page says so next to the switch). */
 html[data-a11y-large] .feature { display: none; }
+
+/* The wake word is on: the microphone button wears a ring, because a microphone that listens
+   all the time must be visible on the screen, not only in the settings. */
+.mic.armed { box-shadow: 0 0 0 0.18rem var(--bg), 0 0 0 0.3rem var(--accent); }
