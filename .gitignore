@@ -10,3 +10,4 @@ dist/
 .coverage
 beranda.toml
 .DS_Store
+node_modules/

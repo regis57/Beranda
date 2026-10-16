@@ -163,5 +163,14 @@
     "nameday": "Névnap",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Időjárás",
+    "week": "Következő 7 nap",
+    "radio": "Rádió",
+    "microphone": "Mikrofon",
+    "volume": "Hangerő",
+    "mute": "Némítás",
+    "news": "Hírek"
   }
 }

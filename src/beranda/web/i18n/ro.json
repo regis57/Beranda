@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Vreme",
+    "week": "Următoarele 7 zile",
+    "radio": "Radio",
+    "microphone": "Microfon",
+    "volume": "Volum",
+    "mute": "Fără sunet",
+    "news": "Știri"
   }
 }

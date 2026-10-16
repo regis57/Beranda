@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Tan",
+    "week": "7 jou k ap vini",
+    "radio": "Radyo",
+    "microphone": "Mikwo",
+    "volume": "Volim",
+    "mute": "Koupe son",
+    "news": "Nouvèl"
   }
 }

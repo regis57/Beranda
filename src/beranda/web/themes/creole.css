@@ -10,12 +10,12 @@
   --glyph-writing: horizontal-tb;
 }
 :root, :root[data-mode="light"] {
-  --bg: #fdf6e6; --ink: #2a1a12; --ink-2: rgba(42, 26, 18, 0.72); --ink-3: rgba(42, 26, 18, 0.48);
+  --bg: #fdf6e6; --ink: #2a1a12; --ink-2: rgba(42, 26, 18, 0.72); --ink-3: rgba(42, 26, 18, 0.62);
   --line: rgba(42, 26, 18, 0.16); --accent: #d8431b; --gold: #f2b705; --green: #2f8f46; --rain: #1d6fb8;
   --warm: #e2701d; --cool: #4b8fd0; --moon-lit: #2a1a12; --moon-dark: rgba(42, 26, 18, 0.08);
 }
 :root[data-mode="night"] {
-  --bg: #120d08; --ink: rgba(250, 236, 214, 0.86); --ink-2: rgba(250, 236, 214, 0.6); --ink-3: rgba(250, 236, 214, 0.38);
+  --bg: #120d08; --ink: rgba(250, 236, 214, 0.86); --ink-2: rgba(250, 236, 214, 0.6); --ink-3: rgba(250, 236, 214, 0.49);
   --line: rgba(250, 236, 214, 0.13); --accent: #d9764f; --gold: #c9a23a; --green: #4f9a63; --rain: #6aa0d4;
   --warm: #c3743e; --cool: #4f7fae; --moon-lit: #faecd6; --moon-dark: rgba(250, 236, 214, 0.08);
 }

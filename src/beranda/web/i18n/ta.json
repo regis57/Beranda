@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "வானிலை",
+    "week": "அடுத்த 7 நாட்கள்",
+    "radio": "வானொலி",
+    "microphone": "ஒலிவாங்கி",
+    "volume": "ஒலியளவு",
+    "mute": "ஒலி நிறுத்து",
+    "news": "செய்திகள்"
   }
 }

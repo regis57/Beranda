@@ -163,5 +163,14 @@
     "nameday": "Vārda diena",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Laikapstākļi",
+    "week": "Nākamās 7 dienas",
+    "radio": "Radio",
+    "microphone": "Mikrofons",
+    "volume": "Skaļums",
+    "mute": "Izslēgt skaņu",
+    "news": "Ziņas"
   }
 }

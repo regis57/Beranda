@@ -163,5 +163,14 @@
     "nameday": "Fête",
     "daylight": "Jour",
     "calendar": "Calendrier"
+  },
+  "a11y": {
+    "weather": "Météo",
+    "week": "7 prochains jours",
+    "radio": "Radio",
+    "microphone": "Microphone",
+    "volume": "Volume",
+    "mute": "Couper le son",
+    "news": "Actualités"
   }
 }

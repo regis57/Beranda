@@ -17,7 +17,7 @@
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <span id="menu-label"></span>
       </button>
-      <div class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></div>
+      <h1 class="brand"><img src="/static/favicon.svg" alt="" width="28" height="28"><b>Beranda</b></h1>
     </div>
     <div class="top-right">
       <a class="link" id="open-display" href="/" target="_blank" rel="noopener"></a>
@@ -59,7 +59,7 @@
         <h2><span class="num">1</span><span data-i18n="admin.place"></span></h2>
         <p class="hint" data-i18n="admin.place_hint"></p>
         <div class="row">
-          <input id="q" type="search" data-ph="admin.search_placeholder" aria-label="search">
+          <input id="q" type="search" data-ph="admin.search_placeholder" data-label="admin.search_placeholder">
           <button type="button" id="q-go" data-i18n="admin.search"></button>
         </div>
         <ul id="q-results" class="results" hidden></ul>
@@ -110,7 +110,7 @@
         <div id="w-alerts-body" hidden>
           <p class="hint" data-i18n="admin.w_alerts_hint"></p>
           <div class="row wrap">
-            <input id="w-area" type="text" spellcheck="false" maxlength="80" data-ph="admin.w_area_ph" aria-label="area">
+            <input id="w-area" type="text" spellcheck="false" maxlength="80" data-ph="admin.w_area_ph" data-label="admin.w_area_ph">
             <button type="button" id="w-area-test" data-i18n="admin.w_area_test"></button>
           </div>
           <p class="hint" id="w-area-msg" role="status"></p>
@@ -118,7 +118,7 @@
         <label class="check"><input type="checkbox" id="w-clock2"><span data-i18n="admin.w_clock2"></span></label>
         <div id="w-clock2-body" hidden>
           <p class="hint" data-i18n="admin.w_clock2_hint"></p>
-          <input id="w-clock2-tz" type="text" list="tz-list" spellcheck="false" autocomplete="off" data-ph="admin.w_clock2_ph" aria-label="time zone">
+          <input id="w-clock2-tz" type="text" list="tz-list" spellcheck="false" autocomplete="off" data-ph="admin.w_clock2_ph" data-label="admin.w_clock2_ph">
           <datalist id="tz-list"></datalist>
           <p class="error" id="w-clock2-err" hidden></p>
         </div>
@@ -160,7 +160,7 @@
             <h3 data-i18n="admin.news_world"></h3>
             <div id="news-world"></div>
             <h3 data-i18n="admin.news_other"></h3>
-            <select id="news-other-country"></select>
+            <select id="news-other-country" data-label="admin.news_other"></select>
             <div id="news-other"></div>
           </div>
           <h3 data-i18n="admin.news_custom"></h3>
@@ -217,9 +217,9 @@
         <audio id="admin-audio" preload="none"></audio>
         <h3 data-i18n="admin.radio_search"></h3>
         <div class="row wrap">
-          <input id="radio-q" type="text" data-ph="admin.radio_search_ph">
-          <select id="radio-country"></select>
-          <select id="radio-language"></select>
+          <input id="radio-q" type="text" data-ph="admin.radio_search_ph" data-label="admin.radio_search_ph">
+          <select id="radio-country" data-label="admin.country"></select>
+          <select id="radio-language" data-label="admin.language"></select>
           <button type="button" id="radio-go" data-i18n="admin.search"></button>
         </div>
         <!-- A long list can be folded away with one button, so the page stays short. -->

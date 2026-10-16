@@ -163,5 +163,14 @@
     "nameday": "名の日",
     "daylight": "日照時間",
     "calendar": "暦"
+  },
+  "a11y": {
+    "weather": "天気",
+    "week": "今後7日間",
+    "radio": "ラジオ",
+    "microphone": "マイク",
+    "volume": "音量",
+    "mute": "消音",
+    "news": "ニュース"
   }
 }

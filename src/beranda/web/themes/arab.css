@@ -9,13 +9,13 @@
   --glyph-writing: horizontal-tb;
 }
 :root, :root[data-mode="light"] {
-  --bg: #f5f0e6; --ink: #13292a; --ink-2: rgba(19, 41, 42, 0.72); --ink-3: rgba(19, 41, 42, 0.48);
+  --bg: #f5f0e6; --ink: #13292a; --ink-2: rgba(19, 41, 42, 0.72); --ink-3: rgba(19, 41, 42, 0.65);
   --line: rgba(19, 41, 42, 0.16); --accent: #0f6e62; --gold: #b8862b; --rain: #1f4f86;
   --warm: #c07a35; --cool: #4f7fb0; --moon-lit: #13292a; --moon-dark: rgba(19, 41, 42, 0.08);
   --ornament: url("/static/themes/zellige.svg");
 }
 :root[data-mode="night"] {
-  --bg: #08130f; --ink: rgba(236, 228, 210, 0.86); --ink-2: rgba(236, 228, 210, 0.6); --ink-3: rgba(236, 228, 210, 0.38);
+  --bg: #08130f; --ink: rgba(236, 228, 210, 0.86); --ink-2: rgba(236, 228, 210, 0.6); --ink-3: rgba(236, 228, 210, 0.51);
   --line: rgba(236, 228, 210, 0.13); --accent: #4fa592; --gold: #b99550; --rain: #7097cc;
   --warm: #b0804a; --cool: #4d7099; --moon-lit: #ece4d2; --moon-dark: rgba(236, 228, 210, 0.08);
 }

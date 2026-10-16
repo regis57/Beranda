@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Te reva",
+    "week": "7 mahana i muri nei",
+    "radio": "Ratio",
+    "microphone": "Mikoro",
+    "volume": "Puai reo",
+    "mute": "Fa'amū",
+    "news": "Parau api"
   }
 }

@@ -163,5 +163,14 @@
     "nameday": "Nimipäivä",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Sää",
+    "week": "Seuraavat 7 päivää",
+    "radio": "Radio",
+    "microphone": "Mikrofoni",
+    "volume": "Äänenvoimakkuus",
+    "mute": "Mykistä",
+    "news": "Uutiset"
   }
 }

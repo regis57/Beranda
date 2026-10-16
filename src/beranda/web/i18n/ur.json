@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "موسم",
+    "week": "اگلے 7 دن",
+    "radio": "ریڈیو",
+    "microphone": "مائیکروفون",
+    "volume": "آواز",
+    "mute": "خاموش",
+    "news": "خبریں"
   }
 }

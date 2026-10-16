@@ -163,5 +163,14 @@
     "nameday": "Namenstag",
     "daylight": "Tageslicht",
     "calendar": "Kalender"
+  },
+  "a11y": {
+    "weather": "Wetter",
+    "week": "Nächste 7 Tage",
+    "radio": "Radio",
+    "microphone": "Mikrofon",
+    "volume": "Lautstärke",
+    "mute": "Stumm",
+    "news": "Nachrichten"
   }
 }

@@ -54,5 +54,14 @@
   "tv_empty": "节目表中没有今晚的节目",
   "tv_error": "无法连接节目表",
   "radio_prev": "上一个电台",
-  "radio_next": "下一个电台"
+  "radio_next": "下一个电台",
+  "a11y": {
+    "weather": "天氣",
+    "week": "未來7天",
+    "radio": "收音機",
+    "microphone": "麥克風",
+    "volume": "音量",
+    "mute": "靜音",
+    "news": "新聞"
+  }
 }

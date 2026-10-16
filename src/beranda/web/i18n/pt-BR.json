@@ -39,5 +39,14 @@
   "tv_empty": "Nada no guia para esta noite",
   "tv_error": "Guia de TV inacessível",
   "radio_prev": "Estação anterior",
-  "radio_next": "Estação seguinte"
+  "radio_next": "Estação seguinte",
+  "a11y": {
+    "weather": "Tempo",
+    "week": "Próximos 7 dias",
+    "radio": "Rádio",
+    "microphone": "Microfone",
+    "volume": "Volume",
+    "mute": "Silenciar",
+    "news": "Notícias"
+  }
 }

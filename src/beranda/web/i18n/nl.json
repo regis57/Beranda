@@ -163,5 +163,14 @@
     "nameday": "Naamdag",
     "daylight": "Daglicht",
     "calendar": "Kalender"
+  },
+  "a11y": {
+    "weather": "Weer",
+    "week": "Komende 7 dagen",
+    "radio": "Radio",
+    "microphone": "Microfoon",
+    "volume": "Volume",
+    "mute": "Dempen",
+    "news": "Nieuws"
   }
 }

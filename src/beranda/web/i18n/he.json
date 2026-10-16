@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "מזג אוויר",
+    "week": "7 הימים הבאים",
+    "radio": "רדיו",
+    "microphone": "מיקרופון",
+    "volume": "עוצמת קול",
+    "mute": "השתק",
+    "news": "חדשות"
   }
 }

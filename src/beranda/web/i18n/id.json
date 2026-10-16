@@ -163,5 +163,14 @@
     "nameday": "Hari nama",
     "daylight": "Siang hari",
     "calendar": "Kalender"
+  },
+  "a11y": {
+    "weather": "Cuaca",
+    "week": "7 hari ke depan",
+    "radio": "Radio",
+    "microphone": "Mikrofon",
+    "volume": "Volume",
+    "mute": "Bisukan",
+    "news": "Berita"
   }
 }

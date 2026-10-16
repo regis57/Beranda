@@ -146,3 +146,10 @@ One line per version, newest last. Each one was a pull request on
 - **v0.16.10**: on a Raspberry Pi with no screen plugged in (used over SSH only), the diagnostic file and
   `beranda doctor` no longer show the full-screen display service as a fault: it has nothing to do
   there. If the Pi cannot tell, or the service runs anyway, nothing changes
+- **v0.17.0**: a first pass for people who see badly or use no mouse. The faint grey texts of the
+  screen (air, moon, next events, the town...) are darker in all 15 themes, light and night, so they
+  pass the reading-contrast rule; every box and list of the settings page has a name a screen reader
+  can say, in the page's language, and so has every part of the screen (57 languages); what changes
+  on the screen (weather, agenda, warnings, news) is announced; a clear ring shows where the keyboard
+  is; the settings page stops moving for people who asked their system for less motion. Both pages
+  are now checked against the accessibility rules (WCAG 2.1 AA) on every change

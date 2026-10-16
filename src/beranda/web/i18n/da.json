@@ -163,5 +163,14 @@
     "nameday": "Navnedag",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Vejr",
+    "week": "Næste 7 dage",
+    "radio": "Radio",
+    "microphone": "Mikrofon",
+    "volume": "Lydstyrke",
+    "mute": "Slå lyd fra",
+    "news": "Nyheder"
   }
 }

@@ -62,6 +62,7 @@ body {
 /* ---- clock ------------------------------------------------------------------ */
 .clock { grid-area: clock; }
 .time {
+  margin: 0; font-weight: inherit;
   font-family: var(--f-display);
   font-size: 6rem;
   font-weight: var(--clock-weight, 100);
@@ -308,7 +309,7 @@ body[data-sleep="true"] .phototile img { opacity: 0; }
 
 .status { grid-area: 4 / 3 / 5 / 4; z-index: 1; justify-self: end; align-self: end; display: flex; gap: 0.9rem; align-items: center; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
 .badge { padding: 0.12rem 0.5rem; border: 1px solid currentColor; border-radius: 99px; }
-.place { opacity: 0.9; }
+.place { opacity: 1; }  /* no extra fading: the town name must stay readable */
 
 /* ---- portrait / small screens: one column, scrollable ---------------------------------- */
 @media (max-aspect-ratio: 1/1), (max-width: 760px) {
@@ -399,3 +400,6 @@ body[data-sleep="true"] .board, body[data-sleep="true"] .setup { opacity: 0; }
   .nameday-top { flex-basis: 100%; max-width: none; text-align: start; display: flex; align-items: baseline; gap: 0.8rem; }
   .nd-names { font-size: 1.5rem; }
 }
+
+/* Keyboard users must always see where they are: one clear ring, the same everywhere. */
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }

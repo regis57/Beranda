@@ -13,7 +13,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 "Not
 .top { position: sticky; top: 0; z-index: 20; background: var(--bg); display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .6rem clamp(1rem, 3vw, 2rem); border-bottom: 1px solid var(--line); }
 .top-left { display: flex; align-items: center; gap: .9rem; min-width: 0; }
 .card, .welcome { scroll-margin-top: 4.5rem; }
-.brand { display: flex; align-items: center; gap: .6rem; font-size: 1.1rem; }
+.brand { display: flex; align-items: center; gap: .6rem; font-size: 1.1rem; margin: 0; font-weight: 400; }
 .brand span { color: var(--ink-2); font-size: .8rem; }
 .link { color: var(--accent); text-decoration: none; font-size: .95rem; }
 .link:hover { text-decoration: underline; }
@@ -180,3 +180,10 @@ button.danger:disabled { background: transparent; color: var(--ink-2); border-co
 .wifi-list button.pick { text-align: start; width: 100%; display: flex; gap: .6rem; align-items: center; }
 .bars { font-family: monospace; letter-spacing: -.1em; color: var(--ok); }
 .edge-hint { border: 1px solid var(--line); border-inline-start: 4px solid #ffb300; border-radius: .5rem; padding: .55rem .8rem; margin: 0; }
+
+/* Keyboard users must always see where they are: one clear ring, the same everywhere. */
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* People who asked their system for less motion get none here either. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

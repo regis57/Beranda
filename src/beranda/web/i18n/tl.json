@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Panahon",
+    "week": "Susunod na 7 araw",
+    "radio": "Radyo",
+    "microphone": "Mikropono",
+    "volume": "Lakas ng tunog",
+    "mute": "I-mute",
+    "news": "Balita"
   }
 }

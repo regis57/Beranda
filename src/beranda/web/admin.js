@@ -87,6 +87,8 @@ function edgeHint() {
 function translateStatic() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   for (const el of document.querySelectorAll('[data-ph]')) el.placeholder = t(el.dataset.ph);
+  // The name a screen reader says for a box that has no label next to it, in the page's language.
+  for (const el of document.querySelectorAll('[data-label]')) el.setAttribute('aria-label', t(el.dataset.label));
   $('open-display').textContent = t('admin.open_display');
   $('menu-label').textContent = t('admin.menu');
   edgeHint();

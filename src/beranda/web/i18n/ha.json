@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Yanayi",
+    "week": "Kwanaki 7 masu zuwa",
+    "radio": "Rediyo",
+    "microphone": "Makirufo",
+    "volume": "Ƙarar sauti",
+    "mute": "Kashe sauti",
+    "news": "Labarai"
   }
 }

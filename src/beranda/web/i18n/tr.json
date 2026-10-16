@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Hava durumu",
+    "week": "Önümüzdeki 7 gün",
+    "radio": "Radyo",
+    "microphone": "Mikrofon",
+    "volume": "Ses",
+    "mute": "Sessiz",
+    "news": "Haberler"
   }
 }

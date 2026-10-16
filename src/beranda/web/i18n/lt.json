@@ -163,5 +163,14 @@
     "nameday": "Vardadienis",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Orai",
+    "week": "Kitos 7 dienos",
+    "radio": "Radijas",
+    "microphone": "Mikrofonas",
+    "volume": "Garsumas",
+    "mute": "Nutildyti",
+    "news": "Naujienos"
   }
 }
