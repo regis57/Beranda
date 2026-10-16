@@ -175,6 +175,9 @@
     "read_day": "Přečíst den nahlas",
     "no_news": "Momentálně žádné zprávy",
     "tap_for_sound": "Dotkněte se obrazovky jednou, aby mohla Beranda mluvit.",
-    "wake_stopped": "Budicí slovo se zastavilo: mikrofon si vzalo něco jiného. Tlačítko stále funguje."
+    "wake_stopped": "Budicí slovo se zastavilo: mikrofon si vzalo něco jiného. Tlačítko stále funguje.",
+    "mic_none": "Na tomto zařízení nebyl nalezen mikrofon.",
+    "mic_blocked": "Mikrofon je pro tuto stránku zablokován.",
+    "mic_offline": "Hlasovou službu prohlížeče nelze kontaktovat."
   }
 }

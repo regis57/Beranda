@@ -175,6 +175,9 @@
     "read_day": "Les opp dagen",
     "no_news": "Ingen nyheter akkurat nå",
     "tap_for_sound": "Trykk på skjermen én gang slik at Beranda kan snakke.",
-    "wake_stopped": "Vekkeordet stoppet: noe annet tok mikrofonen. Knappen virker fortsatt."
+    "wake_stopped": "Vekkeordet stoppet: noe annet tok mikrofonen. Knappen virker fortsatt.",
+    "mic_none": "Fant ingen mikrofon på denne enheten.",
+    "mic_blocked": "Mikrofonen er blokkert for denne siden.",
+    "mic_offline": "Nettleserens taletjeneste kan ikke nås."
   }
 }

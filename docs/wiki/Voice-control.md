@@ -51,7 +51,7 @@ Portuguese, Arabic, Swahili, Indonesian): the time, the date, the weather, today
 tomorrow's events, read the whole day, the headlines, tonight's TV; play / stop / next / previous
 station, louder / quieter; bigger text, normal text, high contrast, normal colours, be quiet.
 "Bigger" and "high contrast" said out loud stay on that tablet (until said back); to make them
-permanent for every screen, use box 17.
+permanent for every screen, use box 16.
 
 ## When it does not work
 

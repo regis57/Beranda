@@ -25,6 +25,16 @@ let running = null;
 const LOCK = 'beranda-wake-owner';
 const me = Math.random().toString(36).slice(2);
 
+// A device with no microphone at all answers "audio-capture" to everything, after the fact.
+// The browser lists its microphones without asking permission, so the settings page can say
+// so before anybody switches voice control on.
+export async function microphoneExists() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    return devices.some((device) => device.kind === 'audioinput');
+  } catch { return true; }  // cannot tell: better to say nothing than to say something wrong
+}
+
 export function availability() {
   if (!Recognition) return 'unsupported';
   if (!window.isSecureContext) return 'insecure';

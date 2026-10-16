@@ -175,6 +175,9 @@
     "read_day": "P'unchawta sinchita ñawinchay",
     "no_news": "Kunanqa mana willakuykuna kanchu",
     "tap_for_sound": "Beranda rimanampaq pantallata huk kutilla llamiy.",
-    "wake_stopped": "Rikch'arichiq simi sayarun: huk imapas mikrufunuta hap'irqan. Ñit'ina hinaraq llamk'an."
+    "wake_stopped": "Rikch'arichiq simi sayarun: huk imapas mikrufunuta hap'irqan. Ñit'ina hinaraq llamk'an.",
+    "mic_none": "Kay aparatupi mana mikrufunu tarikunchu.",
+    "mic_blocked": "Kay p'anqapaq mikrufunu harkasqa kashan.",
+    "mic_offline": "Mana atikunchu rimay serviciuman chayay."
   }
 }

@@ -20,8 +20,8 @@ to any box; each box has a **Need help?** link. Press **Save**: the screen follo
 | **13. Wi-Fi** | The network in use, saved networks, add / use now / forget | Adding never cuts the current one; switching goes back by itself if it fails |
 | **14. System** | Version, board, updates, restart screen, reboot | Buttons ask for a second click |
 | **15. Access** | Optional PIN | The page already opens from the home network only. After 5 wrong PINs, that phone or computer waits 1 min, then longer ([details](Security#wrong-pins-what-happens)) |
-| **16. Advanced user** | Port, secure address, diagnostic file, start over | Every consequence is spelled out before you confirm |
-| **17. Accessibility** | Large text, high contrast, read the day out loud | For people who see badly or cannot read the screen; the three work with any style. *Large text* hides the 24 h graph and the air row to make room. *Read the day* adds a speaker button on the screen (time, weather, today's events, warnings), also by voice: "read me the day" |
+| **16. Accessibility** | Large text, high contrast, read the day out loud | For people who see badly or cannot read the screen; the three work with any style. *Large text* hides the 24 h graph and the air row to make room. *Read the day* adds a speaker button on the screen (time, weather, today's events, warnings), also by voice: "read me the day" |
+| **17. Advanced user** | Port, secure address, diagnostic file, start over | Every consequence is spelled out before you confirm |
 
 ## Wi-Fi
 

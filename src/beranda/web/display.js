@@ -895,7 +895,7 @@ async function listen() {
   const mic = $('mic');
   if (mic.classList.contains('listening')) return;
   if (voice.availability() !== 'ok') {
-    toast(`${t('voice_unavailable')} (${voice.availability()})`, 9000);
+    toast(micProblem(voice.availability()), 9000);
     report(`microphone: ${voice.availability()} (secure page: ${window.isSecureContext}, ${location.protocol})`);
     return;
   }
@@ -916,7 +916,7 @@ async function listen() {
   } catch (err) {
     // microphone blocked, none plugged in, or the browser's speech service unreachable: the short code
     // tells which, and the settings page (Voice control, "Test the microphone") explains it in words
-    toast(`${t('voice_unavailable')} (${err.message || err})`, 9000);
+    toast(micProblem(err.message || err), 9000);
     report(`microphone: ${err.message || err} (secure page: ${window.isSecureContext}, ${location.protocol})`);
     console.warn('voice failed', err);
   } finally {
@@ -975,6 +975,14 @@ function setLook(change) {
 // The wake word: the tablet listens all the time for it, then takes the sentence that follows.
 let wake = null;
 let wakeWord = '';
+// The short code a browser gives back, in words. Anything else keeps the code, which the
+// settings page and the diagnostic file explain.
+function micProblem(code) {
+  const said = { 'audio-capture': 'a11y.mic_none', 'not-allowed': 'a11y.mic_blocked',
+    network: 'a11y.mic_offline', 'service-not-allowed': 'a11y.mic_offline' }[String(code)];
+  return said ? t(said) : `${t('voice_unavailable')} (${code})`;
+}
+
 function renderVoice() {
   $('mic').hidden = !state.voice;
   const word = state.voice ? (state.wake_word || '') : '';
@@ -1000,9 +1008,9 @@ function renderVoice() {
         toast(`« ${said} »\n${answer.reply}`);
         sayOutLoud(answer.reply);
         doAction(answer.action);
-      } catch (err) { toast(`${t('voice_unavailable')} (${err.message || err})`, 9000); }
+      } catch (err) { toast(micProblem(err.message || err), 9000); }
     },
-    onError: (why) => { report(`wake word: ${why}`); toast(`${t('a11y.wake_stopped')} (${why})`, 15000); $('mic').classList.remove('armed'); },
+    onError: (why) => { report(`wake word: ${why}`); toast(micProblem(why), 15000); $('mic').classList.remove('armed'); },
   });
 }
 

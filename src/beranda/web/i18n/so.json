@@ -175,6 +175,9 @@
     "read_day": "Akhri maalinta cod dheer",
     "no_news": "Hadda war ma jiro",
     "tap_for_sound": "Hal mar taabo shaashadda si Beranda u hadasho.",
-    "wake_stopped": "Erayga toosinta wuu joogsaday: wax kale ayaa qaatay makarafoonka. Badhanku weli wuu shaqeynayaa."
+    "wake_stopped": "Erayga toosinta wuu joogsaday: wax kale ayaa qaatay makarafoonka. Badhanku weli wuu shaqeynayaa.",
+    "mic_none": "Makarafoon lagama helin qalabkan.",
+    "mic_blocked": "Makarafoonka waa loo xannibay boggan.",
+    "mic_offline": "Adeegga codka ee browserka lama gaari karo."
   }
 }

@@ -175,6 +175,9 @@
     "read_day": "Ka ọjọ́ náà sókè",
     "no_news": "Kò sí ìròyìn báyìí",
     "tap_for_sound": "Fọwọ́ kan ojú-iboju lẹ́ẹ̀kan kí Beranda lè sọ̀rọ̀.",
-    "wake_stopped": "Ọ̀rọ̀ ìjí dúró: ohun mìíràn gba gbohùngbohùn. Bọ́tìnì náà ṣì ń ṣiṣẹ́."
+    "wake_stopped": "Ọ̀rọ̀ ìjí dúró: ohun mìíràn gba gbohùngbohùn. Bọ́tìnì náà ṣì ń ṣiṣẹ́.",
+    "mic_none": "Kò sí gbohùngbohùn lórí ẹ̀rọ yìí.",
+    "mic_blocked": "Wọ́n dí gbohùngbohùn fún ojú-ìwé yìí.",
+    "mic_offline": "A kò lè dé ibi iṣẹ́ ohùn aṣàwákiri."
   }
 }
