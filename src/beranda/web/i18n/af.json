@@ -174,6 +174,7 @@
     "news": "Nuus",
     "read_day": "Lees die dag hardop",
     "no_news": "Geen nuus op die oomblik nie",
-    "tap_for_sound": "Raak die skerm een keer aan sodat Beranda kan praat."
+    "tap_for_sound": "Raak die skerm een keer aan sodat Beranda kan praat.",
+    "wake_stopped": "Die wekwoord het gestop: iets anders het die mikrofoon. Die knoppie werk nog."
   }
 }

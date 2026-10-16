@@ -174,6 +174,7 @@
     "news": "Wiadomości",
     "read_day": "Przeczytaj dzień na głos",
     "no_news": "Brak wiadomości na razie",
-    "tap_for_sound": "Dotknij ekranu raz, aby Beranda mogła mówić."
+    "tap_for_sound": "Dotknij ekranu raz, aby Beranda mogła mówić.",
+    "wake_stopped": "Słowo budzące zatrzymało się: coś innego zajęło mikrofon. Przycisk nadal działa."
   }
 }

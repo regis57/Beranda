@@ -174,6 +174,7 @@
     "news": "Haberler",
     "read_day": "Günü sesli oku",
     "no_news": "Şu anda haber yok",
-    "tap_for_sound": "Beranda konuşabilsin diye ekrana bir kez dokunun."
+    "tap_for_sound": "Beranda konuşabilsin diye ekrana bir kez dokunun.",
+    "wake_stopped": "Uyandırma kelimesi durdu: mikrofonu başka bir şey aldı. Düğme hâlâ çalışıyor."
   }
 }

@@ -22,6 +22,8 @@ const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 // microphone button has to borrow the microphone from it and give it back afterwards;
 // otherwise both fail silently and nothing works any more.
 let running = null;
+const LOCK = 'beranda-wake-owner';
+const me = Math.random().toString(36).slice(2);
 
 export function availability() {
   if (!Recognition) return 'unsupported';
@@ -35,7 +37,10 @@ export function listenOnce(lang) {
   return new Promise((resolve, reject) => {
     running?.pause();  // the wake word steps aside: one listening at a time
     let over = false;
-    const give_back = () => { if (over) return; over = true; running?.resume(); };
+    const give_back = () => { if (over) return; over = true; clearTimeout(guard); running?.resume(); };
+    // A browser sometimes answers nothing at all: no words, no error, no end. Without this the
+    // microphone would stay borrowed for ever and the wake word would never listen again.
+    const guard = setTimeout(() => { try { rec.stop(); } catch { /* already */ } failed(new Error('no answer')); }, 12_000);
     const done = (text) => { give_back(); resolve(text); };
     const failed = (err) => { give_back(); reject(err); };
     const rec = new Recognition();
@@ -63,6 +68,7 @@ export function wakeListener({ lang, word, onWake, onCommand, onError, onState }
   let awake = false;  // the word was heard on its own: the next sentence is the command
   let fails = 0;      // failures in a row; the wait doubles, so a service that is down is left alone
   let timer = 0;
+  let listening_since = 0;
 
   const later = (ms) => { clearTimeout(timer); timer = setTimeout(start, ms); };
   const give_up = (why) => { stopped = true; clearTimeout(timer); onState?.('stopped'); onError(why); };
@@ -74,7 +80,7 @@ export function wakeListener({ lang, word, onWake, onCommand, onError, onState }
     rec.continuous = true;
     rec.interimResults = false;
     rec.maxAlternatives = 1;
-    rec.onstart = () => { onState?.('listening'); };
+    rec.onstart = () => { listening_since = Date.now(); onState?.('listening'); };
     rec.onresult = (event) => {
       fails = 0;  // it answered: start counting again from zero
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
@@ -90,7 +96,12 @@ export function wakeListener({ lang, word, onWake, onCommand, onError, onState }
     };
     rec.onerror = (event) => {
       const why = event.error;
-      if (why === 'not-allowed' || why === 'service-not-allowed' || why === 'audio-capture') return give_up(why);
+      // "The microphone could not be used." When it comes after a while of listening fine, it is
+      // something else taking the microphone (another window, the system's own voice assistant):
+      // that passes, so wait and try again. Right at the start, it means there is none: give up.
+      const worked_first = Date.now() - listening_since > 5000;
+      if (why === 'audio-capture' && !worked_first) return give_up(why);
+      if (why === 'not-allowed' || why === 'service-not-allowed') return give_up(why);
       if (why === 'no-speech' || why === 'aborted') return;  // normal: nobody spoke, or we stopped it
       fails += 1;
       onState?.(`error ${why} (${fails})`);
@@ -109,6 +120,25 @@ export function wakeListener({ lang, word, onWake, onCommand, onError, onState }
     resume() { if (!paused || stopped) return; paused = false; later(600); },
   };
   running = self;
+  // Several Beranda screens open in the same browser would ask for the microphone at the same
+  // time, and the browser gives it to one and "audio-capture" to the others. The newest screen
+  // takes it; the others wait, and take over by themselves if that one is closed.
+  const claim = () => { try { localStorage.setItem(LOCK, JSON.stringify({ id: me, at: Date.now() })); } catch { /* no storage: just listen */ } };
+  const owner = () => {
+    try {
+      const held = JSON.parse(localStorage.getItem(LOCK) || 'null');
+      return !held || held.id === me || Date.now() - held.at > 12_000 ? null : held.id;
+    } catch { return null; }
+  };
+  claim();
+  setInterval(() => { if (!stopped) claim(); }, 4000);
+  const watch = setInterval(() => {
+    if (stopped) return clearInterval(watch);
+    const other = owner();
+    if (other && !paused) { onState?.('another screen has the microphone'); self.pause(); }
+    else if (!other && paused) { onState?.('taking the microphone back'); self.resume(); }
+  }, 2000);
+  if (owner()) { paused = true; onState?.('another screen has the microphone'); return self; }
   start();
   return self;
 }

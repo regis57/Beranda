@@ -65,6 +65,7 @@
     "news": "新聞",
     "read_day": "朗讀今天",
     "no_news": "目前沒有新聞",
-    "tap_for_sound": "輕觸螢幕一次，Beranda 才能說話。"
+    "tap_for_sound": "輕觸螢幕一次，Beranda 才能說話。",
+    "wake_stopped": "喚醒詞已停止：麥克風被其他程式佔用。按鈕仍可使用。"
   }
 }

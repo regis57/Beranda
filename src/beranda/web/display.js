@@ -1002,7 +1002,7 @@ function renderVoice() {
         doAction(answer.action);
       } catch (err) { toast(`${t('voice_unavailable')} (${err.message || err})`, 9000); }
     },
-    onError: (why) => { report(`wake word: ${why}`); toast(`${t('voice_unavailable')} (${why})`, 9000); },
+    onError: (why) => { report(`wake word: ${why}`); toast(`${t('a11y.wake_stopped')} (${why})`, 15000); $('mic').classList.remove('armed'); },
   });
 }
 

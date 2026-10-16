@@ -33,6 +33,13 @@ while you hold it.
 itself and Beranda starts it again; when its service keeps failing, Beranda waits longer and
 longer and finally gives up with a message rather than asking every second.
 
+**A computer only lends its microphone to one thing at a time.** If the wake word stops after a
+few seconds with `audio-capture`, something else took it. On Windows the usual causes are another
+window doing speech, **voice activation** (Settings → Privacy & security → Speech, and the
+"wake word" settings of Cortana or Copilot), or an app holding the microphone. Several Beranda
+screens open in the same browser also share one microphone: the newest one listens, the others
+wait and take over by themselves if it is closed.
+
 ## What you can say
 
 Box 11 → **Open the printable guide**: one A4 page, in the language the screen listens in, with
