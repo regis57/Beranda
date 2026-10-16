@@ -13,7 +13,7 @@
   --bg: #f4efe4;
   --ink: #23201d;
   --ink-2: rgba(35, 32, 29, 0.66);
-  --ink-3: rgba(35, 32, 29, 0.42);
+  --ink-3: rgba(35, 32, 29, 0.63);
   --line: rgba(35, 32, 29, 0.14);
   --accent: #bf3b2b;   /* shu-iro 朱色, vermilion */
   --rain: #2f5d8a;     /* ai-iro 藍色, indigo */
@@ -28,7 +28,7 @@
   --bg: #0d0d0f;
   --ink: rgba(236, 229, 216, 0.82);
   --ink-2: rgba(236, 229, 216, 0.55);
-  --ink-3: rgba(236, 229, 216, 0.34);
+  --ink-3: rgba(236, 229, 216, 0.51);
   --line: rgba(236, 229, 216, 0.12);
   --accent: #b5645a;
   --rain: #6f8fb4;

@@ -61,6 +61,13 @@ async function loadStrings(code) {
   loadedLang = full;
   document.documentElement.lang = full;
   document.documentElement.dir = RTL.has(m[1]) ? 'rtl' : 'ltr';
+  // Names a screen reader says for each part of the board, in the display's own language.
+  for (const [id, key] of [['now', 'a11y.weather'], ['week', 'a11y.week'], ['upcoming-box', 'upcoming'],
+    ['radio', 'a11y.radio'], ['news', 'a11y.news']]) {
+    const el = $(id);
+    if (el) el.setAttribute('aria-label', t(key));
+  }
+  $('mic').setAttribute('aria-label', t('a11y.microphone'));
 }
 
 function t(key, vars) {
@@ -841,6 +848,8 @@ function paintRadio() {
   $('radio-next').hidden = stations.length < 2;
   $('radio-prev').hidden = stations.length < 2;
   $('radio-prev').setAttribute('aria-label', t('radio_prev'));
+  $('radio-mute').setAttribute('aria-label', t('a11y.mute'));
+  $('radio-volume').setAttribute('aria-label', t('a11y.volume'));
   $('radio-next').setAttribute('aria-label', t('radio_next'));
 }
 

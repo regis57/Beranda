@@ -8,13 +8,13 @@
   --clock-weight: 200;
 }
 :root, :root[data-mode="light"] {
-  --bg: #f5efe2; --ink: #1d1a18; --ink-2: rgba(29, 26, 24, 0.7); --ink-3: rgba(29, 26, 24, 0.46);
+  --bg: #f5efe2; --ink: #1d1a18; --ink-2: rgba(29, 26, 24, 0.7); --ink-3: rgba(29, 26, 24, 0.62);
   --line: rgba(29, 26, 24, 0.15); --accent: #b3261e; --gold: #b28a36; --rain: #2c4f6b;
   --warm: #c2553a; --cool: #5e83a3; --moon-lit: #1d1a18; --moon-dark: rgba(29, 26, 24, 0.09);
   --ornament: url("/static/themes/xiangyun.svg");
 }
 :root[data-mode="night"] {
-  --bg: #150908; --ink: rgba(240, 226, 206, 0.86); --ink-2: rgba(240, 226, 206, 0.6); --ink-3: rgba(240, 226, 206, 0.38);
+  --bg: #150908; --ink: rgba(240, 226, 206, 0.86); --ink-2: rgba(240, 226, 206, 0.6); --ink-3: rgba(240, 226, 206, 0.51);
   --line: rgba(178, 138, 54, 0.22); --accent: #cf4a3c; --gold: #b99550; --rain: #6d8fae;
   --warm: #b75a43; --cool: #577591; --moon-lit: #f0e2ce; --moon-dark: rgba(240, 226, 206, 0.08);
 }

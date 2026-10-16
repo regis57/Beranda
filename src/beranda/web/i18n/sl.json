@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Vreme",
+    "week": "Naslednjih 7 dni",
+    "radio": "Radio",
+    "microphone": "Mikrofon",
+    "volume": "Glasnost",
+    "mute": "Utišaj",
+    "news": "Novice"
   }
 }

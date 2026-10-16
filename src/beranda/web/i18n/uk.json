@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Погода",
+    "week": "Наступні 7 днів",
+    "radio": "Радіо",
+    "microphone": "Мікрофон",
+    "volume": "Гучність",
+    "mute": "Без звуку",
+    "news": "Новини"
   }
 }

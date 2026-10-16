@@ -163,5 +163,14 @@
     "nameday": "Ονομαστική εορτή",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Καιρός",
+    "week": "Επόμενες 7 ημέρες",
+    "radio": "Ραδιόφωνο",
+    "microphone": "Μικρόφωνο",
+    "volume": "Ένταση",
+    "mute": "Σίγαση",
+    "news": "Ειδήσεις"
   }
 }

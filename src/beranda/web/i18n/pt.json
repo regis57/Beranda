@@ -163,5 +163,14 @@
     "nameday": "Onomástico",
     "daylight": "Luz do dia",
     "calendar": "Calendário"
+  },
+  "a11y": {
+    "weather": "Tempo",
+    "week": "Próximos 7 dias",
+    "radio": "Rádio",
+    "microphone": "Microfone",
+    "volume": "Volume",
+    "mute": "Silenciar",
+    "news": "Notícias"
   }
 }

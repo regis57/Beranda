@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Pacha",
+    "week": "Qatiq 7 p'unchaw",
+    "radio": "Radio",
+    "microphone": "Mikrufunu",
+    "volume": "Uyarina",
+    "mute": "Upallachiy",
+    "news": "Willakuykuna"
   }
 }

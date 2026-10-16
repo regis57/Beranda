@@ -163,5 +163,14 @@
     "nameday": "Siku ya jina",
     "daylight": "Mchana",
     "calendar": "Kalenda"
+  },
+  "a11y": {
+    "weather": "Hali ya hewa",
+    "week": "Siku 7 zijazo",
+    "radio": "Redio",
+    "microphone": "Kipaza sauti",
+    "volume": "Sauti",
+    "mute": "Nyamazisha",
+    "news": "Habari"
   }
 }

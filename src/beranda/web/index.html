@@ -15,15 +15,15 @@
   <main class="board" id="board">
 
     <header class="clock">
-      <div class="time"><span id="hm">--:--</span><span class="period" id="period"></span></div>
+      <h1 class="time"><span id="hm">--:--</span><span class="period" id="period"></span></h1>
       <div class="date" id="date"></div>
       <!-- Optional: the time somewhere else (family abroad...), small, under the date. -->
       <div class="clock2" id="clock2" hidden></div>
       <!-- Optional: official weather warnings for your area (MeteoAlarm). -->
-      <ul class="alerts" id="alerts" hidden></ul>
+      <ul class="alerts" id="alerts" aria-live="polite" hidden></ul>
     </header>
 
-    <section class="now" aria-label="Météo">
+    <section class="now" id="now" aria-live="polite">
       <div class="now-row">
         <div class="now-icon" id="now-icon"></div>
         <div class="now-temp"><span id="now-temp">–</span><span class="now-unit" id="now-unit">°</span></div>
@@ -55,7 +55,7 @@
       <ul class="air" id="air" hidden></ul>
     </section>
 
-    <section class="week" id="week" aria-label="Prévisions sur 7 jours"></section>
+    <section class="week" id="week"></section>
 
     <aside class="side">
       <section class="sky" id="sky">
@@ -93,7 +93,7 @@
         <ul class="eph-list" id="eph-list"></ul>
       </section>
 
-      <section class="upcoming" aria-label="À venir">
+      <section class="upcoming" id="upcoming-box" aria-live="polite">
         <ul class="upcoming-list" id="upcoming"></ul>
       </section>
 
@@ -116,10 +116,10 @@
               <button type="button" class="radio-skip" id="radio-prev" aria-label="Previous station">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6l-9 6 9 6zM5 6h2v12H5z"/></svg>
               </button>
-              <button type="button" class="radio-mute" id="radio-mute" aria-label="Volume">
+              <button type="button" class="radio-mute" id="radio-mute">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path id="radio-speaker" d="M4 9v6h4l5 4V5L8 9z"/></svg>
               </button>
-              <input type="range" id="radio-volume" min="0" max="100" step="1" aria-label="Volume">
+              <input type="range" id="radio-volume" min="0" max="100" step="1">
               <button type="button" class="radio-skip" id="radio-next" aria-label="Next station">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l9 6-9 6zM17 6h2v12h-2z"/></svg>
               </button>
@@ -131,7 +131,7 @@
     </aside>
 
     <!-- A few headlines at a time (a new set every few seconds). -->
-    <section class="news" id="news" hidden>
+    <section class="news" id="news" aria-live="polite" hidden>
       <ul class="news-list" id="news-list"></ul>
     </section>
 

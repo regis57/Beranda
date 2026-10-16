@@ -10,13 +10,13 @@
   --glyph-writing: horizontal-tb;
 }
 :root, :root[data-mode="light"] {
-  --bg: #f2e8d2; --ink: #1f2b23; --ink-2: rgba(31, 43, 35, 0.72); --ink-3: rgba(31, 43, 35, 0.48);
+  --bg: #f2e8d2; --ink: #1f2b23; --ink-2: rgba(31, 43, 35, 0.72); --ink-3: rgba(31, 43, 35, 0.67);
   --line: rgba(31, 43, 35, 0.17); --accent: #c4512a; --forest: #2f5d3a; --rain: #2b5c8a;
   --warm: #d3692f; --cool: #4d7fae; --moon-lit: #1f2b23; --moon-dark: rgba(31, 43, 35, 0.09);
   --ornament: url("/static/themes/mountains.svg");
 }
 :root[data-mode="night"] {
-  --bg: #0d1410; --ink: rgba(240, 230, 208, 0.86); --ink-2: rgba(240, 230, 208, 0.6); --ink-3: rgba(240, 230, 208, 0.38);
+  --bg: #0d1410; --ink: rgba(240, 230, 208, 0.86); --ink-2: rgba(240, 230, 208, 0.6); --ink-3: rgba(240, 230, 208, 0.5);
   --line: rgba(240, 230, 208, 0.13); --accent: #d27a52; --forest: #5f8f6a; --rain: #6f9bc8;
   --warm: #bf6f45; --cool: #4f7499; --moon-lit: #f0e6d0; --moon-dark: rgba(240, 230, 208, 0.08);
 }

@@ -163,5 +163,14 @@
     "nameday": "Meniny",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Počasie",
+    "week": "Nasledujúcich 7 dní",
+    "radio": "Rádio",
+    "microphone": "Mikrofón",
+    "volume": "Hlasitosť",
+    "mute": "Stlmiť",
+    "news": "Správy"
   }
 }

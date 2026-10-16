@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Cimilada",
+    "week": "7-da maalmood ee soo socda",
+    "radio": "Raadiyo",
+    "microphone": "Makarafoon",
+    "volume": "Codka",
+    "mute": "Aamusi",
+    "news": "Wararka"
   }
 }

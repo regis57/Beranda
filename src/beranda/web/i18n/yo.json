@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Ojú ọjọ́",
+    "week": "Ọjọ́ 7 tó ń bọ̀",
+    "radio": "Rédíò",
+    "microphone": "Gbohùngbohùn",
+    "volume": "Ìró",
+    "mute": "Pa ohùn",
+    "news": "Ìròyìn"
   }
 }

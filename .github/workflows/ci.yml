@@ -28,6 +28,19 @@ jobs:
       - run: ruff check src tests scripts
       - run: pytest -q
 
+  # Both pages against the accessibility rules (WCAG 2.1 AA, with axe-core) and the Tab key:
+  # a change must never take something away from people who use a screen reader or no mouse.
+  accessibility:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]" playwright && python -m playwright install --with-deps chromium
+      - run: npm i --no-save axe-core@4.10.2
+      - run: python scripts/check_a11y.py
+
   # The installer, for real, on a fresh Ubuntu machine with systemd (all but the screen part).
   installer:
     # Same pin as above, and for the same reason: this job provisions real systemd

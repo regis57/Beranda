@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "የአየር ሁኔታ",
+    "week": "ቀጣይ 7 ቀናት",
+    "radio": "ሬዲዮ",
+    "microphone": "ማይክሮፎን",
+    "volume": "ድምጽ",
+    "mute": "ድምጽ አጥፋ",
+    "news": "ዜና"
   }
 }

@@ -163,5 +163,14 @@
     "nameday": "Imendan",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Vrijeme",
+    "week": "Sljedećih 7 dana",
+    "radio": "Radio",
+    "microphone": "Mikrofon",
+    "volume": "Glasnoća",
+    "mute": "Isključi zvuk",
+    "news": "Vijesti"
   }
 }

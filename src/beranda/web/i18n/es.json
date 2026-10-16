@@ -163,5 +163,14 @@
     "nameday": "Santoral",
     "daylight": "Luz del día",
     "calendar": "Calendario"
+  },
+  "a11y": {
+    "weather": "Tiempo",
+    "week": "Próximos 7 días",
+    "radio": "Radio",
+    "microphone": "Micrófono",
+    "volume": "Volumen",
+    "mute": "Silencio",
+    "news": "Noticias"
   }
 }

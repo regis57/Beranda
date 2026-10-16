@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Klimaa",
+    "week": "7 fan yi ñëw",
+    "radio": "Rajo",
+    "microphone": "Mikro",
+    "volume": "Baat bi",
+    "mute": "Noppal",
+    "news": "Xibaar"
   }
 }

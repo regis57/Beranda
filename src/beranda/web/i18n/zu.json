@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Isimo sezulu",
+    "week": "Izinsuku eziyi-7 ezizayo",
+    "radio": "Umsakazo",
+    "microphone": "Imakrofoni",
+    "volume": "Ivolumu",
+    "mute": "Thulisa",
+    "news": "Izindaba"
   }
 }

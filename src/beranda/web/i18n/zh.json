@@ -163,5 +163,14 @@
     "nameday": "命名日",
     "daylight": "日照",
     "calendar": "日历"
+  },
+  "a11y": {
+    "weather": "天气",
+    "week": "未来7天",
+    "radio": "收音机",
+    "microphone": "麦克风",
+    "volume": "音量",
+    "mute": "静音",
+    "news": "新闻"
   }
 }

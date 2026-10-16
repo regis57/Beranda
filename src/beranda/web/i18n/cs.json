@@ -163,5 +163,14 @@
     "nameday": "Svátek",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Počasí",
+    "week": "Dalších 7 dní",
+    "radio": "Rádio",
+    "microphone": "Mikrofon",
+    "volume": "Hlasitost",
+    "mute": "Ztlumit",
+    "news": "Zprávy"
   }
 }

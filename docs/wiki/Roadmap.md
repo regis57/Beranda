@@ -11,6 +11,9 @@ comes first. Order agreed in October 2026.
 
 ## Next
 
+- **Accessibility, second pass**: a box in the settings with large text, high contrast and
+  "read me the day" out loud; then more voice commands, without touching the screen.
+
 - **Offline voice on the Pi** (Vosk): the page sends the sound to the Pi, which recognises it.
   Works in any browser (Edge, Firefox, Safari), no Google or Microsoft, the voice never leaves home.
   Cost: about 50 MB per language on the SD card, a bit less accurate, one or two seconds on a Pi 4.

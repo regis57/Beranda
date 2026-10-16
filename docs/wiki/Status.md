@@ -1,6 +1,6 @@
 # Status
 
-**Beranda 0.16.10 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
+**Beranda 0.17.0 - alpha.** Used every day by the author on a Raspberry Pi 4 (2 GB).
 "Alpha" means: it works and is used, but only a few boards and browsers have been tried for real.
 
 ## What works, and how we know
@@ -22,6 +22,7 @@
 | Wi-Fi: automatic way back after a failed switch, forget | ⚠️ tested with a simulated Wi-Fi | |
 | Wi-Fi safety net "Beranda setup" (on by default) | ⚠️ installed and running on a real Pi 4; opening it (no network at all) not tried yet | |
 | Ready-to-flash image | ❓ built, never tried on a real Pi | |
+| Accessibility (screen reader, keyboard, contrast) | ⚠️ passes the automated rules (axe, WCAG 2.1 AA); not yet tried with a real screen reader | CI, every change |
 
 ## Known issues
 

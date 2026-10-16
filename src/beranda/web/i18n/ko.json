@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "날씨",
+    "week": "다음 7일",
+    "radio": "라디오",
+    "microphone": "마이크",
+    "volume": "음량",
+    "mute": "음소거",
+    "news": "뉴스"
   }
 }

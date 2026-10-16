@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "สภาพอากาศ",
+    "week": "7 วันข้างหน้า",
+    "radio": "วิทยุ",
+    "microphone": "ไมโครโฟน",
+    "volume": "ระดับเสียง",
+    "mute": "ปิดเสียง",
+    "news": "ข่าว"
   }
 }

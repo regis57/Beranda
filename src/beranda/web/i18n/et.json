@@ -163,5 +163,14 @@
     "nameday": "Nimepäev",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Ilm",
+    "week": "Järgmised 7 päeva",
+    "radio": "Raadio",
+    "microphone": "Mikrofon",
+    "volume": "Helitugevus",
+    "mute": "Vaigista",
+    "news": "Uudised"
   }
 }

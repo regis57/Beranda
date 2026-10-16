@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Temps",
+    "week": "Propers 7 dies",
+    "radio": "Ràdio",
+    "microphone": "Micròfon",
+    "volume": "Volum",
+    "mute": "Silenciar",
+    "news": "Notícies"
   }
 }

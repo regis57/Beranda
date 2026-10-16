@@ -163,5 +163,14 @@
     "nameday": "Name day",
     "daylight": "Daylight",
     "calendar": "Calendar"
+  },
+  "a11y": {
+    "weather": "Toetrandro",
+    "week": "7 andro manaraka",
+    "radio": "Radio",
+    "microphone": "Mikrô",
+    "volume": "Hamafin'ny feo",
+    "mute": "Mampangina",
+    "news": "Vaovao"
   }
 }
