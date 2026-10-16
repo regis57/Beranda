@@ -911,7 +911,7 @@ async function listen() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const answer = await response.json();
     toast(`« ${heard} »\n${answer.reply}`);
-    voice.speak(answer.reply, lang);
+    sayOutLoud(answer.reply);
     doAction(answer.action);
   } catch (err) {
     // microphone blocked, none plugged in, or the browser's speech service unreachable: the short code
@@ -930,7 +930,7 @@ $('mic').addEventListener('click', listen);
 function doAction(action) {
   const type = action?.type;
   if (!type) return;
-  const say = (text) => { toast(text, 12000); voice.speak(text, lang); };
+  const say = (text) => { toast(text, 12000); sayOutLoud(text); };
   const now = new Date();
   const dayLine = (date, label) => {
     const key = dayKey(date);
@@ -982,9 +982,13 @@ function renderVoice() {
   wakeWord = word;
   wake?.stop();
   wake = null;
+  $('mic').classList.remove('armed');
   if (!word || voice.availability() !== 'ok') return;
+  report(`wake word: listening for "${word}"`);
+  $('mic').classList.add('armed');  // an always-on microphone must show on the screen
   wake = voice.wakeListener({
     lang, word,
+    onState: (what) => report(`wake word: ${what}`),
     onWake: () => { toast(t('voice_listening'), 8000); },
     onCommand: async (said) => {
       toast(`« ${said} »`, 0);
@@ -994,7 +998,7 @@ function renderVoice() {
         });
         const answer = await response.json();
         toast(`« ${said} »\n${answer.reply}`);
-        voice.speak(answer.reply, lang);
+        sayOutLoud(answer.reply);
         doAction(answer.action);
       } catch (err) { toast(`${t('voice_unavailable')} (${err.message || err})`, 9000); }
     },
@@ -1033,7 +1037,26 @@ export function daySummary() {
 function readDay() {
   const text = daySummary();
   toast(text, 12000);
-  voice.speak(text, lang);
+  sayOutLoud(text);
+}
+
+// Everything Beranda says goes through here. A browser keeps a page nobody has touched
+// quiet, and a wall display is never touched: rather than staying silent for no visible
+// reason, the screen then asks for one touch.
+let soundAllowed = false;
+function sayOutLoud(text) {
+  voice.speak(text, lang, () => {
+    if (soundAllowed) return;
+    toast(`${text}\n\n${t('a11y.tap_for_sound')}`, 15000);
+    report('speech: the browser kept it silent (the page has not been touched yet)');
+  });
+}
+for (const event of ['pointerdown', 'keydown']) {
+  window.addEventListener(event, () => {
+    if (soundAllowed) return;
+    soundAllowed = true;
+    voice.allowSound();
+  }, { once: true });
 }
 $('read-day').addEventListener('click', readDay);
 

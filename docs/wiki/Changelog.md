@@ -164,3 +164,11 @@ One line per version, newest last. Each one was a pull request on
   A **printable one-page guide** of everything you can say, in the screen's language, with your own
   phrases (box 11 → *Open the printable guide*; print or save as PDF). And **arrows** to put radio
   favourites and TV channels in the order you want: prime time follows it
+- **v0.17.3**: fixes what 0.17.2 broke. A browser allows **one listening at a time**: the wake word
+  held the microphone, so the microphone button stopped answering and no phrase worked at all. The
+  button now borrows the microphone and gives it back. A failing speech service is left alone
+  (the wait doubles, then Beranda says it gave up) instead of being asked again every few seconds.
+  When the browser keeps a page nobody has touched silent, the screen now says "touch the screen
+  once" instead of saying nothing. The microphone button wears a ring while the wake word is on,
+  the settings page says plainly what an always-open microphone costs, and a new check
+  (`scripts/check_voice.py`, in CI) makes sure the two listenings never fight again

@@ -173,6 +173,7 @@
     "mute": "Couper le son",
     "news": "Actualités",
     "read_day": "Lire la journée à voix haute",
-    "no_news": "Pas d'actualités pour le moment"
+    "no_news": "Pas d'actualités pour le moment",
+    "tap_for_sound": "Touchez l'écran une fois pour que Beranda puisse parler."
   }
 }

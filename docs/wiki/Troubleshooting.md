@@ -24,6 +24,10 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 | "Too many wrong PINs" | 5 wrong PINs from this phone or computer | wait the minutes shown (other devices are not affected); restarting Beranda on the Pi also clears it |
 | Forgot the PIN | | on the Pi: `sudo sed -i '/^pin = /d' /etc/beranda/config.toml && sudo systemctl restart beranda`, then set a new one in box 15 |
 | "Beranda only answers devices on its own home network" | the phone is on mobile data, a guest network or a VPN | join the same Wi-Fi as the mirror, turn the VPN off |
+| The microphone button does nothing, and nothing is ever heard | **v0.17.2 only**: the wake word kept the microphone for itself | update to 0.17.3; as a stopgap, empty the wake word box |
+| Beranda answers on screen but says nothing out loud | the browser keeps a page nobody has touched quiet | touch the screen once (Beranda now says so); it lasts until the page is reloaded |
+| "microphone in use" stays on, battery drains | the wake word is on: the microphone is open all the time | that is how it works; empty the wake word box to use the button only |
+| The wake word stops working after a while | the browser's speech service kept failing, so Beranda gave up | the screen says so; reload the screen, and check the internet connection |
 | Black screen on the Pi | the screen service stopped | `sudo systemctl restart beranda-kiosk` |
 | Nothing shows a calendar | link expired or wrong | box 5: paste it again, *Test* |
 

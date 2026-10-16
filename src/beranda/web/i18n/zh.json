@@ -173,6 +173,7 @@
     "mute": "静音",
     "news": "新闻",
     "read_day": "朗读今天",
-    "no_news": "暂时没有新闻"
+    "no_news": "暂时没有新闻",
+    "tap_for_sound": "轻触屏幕一次，Beranda 才能说话。"
   }
 }

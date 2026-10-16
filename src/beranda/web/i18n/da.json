@@ -173,6 +173,7 @@
     "mute": "Slå lyd fra",
     "news": "Nyheder",
     "read_day": "Læs dagen højt",
-    "no_news": "Ingen nyheder lige nu"
+    "no_news": "Ingen nyheder lige nu",
+    "tap_for_sound": "Rør skærmen én gang, så Beranda må tale."
   }
 }
