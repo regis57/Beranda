@@ -30,7 +30,9 @@ link, feed address or PIN; web addresses are cut to the site name, the place is 
 | The wake word stops working after a while | the browser's speech service kept failing, so Beranda gave up | the screen says so; reload the screen, and check the internet connection |
 | `audio-capture`, and the computer does have a microphone | a **Bluetooth** headset or speakerphone: Windows only lends its microphone in "hands-free" mode, and a Bluetooth device in music mode has none | Settings → System → Sound → Input, pick the "Hands-Free" entry of that device; or plug it in by cable or its USB dongle, which always works. Also check Windows → Privacy & security → Microphone → "Let desktop apps access your microphone" |
 | The wake word stops after about 15 s, every time (`audio-capture`) | something else on the computer took the microphone: another window using speech, Windows voice activation ("Hey Cortana", "Hey Copilot"), or an app holding the microphone | close the other window; Windows → Settings → Privacy → Speech, turn voice activation off; check that apps may use the microphone. Beranda now waits and tries again instead of giving up |
-| Several Beranda screens, and only one hears the wake word | on purpose since 0.17.4: a browser gives the microphone to one page only | that is the right one; the others take over by themselves if it is closed |
+| Microphone test: "works, but heard nothing", with the wake word on | **0.17.2 to 0.17.6**: the preview on the settings page was a second screen holding the microphone | update to 0.17.7 |
+| Several Beranda screens, and only one hears the wake word | on purpose: a browser has one microphone, the first screen keeps it | the others take over at once if it is closed |
+| Voice works with one address and not the other | `rp4.local` and `192.168.1.x` are two sites for the browser: they cannot share the microphone | open Beranda with one address only |
 | Black screen on the Pi | the screen service stopped | `sudo systemctl restart beranda-kiosk` |
 | Nothing shows a calendar | link expired or wrong | box 5: paste it again, *Test* |
 

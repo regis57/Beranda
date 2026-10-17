@@ -150,7 +150,9 @@ let previewTimer = null;
 function refreshPreview() {
   clearTimeout(previewTimer);
   previewTimer = setTimeout(() => {
-    const q = new URLSearchParams({ theme: cfg.theme, lang: $('language').value });
+    // preview=1: the little screen on the settings page is a picture. It must never listen
+    // or speak - otherwise it is a second Beranda fighting the real screen for the microphone.
+    const q = new URLSearchParams({ theme: cfg.theme, lang: $('language').value, preview: '1' });
     if (cfg.mode !== 'auto') q.set('mode', cfg.mode);
     $('preview').src = `/?${q}`;
   }, 250);
