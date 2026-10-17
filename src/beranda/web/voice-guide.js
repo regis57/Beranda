@@ -45,13 +45,7 @@ async function render(language) {
   document.title = `Beranda · ${t(dict, 'guide_title')}`;
   $('subtitle').textContent = `${t(dict, 'guide_title')} · ${names.of(commands.language)}`;
   $('date').textContent = new Date().toLocaleDateString(commands.language, { day: 'numeric', month: 'long', year: 'numeric' });
-  $('how').innerHTML = '';
-  const how = document.createElement('span');
-  how.append(t(dict, 'guide_how_1'), ' ');
-  const b = document.createElement('b');
-  b.textContent = t(dict, 'guide_how_wake', { word: commands.wake_word || '…' });
-  how.append(commands.wake_word ? b : t(dict, 'guide_how_button'), ' ', t(dict, 'guide_how_2'));
-  $('how').append(how);
+  $('how').textContent = `${t(dict, 'guide_how_button')} ${t(dict, 'guide_how_2')}`;
   $('groups').replaceChildren(...GROUPS.map(([title, intents]) => {
     const section = document.createElement('section');
     const h2 = document.createElement('h2');

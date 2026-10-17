@@ -364,7 +364,6 @@ def router(runtime: Runtime) -> APIRouter:
             "language": lang,
             "commands": voice_mod.default_commands(lang),
             "actions": list(config_mod.VOICE_ACTIONS),
-            "wake_word": runtime.cfg.voice_wake_word,
             "own": [c.phrase for c in runtime.cfg.voice_commands],  # for the printed guide
         }
 

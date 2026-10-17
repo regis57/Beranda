@@ -28,7 +28,7 @@ dark at night. **Free**: no account, no subscription, no paid service.
 | **Your life** | Your calendar (Google, Apple, Outlook, Nextcloud, Proton), public holidays of your country, birthdays and dates that matter, your photos as a slideshow. |
 | **The world** | News headlines, world radio (50,000 stations), tonight's TV, "On this day" in history. |
 | **Handy extras** | Air quality, UV and pollen · official weather warnings for your area · name day, length of the day and your country's own calendar (Hijri, Chinese lunar, Japanese era...) · a small second clock. **Each one can be switched off.** |
-| **Hands-free** | Optional voice control from the tablet's microphone: "what's the weather", "play France Inter", "next station". Works from a computer too: just open `https://` instead of `http://`. [How to use it](docs/VOICE.md) |
+| **Voice, on demand** | Tap the microphone button and speak: "what's the weather", "play France Inter", "read me the day". The microphone only listens while the button asked it to — and a browser only allows it on an `https://` page (Beranda's own certificate is enough). [How to use it](docs/VOICE.md) |
 | **Made for a wall** | Works upright or sideways, turns the screen off at night, and each theme tells the season in its own culture. |
 
 ## Start in 2 minutes, on your computer

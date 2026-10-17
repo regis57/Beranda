@@ -175,7 +175,6 @@
     "read_day": "Læs dagen højt",
     "no_news": "Ingen nyheder lige nu",
     "tap_for_sound": "Rør skærmen én gang, så Beranda må tale.",
-    "wake_stopped": "Vækkeordet stoppede: noget andet tog mikrofonen. Knappen virker stadig.",
     "mic_none": "Browseren kan ikke bruge mikrofonen – se indstillingerne.",
     "mic_blocked": "Mikrofonen er blokeret for denne side.",
     "mic_offline": "Browserens taletjeneste kan ikke nås."

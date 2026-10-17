@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Check the voice control in a real browser, with a stand-in for the speech service.
+"""Check the voice button in a real browser, with a stand-in for the speech service.
 
     python scripts/check_voice.py
 
-A browser allows ONE listening at a time. The wake word listens all the time, so pressing the
-microphone button has to borrow the microphone and give it back; when that went wrong (v0.17.2)
-both stopped working and nothing said a word. This checks it, and that a failing speech service
-makes Beranda wait longer and longer instead of asking again every second.
+The microphone only listens while a tap on the button asked it to (the always-on wake word
+of 0.17.2-0.17.7 was taken out again). What stays checked: the button hears and answers, a
+browser that answers nothing at all does not leave the button stuck, a computer with no
+microphone is told so before and after, and one that has an unusable microphone (Bluetooth
+in music mode...) gets the right advice instead of "plug one in".
 
 Needs `pip install playwright` and a Chromium (set CHROMIUM_PATH if it is not found).
 Exits non-zero on any problem.
@@ -32,16 +33,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from beranda.app import create_app
 from beranda.config import from_dict
 
-# Behaves like a browser's speech service, and refuses a second listening, exactly as one does.
+# Behaves like a browser's speech service: one listening at a time, ended by a result.
 STAND_IN = """
-window.__live = 0; window.__peak = 0; window.__log = []; window.__spoken = [];
+window.__live = 0; window.__spoken = [];
 window.speechSynthesis.speak = (u) => { window.__spoken.push(u.text); if (u.onstart) u.onstart(); };
 class FakeRec {
   start() {
-    if (window.__live > 0) { window.__log.push('REFUSED'); throw new DOMException('already started', 'InvalidStateError'); }
-    window.__live += 1; window.__peak = Math.max(window.__peak, window.__live);
+    window.__live += 1;
     this.running = true; window.__recs = (window.__recs || []).concat(this);
-    window.__log.push('start'); setTimeout(() => this.onstart && this.onstart(), 0);
+    setTimeout(() => this.onstart && this.onstart(), 0);
   }
   stop() { if (!this.running) return; this.running = false; window.__live -= 1; setTimeout(() => this.onend && this.onend(), 0); }
 }
@@ -50,63 +50,7 @@ Object.defineProperty(window, 'isSecureContext', { value: true });
 window.__latest = () => (window.__recs || []).filter((r) => r.running).slice(-1)[0];
 window.__hear = (t) => { const r = window.__latest(); if (!r) return false;
   r.onresult({ resultIndex: 0, results: [[{ transcript: t }]] }); if (!r.continuous) r.stop(); return true; };
-window.__fail = (e) => { const r = window.__latest(); if (r) { r.onerror({ error: e }); r.stop(); } };
 """
-
-
-# The tests with several pages need what Chrome really does: ONE microphone for the whole
-# browser. The pages ask the test itself (exposed functions) whether they may have it; a
-# second recognition, in any page, is cut off ("aborted") exactly as Chrome cuts it off.
-SHARED = """
-window.__mine = null;
-class SharedRec {
-  start() {
-    this.rid = Math.random().toString(36).slice(2);
-    window.__micTake(this.rid).then((ok) => {
-      if (!ok) { this.onerror && this.onerror({ error: 'aborted' }); this.onend && this.onend(); return; }
-      this.running = true; window.__mine = this; this.onstart && this.onstart();
-    });
-  }
-  stop() {
-    if (!this.running) return;
-    this.running = false; window.__micGive(this.rid);
-    if (window.__mine === this) window.__mine = null;
-    setTimeout(() => this.onend && this.onend(), 0);
-  }
-}
-window.SpeechRecognition = SharedRec;
-Object.defineProperty(window, 'isSecureContext', { value: true });
-navigator.mediaDevices.enumerateDevices = async () => [{ kind: 'audioinput', label: 'USB speakerphone' }];
-window.speechSynthesis.speak = (u) => { if (u.onstart) u.onstart(); };
-window.__hear = (t) => { const r = window.__mine; if (!r) return false;
-  r.onresult({ resultIndex: 0, results: [[{ transcript: t }]] }); if (!r.continuous) r.stop(); return true; };
-"""
-
-
-def shared_microphone(context):
-    """Expose one browser-wide microphone to every page of `context`; returns its counters."""
-    mic = {"holder": None, "page": None, "cut": 0}
-
-    def take(source, rid: str) -> bool:
-        if mic["holder"] in (None, rid):
-            mic["holder"], mic["page"] = rid, source["page"]
-            return True
-        mic["cut"] += 1
-        return False
-
-    def give(source, rid: str) -> None:
-        if mic["holder"] == rid:
-            mic["holder"] = mic["page"] = None
-
-    def closed(page) -> None:  # closing a tab frees its microphone, as in a real browser
-        if mic["page"] is page:
-            mic["holder"] = mic["page"] = None
-
-    context.expose_binding("__micTake", take)
-    context.expose_binding("__micGive", give)
-    context.on("page", lambda page: page.on("close", closed))
-    context.add_init_script(SHARED)
-    return mic
 
 
 def free_port() -> int:
@@ -128,7 +72,7 @@ def find_chromium() -> str | None:
 
 def main() -> int:
     tmp = Path(tempfile.mkdtemp())
-    cfg = from_dict({"demo": True, "language": "fr", "voice": {"enabled": True, "wake_word": "Beranda"}})
+    cfg = from_dict({"demo": True, "language": "fr", "voice": {"enabled": True}})
     app = create_app(replace(cfg, cache_dir=tmp / "cache", news_enabled=False, history_enabled=False),
                      config_path=tmp / "config.toml")
     port = free_port()
@@ -148,100 +92,34 @@ def main() -> int:
         if chromium := find_chromium():
             launch["executable_path"] = chromium
         browser = p.chromium.launch(**launch)
+
+        # The ordinary road: tap the button, speak, hear the answer out loud.
         page = browser.new_page(viewport={"width": 1280, "height": 800})
         page.add_init_script(STAND_IN)
         page.goto(f"http://127.0.0.1:{port}/")
         page.wait_for_timeout(2500)
-
-        want(page.evaluate("window.__live") == 1, "the wake word listens once the screen is up")
+        want(page.evaluate("window.__live") == 0, "nothing listens until the button is tapped")
         page.click("#mic")
         page.wait_for_timeout(500)
-        want(page.evaluate("window.__peak") == 1, "the microphone button does not open a second listening")
+        want(page.evaluate("window.__live") == 1, "the button is listening")
         want(page.evaluate("window.__hear('quelle heure est-il')"), "something is listening for the button")
         page.wait_for_timeout(1200)
-        want("Il est" in page.text_content("#toast"), "the button gets an answer while the wake word is on")
-        page.wait_for_timeout(1500)
-        want(page.evaluate("window.__live") == 1, "the wake word gets the microphone back")
-        page.evaluate("window.__hear('beranda quel jour on est')")
-        page.wait_for_timeout(900)
-        want(len(page.evaluate("window.__spoken")) > 1, "the wake word answers, out loud")
-
-        # "Somebody took the microphone" after it worked: that passes, so try again later.
-        # Right at the start it means there is none: give up rather than ask for ever.
-        page.wait_for_timeout(5200)
-        page.evaluate("window.__fail('audio-capture')")
-        page.wait_for_timeout(3000)
-        want(page.evaluate("window.__live") == 1, "a microphone taken away for a moment is waited for, not given up")
-
-        before = page.evaluate("window.__log.filter((x) => x === 'start').length")
-        for _ in range(4):
-            page.evaluate("window.__fail('network')")
-            page.wait_for_timeout(300)
-        page.wait_for_timeout(3000)
-        tries = page.evaluate("window.__log.filter((x) => x === 'start').length") - before
-        want(tries <= 8, f"a failing speech service is left alone (asked again {tries} times, not dozens)")
-        want(page.evaluate("window.__log.filter((x) => x === 'REFUSED').length") == 0, "the browser never refuses a listening")
+        want("Il est" in page.text_content("#toast"), "the button gets an answer")
+        want(len(page.evaluate("window.__spoken")) >= 1, "the answer is spoken out loud")
+        want(page.evaluate("window.__live") == 0, "the microphone is let go afterwards")
         page.close()
 
-        # The browser sometimes answers nothing at all to the button: no words, no error, no end.
-        # The microphone must still come back to the wake word afterwards.
+        # The browser sometimes answers nothing at all: no words, no error, no end.
+        # The button must not stay stuck on "Listening..." for ever.
         page = browser.new_page(viewport={"width": 1280, "height": 800})
-        page.add_init_script(STAND_IN)
+        page.add_init_script(STAND_IN + "FakeRec.prototype.stop = function () {};")
         page.goto(f"http://127.0.0.1:{port}/")
         page.wait_for_timeout(2500)
         page.click("#mic")
-        page.wait_for_timeout(1000)
-        want(page.evaluate("window.__live") == 1, "the button is listening")
         page.wait_for_timeout(14_000)  # the page gives up on a silent browser after 12 s
-        want(page.evaluate("window.__live") == 1, "a browser that answers nothing does not keep the microphone for ever")
-        want(page.evaluate("window.__hear('beranda quelle heure est-il')"), "the wake word is listening again")
-
+        want("…" not in (page.text_content("#toast") or "") or "micro" in page.text_content("#toast").lower(),
+             "a browser that answers nothing does not leave the button stuck")
         page.close()
-
-        # Two Beranda screens in the SAME browser, sharing ONE microphone as in Chrome. The first
-        # keeps it; the second waits. And they must stay that way, not take it from each other
-        # every few seconds (v0.17.4-0.17.6 did, and nothing was ever heard).
-        together = browser.new_context(viewport={"width": 1280, "height": 800})
-        mic = shared_microphone(together)
-        first, second = together.new_page(), together.new_page()
-        first.goto(f"http://127.0.0.1:{port}/")
-        first.wait_for_timeout(2500)
-        second.goto(f"http://127.0.0.1:{port}/")
-        second.wait_for_timeout(3000)
-        holders = [first.evaluate("window.__mine !== null"), second.evaluate("window.__mine !== null")]
-        want(holders == [True, False], f"the first screen keeps the microphone, the second waits ({holders})")
-        cut_before = mic["cut"]
-        first.wait_for_timeout(7000)
-        want(mic["cut"] - cut_before <= 1, f"the two screens do not take it from each other (cut off {mic['cut'] - cut_before} times in 7 s)")
-        want(first.evaluate("window.__mine !== null"), "the first screen still holds it 7 s later")
-
-        # The settings page shows a little copy of the screen as a preview. That copy must never
-        # listen: it was a hidden second screen holding the microphone (found in v0.17.6).
-        settings = together.new_page()
-        settings.goto(f"http://127.0.0.1:{port}/admin")
-        settings.wait_for_timeout(3000)
-        preview_listens = settings.frame_locator("#preview").locator("body").evaluate("() => window.__mine !== null")
-        want(not preview_listens, "the preview on the settings page never takes the microphone")
-        want(first.evaluate("window.__mine !== null"), "the real screen keeps the microphone while the settings page is open")
-
-        # The settings page, in another tab, tests the microphone while a screen's wake word
-        # holds it: the screen must step aside, the test must hear, and the screen take it back.
-        settings.click("#voice-test")
-        settings.wait_for_timeout(1800)
-        want(settings.evaluate("window.__mine !== null"), "the settings test gets the microphone from the screen in another tab")
-        settings.evaluate("window.__hear('bonjour beranda')")
-        settings.wait_for_timeout(600)
-        msg = settings.text_content("#voice-test-msg")
-        want("bonjour" in msg.lower(), f"the settings test hears what is said ({msg!r})")
-        first.wait_for_timeout(2500)
-        want(first.evaluate("window.__mine !== null"), "the screen takes the microphone back after the test")
-
-        # The screen that held it is closed: the other one takes over by itself.
-        first.goto("about:blank")  # leaving the page, as closing the tab does
-        first.close()
-        second.wait_for_timeout(3000)
-        want(second.evaluate("window.__mine !== null"), "when the first screen is closed, the second one takes over at once")
-        together.close()
 
         # A computer with no microphone at all: say so in words, before and after.
         nomic = browser.new_context(viewport={"width": 1100, "height": 900})
@@ -252,8 +130,7 @@ def main() -> int:
         settings = nomic.new_page()
         settings.goto(f"http://127.0.0.1:{port}/admin")
         settings.wait_for_timeout(2500)
-        want("microphone" in settings.text_content("#voice-check").lower()
-             or "micro" in settings.text_content("#voice-check").lower(),
+        want("micro" in settings.text_content("#voice-check").lower(),
              "the settings page says there is no microphone before anyone switches voice on")
         want(settings.eval_on_selector_all("#form h2 .num", "e => e.map((x) => Number(x.textContent))")
              == list(range(1, 18)), "the boxes are numbered in order")

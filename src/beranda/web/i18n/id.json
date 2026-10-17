@@ -175,7 +175,6 @@
     "read_day": "Bacakan hari ini",
     "no_news": "Belum ada berita",
     "tap_for_sound": "Sentuh layar sekali agar Beranda bisa berbicara.",
-    "wake_stopped": "Kata pemicu berhenti: hal lain mengambil mikrofon. Tombolnya masih berfungsi.",
     "mic_none": "Browser tidak bisa memakai mikrofon – lihat pengaturan.",
     "mic_blocked": "Mikrofon diblokir untuk halaman ini.",
     "mic_offline": "Layanan suara browser tidak dapat dihubungi."

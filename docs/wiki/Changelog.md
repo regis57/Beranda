@@ -202,3 +202,13 @@ One line per version, newest last. Each one was a pull request on
   a microphone that never started is no longer mistaken for one that "worked first". A check in
   CI now simulates Chrome's single microphone across tabs; it fails on 0.17.6 with exactly the
   message the owner saw
+- **v0.18.0**: the always-on **wake word is gone**, on its owner's call after three evenings of
+  fighting it: a browser's continuous listening proved too fragile to trust (Chrome ends or
+  starves the stream on its own schedule), and it meant a microphone open all day. The microphone
+  button does everything: it only listens while a tap asked it to, all the 0.17 phrases still
+  work, and the printable guide stays. A wake word saved by an older version is simply ignored.
+  Kept from the attempt, because they are good: the 12-second guard on a browser that answers
+  nothing, "touch the screen once so Beranda may speak", the plain-words microphone messages, and
+  the no-microphone warnings on the settings page. The docs now say in one clear place that **a
+  browser only allows the microphone on an https (SSL) page**, and that Beranda's own self-made
+  certificate is enough

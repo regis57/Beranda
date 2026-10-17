@@ -175,7 +175,6 @@
     "read_day": "Basahin ang araw nang malakas",
     "no_news": "Walang balita ngayon",
     "tap_for_sound": "Pindutin ang screen nang isang beses para makapagsalita ang Beranda.",
-    "wake_stopped": "Huminto ang wake word: may ibang kumuha ng mikropono. Gumagana pa rin ang button.",
     "mic_none": "Hindi magamit ng browser ang mikropono – tingnan ang mga setting.",
     "mic_blocked": "Naka-block ang mikropono para sa page na ito.",
     "mic_offline": "Hindi maabot ang speech service ng browser."

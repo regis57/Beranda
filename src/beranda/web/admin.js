@@ -789,7 +789,6 @@ async function renderVoiceDefaults() {
 function renderVoice() {
   const voice = cfg.voice || { enabled: false };
   $('voice-on').checked = !!voice.enabled;
-  $('wake-word').value = voice.wake_word || '';
   $('voice-check').hidden = !voice.enabled;
   const availability = voiceApi.availability();
   // Edge offers speech recognition but its service often fails ("network"): say so before the person tries.
@@ -1281,7 +1280,6 @@ function collect() {
   body.tv = { url: $('tv-url').value.trim(), channels: [...tvSelected], names: tvNames };
   body.voice = {
     enabled: $('voice-on').checked,
-    wake_word: $('wake-word').value.trim(),
     commands: voiceCommands.filter((c) => c.phrase.trim()).map((c) => ({ phrase: c.phrase.trim(), action: c.action, station: c.station || '', reply: c.reply || '' })),
   };
   body.widgets = collectWidgets();
