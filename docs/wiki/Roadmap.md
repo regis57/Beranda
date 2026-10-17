@@ -11,8 +11,10 @@ comes first. Order agreed in October 2026.
 
 ## Next
 
-- **Accessibility, third pass**: more voice commands without touching the screen (a wake word,
-  or the microphone on the Pi itself), and a try with a real screen reader.
+- **Accessibility, third pass**: a try with a real screen reader. Hands-free voice was tried in
+  the browser (a wake word, 0.17.2-0.17.7) and taken out again: a browser's always-on listening
+  proved too fragile. If it ever comes back, it will be a microphone on the Pi itself, listening
+  locally (openWakeWord + Vosk) - parked for now.
 
 - **Offline voice on the Pi** (Vosk): the page sends the sound to the Pi, which recognises it.
   Works in any browser (Edge, Firefox, Safari), no Google or Microsoft, the voice never leaves home.

@@ -175,7 +175,6 @@
     "read_day": "Günü sesli oku",
     "no_news": "Şu anda haber yok",
     "tap_for_sound": "Beranda konuşabilsin diye ekrana bir kez dokunun.",
-    "wake_stopped": "Uyandırma kelimesi durdu: mikrofonu başka bir şey aldı. Düğme hâlâ çalışıyor.",
     "mic_none": "Tarayıcı mikrofonu kullanamıyor – ayarlara bakın.",
     "mic_blocked": "Bu sayfa için mikrofon engellendi.",
     "mic_offline": "Tarayıcının konuşma servisine ulaşılamıyor."

@@ -175,7 +175,6 @@
     "read_day": "Läs upp dagen",
     "no_news": "Inga nyheter just nu",
     "tap_for_sound": "Rör skärmen en gång så att Beranda får tala.",
-    "wake_stopped": "Väckordet stoppade: något annat tog mikrofonen. Knappen fungerar fortfarande.",
     "mic_none": "Webbläsaren kan inte använda mikrofonen – se inställningarna.",
     "mic_blocked": "Mikrofonen är blockerad för den här sidan.",
     "mic_offline": "Webbläsarens taltjänst kan inte nås."

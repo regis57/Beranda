@@ -79,11 +79,10 @@ def test_tv_defaults_and_round_trip():
 
 def test_voice_defaults_and_round_trip():
     assert config.Config().voice_enabled is False
-    cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "  Beranda  "}})
-    assert cfg.voice_enabled is True and cfg.voice_wake_word == "Beranda"
-    assert config.to_dict(cfg)["voice"] == {"enabled": True, "wake_word": "Beranda", "commands": []}
-    with pytest.raises(ValueError):
-        config.from_dict({"voice": {"wake_word": "a"}})  # too short: it would wake up on any noise
+    # A config saved by 0.17.2-0.17.7 may still hold "wake_word": ignored, never an error.
+    cfg = config.from_dict({"voice": {"enabled": True, "wake_word": "Beranda"}})
+    assert cfg.voice_enabled is True
+    assert config.to_dict(cfg)["voice"] == {"enabled": True, "commands": []}
 
 
 def test_photos_round_trip_with_a_dropbox_link():

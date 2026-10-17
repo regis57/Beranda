@@ -175,7 +175,6 @@
     "read_day": "A nap felolvasása",
     "no_news": "Most nincs hír",
     "tap_for_sound": "Érintse meg egyszer a képernyőt, hogy a Beranda beszélhessen.",
-    "wake_stopped": "Az ébresztőszó leállt: valami más vette el a mikrofont. A gomb még működik.",
     "mic_none": "A böngésző nem tudja használni a mikrofont – lásd a beállításokat.",
     "mic_blocked": "A mikrofon le van tiltva ezen az oldalon.",
     "mic_offline": "A böngésző beszédszolgáltatása nem érhető el."

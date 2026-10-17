@@ -175,7 +175,6 @@
     "read_day": "Llegir el dia en veu alta",
     "no_news": "Cap notícia ara mateix",
     "tap_for_sound": "Toqueu la pantalla una vegada perquè Beranda pugui parlar.",
-    "wake_stopped": "La paraula d'activació s'ha aturat: una altra cosa ha pres el micròfon. El botó encara funciona.",
     "mic_none": "El navegador no pot fer servir el micròfon – vegeu la configuració.",
     "mic_blocked": "El micròfon està bloquejat per a aquesta pàgina.",
     "mic_offline": "No es pot accedir al servei de veu del navegador."

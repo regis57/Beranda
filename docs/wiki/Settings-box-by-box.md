@@ -15,7 +15,7 @@ to any box; each box has a **Need help?** link. Press **Save**: the screen follo
 | **8. Photo frame** | *Add photos*, or follow a shared Dropbox folder | Limited by the board, see below |
 | **9. World radio** | Search 50,000 stations, keep favourites | Plays on the screen's speakers. Arrows put your favourites in the order you want |
 | **10. TV tonight** | Pick a free guide for your country, tick channels | Channel names are kept with the settings. Arrows order the ticked channels: prime time on the screen follows that order |
-| **11. Voice control** | Microphone button, your own phrases, *Test the microphone* | Google Chrome only, see [Voice control](Voice-control). A wake word ("Beranda") lets you speak without touching the screen; *Open the printable guide* gives one A4 page of everything you can say, in the screen's language |
+| **11. Voice control** | Microphone button, your own phrases, *Test the microphone* | Google Chrome only, and **the screen must be open in https://** (the microphone needs a secure page, Beranda's own certificate is enough) — see [Voice control](Voice-control). *Open the printable guide* gives one A4 page of everything you can say, in the screen's language. The microphone only listens while the button asked it to |
 | **12. Screen** | Rotation, night hours | On a Pi the HDMI turns off; on a tablet the page goes dark |
 | **13. Wi-Fi** | The network in use, saved networks, add / use now / forget | Adding never cuts the current one; switching goes back by itself if it fails |
 | **14. System** | Version, board, updates, restart screen, reboot | Buttons ask for a second click |

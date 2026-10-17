@@ -1,37 +1,32 @@
 # Voice control
 
-Beranda listens with the **microphone of the device that shows it** (tablet or computer), never the Pi's.
+Beranda listens with the **microphone of the device that shows it** (tablet or computer), never
+the Pi's — and **only while a tap on the microphone button asked it to**. Nothing listens in the
+background, ever.
+
+## The one rule that trips everybody: the microphone needs SSL
+
+A browser only hands its microphone to a **"secure" page** — an `https://` address. Plain
+`http://beranda.local:8080` is refused, silently or with `insecure`. Beranda has had https on
+the **same port** since 0.15.2, with a certificate it makes itself. That certificate is not
+signed by an authority the browser knows, and that is fine: the browser warns once ("your
+connection is not private") — tap *Advanced* → *Continue* — and the microphone is allowed from
+then on. Self-made or not, the traffic is encrypted all the same.
+
+## Setting it up
 
 1. Settings page, box **11 · Voice control**: tick *Show the microphone button*, **Save**.
 2. Open Beranda in **Google Chrome**. Edge offers speech recognition but its service fails
    ("network"); Firefox and Safari do not offer it to web pages.
-3. Use the **secure address**: `https://` instead of `http://`, same address and port. The first
-   time, accept the "not private" warning (*Advanced* → *Continue*): the certificate is made by Beranda.
-4. Tap the round microphone, allow it, speak: "what's the weather", "play France Inter", "next station", "read me the day"...
+3. Open the screen with **`https://`** instead of `http://` (same address, same port), and accept
+   the one-time warning as above. **Without https there is no microphone**: this step is not
+   optional. (A last resort without https exists: the one-time Chrome setting
+   `chrome://flags/#unsafely-treat-insecure-origin-as-secure` with Beranda's `http://` address.)
+4. Tap the round microphone, allow it, speak: "what's the weather", "play France Inter",
+   "next station", "read me the day"...
 
-The other way round step 3: a one-time Chrome setting,
-`chrome://flags/#unsafely-treat-insecure-origin-as-secure` with Beranda's `http://` address.
-
-## Without touching the screen: the wake word
-
-Box 11 → *Speak without touching the screen* → type a word, say **Beranda**, and Save. Reload the
-screen on the tablet once. From then on the tablet listens all the time (with its own microphone,
-through the browser's speech service): say the word, then your sentence, in one breath
-("Beranda, what's the weather") or in two (say "Beranda", wait for *Listening…*, then speak).
-A word of two syllables or more works best; a very short one wakes it up by mistake. Leave the
-box empty to keep the microphone button only. While it is on, the microphone button on the screen
-wears a ring, so an always-listening microphone is never invisible.
-
-**Know what it costs, before you switch it on.** The tablet holds its microphone open all the
-time, and Chrome sends **everything it hears** to Google to turn it into text, not only your
-commands. Chrome shows "microphone in use" for as long as it lasts, the battery drains faster,
-and a television nearby can wake it up. Beranda itself keeps nothing, and the Raspberry Pi hears
-nothing. If any of that bothers you, empty the box: the microphone button alone only listens
-while you hold it.
-
-**It is the browser's own listening**, and it is not reliable: Chrome stops a long listen by
-itself and Beranda starts it again; when its service keeps failing, Beranda waits longer and
-longer and finally gives up with a message rather than asking every second.
+Chrome turns the speech into text with Google's online service: your sentence crosses the
+internet while the button listens, and only then. Beranda itself keeps nothing.
 
 **A Bluetooth headset is two devices in one.** In music mode it has no microphone at all; Windows
 only lends its microphone in "hands-free" mode, which also makes the sound poorer. If the browser
@@ -40,18 +35,14 @@ Sound → Input and pick the **Hands-Free** entry of that device — or plug it 
 its USB dongle, which always works. On Windows, also check Privacy & security → Microphone →
 "Let desktop apps access your microphone".
 
-**A browser has one microphone.** Chrome lets a single page listen at a time; a second one is
-cut off, and "the microphone works but heard nothing" is what that looks like. So all the
-Beranda pages in a browser agree among themselves: the **first** screen with a wake word keeps
-the microphone, other screens wait (and take over at once if it is closed), and the microphone
-button or the settings page's *Test* borrows it for a moment and gives it back. The little
-preview of the screen on the settings page never listens at all. One thing they cannot agree
-across: two different addresses for the same Pi (`rp4.local` and `192.168.1.x`) are, for the
-browser, two different sites: open Beranda with one address only.
+## Why there is no wake word
 
-If the wake word stops after a few seconds with `audio-capture`, something outside the browser
-took the microphone. On Windows the usual causes are **voice activation** (Settings → Privacy &
-security → Speech, and the "wake word" settings of Cortana or Copilot), or an app holding it.
+Versions 0.17.2 to 0.17.7 tried an always-on wake word ("Beranda, ..."). It was taken out again:
+a browser's continuous listening proved too fragile to trust — Chrome ends or starves the stream
+on its own schedule — and it meant a microphone open all day, sending everything it heard to
+Google. Hands-free voice would need a microphone on the Raspberry Pi itself, listening locally;
+that road stays on the [Roadmap](Roadmap), parked. The button asks for the microphone only when
+tapped, which a browser does reliably.
 
 ## What you can say
 

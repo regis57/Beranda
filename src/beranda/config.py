@@ -121,8 +121,6 @@ class Config:
     second_clock: str = ""  # a second time zone ("Asia/Jakarta"), small, under the date; "" = off
     voice_commands: tuple[VoiceCommand, ...] = ()  # the user's own phrases, added on the settings page
     voice_enabled: bool = False  # shows a microphone button on the page (the tablet's own mic)
-    # A word the tablet waits for ("Beranda"), so nobody has to touch the screen; "" = button only.
-    voice_wake_word: str = ""
     history_enabled: bool = True  # the "On this day" box, from Wikipedia
     limits_profile: str = "auto"  # how much may be added: "auto" (by Raspberry Pi model) or lite..max
 
@@ -165,14 +163,6 @@ def _parse_station(raw: dict) -> Station:
         favicon=str(raw.get("favicon", "")),
         country=str(raw.get("country", "")),
     )
-
-
-def _check_wake_word(value: object) -> str:
-    """One or two plain words, 2 to 30 letters; '' turns it off. Short words give false alarms."""
-    word = " ".join(str(value or "").split())
-    if word and not (2 <= len(word) <= 30):
-        raise ValueError("the wake word must be 2 to 30 characters, or empty")
-    return word
 
 
 def _parse_voice_command(raw: dict) -> VoiceCommand:
@@ -344,8 +334,9 @@ def from_dict(data: dict) -> Config:
         a11y_read_aloud=bool(a11y.get("read_aloud", False)),
         second_clock=_check_timezone(widgets.get("second_clock", "")),
         voice_commands=tuple(_parse_voice_command(c) for c in voice.get("commands", [])[: cap.voice_commands]),
+        # "wake_word", saved by 0.17.2-0.17.7, is deliberately ignored: the always-on
+        # listening was taken out again (a browser's long listen proved too fragile).
         voice_enabled=bool(voice.get("enabled", False)),
-        voice_wake_word=_check_wake_word(voice.get("wake_word", "")),
         history_enabled=bool(history.get("enabled", True)),
         limits_profile=profile,
     )
@@ -420,7 +411,6 @@ def to_dict(cfg: Config) -> dict:
         out["tv"]["names"] = dict(cfg.tv_channel_names)
     out["voice"] = {
         "enabled": cfg.voice_enabled,
-        "wake_word": cfg.voice_wake_word,
         "commands": [
             {k: v for k, v in (("phrase", c.phrase), ("action", c.action), ("station", c.station), ("reply", c.reply)) if v}
             for c in cfg.voice_commands

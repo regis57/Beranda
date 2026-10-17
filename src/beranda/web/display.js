@@ -977,9 +977,6 @@ function setLook(change) {
   applyAccessibility();
 }
 
-// The wake word: the tablet listens all the time for it, then takes the sentence that follows.
-let wake = null;
-let wakeWord = '';
 // The short code a browser gives back, in words. Anything else keeps the code, which the
 // settings page and the diagnostic file explain.
 function micProblem(code) {
@@ -988,36 +985,9 @@ function micProblem(code) {
   return said ? t(said) : `${t('voice_unavailable')} (${code})`;
 }
 
+// The microphone button alone: the microphone only listens while a tap asked it to.
 function renderVoice() {
-  $('mic').hidden = !state.voice;
-  if (PREVIEW) return;  // a picture of the screen: no microphone, ever
-  const word = state.voice ? (state.wake_word || '') : '';
-  if (word === wakeWord) return;
-  wakeWord = word;
-  wake?.stop();
-  wake = null;
-  $('mic').classList.remove('armed');
-  if (!word || voice.availability() !== 'ok') return;
-  report(`wake word: listening for "${word}"`);
-  $('mic').classList.add('armed');  // an always-on microphone must show on the screen
-  wake = voice.wakeListener({
-    lang, word,
-    onState: (what) => report(`wake word: ${what}`),
-    onWake: () => { toast(t('voice_listening'), 8000); },
-    onCommand: async (said) => {
-      toast(`« ${said} »`, 0);
-      try {
-        const response = await fetch('/api/voice', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: said }),
-        });
-        const answer = await response.json();
-        toast(`« ${said} »\n${answer.reply}`);
-        sayOutLoud(answer.reply);
-        doAction(answer.action);
-      } catch (err) { toast(micProblem(err.message || err), 9000); }
-    },
-    onError: (why) => { report(`wake word: ${why}`); toast(micProblem(why), 15000); $('mic').classList.remove('armed'); },
-  });
+  $('mic').hidden = !state.voice || PREVIEW;  // the preview is a picture: no microphone there
 }
 
 // ---------------------------------------------------------------- accessibility ----------

@@ -175,7 +175,6 @@
     "read_day": "Leer el día en voz alta",
     "no_news": "Sin noticias por ahora",
     "tap_for_sound": "Toque la pantalla una vez para que Beranda pueda hablar.",
-    "wake_stopped": "La palabra de activación se detuvo: otra cosa tomó el micrófono. El botón sigue funcionando.",
     "mic_none": "El navegador no puede usar el micrófono: vea los ajustes.",
     "mic_blocked": "El micrófono está bloqueado para esta página.",
     "mic_offline": "No se puede acceder al servicio de voz del navegador."

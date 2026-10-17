@@ -29,7 +29,7 @@ aucun service payant.
 | **Votre quotidien** | Votre agenda (Google, Apple, Outlook, Nextcloud, Proton), les jours fériés de votre pays, anniversaires et dates qui comptent, vos photos en diaporama. |
 | **Le monde** | Titres de l'actualité, radio du monde (50 000 stations), programme TV de ce soir, « Ce jour-là » dans l'histoire. |
 | **Petits plus** | Qualité de l'air, UV et pollens · vigilances météo officielles de votre zone · fête du jour, durée du jour et calendrier de votre pays (hégirien, lunaire chinois, ère japonaise...) · une petite deuxième horloge. **Chacun peut être désactivé.** |
-| **Mains libres** | Commande vocale facultative avec le micro de la tablette : « quel temps fait-il », « mets France Inter », « station suivante ». Marche aussi depuis un ordinateur : ouvrez simplement `https://` au lieu de `http://`. [Mode d'emploi](docs/VOICE.fr.md) |
+| **La voix, à la demande** | Touchez le bouton micro et parlez : « quel temps fait-il », « mets France Inter », « lis-moi la journée ». Le micro n'écoute que quand le bouton le demande — et un navigateur ne l'autorise que sur une page `https://` (le certificat de Beranda suffit). [Mode d'emploi](docs/VOICE.fr.md) |
 | **Fait pour un mur** | En hauteur ou en largeur, écran éteint la nuit, et chaque thème raconte la saison à la façon de sa culture. |
 
 ## Essayer en 2 minutes, sur votre ordinateur
