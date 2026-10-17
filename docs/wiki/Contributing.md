@@ -1,5 +1,9 @@
 # Contributing
 
+Working with an AI assistant on this project? The repository root holds a
+[CLAUDE.md](https://github.com/regis57/Beranda/blob/main/CLAUDE.md): the same rules, written for
+an assistant that is new to the project.
+
 ## Set up
 
 ```bash
