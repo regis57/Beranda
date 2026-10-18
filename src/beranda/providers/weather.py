@@ -17,7 +17,7 @@ RAIN_WINDOW = 8  # 8 x 15 min = the next two hours
 
 def _units(units: str) -> dict:
     if units == "imperial":
-        return {"temp": "°F", "wind": "mph", "precip": "in"}
+        return {"temp": "°F", "wind": "mph", "precip": "mm"}
     return {"temp": "°C", "wind": "km/h", "precip": "mm"}
 
 
@@ -41,7 +41,9 @@ def build_params(latitude: float, longitude: float, units: str) -> dict:
         "forecast_days": 7,
         "temperature_unit": "celsius" if metric else "fahrenheit",
         "wind_speed_unit": "kmh" if metric else "mph",
-        "precipitation_unit": "mm" if metric else "inch",
+        # Always millimetres: the amounts are never shown as numbers, they only feed the rain
+        # thresholds and bar heights, which are written in millimetres here and in display.js.
+        "precipitation_unit": "mm",
     }
 
 

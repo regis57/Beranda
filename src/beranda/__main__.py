@@ -28,9 +28,14 @@ def main(argv: list[str] | None = None) -> None:
     if args.command == "doctor":
         from .doctor import run
 
-        raise SystemExit(run())
+        raise SystemExit(run(args.config))
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    # httpx and httpcore log every request at INFO with its full address, and those addresses can
+    # hold a private calendar link, a feed token or the town's coordinates: none of that may reach
+    # the system journal, which people paste into bug reports.
+    for noisy in ("httpx", "httpcore"):
+        logging.getLogger(noisy).setLevel(logging.WARNING)
     config_path = args.config or config.find_config_path() or config.DEFAULT_CONFIG_PATH
     cfg = config.load(config_path if config_path.is_file() else None)
     overrides = {}

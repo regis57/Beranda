@@ -163,7 +163,10 @@ async def build_state(
             return calendar_ics.events_from_ics(text, start, end, loc.timezone, index)
 
         try:
-            got, is_stale = await cache.get(f"ics:{digest}:{start}:{end}", CALENDAR_TTL, load, name="calendar")
+            # The key holds the link only, not the month window: otherwise, offline on the 1st of
+            # a month, the copy saved minutes before midnight would never be looked up again and
+            # the agenda would go empty instead of showing that copy, flagged stale.
+            got, is_stale = await cache.get(f"ics:{digest}", CALENDAR_TTL, load, name="calendar")
             events.extend(got)
             if is_stale:
                 stale.append(f"calendar:{index}")
@@ -281,7 +284,7 @@ async def build_state(
                     f"alerts:{cfg.country.upper()}", ALERTS_TTL, lambda: alerts_mod.fetch(cfg.country, now),
                     name="weather warnings",
                 )
-                alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area)}
+                alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area, now=now)}
                 if is_stale:
                     stale.append("alerts")
             except Exception as exc:  # noqa: BLE001

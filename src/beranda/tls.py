@@ -62,14 +62,17 @@ def certificate_names() -> tuple[list[str], list[str]]:
 
 
 def ensure_certificate(folder: Path) -> tuple[Path, Path]:
-    """The (certificate, key) files in `folder`, made now if missing, out of date, or if the
-    name or address of this device changed since. Raises TlsError("no_openssl" | "failed")."""
+    """The (certificate, key) files in `folder`, made now if missing, out of date, or if a
+    name or address it must cover is missing from it. Raises TlsError("no_openssl" | "failed")."""
     cert, key, stamp = folder / "cert.pem", folder / "key.pem", folder / "names.txt"
     dns, ips = certificate_names()
     wanted = "\n".join([*dns, *ips])
+    # Kept when it already covers every name wanted now, not only on an exact match: the service
+    # does not wait for the network, so an address still unknown at start-up must not count as a
+    # change - each new certificate brings the browser's warning back on every screen.
     try:
         fresh = (
-            cert.is_file() and key.is_file() and stamp.read_text() == wanted
+            cert.is_file() and key.is_file() and set(wanted.splitlines()) <= set(stamp.read_text().splitlines())
             and time.time() - cert.stat().st_mtime < RENEW_AFTER_DAYS * 86400
         )
     except OSError:

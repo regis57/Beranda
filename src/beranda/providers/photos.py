@@ -18,11 +18,13 @@ Syncthing can also keep a folder filled by themselves (then point the settings p
 from __future__ import annotations
 
 import asyncio
-
+import hashlib
+import logging
 import os
 import re
 import tempfile
 import zipfile
+from collections import Counter
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
@@ -34,6 +36,8 @@ MAX_UPLOAD_BYTES = 15 * 1024 * 1024  # one picture; phone photos are typically 2
 MAX_DROPBOX_BYTES = 400 * 1024 * 1024  # the whole shared folder, as one download
 DROPBOX_PREFIX = "dropbox-"  # synced files are tagged so a re-sync never touches your uploads
 USER_AGENT = "Beranda/0.12 (+https://github.com/regis57/Beranda)"
+
+log = logging.getLogger("beranda.photos")
 
 _SAFE_NAME = re.compile(r"[^A-Za-z0-9._-]+")
 
@@ -74,11 +78,26 @@ def list_photos(folder: str | Path, limit: int = MAX_PHOTOS) -> list[str]:
     if not str(folder):
         return []
     path = Path(folder).expanduser()
-    if not path.is_dir():
+    found: list[tuple[float, str]] = []
+    try:
+        if not path.is_dir():
+            return []
+        for f in path.iterdir():
+            try:
+                if f.is_file() and f.suffix.lower() in EXTENSIONS:
+                    found.append((f.stat().st_mtime, f.name))
+            except OSError:
+                # A picture removed while we look (a Dropbox sync, the delete button) is skipped,
+                # so the others are still shown.
+                continue
+    except OSError as exc:
+        # A folder Beranda's own user may not open - anything under /home, which the service
+        # hides with ProtectHome=yes, or an unmounted USB stick - must hide the photo tile, not
+        # fail the whole screen, the settings page and the diagnostic file with it.
+        log.warning("cannot read the photo folder (%s)", type(exc).__name__)
         return []
-    files = [f for f in path.iterdir() if f.is_file() and f.suffix.lower() in EXTENSIONS]
-    files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
-    return [f.name for f in files[:limit]]
+    found.sort(reverse=True)
+    return [name for _, name in found[:limit]]
 
 
 def resolve(folder: str | Path, name: str) -> Path | None:
@@ -215,8 +234,20 @@ def extract_zip(fileobj, folder: Path, limit: int = MAX_PHOTOS) -> dict:
     with archive:
         infos = [i for i in archive.infolist() if not i.is_dir() and Path(i.filename).suffix.lower() in EXTENSIONS]
         infos.sort(key=lambda i: i.date_time, reverse=True)
+        # Two albums can both hold an IMG_0001.JPG, and names written in another alphabet all
+        # clean up to "photo": such clashing names get a tag taken from the full path inside the
+        # zip, so no picture replaces another. The tag depends only on the zip's contents, never
+        # on the order pictures are copied in, so it stays the same from one sync to the next and
+        # the "same size, already here" check below still holds. Names that do not clash keep
+        # their plain form, as before.
+        clashes = Counter(safe_name(i.filename) for i in infos)
         for info in infos[:limit]:
-            name = DROPBOX_PREFIX + safe_name(info.filename)
+            base = safe_name(info.filename)
+            if clashes[base] > 1:
+                stem, ext = os.path.splitext(base)
+                tag = hashlib.sha1(info.filename.encode("utf-8"), usedforsecurity=False).hexdigest()[:8]
+                base = f"{stem}-{tag}{ext}"
+            name = DROPBOX_PREFIX + base
             if info.file_size > MAX_UPLOAD_BYTES or name in kept:
                 continue
             target = folder / name
