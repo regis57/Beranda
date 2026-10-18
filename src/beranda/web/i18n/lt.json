@@ -180,5 +180,13 @@
     "mic_offline": "Nepavyksta pasiekti naršyklės kalbos paslaugos.",
     "mic_no_answer": "Nieko nebuvo girdėti. Palieskite mikrofoną ir bandykite dar kartą.",
     "voice_no_reply": "Beranda neatsakė. Palaukite akimirką ir vėl palieskite mikrofoną."
+  },
+  "prayer": {
+    "next": "Kita malda: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

@@ -822,6 +822,7 @@ function renderWidgets() {
   $('w-air').checked = w.air !== false;
   $('w-eph').checked = w.ephemeris !== false;
   $('w-nameday').checked = w.nameday_top !== false;
+  $('w-prayer').checked = w.prayer !== false;
   $('w-alerts').checked = !!w.alerts;
   $('w-area').value = w.alerts_area || '';
   $('w-clock2').checked = !!w.second_clock;
@@ -886,6 +887,7 @@ function collectWidgets() {
     air: $('w-air').checked,
     ephemeris: $('w-eph').checked,
     nameday_top: $('w-nameday').checked,
+    prayer: $('w-prayer').checked,
     alerts: $('w-alerts').checked,
     alerts_area: $('w-area').value.trim(),
     second_clock: zone,

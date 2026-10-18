@@ -180,5 +180,13 @@
     "mic_offline": "Browserens taletjeneste kan ikke nås.",
     "mic_no_answer": "Der blev ikke hørt noget. Tryk på mikrofonen, og prøv igen.",
     "voice_no_reply": "Beranda svarede ikke. Vent et øjeblik, og tryk på mikrofonen igen."
+  },
+  "prayer": {
+    "next": "Næste bøn: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

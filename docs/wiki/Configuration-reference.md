@@ -23,7 +23,7 @@ key is optional. Example: [config.example.toml](https://github.com/regis57/Beran
 | `[screen]` `rotate`, `off`, `on` | 0, never | 12 | rotation in degrees, night hours `"23:00"` |
 | `[admin]` `pin` | none | 15 | |
 | `[server]` `host`, `port` | `0.0.0.0`, 8080 | 17 | the port also answers https |
-| `[widgets]` `chart`, `air`, `alerts`, `alerts_area`, `ephemeris`, `second_clock`, `nameday_top` | on, on, off, -, on, -, on | 4 | extras of the main screen |
+| `[widgets]` `chart`, `air`, `alerts`, `alerts_area`, `ephemeris`, `second_clock`, `nameday_top`, `prayer` | on, on, off, -, on, -, on, on | 4 | extras of the main screen |
 | `[accessibility]` `large_text`, `high_contrast`, `read_aloud` | off, off, off | 16 | bigger text, stronger contrast, read the screen aloud |
 | `[limits]` `profile` | `auto` | - | `lite`, `standard`, `comfort`, `plus`, `max` |
 

@@ -180,5 +180,13 @@
     "mic_offline": "Serviciul vocal al browserului nu poate fi contactat.",
     "mic_no_answer": "Nu s-a auzit nimic. Atingeți microfonul și încercați din nou.",
     "voice_no_reply": "Beranda nu a răspuns. Așteptați puțin și atingeți din nou microfonul."
+  },
+  "prayer": {
+    "next": "Următoarea rugăciune: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

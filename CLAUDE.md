@@ -60,7 +60,7 @@ git checkout main && git pull
 ## Checks
 
 ```bash
-pytest -q                                   # ~755 tests
+pytest -q                                   # ~775 tests
 ruff check .                                # includes the security rules (S, B, BLE, ASYNC, DTZ)
 node --check src/beranda/web/*.js
 npm i --no-save axe-core && python scripts/check_a11y.py   # WCAG 2.1 AA + the Tab key

@@ -180,5 +180,13 @@
     "mic_offline": "Webbläsarens taltjänst kan inte nås.",
     "mic_no_answer": "Inget hördes. Tryck på mikrofonen och försök igen.",
     "voice_no_reply": "Beranda svarade inte. Vänta en stund och tryck på mikrofonen igen."
+  },
+  "prayer": {
+    "next": "Nästa bön: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

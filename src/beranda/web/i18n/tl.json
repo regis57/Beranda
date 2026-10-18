@@ -180,5 +180,13 @@
     "mic_offline": "Hindi maabot ang speech service ng browser.",
     "mic_no_answer": "Walang narinig. I-tap ang mikropono at subukang muli.",
     "voice_no_reply": "Hindi sumagot ang Beranda. Maghintay sandali at i-tap muli ang mikropono."
+  },
+  "prayer": {
+    "next": "Susunod na dasal: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

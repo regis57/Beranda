@@ -180,5 +180,13 @@
     "mic_offline": "Mënuñu agsi ci sarwiis bu baat bi ci naviguteer bi.",
     "mic_no_answer": "Dégguñu dara. Laal mikoro bi te jéem ko ci kanam.",
     "voice_no_reply": "Beranda tontuwul. Xaaral tuuti te laal mikoro bi ci kanam."
+  },
+  "prayer": {
+    "next": "Julli bi ci topp: {name} {time}",
+    "fajr": "Fajar",
+    "dhuhr": "Tisbaar",
+    "asr": "Takusaan",
+    "maghrib": "Timis",
+    "isha": "Gee"
   }
 }

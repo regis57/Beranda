@@ -180,5 +180,13 @@
     "mic_offline": "Govorna usluga preglednika nije dostupna.",
     "mic_no_answer": "Ništa se nije čulo. Dodirnite mikrofon i pokušajte ponovno.",
     "voice_no_reply": "Beranda nije odgovorila. Pričekajte trenutak i ponovno dodirnite mikrofon."
+  },
+  "prayer": {
+    "next": "Sljedeća molitva: {name} {time}",
+    "fajr": "Sabah",
+    "dhuhr": "Podne",
+    "asr": "Ikindija",
+    "maghrib": "Akšam",
+    "isha": "Jacija"
   }
 }

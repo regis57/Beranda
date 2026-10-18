@@ -180,5 +180,13 @@
     "mic_offline": "无法连接浏览器的语音服务。",
     "mic_no_answer": "什么也没听到。请点按麦克风再试一次。",
     "voice_no_reply": "Beranda 没有回应。请稍等片刻，再点按麦克风。"
+  },
+  "prayer": {
+    "next": "下次礼拜：{name} {time}",
+    "fajr": "晨礼",
+    "dhuhr": "晌礼",
+    "asr": "晡礼",
+    "maghrib": "昏礼",
+    "isha": "宵礼"
   }
 }

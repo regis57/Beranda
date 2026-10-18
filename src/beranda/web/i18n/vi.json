@@ -180,5 +180,13 @@
     "mic_offline": "Không thể kết nối dịch vụ giọng nói của trình duyệt.",
     "mic_no_answer": "Không nghe thấy gì. Hãy chạm vào micrô và thử lại.",
     "voice_no_reply": "Beranda không trả lời. Hãy đợi một lát rồi chạm lại vào micrô."
+  },
+  "prayer": {
+    "next": "Lễ cầu nguyện tiếp theo: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

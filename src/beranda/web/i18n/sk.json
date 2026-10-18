@@ -180,5 +180,13 @@
     "mic_offline": "Hlasovú službu prehliadača nemožno dosiahnuť.",
     "mic_no_answer": "Nič nebolo počuť. Ťuknite na mikrofón a skúste to znova.",
     "voice_no_reply": "Beranda neodpovedala. Chvíľu počkajte a znova ťuknite na mikrofón."
+  },
+  "prayer": {
+    "next": "Ďalšia modlitba: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

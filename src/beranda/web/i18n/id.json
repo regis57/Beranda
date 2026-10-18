@@ -180,5 +180,13 @@
     "mic_offline": "Layanan suara browser tidak dapat dihubungi.",
     "mic_no_answer": "Tidak ada yang terdengar. Ketuk mikrofon dan coba lagi.",
     "voice_no_reply": "Beranda tidak menjawab. Tunggu sebentar lalu ketuk mikrofon lagi."
+  },
+  "prayer": {
+    "next": "Salat berikutnya: {name} {time}",
+    "fajr": "Subuh",
+    "dhuhr": "Zuhur",
+    "asr": "Asar",
+    "maghrib": "Magrib",
+    "isha": "Isya"
   }
 }

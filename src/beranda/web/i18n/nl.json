@@ -180,5 +180,13 @@
     "mic_offline": "De spraakdienst van de browser is onbereikbaar.",
     "mic_no_answer": "Er werd niets gehoord. Tik op de microfoon en probeer het opnieuw.",
     "voice_no_reply": "Beranda gaf geen antwoord. Wacht even en tik opnieuw op de microfoon."
+  },
+  "prayer": {
+    "next": "Volgend gebed: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

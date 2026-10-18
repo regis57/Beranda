@@ -25,7 +25,7 @@ aucun service payant.
 
 | | |
 |---|---|
-| **L'heure et la météo** | Horloge, date, météo du moment, pluie dans les 2 prochaines heures, prévisions à 7 jours et graphique sur 24 heures (température, pluie, vent, nuits). Phase de la lune, lever et coucher du soleil. |
+| **L'heure et la météo** | Horloge, date, météo du moment, pluie dans les 2 prochaines heures, prévisions à 7 jours et graphique sur 24 heures (température, pluie, vent, nuits). Phase de la lune, lever et coucher du soleil, et la prochaine prière dans les pays dont l'islam est la religion d'État. |
 | **Votre quotidien** | Votre agenda (Google, Apple, Outlook, Nextcloud, Proton), les jours fériés de votre pays, anniversaires et dates qui comptent, vos photos en diaporama. |
 | **Le monde** | Titres de l'actualité, radio du monde (50 000 stations), programme TV de ce soir, « Ce jour-là » dans l'histoire. |
 | **Petits plus** | Qualité de l'air, UV et pollens · vigilances météo officielles de votre zone · fête du jour, durée du jour et calendrier de votre pays (hégirien, lunaire chinois, ère japonaise...) · une petite deuxième horloge. **Chacun peut être désactivé.** |

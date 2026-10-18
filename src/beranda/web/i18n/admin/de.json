@@ -445,6 +445,8 @@
   "edge_hint": "Tipp: Beranda läuft am besten in Google Chrome. Microsoft Edge hat Probleme gemacht (Sprachsteuerung, Seiten aus einer älteren Version).",
   "w_nameday": "Namenstag groß, oben rechts",
   "w_nameday_hint": "In Ländern, die Namenstage feiern (Frankreich, Deutschland, Polen, Schweden, Ungarn …), mit den Namen Ihres Landes. Groß oben rechts mit dem Design Frankreich; bei den anderen Designs bleibt er in der Zeile der Ephemeride.",
+  "w_prayer": "Nächstes Gebet, unter dem Mond",
+  "w_prayer_hint": "In Ländern mit dem Islam als Staatsreligion (Marokko, Algerien, Ägypten, Saudi-Arabien, Pakistan, Malaysia…) die Uhrzeit des nächsten der fünf Gebete, auf dem Pi aus dem Sonnenstand berechnet, nach der Methode Ihres Landes. Sie kann von Ihrer Moschee um ein, zwei Minuten abweichen.",
   "a11y": "Barrierefreiheit",
   "a11y_hint": "Für Menschen, die schlecht sehen oder den Bildschirm nicht lesen können. Alle drei passen zu jedem Stil.",
   "a11y_large": "Großer Text",

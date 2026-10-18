@@ -180,5 +180,13 @@
     "mic_offline": "Ba a iya isa ga sabis na murya na burauza ba.",
     "mic_no_answer": "Ba a ji komai ba. Taɓa makirufo ka sake gwadawa.",
     "voice_no_reply": "Beranda bai amsa ba. Jira ɗan lokaci ka sake taɓa makirufo."
+  },
+  "prayer": {
+    "next": "Sallah ta gaba: {name} {time}",
+    "fajr": "Asuba",
+    "dhuhr": "Azahar",
+    "asr": "La'asar",
+    "maghrib": "Magariba",
+    "isha": "Isha"
   }
 }

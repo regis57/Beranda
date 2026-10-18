@@ -180,5 +180,13 @@
     "mic_offline": "A kò lè dé ibi iṣẹ́ ohùn aṣàwákiri.",
     "mic_no_answer": "A kò gbọ́ nǹkan kan. Tẹ gbohùngbohùn kí o sì tún gbìyànjú.",
     "voice_no_reply": "Beranda kò dáhùn. Dúró díẹ̀ kí o sì tún tẹ gbohùngbohùn."
+  },
+  "prayer": {
+    "next": "Ìrun tó kàn: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

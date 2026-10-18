@@ -198,6 +198,7 @@ body {
 .moon-svg { width: 6.4rem; height: 6.4rem; }
 .moon-name { font-size: 0.95rem; letter-spacing: 0.05em; }
 .moon-detail { font-size: 0.75rem; color: var(--ink-3); letter-spacing: 0.04em; line-height: 1.5; }
+.moon-prayer { margin-top: 0.35rem; font-size: 0.85rem; color: var(--ink-2); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 .sun { font-size: 0.8rem; color: var(--ink-2); letter-spacing: 0.04em; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 0.8rem; margin-top: 0.1rem; font-variant-numeric: tabular-nums; }
 
 /* Without a season block (e.g. the French theme) the moon sits beside its text, to save height. */

@@ -550,6 +550,14 @@ function renderSky() {
     div.textContent = line;
     return div;
   }));
+  // The server only sends a prayer in countries whose state religion is Islam, with the
+  // extra switched on; the time is the place's own, like sunrise and sunset below.
+  const prayer = state.sky.prayer;
+  $('moon-prayer').hidden = !prayer;
+  if (prayer) {
+    const at = dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(prayer.at));
+    $('moon-prayer').textContent = t('prayer.next', { name: t(`prayer.${prayer.name}`), time: at });
+  }
 
   const sun = $('sun');
   sun.replaceChildren();

@@ -180,5 +180,13 @@
     "mic_offline": "Le service vocal du navigateur est injoignable.",
     "mic_no_answer": "Rien n’a été entendu. Touchez le micro et réessayez.",
     "voice_no_reply": "Beranda n’a pas répondu. Attendez un instant et touchez de nouveau le micro."
+  },
+  "prayer": {
+    "next": "Prochaine prière : {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dohr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Icha"
   }
 }

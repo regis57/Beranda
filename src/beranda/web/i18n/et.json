@@ -180,5 +180,13 @@
     "mic_offline": "Brauseri kõneteenus pole kättesaadav.",
     "mic_no_answer": "Midagi ei kuuldud. Puudutage mikrofoni ja proovige uuesti.",
     "voice_no_reply": "Beranda ei vastanud. Oodake hetk ja puudutage mikrofoni uuesti."
+  },
+  "prayer": {
+    "next": "Järgmine palve: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }
