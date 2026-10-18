@@ -177,6 +177,8 @@
     "tap_for_sound": "Érintse meg egyszer a képernyőt, hogy a Beranda beszélhessen.",
     "mic_none": "A böngésző nem tudja használni a mikrofont – lásd a beállításokat.",
     "mic_blocked": "A mikrofon le van tiltva ezen az oldalon.",
-    "mic_offline": "A böngésző beszédszolgáltatása nem érhető el."
+    "mic_offline": "A böngésző beszédszolgáltatása nem érhető el.",
+    "mic_no_answer": "Nem hallatszott semmi. Koppintson a mikrofonra, és próbálja újra.",
+    "voice_no_reply": "A Beranda nem válaszolt. Várjon egy kicsit, és koppintson újra a mikrofonra."
   }
 }

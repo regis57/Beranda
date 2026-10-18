@@ -177,6 +177,8 @@
     "tap_for_sound": "Chạm vào màn hình một lần để Beranda có thể nói.",
     "mic_none": "Trình duyệt không dùng được micrô – xem cài đặt.",
     "mic_blocked": "Micrô bị chặn cho trang này.",
-    "mic_offline": "Không thể kết nối dịch vụ giọng nói của trình duyệt."
+    "mic_offline": "Không thể kết nối dịch vụ giọng nói của trình duyệt.",
+    "mic_no_answer": "Không nghe thấy gì. Hãy chạm vào micrô và thử lại.",
+    "voice_no_reply": "Beranda không trả lời. Hãy đợi một lát rồi chạm lại vào micrô."
   }
 }

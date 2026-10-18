@@ -177,6 +177,8 @@
     "tap_for_sound": "A fāfā i te mata hō'ē taime nō te Beranda ia nehenehe e parau.",
     "mic_none": "'Aita te mātini i nehenehe e fa'a'ohipa i te mikoro – a hi'o i te mau fa'anahoraa.",
     "mic_blocked": "Ua ôpanihia te mikoro no teie 'api.",
-    "mic_offline": "'Aita e nehenehe e tae i te taviniraa reo a te mātini."
+    "mic_offline": "'Aita e nehenehe e tae i te taviniraa reo a te mātini.",
+    "mic_no_answer": "Aita e mea i fa’aro’ohia. A pata i te mikoro e a tamata faahou.",
+    "voice_no_reply": "Aita Beranda i pahono. A tia’i ri’i e a pata faahou i te mikoro."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "Raak die skerm een keer aan sodat Beranda kan praat.",
     "mic_none": "Die blaaier kan nie die mikrofoon gebruik nie – sien die instellings.",
     "mic_blocked": "Die mikrofoon is vir hierdie bladsy geblokkeer.",
-    "mic_offline": "Die blaaier se spraakdiens is onbereikbaar."
+    "mic_offline": "Die blaaier se spraakdiens is onbereikbaar.",
+    "mic_no_answer": "Niks is gehoor nie. Tik op die mikrofoon en probeer weer.",
+    "voice_no_reply": "Beranda het nie geantwoord nie. Wag 'n oomblik en tik weer op die mikrofoon."
   }
 }

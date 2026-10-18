@@ -177,6 +177,8 @@
     "tap_for_sound": "Kosketa näyttöä kerran, jotta Beranda voi puhua.",
     "mic_none": "Selain ei voi käyttää mikrofonia – katso asetukset.",
     "mic_blocked": "Mikrofoni on estetty tällä sivulla.",
-    "mic_offline": "Selaimen puhepalveluun ei saada yhteyttä."
+    "mic_offline": "Selaimen puhepalveluun ei saada yhteyttä.",
+    "mic_no_answer": "Mitään ei kuulunut. Napauta mikrofonia ja yritä uudelleen.",
+    "voice_no_reply": "Beranda ei vastannut. Odota hetki ja napauta mikrofonia uudelleen."
   }
 }

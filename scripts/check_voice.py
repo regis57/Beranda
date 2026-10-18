@@ -119,6 +119,24 @@ def main() -> int:
         page.wait_for_timeout(14_000)  # the page gives up on a silent browser after 12 s
         want("…" not in (page.text_content("#toast") or "") or "micro" in page.text_content("#toast").lower(),
              "a browser that answers nothing does not leave the button stuck")
+        said = page.text_content("#toast") or ""
+        want("no answer" not in said and "(" not in said, f"a silent browser is told in words, not a code ({said!r})")
+        page.close()
+
+        # The sentence is heard but Beranda does not answer (restarting, or voice switched off
+        # meanwhile): say that, not "microphone unavailable" with an English code after it.
+        page = browser.new_page(viewport={"width": 1280, "height": 800})
+        page.add_init_script(STAND_IN)
+        page.route("**/api/voice", lambda route: route.fulfill(status=500, body="boom"))
+        page.goto(f"http://127.0.0.1:{port}/")
+        page.wait_for_timeout(2500)
+        page.click("#mic")
+        page.wait_for_timeout(500)
+        page.evaluate("window.__hear('quelle heure est-il')")
+        page.wait_for_timeout(1200)
+        said = page.text_content("#toast") or ""
+        want("HTTP" not in said and "Micro" not in said and len(said) > 10,
+             f"a Beranda that does not answer is told in words ({said!r})")
         page.close()
 
         # A computer with no microphone at all: say so in words, before and after.

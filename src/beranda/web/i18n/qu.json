@@ -177,6 +177,8 @@
     "tap_for_sound": "Beranda rimanampaq pantallata huk kutilla llamiy.",
     "mic_none": "Navegador mana mikrufunuta llamk'achiyta atinchu – kamachiykunata qhaway.",
     "mic_blocked": "Kay p'anqapaq mikrufunu harkasqa kashan.",
-    "mic_offline": "Mana atikunchu rimay serviciuman chayay."
+    "mic_offline": "Mana atikunchu rimay serviciuman chayay.",
+    "mic_no_answer": "Manam imatapas uyarikunchu. Mikrofonota llamiy, hinaspa wakmanta ruray.",
+    "voice_no_reply": "Beranda manam kutichirqanchu. Huk ratota suyay, hinaspa mikrofonota wakmanta llamiy."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "Atingeți ecranul o dată pentru ca Beranda să poată vorbi.",
     "mic_none": "Browserul nu poate folosi microfonul – vedeți setările.",
     "mic_blocked": "Microfonul este blocat pentru această pagină.",
-    "mic_offline": "Serviciul vocal al browserului nu poate fi contactat."
+    "mic_offline": "Serviciul vocal al browserului nu poate fi contactat.",
+    "mic_no_answer": "Nu s-a auzit nimic. Atingeți microfonul și încercați din nou.",
+    "voice_no_reply": "Beranda nu a răspuns. Așteptați puțin și atingeți din nou microfonul."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "Sentuh skrin sekali supaya Beranda boleh bercakap.",
     "mic_none": "Pelayar tidak boleh guna mikrofon – lihat tetapan.",
     "mic_blocked": "Mikrofon disekat untuk halaman ini.",
-    "mic_offline": "Perkhidmatan suara pelayar tidak dapat dihubungi."
+    "mic_offline": "Perkhidmatan suara pelayar tidak dapat dihubungi.",
+    "mic_no_answer": "Tiada apa yang didengar. Ketik mikrofon dan cuba lagi.",
+    "voice_no_reply": "Beranda tidak menjawab. Tunggu sebentar dan ketik mikrofon sekali lagi."
   }
 }

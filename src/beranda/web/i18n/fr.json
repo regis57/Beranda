@@ -177,6 +177,8 @@
     "tap_for_sound": "Touchez l'écran une fois pour que Beranda puisse parler.",
     "mic_none": "Le navigateur n’arrive pas à utiliser le micro – voir les réglages.",
     "mic_blocked": "Le micro est bloqué pour cette page.",
-    "mic_offline": "Le service vocal du navigateur est injoignable."
+    "mic_offline": "Le service vocal du navigateur est injoignable.",
+    "mic_no_answer": "Rien n’a été entendu. Touchez le micro et réessayez.",
+    "voice_no_reply": "Beranda n’a pas répondu. Attendez un instant et touchez de nouveau le micro."
   }
 }

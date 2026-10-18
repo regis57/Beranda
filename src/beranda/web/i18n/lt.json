@@ -177,6 +177,8 @@
     "tap_for_sound": "Vieną kartą palieskite ekraną, kad Beranda galėtų kalbėti.",
     "mic_none": "Naršyklė negali naudoti mikrofono – žiūrėkite nustatymus.",
     "mic_blocked": "Šiam puslapiui mikrofonas užblokuotas.",
-    "mic_offline": "Nepavyksta pasiekti naršyklės kalbos paslaugos."
+    "mic_offline": "Nepavyksta pasiekti naršyklės kalbos paslaugos.",
+    "mic_no_answer": "Nieko nebuvo girdėti. Palieskite mikrofoną ir bandykite dar kartą.",
+    "voice_no_reply": "Beranda neatsakė. Palaukite akimirką ir vėl palieskite mikrofoną."
   }
 }

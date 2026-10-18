@@ -71,7 +71,7 @@ body {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.period { font-size: 2rem; letter-spacing: 0; margin-left: 0.5rem; color: var(--ink-2); }
+.period { font-size: 2rem; letter-spacing: 0; margin-inline-start: 0.5rem; color: var(--ink-2); }
 .date {
   margin-top: 0.4rem;
   font-size: 1.35rem;
@@ -98,7 +98,7 @@ body {
 .now-icon { width: 4.2rem; height: 4.2rem; color: var(--ink); flex: none; }
 .now-icon svg { width: 100%; height: 100%; }
 .now-temp { font-family: var(--f-display); font-size: 4.6rem; font-weight: var(--clock-weight, 100); line-height: 1; letter-spacing: -0.03em; }
-.now-unit { font-size: 1.8rem; vertical-align: top; position: relative; top: 0.45rem; margin-left: 0.15rem; color: var(--ink-2); font-weight: 300; letter-spacing: 0; }
+.now-unit { font-size: 1.8rem; vertical-align: top; position: relative; top: 0.45rem; margin-inline-start: 0.15rem; color: var(--ink-2); font-weight: 300; letter-spacing: 0; }
 .now-label { font-size: 1.45rem; font-weight: 300; letter-spacing: 0.03em; }
 .now-detail { margin-top: 0.3rem; font-size: 1rem; color: var(--ink-2); letter-spacing: 0.05em; }
 
@@ -164,7 +164,9 @@ body {
 /* ---- side column ------------------------------------------------------------------ */
 .side {
   grid-area: side; display: flex; flex-direction: column; gap: 1.2rem; min-height: 0;
-  padding-left: clamp(1rem, 2.6vw, 2.6rem); border-left: 1px solid var(--line);
+  /* Logical sides: in a right-to-left language the grid puts this column on the left, and the
+     line must still face the board rather than the screen edge. */
+  padding-inline-start: clamp(1rem, 2.6vw, 2.6rem); border-inline-start: 1px solid var(--line);
   padding-bottom: 3.6rem;  /* room for the status line (and the microphone) that sits over the bottom of this column */
 }
 
@@ -324,7 +326,7 @@ body[data-sleep="true"] .phototile img { opacity: 0; }
   .board:has(.feature[hidden]) { grid-template-areas: "clock" "now" "week" "news" "side" "status"; grid-template-rows: none; }
   .feature { min-height: 0; }
   .feature-row { flex: none; height: clamp(12rem, 34vh, 22rem); }
-  .side { border-left: none; padding-left: 0; padding-bottom: 0; border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  .side { border-inline-start: none; padding-inline-start: 0; padding-bottom: 0; border-top: 1px solid var(--line); padding-top: 1.6rem; }
   .status { grid-area: status; }
   .time { font-size: 5.6rem; }
   .news-title { white-space: normal; }

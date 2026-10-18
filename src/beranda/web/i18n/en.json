@@ -177,6 +177,8 @@
     "tap_for_sound": "Touch the screen once so Beranda may speak.",
     "mic_none": "The browser cannot use the microphone – see the settings.",
     "mic_blocked": "The microphone is blocked for this page.",
-    "mic_offline": "The browser's speech service cannot be reached."
+    "mic_offline": "The browser's speech service cannot be reached.",
+    "mic_no_answer": "Nothing was heard. Tap the microphone and try again.",
+    "voice_no_reply": "Beranda did not answer. Wait a moment and tap the microphone again."
   }
 }

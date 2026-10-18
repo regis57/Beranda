@@ -177,6 +177,8 @@
     "tap_for_sound": "Enkrat se dotaknite zaslona, da lahko Beranda govori.",
     "mic_none": "Brskalnik ne more uporabiti mikrofona – glejte nastavitve.",
     "mic_blocked": "Mikrofon je za to stran blokiran.",
-    "mic_offline": "Govorna storitev brskalnika ni dosegljiva."
+    "mic_offline": "Govorna storitev brskalnika ni dosegljiva.",
+    "mic_no_answer": "Nič se ni slišalo. Tapnite mikrofon in poskusite znova.",
+    "voice_no_reply": "Beranda ni odgovorila. Počakajte trenutek in znova tapnite mikrofon."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "Thinta isikrini kanye ukuze iBeranda ikwazi ukukhuluma.",
     "mic_none": "Isiphequluli asikwazi ukusebenzisa imakrofoni – bheka izilungiselelo.",
     "mic_blocked": "Imakrofoni ivinjelwe kuleli khasi.",
-    "mic_offline": "Insizakalo yenkulumo yesiphequluli ayitholakali."
+    "mic_offline": "Insizakalo yenkulumo yesiphequluli ayitholakali.",
+    "mic_no_answer": "Akukho okuzwakele. Thepha imakrofoni bese uzama futhi.",
+    "voice_no_reply": "I-Beranda ayiphendulanga. Linda kancane bese uthepha imakrofoni futhi."
   }
 }
