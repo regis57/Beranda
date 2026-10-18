@@ -177,6 +177,8 @@
     "tap_for_sound": "Taɓa allon sau ɗaya don Beranda ta iya magana.",
     "mic_none": "Burauza ba zai iya amfani da makirufo ba – duba saitunan.",
     "mic_blocked": "An toshe makirufo don wannan shafin.",
-    "mic_offline": "Ba a iya isa ga sabis na murya na burauza ba."
+    "mic_offline": "Ba a iya isa ga sabis na murya na burauza ba.",
+    "mic_no_answer": "Ba a ji komai ba. Taɓa makirufo ka sake gwadawa.",
+    "voice_no_reply": "Beranda bai amsa ba. Jira ɗan lokaci ka sake taɓa makirufo."
   }
 }

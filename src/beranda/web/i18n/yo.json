@@ -177,6 +177,8 @@
     "tap_for_sound": "Fọwọ́ kan ojú-iboju lẹ́ẹ̀kan kí Beranda lè sọ̀rọ̀.",
     "mic_none": "Aṣàwákiri kò lè lo gbohùngbohùn – wo àwọn ètò.",
     "mic_blocked": "Wọ́n dí gbohùngbohùn fún ojú-ìwé yìí.",
-    "mic_offline": "A kò lè dé ibi iṣẹ́ ohùn aṣàwákiri."
+    "mic_offline": "A kò lè dé ibi iṣẹ́ ohùn aṣàwákiri.",
+    "mic_no_answer": "A kò gbọ́ nǹkan kan. Tẹ gbohùngbohùn kí o sì tún gbìyànjú.",
+    "voice_no_reply": "Beranda kò dáhùn. Dúró díẹ̀ kí o sì tún tẹ gbohùngbohùn."
   }
 }

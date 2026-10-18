@@ -177,6 +177,8 @@
     "tap_for_sound": "Dotkněte se obrazovky jednou, aby mohla Beranda mluvit.",
     "mic_none": "Prohlížeč nemůže použít mikrofon – viz nastavení.",
     "mic_blocked": "Mikrofon je pro tuto stránku zablokován.",
-    "mic_offline": "Hlasovou službu prohlížeče nelze kontaktovat."
+    "mic_offline": "Hlasovou službu prohlížeče nelze kontaktovat.",
+    "mic_no_answer": "Nic nebylo slyšet. Klepněte na mikrofon a zkuste to znovu.",
+    "voice_no_reply": "Beranda neodpověděla. Chvíli počkejte a znovu klepněte na mikrofon."
   }
 }

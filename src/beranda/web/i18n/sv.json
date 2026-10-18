@@ -177,6 +177,8 @@
     "tap_for_sound": "Rör skärmen en gång så att Beranda får tala.",
     "mic_none": "Webbläsaren kan inte använda mikrofonen – se inställningarna.",
     "mic_blocked": "Mikrofonen är blockerad för den här sidan.",
-    "mic_offline": "Webbläsarens taltjänst kan inte nås."
+    "mic_offline": "Webbläsarens taltjänst kan inte nås.",
+    "mic_no_answer": "Inget hördes. Tryck på mikrofonen och försök igen.",
+    "voice_no_reply": "Beranda svarade inte. Vänta en stund och tryck på mikrofonen igen."
   }
 }

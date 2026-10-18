@@ -177,6 +177,8 @@
     "tap_for_sound": "Hal mar taabo shaashadda si Beranda u hadasho.",
     "mic_none": "Browserku ma isticmaali karo makarafoonka – eeg goobaha.",
     "mic_blocked": "Makarafoonka waa loo xannibay boggan.",
-    "mic_offline": "Adeegga codka ee browserka lama gaari karo."
+    "mic_offline": "Adeegga codka ee browserka lama gaari karo.",
+    "mic_no_answer": "Waxba lama maqlin. Taabo makarafoonka oo isku day mar kale.",
+    "voice_no_reply": "Beranda kama jawaabin. Sug wax yar oo mar kale taabo makarafoonka."
   }
 }

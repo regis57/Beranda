@@ -42,10 +42,13 @@ export function createRadio(audio, onChange) {
       audio.src = next.url;
       try { await audio.play(); } catch { set('error'); } // a blocked or dead stream
     },
-    stop() {
+    // forget = true also drops the station, for one removed from the favourites: play must
+    // not bring it back. An ordinary stop keeps it, so play resumes the same station.
+    stop(forget = false) {
       audio.pause();
       audio.removeAttribute('src');
       audio.load();
+      if (forget) station = null;
       set('idle');
     },
     toggle(fallback) {

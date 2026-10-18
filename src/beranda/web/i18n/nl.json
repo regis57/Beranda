@@ -177,6 +177,8 @@
     "tap_for_sound": "Raak het scherm één keer aan zodat Beranda mag spreken.",
     "mic_none": "De browser kan de microfoon niet gebruiken – zie de instellingen.",
     "mic_blocked": "De microfoon is geblokkeerd voor deze pagina.",
-    "mic_offline": "De spraakdienst van de browser is onbereikbaar."
+    "mic_offline": "De spraakdienst van de browser is onbereikbaar.",
+    "mic_no_answer": "Er werd niets gehoord. Tik op de microfoon en probeer het opnieuw.",
+    "voice_no_reply": "Beranda gaf geen antwoord. Wacht even en tik opnieuw op de microfoon."
   }
 }
