@@ -89,7 +89,10 @@ async function boot() {
     try { dict = await strings(select.value); } catch { /* even the words failed: English below */ }
     $('how').textContent = err.status === 401 || err.status === 403
       ? `${dict.enter_pin || 'Type the settings PIN'} → ${dict.voice_guide_open || 'Open the printable guide'}`
-      : 'Beranda did not answer. Open this page again from the settings page.';
+      // Any other failure means the Pi did not answer properly. The Wi-Fi page already has a
+      // translated "No answer from the Pi, reload the page in a minute" sentence in all nine
+      // settings languages, so reuse it rather than show English to everyone.
+      : (dict.wifi_err_timeout || 'No answer from the Pi. Reload the page in a minute.');
   }
 }
 boot();
