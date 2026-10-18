@@ -281,7 +281,8 @@
         <h3 data-i18n="admin.voice_defaults_title"></h3>
         <p class="hint" id="voice-guide-hint"></p>
         <div class="row wrap">
-          <a class="button" id="voice-guide-link" href="/static/voice-guide.html" target="_blank" rel="noopener" data-i18n="admin.voice_guide_open"></a>
+          <!-- rel="opener" on purpose: the guide is our own page and needs this tab's PIN, which a browser copies into a new tab only when it keeps its opener (noopener would protect nothing here). -->
+          <a class="button" id="voice-guide-link" href="/static/voice-guide.html" target="_blank" rel="opener" data-i18n="admin.voice_guide_open"></a>
         </div>
         <details class="help">
           <summary id="voice-defaults-summary"></summary>

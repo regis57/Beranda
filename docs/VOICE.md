@@ -51,7 +51,7 @@ phrases fit, the longest one wins.
 
 Saying only "play" (or its equivalent) starts your **first** favourite station; "play France
 Inter" starts the favourite whose name is closest to what was heard. Only your own favourite
-stations (box 8) can be started.
+stations (box 9) can be started.
 
 **English** (`en`)
 
@@ -71,7 +71,7 @@ stations (box 8) can be started.
 
 | What | You can say |
 |---|---|
-| Weather | “quel temps fait-il” · “météo” · “previsions” |
+| Weather | “quel temps fait-il” · “météo” · “prévisions” |
 | Time | “quelle heure est-il” · “heure” |
 | Tonight on TV | “à la télé” · “programme tv” · “programme télé” · “télévision” |
 | Play a station (say its name after) | “joue” · “mets” · “écoute” |
@@ -222,7 +222,9 @@ station = "960d0c25-0601-11e8-ae97-52543be04c81"   # the favourite's uuid; leave
 ```
 
 Actions: `radio_play`, `radio_stop`, `radio_next`, `radio_prev`, `volume_up`, `volume_down`,
-`weather`, `time`, `tv`, `say`.
+`weather`, `time`, `tv`, `read_day`, `date`, `agenda`, `tomorrow`, `news`, `bigger`, `smaller`,
+`contrast_on`, `contrast_off`, `quiet`, `say`. The full list of phrases for every action is in the
+printable guide (box 11) and on the Voice control page of the manual.
 
 ## If it does not work
 

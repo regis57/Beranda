@@ -15,7 +15,7 @@ try { pin = sessionStorage.getItem('beranda-pin') || ''; } catch { /* no storage
 
 async function json(url, headers = {}) {
   const r = await fetch(url, { headers });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  if (!r.ok) { const e = new Error(`HTTP ${r.status}`); e.status = r.status; throw e; }
   return r.json();
 }
 
@@ -82,6 +82,14 @@ async function boot() {
   select.value = VOICE_LANGUAGES.includes(wanted) ? wanted : 'en';
   select.addEventListener('change', () => render(select.value));
   $('print').addEventListener('click', () => window.print());
-  try { await render(select.value); } catch (err) { $('how').textContent = `${err.message}. Open this page from the settings page.`; }
+  try { await render(select.value); } catch (err) {
+    // People must never see a bare "HTTP 401": a locked settings page is the usual reason, so
+    // ask for the PIN in their own words (the existing "Type the settings PIN" sentence).
+    let dict = {};
+    try { dict = await strings(select.value); } catch { /* even the words failed: English below */ }
+    $('how').textContent = err.status === 401 || err.status === 403
+      ? `${dict.enter_pin || 'Type the settings PIN'} → ${dict.voice_guide_open || 'Open the printable guide'}`
+      : 'Beranda did not answer. Open this page again from the settings page.';
+  }
 }
 boot();
