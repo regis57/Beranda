@@ -25,6 +25,7 @@ import os
 import re
 import secrets
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -269,14 +270,28 @@ def results_dir() -> Path:
 
 def _write_result(folder: Path, job_id: str, result: dict, owner: tuple[int, int] | None) -> None:
     folder.mkdir(parents=True, exist_ok=True)
-    tmp = folder / f".{job_id}.tmp"
-    tmp.write_text(json.dumps(result))
-    # Owner only. The next line hands the file to the web server's own user, so nobody
-    # else on the Pi - not even its group - ever needs to be able to read it.
-    os.chmod(tmp, 0o600)
-    if owner:
-        os.chown(tmp, *owner)
-    os.replace(tmp, folder / f"{job_id}.json")
+    # This runs as root inside a folder the web server's user can write. Everything is done
+    # relative to the folder opened once without following links, and the temporary file is
+    # created fresh (never reused, never through a link): otherwise a link planted there could
+    # make root overwrite, and hand over, any file on the Pi.
+    dfd = os.open(folder, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        tmp = f".{job_id}.tmp"
+        try:
+            os.unlink(tmp, dir_fd=dfd)
+        except FileNotFoundError:
+            pass
+        fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=dfd)
+        with os.fdopen(fd, "w") as out:
+            out.write(json.dumps(result))
+            # Owner only, then handed to the web server's own user, so nobody else on the
+            # Pi - not even its group - ever needs to be able to read it.
+            os.fchmod(out.fileno(), 0o600)
+            if owner:
+                os.fchown(out.fileno(), *owner)
+        os.replace(tmp, f"{job_id}.json", src_dir_fd=dfd, dst_dir_fd=dfd)
+    finally:
+        os.close(dfd)
     # answers older than an hour are of no use to anybody
     for old in folder.glob("*.json"):
         try:
@@ -298,10 +313,17 @@ def job_main(argv: list[str] | None = None) -> int:
         request.unlink(missing_ok=True)
         return 2
     folder = results_dir()
+    # The request must be a plain file the web server wrote itself (see admin.py).
+    # A link is refused without being read: root would otherwise read, and act on, whatever
+    # file it points to.
+    job, owner = {}, None
     try:
-        stat = request.stat()
-        owner = (stat.st_uid, stat.st_gid)  # the web server's user: it must read the answer
-        job = json.loads(request.read_text())
+        fd = os.open(request, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(fd) as src:
+            info = os.fstat(src.fileno())
+            if stat.S_ISREG(info.st_mode):
+                owner = (info.st_uid, info.st_gid)  # the web server's user: it must read the answer
+                job = json.loads(src.read())
     except (OSError, ValueError):
         job, owner = {}, None
     request.unlink(missing_ok=True)  # at once: it may hold a password
