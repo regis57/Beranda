@@ -478,5 +478,6 @@
   "order_hint": "The arrows move a line up or down: the first one is shown first.",
   "move_up": "Move up",
   "move_down": "Move down",
-  "voice_err_mic_unusable": "This device has a microphone, but the browser cannot use it. Three usual reasons. (1) A Bluetooth headset or speakerphone: Windows only lends its microphone in “hands-free” mode — open Settings → System → Sound → Input and pick the “Hands-Free” entry of that device, or plug it in by cable or its USB dongle, which always works. (2) Windows → Privacy & security → Microphone: “Let desktop apps access your microphone” must be on. (3) Another program is holding the microphone: close it."
+  "voice_err_mic_unusable": "This device has a microphone, but the browser cannot use it. Three usual reasons. (1) A Bluetooth headset or speakerphone: Windows only lends its microphone in “hands-free” mode — open Settings → System → Sound → Input and pick the “Hands-Free” entry of that device, or plug it in by cable or its USB dongle, which always works. (2) Windows → Privacy & security → Microphone: “Let desktop apps access your microphone” must be on. (3) Another program is holding the microphone: close it.",
+  "voice_reply_missing": "One of your own phrases should answer but has no answer yet: write what Beranda should say, or remove the phrase."
 }
