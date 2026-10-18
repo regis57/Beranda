@@ -394,6 +394,12 @@ def create_app(
             response = PlainTextResponse(
                 "Beranda only answers devices on its own home network.", status_code=403
             )
+        elif not access.is_home_name(request.headers.get("host")):
+            # A page from another site whose name was re-pointed at the Pi (DNS rebinding) comes
+            # from a home address, so only the name it was opened under shows it is a stranger.
+            response = PlainTextResponse(
+                "Open Beranda by its own address, for example beranda.local:8080.", status_code=403
+            )
         else:
             response = await call_next(request)
         response.headers["Content-Security-Policy"] = CSP
