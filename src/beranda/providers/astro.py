@@ -8,11 +8,11 @@ moons, so it never drifts from the calendar. Sun times and elevation come from `
 from __future__ import annotations
 
 import math
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from astral import LocationInfo
-from astral.sun import elevation, sun
+from astral.sun import elevation, sunrise, sunset
 
 SYNODIC_MONTH = 29.530588861  # days, mean
 _UNIX_EPOCH_JD = 2440587.5
@@ -136,18 +136,69 @@ def _observer(latitude: float, longitude: float, tz: str):
 
 
 def sun_times(when: datetime, latitude: float, longitude: float, tz: str) -> dict:
-    """Sunrise/sunset for the local date of `when`. Both None during polar day/night."""
+    """Sunrise/sunset for the local date of `when`, each None only if it does not happen today."""
     zone = ZoneInfo(tz)
     local = when.astimezone(zone)
-    info = _observer(latitude, longitude, tz)
+    observer = _observer(latitude, longitude, tz).observer
+    # Each event is asked for on its own: astral's sun() also wants civil dawn and dusk, and
+    # during the white nights above about 60 degrees those never happen, which used to wipe
+    # out a perfectly real sunrise and sunset for weeks every summer.
     try:
-        times = sun(info.observer, date=local.date(), tzinfo=zone)
-        return {
-            "sunrise": times["sunrise"].isoformat(),
-            "sunset": times["sunset"].isoformat(),
-        }
-    except ValueError:  # the sun never rises or never sets today
-        return {"sunrise": None, "sunset": None}
+        rise = sunrise(observer, date=local.date(), tzinfo=zone)
+    except ValueError:  # polar night or polar day
+        rise = None
+    try:
+        down = sunset(observer, date=local.date(), tzinfo=zone)
+    except ValueError:
+        down = None
+    if rise and down and down < rise:
+        # When the sun sets after local midnight, astral gives the previous evening's sunset;
+        # the one that ends today's daylight is the one dated tomorrow.
+        try:
+            down = sunset(observer, date=local.date() + timedelta(days=1), tzinfo=zone)
+        except ValueError:
+            down = None
+    return {
+        "sunrise": rise.isoformat() if rise else None,
+        "sunset": down.isoformat() if down else None,
+    }
+
+
+# Main periodic terms of the Moon's longitude, Meeus "Astronomical Algorithms" table 47.A:
+# (D, M, M', F, coefficient in millionths of a degree). The 25 largest terms give a few
+# hundredths of a degree, far finer than the 12 degrees of an Indian lunar day.
+_MOON_TERMS = (
+    (0, 0, 1, 0, 6288774), (2, 0, -1, 0, 1274027), (2, 0, 0, 0, 658314), (0, 0, 2, 0, 213618),
+    (0, 1, 0, 0, -185116), (0, 0, 0, 2, -114332), (2, 0, -2, 0, 58793), (2, -1, -1, 0, 57066),
+    (2, 0, 1, 0, 53322), (2, -1, 0, 0, 45758), (0, 1, -1, 0, -40923), (1, 0, 0, 0, -34720),
+    (0, 1, 1, 0, -30383), (2, 0, 0, -2, 15327), (0, 0, 1, 2, -12528), (0, 0, 1, -2, 10980),
+    (4, 0, -1, 0, 10675), (0, 0, 3, 0, 10034), (4, 0, -2, 0, 8548), (2, 1, -1, 0, -7888),
+    (2, 1, 0, 0, -6766), (1, 0, -1, 0, -5163), (1, 1, 0, 0, 4987), (2, -1, 1, 0, 4036),
+    (2, 0, 2, 0, 3994),
+)
+
+
+def moon_longitude(when: datetime) -> float:
+    """Apparent ecliptic longitude of the Moon, degrees (Meeus ch. 47, main terms)."""
+    jd = when.astimezone(UTC).timestamp() / 86400 + _UNIX_EPOCH_JD
+    t = (jd - 2451545.0) / 36525
+    mean_lon = 218.3164477 + 481267.88123421 * t
+    d = math.radians(297.8501921 + 445267.1114034 * t)
+    m = math.radians(357.5291092 + 35999.0502909 * t)
+    mp = math.radians(134.9633964 + 477198.8675055 * t)
+    f = math.radians(93.2720950 + 483202.0175233 * t)
+    # The Earth's orbit is slowly getting rounder, which weakens the terms that involve the
+    # Sun's anomaly M; E is Meeus's correction for that.
+    e = 1 - 0.002516 * t
+    total = sum(
+        coeff * e ** abs(km) * math.sin(kd * d + km * m + kmp * mp + kf * f)
+        for kd, km, kmp, kf, coeff in _MOON_TERMS
+    )
+    a1 = math.radians(119.75 + 131.849 * t)
+    a2 = math.radians(53.09 + 479264.290 * t)
+    total += 3958 * math.sin(a1) + 1962 * math.sin(math.radians(mean_lon) - f) + 318 * math.sin(a2)
+    omega = math.radians(125.04452 - 1934.136261 * t)
+    return (mean_lon + total / 1e6 - 0.00478 * math.sin(omega)) % 360
 
 
 def is_night(when: datetime, latitude: float, longitude: float) -> bool:

@@ -16,7 +16,7 @@ link with the details in plain words.
 | Box | What it does |
 |---|---|
 | **1. Where are you?** | Type your town, press *Search*, click the right line: name, position and time zone fill in. Without internet, type latitude and longitude (press and hold on your home in any map app to read them). |
-| **2. Country and language** | The country gives public holidays, the first day of the week and the suggested news; picking it also proposes its language. 57 languages for the screen. A region is only needed for regional holidays. |
+| **2. Country and language** | The country gives public holidays and the suggested news; picking it also proposes its language. 57 languages for the screen. A region is only needed for regional holidays. |
 | **3. Look** | Fifteen themes, shown live in the preview. *Auto* switches to night colours after sunset. |
 | **4. Extras of the main screen** | The 24-hour graph, air quality / UV / pollen, weather warnings, name day and local calendar, a second clock. Each one has its own tick box. |
 | **5. Your calendar** | Paste the private link of your calendar and press *Test*. The box *Where do I find this link?* gives the steps for Google, Apple, Outlook, Nextcloud and Proton, each with a link to the official guide in your language. |
@@ -85,7 +85,7 @@ writes `~/.config/beranda/config.toml` (readable by you only, because calendar l
 |---|---|---|
 | `japan` | washi paper, vermilion, ink | the 72 micro-seasons (七十二候) |
 | `indonesia` | batik browns, indigo, a faint kawung motif | *pranata mangsa*, the Javanese farmers' calendar |
-| `france` | almanac paper, navy, red, a tricolour rule | the Republican calendar: "16 Vendémiaire, Belle de nuit" |
+| `france` | almanac paper, navy, red, a tricolour rule | no season block: the box *On this day* takes its place |
 | `germany` | Bauhaus: grey sheet, black, red, yellow | the ten phenological seasons of the DWD ("Vollherbst: Eicheln fallen") |
 | `spain` | lime wash, terracotta, cobalt, Mudéjar star | the season and the *refrán* of the month |
 | `italy` | a Renaissance page, Pompeian red | the season and the *proverbio* of the month |
@@ -103,7 +103,7 @@ Any theme works with any language. Try combinations without saving:
 `/?theme=brazil&lang=pt-BR&mode=night`.
 
 Honest notes: micro-season, mangsa and phenological dates are averages that move from year to
-year; Republican day names and proverbs come from tradition and spellings vary. Corrections
+year; proverbs come from tradition and spellings vary. Corrections
 are welcome.
 
 ## On the wall

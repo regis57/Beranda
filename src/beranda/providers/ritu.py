@@ -3,13 +3,15 @@
 The ṛtu follow the classical two-month pattern, given here in their usual modern
 approximation on the Gregorian calendar. The tithi is the lunar day: the Moon gains 12°
 on the Sun for each one, 15 in the bright half (śukla pakṣa) up to the full moon, 15 in the
-dark half (kṛṣṇa pakṣa) down to the new moon. Computed from the moon's phase, it can be a
-few hours off the almanac (pañcāṅga) of your temple.
+dark half (kṛṣṇa pakṣa) down to the new moon. Computed from the real Moon-Sun elongation,
+it changes within a few minutes of the almanac (pañcāṅga) of your temple.
 """
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
+
+from beranda.providers import astro, jieqi
 
 # (start month, start day, Devanagari, transliteration, English, French)
 RITU = (
@@ -43,7 +45,20 @@ def tithi(phase: float) -> tuple[str, str]:
     return f"{paksha_dev} {dev}", f"{paksha} {latin}"
 
 
-def current(today: date, phase: float) -> dict:
+def elongation_fraction(when: datetime) -> float:
+    """How far the Moon has run ahead of the Sun, as a fraction of a full turn (0 = new moon)."""
+    return ((astro.moon_longitude(when) - jieqi.sun_longitude(when)) % 360) / 360
+
+
+def current(today: date, phase: float | datetime) -> dict:
+    """phase: the moment itself (preferred), or a phase fraction as in astro.moon.
+
+    A tithi is defined by elongation, not by time: the Moon runs faster near perigee, so the
+    even, time-based phase of astro.moon can be a whole tithi off for up to 17 hours. Given
+    the moment, the true elongation is used instead.
+    """
+    if isinstance(phase, datetime):
+        phase = elongation_fraction(phase)
     key = (today.month, today.day)
     idx = max((i for i, r in enumerate(RITU) if (r[0], r[1]) <= key), default=len(RITU) - 1)
     nxt = RITU[(idx + 1) % len(RITU)]
