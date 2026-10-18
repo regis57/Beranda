@@ -177,3 +177,32 @@ def test_two_dropbox_copies_never_run_at_once(tmp_path, monkeypatch):
     results = asyncio.run(run())
     assert all(r["ok"] for r in results)
     assert most == 1 and calls == 1
+
+
+def test_a_link_saved_during_a_copy_is_copied_next(tmp_path, monkeypatch):
+    # The owner saves a new link while the old one is still downloading: the new link must be
+    # copied as soon as the old copy ends, not hours later when the loop comes round again.
+    copied = []
+
+    async def fake_sync(link, folder, limit):
+        copied.append(link)
+        await asyncio.sleep(0.05)
+        return {"added": 1, "removed": 0, "total": 1}
+
+    monkeypatch.setattr(photos, "sync_dropbox", fake_sync)
+    old = "https://www.dropbox.com/scl/fo/a/h?rlkey=old"
+    new = "https://www.dropbox.com/scl/fo/b/h?rlkey=new"
+    cfg = replace(config.Config(), photos_dropbox_url=old, photos_folder=str(tmp_path))
+    runtime = admin.Runtime(cfg=cfg, config_path=None)
+
+    async def run():
+        first = asyncio.create_task(runtime.sync_dropbox())
+        await asyncio.sleep(0.01)
+        runtime.cfg = replace(runtime.cfg, photos_dropbox_url=new)
+        second = await runtime.sync_dropbox()
+        await first
+        return second
+
+    result = asyncio.run(run())
+    assert result["ok"]
+    assert copied == [old, new]

@@ -61,6 +61,9 @@ class Runtime:
     # copies unpacking into the same folder take each other's half-written files away, and the
     # slower one then reports a network fault that never happened, so only one runs at a time.
     _dropbox_lock: asyncio.Lock = field(default_factory=asyncio.Lock, init=False, repr=False)
+    # The link the running (or last) copy uses, so a call for a newer link is never merged
+    # into a copy of the old one.
+    _dropbox_link: str = field(default="", init=False, repr=False)
 
     def __post_init__(self) -> None:
         self.listening_port = self.cfg.port  # a new port saved later only applies after a restart
@@ -71,8 +74,11 @@ class Runtime:
 
     async def sync_dropbox(self) -> dict:
         """Copy the shared Dropbox folder into the photo folder and remember how it went."""
-        if self._dropbox_lock.locked():
-            # A copy is already running: join it rather than download up to 400 MB again.
+        if self._dropbox_lock.locked() and self.cfg.photos_dropbox_url == self._dropbox_link:
+            # A copy of this same link is already running: join it rather than download up to
+            # 400 MB again. When a newer link was saved meanwhile we fall through instead, wait
+            # for the old copy to end and then copy the new link straight away, so the owner
+            # does not wait hours for the next round of the loop.
             async with self._dropbox_lock:
                 return self.dropbox
         async with self._dropbox_lock:
@@ -81,6 +87,7 @@ class Runtime:
             link = self.cfg.photos_dropbox_url
             if not link:
                 return self.dropbox
+            self._dropbox_link = link
             when = datetime.now(UTC).isoformat(timespec="seconds")
             try:
                 result = await photos.sync_dropbox(link, self.photo_folder, self.cfg.limits.photos)
