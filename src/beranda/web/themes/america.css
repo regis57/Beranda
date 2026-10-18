@@ -16,7 +16,7 @@
   --ornament: url("/static/themes/mountains.svg");
 }
 :root[data-mode="night"] {
-  --bg: #0d1410; --ink: rgba(240, 230, 208, 0.86); --ink-2: rgba(240, 230, 208, 0.6); --ink-3: rgba(240, 230, 208, 0.5);
+  --bg: #0d1410; --ink: rgba(240, 230, 208, 0.86); --ink-2: rgba(240, 230, 208, 0.6); --ink-3: rgba(240, 230, 208, 0.51);
   --line: rgba(240, 230, 208, 0.13); --accent: #d27a52; --forest: #5f8f6a; --rain: #6f9bc8;
   --warm: #bf6f45; --cool: #4f7499; --moon-lit: #f0e6d0; --moon-dark: rgba(240, 230, 208, 0.08);
 }

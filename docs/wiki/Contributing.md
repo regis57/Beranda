@@ -16,7 +16,7 @@ beranda --demo            # http://localhost:8080 and /admin
 ## Checks (run before every pull request)
 
 ```bash
-pytest                    # about 540 tests
+pytest                    # about 640 tests
 ruff check src tests scripts   # includes the security rules (S, B, BLE, ASYNC, DTZ)
 node --check src/beranda/web/*.js
 npm i --no-save axe-core && python scripts/check_a11y.py   # accessibility rules + the Tab key (needs playwright)
