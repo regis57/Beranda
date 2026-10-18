@@ -35,7 +35,10 @@ from beranda.app import create_app
 from beranda.config import Config
 
 RULES = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
-PAGES = (("display", "/", 1280, 800), ("settings", "/admin", 1280, 2000))
+# The screen is checked by day and by night on purpose: left to the clock, a run only ever saw
+# one of the two, and a colour too light by day failed daytime runs only (0.18.1).
+PAGES = (("display by day", "/?mode=light", 1280, 800), ("display by night", "/?mode=night", 1280, 800),
+         ("settings", "/admin", 1280, 2000))
 
 
 def free_port() -> int:

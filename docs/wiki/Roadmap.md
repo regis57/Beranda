@@ -3,10 +3,11 @@
 Master word: **ease**. Every step ships as its own small release; what is learned on a real Pi
 comes first. Order agreed in October 2026.
 
-## Now - 0.16
+## Now
 
 1. **Test on other boards**: Raspberry Pi 3B+ and Pi 5, and tune Chromium for the Pi 3.
-2. **First real try of the Wi-Fi box and of the safety net** (both new in 0.16), and of the **ready-to-flash image**.
+2. **First real try of the Wi-Fi safety net** (opening "Beranda setup" with no network at all) and
+   of the **ready-to-flash image**. The Wi-Fi box itself was tried on a real Pi 4 in October 2026.
 3. Turn the per-board limits from estimates into measurements.
 
 ## Next
@@ -42,4 +43,5 @@ comes first. Order agreed in October 2026.
 The short story: **0.1-0.4** foundations and the one-line installer · **0.5-0.9** photos, radio, TV,
 voice, history · **0.10-0.11** 57 languages, Wi-Fi setup · **0.12-0.13** lessons from the first real
 tests · **0.14** the new main screen and limits per board · **0.15** advanced settings, diagnostics,
-https, small SD cards. Every version, one line each: [Changelog](Changelog).
+https, small SD cards · **0.16** Wi-Fi from the settings page, the safety net, home network only ·
+**0.17-0.18** voice: a wake word tried and taken out, the microphone button kept. Every version, one line each: [Changelog](Changelog).

@@ -212,3 +212,10 @@ One line per version, newest last. Each one was a pull request on
   the no-microphone warnings on the settings page. The docs now say in one clear place that **a
   browser only allows the microphone on an https (SSL) page**, and that Beranda's own self-made
   certificate is enough
+- **v0.18.1**: the small grey labels of the default theme (the AIR, UV, POLLEN tiles) were a hair too
+  light by day - 4.49 to 1 against the 4.5 the accessibility rules ask - and CI only saw it in daytime
+  runs, because it checked the screen in whichever mode the clock gave it. The screen is now checked
+  by day and by night every time, and a new test reads the three text colours of all 15 themes in both
+  modes: two more were just under the line (Oceania by day, America by night). Each of the three is
+  one step darker or brighter, invisible to the eye. Also in the wiki: the microphone button
+  confirmed on a real Pi 4 with Chrome on Windows, and the Roadmap brought up to date
