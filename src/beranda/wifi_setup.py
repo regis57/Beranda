@@ -232,13 +232,24 @@ def write_status(ssid: str | None) -> None:
             # Root writes this into a folder the web server's user owns, so a link planted at
             # this name must not be followed: write a fresh file beside it and move it in place.
             path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = path.with_name(f".{path.name}.tmp")
-            tmp.unlink(missing_ok=True)
-            fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644)
-            with os.fdopen(fd, "w") as out:
-                out.write(json.dumps({"ssid": ssid, "open": True}))
-                os.fchmod(out.fileno(), 0o644)  # the web server (another user) must read it
-            os.replace(tmp, path)
+            dfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+                # The folder belongs to the web server's user, so its owner is who must read the
+                # file: handing it over keeps it owner-only instead of readable by everyone.
+                folder = os.fstat(dfd)
+                tmp = f".{path.name}.tmp"
+                try:
+                    os.unlink(tmp, dir_fd=dfd)
+                except FileNotFoundError:
+                    pass
+                fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=dfd)
+                with os.fdopen(fd, "w") as out:
+                    out.write(json.dumps({"ssid": ssid, "open": True}))
+                    os.fchmod(out.fileno(), 0o600)
+                    os.fchown(out.fileno(), folder.st_uid, folder.st_gid)
+                os.replace(tmp, path.name, src_dir_fd=dfd, dst_dir_fd=dfd)
+            finally:
+                os.close(dfd)
         else:
             path.unlink(missing_ok=True)
     except OSError:

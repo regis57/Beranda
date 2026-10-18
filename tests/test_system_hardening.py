@@ -235,3 +235,14 @@ def test_the_safety_net_clears_a_leftover_hotspot_when_it_starts(monkeypatch):
     monkeypatch.setattr(wifi_setup, "is_connected", lambda: (_ for _ in ()).throw(RuntimeError("too late")))
     with pytest.raises(Stop):
         wifi_setup.main()
+
+
+def test_the_safety_net_status_is_readable_by_its_folder_owner_only(tmp_path, monkeypatch):
+    # The folder belongs to the web server's user; the file is handed to that same user, and
+    # nobody else on the Pi needs to read the name of the setup network.
+    status = tmp_path / "wifi-setup.json"
+    monkeypatch.setenv("BERANDA_WIFI_STATUS", str(status))
+    wifi_setup.write_status(AP_SSID)
+    info = status.stat()
+    assert info.st_mode & 0o777 == 0o600
+    assert (info.st_uid, info.st_gid) == (tmp_path.stat().st_uid, tmp_path.stat().st_gid)

@@ -43,7 +43,9 @@ def normalise_url(url: str) -> str:
 
 
 async def download(url: str) -> str:
-    # Checked again here, not only when the settings were saved (see news.fetch).
+    # Checked again here, not only when the settings were saved (see news.fetch). Downloading
+    # from an address the owner typed is the whole point of a calendar link, so code scanning's
+    # "request forgery" warning here is expected: checked_url keeps it to http(s) web sites.
     address = checked_url(normalise_url(url), "calendar address")
     async with httpx.AsyncClient(
         timeout=15, headers={"User-Agent": USER_AGENT}, follow_redirects=True
