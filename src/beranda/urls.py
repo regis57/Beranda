@@ -41,11 +41,16 @@ def checked_url(value: object, what: str = "address") -> str:
         raise ValueError(f"the {what} is empty")
     if len(url) > MAX_LENGTH:
         raise ValueError(f"the {what} is far too long ({len(url)} characters)")
-    if _BAD_CHARACTER.search(url):
+    # isprintable() also catches the invisible ones beyond plain ASCII (a zero-width space, a
+    # no-break space, a direction override) that a link copied from a chat or a PDF can carry:
+    # they would be saved, then quietly break the download.
+    if _BAD_CHARACTER.search(url) or not url.isprintable():
         raise ValueError(f"the {what} contains a character that does not belong in a web address")
     parts = urlsplit(url)
     if parts.scheme.lower() not in ("http", "https"):
-        raise ValueError(f"the {what} must start with http:// or https://, got {url[:60]!r}")
+        # The address is not repeated: it can be a private link, and this sentence is shown on
+        # the settings page and can end up in the journal.
+        raise ValueError(f"the {what} must start with http:// or https:// (copy the whole link, including its beginning)")
     if not parts.hostname:
         raise ValueError(f"the {what} does not say which site to read")
     if parts.username or parts.password:

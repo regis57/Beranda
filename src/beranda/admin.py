@@ -57,6 +57,10 @@ class Runtime:
     cache: object | None = None  # the downloaded-data cache (set by create_app), emptied by "erase data"
     listening_port: int = field(init=False, default=0)  # the port this server really listens on
     pins: access.PinAttempts = field(default_factory=access.PinAttempts)  # wrong PINs, per device
+    # Saving a new link, the "copy now" button and the every-few-hours loop can overlap. Two
+    # copies unpacking into the same folder take each other's half-written files away, and the
+    # slower one then reports a network fault that never happened, so only one runs at a time.
+    _dropbox_lock: asyncio.Lock = field(default_factory=asyncio.Lock, init=False, repr=False)
 
     def __post_init__(self) -> None:
         self.listening_port = self.cfg.port  # a new port saved later only applies after a restart
@@ -67,15 +71,25 @@ class Runtime:
 
     async def sync_dropbox(self) -> dict:
         """Copy the shared Dropbox folder into the photo folder and remember how it went."""
-        when = datetime.now(UTC).isoformat(timespec="seconds")
-        try:
-            result = await photos.sync_dropbox(self.cfg.photos_dropbox_url, self.photo_folder, self.cfg.limits.photos)
-            self.dropbox = {"ok": True, "at": when, **result}
-        except photos.PhotoError as exc:  # bad link, too big, not a folder: the page words it
-            self.dropbox = {"ok": False, "at": when, "error": str(exc), "code": exc.code}
-        except (httpx.HTTPError, OSError) as exc:
-            self.dropbox = {"ok": False, "at": when, "error": type(exc).__name__, "code": "net"}
-        return self.dropbox
+        if self._dropbox_lock.locked():
+            # A copy is already running: join it rather than download up to 400 MB again.
+            async with self._dropbox_lock:
+                return self.dropbox
+        async with self._dropbox_lock:
+            # The link is read only once the lock is held, so a copy always uses the latest
+            # saved link and never deletes the pictures of a newer one.
+            link = self.cfg.photos_dropbox_url
+            if not link:
+                return self.dropbox
+            when = datetime.now(UTC).isoformat(timespec="seconds")
+            try:
+                result = await photos.sync_dropbox(link, self.photo_folder, self.cfg.limits.photos)
+                self.dropbox = {"ok": True, "at": when, **result}
+            except photos.PhotoError as exc:  # bad link, too big, not a folder: the page words it
+                self.dropbox = {"ok": False, "at": when, "error": str(exc), "code": exc.code}
+            except (httpx.HTTPError, OSError) as exc:
+                self.dropbox = {"ok": False, "at": when, "error": type(exc).__name__, "code": "net"}
+            return self.dropbox
 
     def sync_dropbox_soon(self) -> None:
         """Start a copy in the background (the settings page must not wait for a download)."""
@@ -197,8 +211,20 @@ def router(runtime: Runtime) -> APIRouter:
             raise HTTPException(422, f"invalid settings: {over}")
         merged = dict(body)
         merged["server"] = {"host": runtime.cfg.host, "port": runtime.cfg.port}
+        # The settings page has no box for the [limits] profile: it can only be chosen by hand in
+        # config.toml. Without this, a save would fall back to "auto" and quietly cut every list
+        # down to the board's automatic limit, deleting links the owner had added.
+        merged["limits"] = {"profile": runtime.cfg.limits_profile}
         if "pin" in merged:  # "" clears, a string sets, absent keeps
-            merged["admin"] = {"pin": str(merged.pop("pin"))}
+            new_pin = str(merged.pop("pin"))
+            # The PIN travels in an HTTP header, and a browser refuses to send one holding a
+            # character beyond Latin-1 (an Arabic or Persian keypad types such digits). A PIN
+            # like that could be saved but never typed again, locking the owner out for good.
+            if new_pin and (not new_pin.isascii() or not new_pin.isprintable() or " " in new_pin):
+                raise HTTPException(
+                    422, "invalid settings: the PIN can only use the digits 0 to 9 and plain letters, without spaces"
+                )
+            merged["admin"] = {"pin": new_pin}
         elif runtime.cfg.admin_pin:
             merged["admin"] = {"pin": runtime.cfg.admin_pin}
         sources = (merged.get("news") or {}).get("sources")
@@ -333,7 +359,9 @@ def router(runtime: Runtime) -> APIRouter:
         url = str(body.get("url", "")).strip()
         try:
             raw = await tv.download(url)
-            found = tv.channels(raw)
+            # A big guide takes seconds to unpack and read (far more on a Pi): off the event
+            # loop, so the screen and the settings page keep answering meanwhile.
+            found = await asyncio.to_thread(tv.channels, raw)
         except Exception as exc:  # noqa: BLE001 - class name only: the URL may be private
             return {"ok": False, "error": type(exc).__name__}
         return {"ok": True, "channels": found}

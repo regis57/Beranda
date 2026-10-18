@@ -52,6 +52,39 @@ def is_home(host: str | None) -> bool:
     return ip.is_private or ip.is_loopback or ip.is_link_local
 
 
+# Endings home routers and the Pi itself give to names on the home network.
+_HOME_SUFFIXES = (".local", ".lan", ".home", ".home.arpa", ".internal", ".localdomain", ".fritz.box")
+
+
+def is_home_name(host_header: str | None) -> bool:
+    """True when the page was opened under a home-network name or address (the Host header).
+
+    A web page from another site can have its own name re-pointed at the Pi's address ("DNS
+    rebinding"). The browser then sends that site's name as Host and as Origin, so comparing the
+    two proves nothing, and the visitor's address is a home one. Only the name gives it away.
+    """
+    host = (host_header or "").strip().lower()
+    if not host:
+        return False  # every browser sends one
+    if host.startswith("["):  # an IPv6 address, written [fe80::1]:8080
+        inside, _, _ = host[1:].partition("]")
+        try:
+            ipaddress.ip_address(inside)
+        except ValueError:
+            return False
+        return True
+    name = host.rsplit(":", 1)[0] if host.count(":") == 1 else host
+    name = name.rstrip(".")
+    try:
+        ipaddress.ip_address(name)
+        return True
+    except ValueError:
+        pass
+    if not name:
+        return False
+    return name == "localhost" or "." not in name or name.endswith(_HOME_SUFFIXES)
+
+
 @dataclass
 class _Device:
     wrong: int = 0

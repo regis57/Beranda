@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import tomllib
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -146,6 +147,12 @@ def _parse_key_date(raw: dict) -> KeyDate:
         raise ValueError(f"key date must be MM-DD or YYYY-MM-DD, got {raw['date']!r}")
     if not (1 <= month <= 12 and 1 <= day <= 31):
         raise ValueError(f"key date out of range: {raw['date']!r}")
+    # 04-31 would pass the range check, then silently never show. A yearly date is tried in
+    # 2000, a leap year, so a birthday on 02-29 is still allowed.
+    try:
+        date(year or 2000, month, day)
+    except ValueError:
+        raise ValueError(f"this date does not exist: {raw['date']!r}") from None
     kind = raw.get("kind", "other")
     if kind not in {"birth", "death", "anniversary", "other"}:
         raise ValueError(f"unknown key date kind: {kind!r}")
@@ -155,7 +162,8 @@ def _parse_key_date(raw: dict) -> KeyDate:
 def _parse_station(raw: dict) -> Station:
     url = str(raw.get("url", "")).strip()
     if not url.lower().startswith(("http://", "https://")):
-        raise ValueError(f"a radio station needs a stream url, got {url[:60]!r}")
+        # The address is not repeated in the message: it is shown on the page and in the journal.
+        raise ValueError("a radio station needs a stream address starting with http:// or https://")
     return Station(
         uuid=str(raw.get("uuid", "")),
         name=str(raw.get("name", "")).strip() or "?",
@@ -257,7 +265,8 @@ def from_dict(data: dict) -> Config:
         name=loc.get("name", Location.name),
         latitude=float(loc.get("latitude", Location.latitude)),
         longitude=float(loc.get("longitude", Location.longitude)),
-        timezone=loc.get("timezone", Location.timezone),
+        # Checked like the second clock: an unknown name would make every screen request fail.
+        timezone=_check_timezone(loc.get("timezone", Location.timezone)) or Location.timezone,
     )
     if not (-90 <= location.latitude <= 90 and -180 <= location.longitude <= 180):
         raise ValueError("location latitude/longitude out of range")
@@ -435,4 +444,7 @@ def to_dict(cfg: Config) -> dict:
         out["subdivision"] = cfg.subdivision
     if cfg.admin_pin:
         out["admin"] = {"pin": cfg.admin_pin}
+    if cfg.cache_dir != Config.cache_dir:
+        # A folder chosen by hand (a USB stick, say) must survive a save from the settings page.
+        out["cache_dir"] = str(cfg.cache_dir)
     return out
