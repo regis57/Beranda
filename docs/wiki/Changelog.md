@@ -219,3 +219,21 @@ One line per version, newest last. Each one was a pull request on
   modes: two more were just under the line (Oceania by day, America by night). Each of the three is
   one step darker or brighter, invisible to the eye. Also in the wiki: the microphone button
   confirmed on a real Pi 4 with Chrome on Windows, and the Roadmap brought up to date
+- **v0.19.0**: a full review of the code against what the README and this wiki promise, 64 problems
+  fixed, each with a test that failed before. **Safety**: the root helper no longer runs a file the web
+  server's user could change, Wi-Fi answers can no longer be steered through a link, full download
+  addresses (calendar links, coordinates) no longer reach the system journal, the settings refuse a page
+  from another site pretending to be at Beranda's address, and a PIN Beranda could not check later is
+  refused at once. **The screen holds up**: a photo folder Beranda may not open hides the photos instead
+  of blanking everything, a mistyped time zone is refused, the agenda keeps its last copy offline on the
+  1st of the month, an expired weather warning disappears even when MeteoAlarm cannot be reached, and a
+  restart without network keeps the https certificate already accepted. **Right answers**: warnings for
+  "Rhône" no longer show "Bouches-du-Rhône"'s, cancelled events are hidden, `webcals://` links work,
+  multi-day events stay until they end, rain stays right in imperial units, the Korean clock, TV paging,
+  white-night sunrise above 60°, the Indian lunar day, holidays when a region is unknown, standard XMLTV
+  guides, radio search by language, Dropbox pictures with the same name. **Voice**: "play the radio"
+  with no station, curly apostrophes, a regional language (fr-FR), words inside words, the printable guide
+  behind a PIN, and a screen opened with `?lang=` understood in that language. **Settings**: a forced
+  `[limits]` profile and a hand-set cache folder survive a save, the voice-phrase limit follows the board.
+  **Install**: re-running the install line restarts Beranda, image installs can update, `--no-wifi-setup`
+  is respected, and the safety net turns the Wi-Fi radio on and survives a wrong password

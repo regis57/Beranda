@@ -976,7 +976,7 @@ async function listen() {
     let answer;
     try {
       const response = await fetch('/api/voice', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard, language: lang }),
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       answer = await response.json();

@@ -1,3 +1,3 @@
 """Beranda: a lean smart-mirror / big-tablet dashboard."""
 
-__version__ = "0.18.1"
+__version__ = "0.19.0"

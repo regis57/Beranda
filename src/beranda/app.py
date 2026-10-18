@@ -7,6 +7,7 @@ import calendar as _calendar
 import hashlib
 import io
 import logging
+import re
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from dataclasses import replace
@@ -484,11 +485,15 @@ def create_app(
         if not cfg.voice_enabled:
             return JSONResponse({"detail": "voice control is turned off in the settings"}, status_code=403)
         text = str(body.get("text", ""))[:300]
+        # A screen opened with ?lang= listens in that language, so its sentences must be matched
+        # in it too. Only a plain language code is taken; anything else falls back to the setting.
+        asked = str(body.get("language", ""))
+        language = asked if re.fullmatch(r"[a-z]{2,3}(-[A-Za-z]{2,4})?", asked) else cfg.language
         now = clock()
         data = await build_state(cfg, cache, now)
         reply = voice_mod.answer(
             text,
-            language=cfg.language,
+            language=language,
             now=now,
             stations=data["radio"]["stations"],
             weather=data["weather"],
