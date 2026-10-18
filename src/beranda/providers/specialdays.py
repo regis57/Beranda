@@ -35,19 +35,28 @@ def holiday_language(country: str, language: str) -> str | None:
 
 def public_holidays(country: str, subdivision: str | None, language: str, years: list[int]):
     """Return {date: name}. Unknown countries yield an empty dict rather than an error."""
+    # Under martial law Ukraine's national holidays are working days for now, and the holidays
+    # library files them under "workday"; without it a Ukrainian screen shows none at all.
+    categories = ("public", "workday") if country == "UA" else None
     try:
         return holidays.country_holidays(
-            country, subdiv=subdivision, years=years, language=holiday_language(country, language)
+            country, subdiv=subdivision, years=years, categories=categories,
+            language=holiday_language(country, language),
         )
     except NotImplementedError:
-        log.warning("no public holiday data for country %r", country)
-        return {}
-    except (KeyError, ValueError):
-        # language or subdivision not supported for this country: retry with defaults
-        try:
-            return holidays.country_holidays(country, years=years)
-        except (NotImplementedError, KeyError, ValueError):
+        if not subdivision:
+            log.warning("no public holiday data for country %r", country)
             return {}
+        # The library raises this for an unknown region too (a hand edit, or a code a newer
+        # release renamed). The national holidays are still right, so show those.
+        log.warning("public holiday region %r is not known for %r; showing the national holidays",
+                    subdivision, country)
+    except (KeyError, ValueError):
+        pass  # language or subdivision not supported for this country: retry with defaults
+    try:
+        return holidays.country_holidays(country, years=years, categories=categories)
+    except (NotImplementedError, KeyError, ValueError):
+        return {}
 
 
 def _key_date_label(key, year: int) -> str:
