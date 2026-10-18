@@ -180,5 +180,13 @@
     "mic_offline": "Insizakalo yenkulumo yesiphequluli ayitholakali.",
     "mic_no_answer": "Akukho okuzwakele. Thepha imakrofoni bese uzama futhi.",
     "voice_no_reply": "I-Beranda ayiphendulanga. Linda kancane bese uthepha imakrofoni futhi."
+  },
+  "prayer": {
+    "next": "Umthandazo olandelayo: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

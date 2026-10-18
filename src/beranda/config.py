@@ -114,6 +114,7 @@ class Config:
     alerts_area: str = ""  # the name of your area as MeteoAlarm writes it, e.g. "Moselle"
     widget_ephemeris: bool = True  # name day, length of the day, the local calendar
     widget_nameday_top: bool = True  # the name day in big at the top right (France theme), in name-day countries
+    widget_prayer: bool = True  # the next prayer under the moon, in countries whose state religion is Islam
     # For people who see badly or cannot read the screen: bigger text, black-on-white colours,
     # and a button (plus a voice command) that reads the day out loud.
     a11y_large_text: bool = False
@@ -338,6 +339,7 @@ def from_dict(data: dict) -> Config:
         alerts_area=" ".join(str(widgets.get("alerts_area", "")).split())[:80],
         widget_ephemeris=bool(widgets.get("ephemeris", True)),
         widget_nameday_top=bool(widgets.get("nameday_top", True)),
+        widget_prayer=bool(widgets.get("prayer", True)),
         a11y_large_text=bool(a11y.get("large_text", False)),
         a11y_high_contrast=bool(a11y.get("high_contrast", False)),
         a11y_read_aloud=bool(a11y.get("read_aloud", False)),
@@ -438,6 +440,7 @@ def to_dict(cfg: Config) -> dict:
         "alerts_area": cfg.alerts_area,
         "ephemeris": cfg.widget_ephemeris,
         "nameday_top": cfg.widget_nameday_top,
+        "prayer": cfg.widget_prayer,
         "second_clock": cfg.second_clock,
     }
     if cfg.subdivision:

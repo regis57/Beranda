@@ -180,5 +180,13 @@
     "mic_offline": "Pārlūka runas pakalpojums nav sasniedzams.",
     "mic_no_answer": "Nekas netika sadzirdēts. Pieskarieties mikrofonam un mēģiniet vēlreiz.",
     "voice_no_reply": "Beranda neatbildēja. Brīdi uzgaidiet un vēlreiz pieskarieties mikrofonam."
+  },
+  "prayer": {
+    "next": "Nākamā lūgšana: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

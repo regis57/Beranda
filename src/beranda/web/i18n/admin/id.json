@@ -445,6 +445,8 @@
   "edge_hint": "Tip: Beranda paling baik di Google Chrome. Microsoft Edge pernah bermasalah (kendali suara, halaman tersimpan dari versi lama).",
   "w_nameday": "Hari nama besar-besar, di kanan atas",
   "w_nameday_hint": "Di negara yang merayakan hari nama (Prancis, Jerman, Polandia, Swedia, Hungaria…), dengan nama-nama negara Anda. Besar di kanan atas dengan tema Prancis; dengan tema lain tetap di baris efemeris.",
+  "w_prayer": "Salat berikutnya, di bawah bulan",
+  "w_prayer_hint": "Di negara yang agama negaranya Islam (Maroko, Aljazair, Mesir, Arab Saudi, Pakistan, Malaysia…), waktu salat berikutnya dari lima waktu, dihitung di Pi dari posisi matahari dengan metode negara Anda. Bisa berbeda satu atau dua menit dari masjid Anda.",
   "a11y": "Aksesibilitas",
   "a11y_hint": "Untuk orang yang penglihatannya kurang, atau tidak bisa membaca layar. Ketiganya cocok dengan gaya apa pun.",
   "a11y_large": "Teks besar",

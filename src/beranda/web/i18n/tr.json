@@ -180,5 +180,13 @@
     "mic_offline": "Tarayıcının konuşma servisine ulaşılamıyor.",
     "mic_no_answer": "Hiçbir şey duyulmadı. Mikrofona dokunup yeniden deneyin.",
     "voice_no_reply": "Beranda yanıt vermedi. Biraz bekleyip mikrofona yeniden dokunun."
+  },
+  "prayer": {
+    "next": "Sıradaki namaz: {name} {time}",
+    "fajr": "Sabah",
+    "dhuhr": "Öğle",
+    "asr": "İkindi",
+    "maghrib": "Akşam",
+    "isha": "Yatsı"
   }
 }

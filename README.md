@@ -24,7 +24,7 @@ dark at night. **Free**: no account, no subscription, no paid service.
 
 | | |
 |---|---|
-| **Time and weather** | Clock, date, weather now, rain in the next 2 hours, 7-day forecast, and a 24-hour graph (temperature, rain, wind, nights). Moon phase, sunrise and sunset. |
+| **Time and weather** | Clock, date, weather now, rain in the next 2 hours, 7-day forecast, and a 24-hour graph (temperature, rain, wind, nights). Moon phase, sunrise and sunset, and the next prayer in countries whose state religion is Islam. |
 | **Your life** | Your calendar (Google, Apple, Outlook, Nextcloud, Proton), public holidays of your country, birthdays and dates that matter, your photos as a slideshow. |
 | **The world** | News headlines, world radio (50,000 stations), tonight's TV, "On this day" in history. |
 | **Handy extras** | Air quality, UV and pollen · official weather warnings for your area · name day, length of the day and your country's own calendar (Hijri, Chinese lunar, Japanese era...) · a small second clock. **Each one can be switched off.** |

@@ -180,5 +180,13 @@
     "mic_offline": "Perkhidmatan suara pelayar tidak dapat dihubungi.",
     "mic_no_answer": "Tiada apa yang didengar. Ketik mikrofon dan cuba lagi.",
     "voice_no_reply": "Beranda tidak menjawab. Tunggu sebentar dan ketik mikrofon sekali lagi."
+  },
+  "prayer": {
+    "next": "Solat seterusnya: {name} {time}",
+    "fajr": "Subuh",
+    "dhuhr": "Zohor",
+    "asr": "Asar",
+    "maghrib": "Maghrib",
+    "isha": "Isyak"
   }
 }

@@ -180,5 +180,13 @@
     "mic_offline": "A böngésző beszédszolgáltatása nem érhető el.",
     "mic_no_answer": "Nem hallatszott semmi. Koppintson a mikrofonra, és próbálja újra.",
     "voice_no_reply": "A Beranda nem válaszolt. Várjon egy kicsit, és koppintson újra a mikrofonra."
+  },
+  "prayer": {
+    "next": "Következő ima: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

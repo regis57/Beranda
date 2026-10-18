@@ -17,7 +17,7 @@ Your settings stay on the Pi. Beranda talks only to the services you use:
 | GitHub | *Check for updates* | nothing | |
 | Browser speech service | voice, in the screen's browser | the sound (Google for Chrome) | the browser maker's |
 
-Public holidays, sun, moon and seasons are computed on the Pi.
+Public holidays, sun, moon, prayer times and seasons are computed on the Pi.
 
 ## What the settings page protects
 

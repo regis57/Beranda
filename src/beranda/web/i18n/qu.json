@@ -180,5 +180,13 @@
     "mic_offline": "Mana atikunchu rimay serviciuman chayay.",
     "mic_no_answer": "Manam imatapas uyarikunchu. Mikrofonota llamiy, hinaspa wakmanta ruray.",
     "voice_no_reply": "Beranda manam kutichirqanchu. Huk ratota suyay, hinaspa mikrofonota wakmanta llamiy."
+  },
+  "prayer": {
+    "next": "Qatiq mañakuy: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

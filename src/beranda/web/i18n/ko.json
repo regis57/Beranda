@@ -180,5 +180,13 @@
     "mic_offline": "브라우저의 음성 서비스에 연결할 수 없습니다.",
     "mic_no_answer": "아무것도 들리지 않았습니다. 마이크를 눌러 다시 시도하세요.",
     "voice_no_reply": "Beranda가 응답하지 않았습니다. 잠시 후 마이크를 다시 눌러 주세요."
+  },
+  "prayer": {
+    "next": "다음 예배: {name} {time}",
+    "fajr": "파즈르",
+    "dhuhr": "주흐르",
+    "asr": "아스르",
+    "maghrib": "마그립",
+    "isha": "이샤"
   }
 }

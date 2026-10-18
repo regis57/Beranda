@@ -180,5 +180,13 @@
     "mic_offline": "Il servizio vocale del browser non è raggiungibile.",
     "mic_no_answer": "Non si è sentito nulla. Tocca il microfono e riprova.",
     "voice_no_reply": "Beranda non ha risposto. Attendi un attimo e tocca di nuovo il microfono."
+  },
+  "prayer": {
+    "next": "Prossima preghiera: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

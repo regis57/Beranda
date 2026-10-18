@@ -180,5 +180,13 @@
     "mic_offline": "No es pot accedir al servei de veu del navegador.",
     "mic_no_answer": "No s’ha sentit res. Toqueu el micròfon i torneu-ho a provar.",
     "voice_no_reply": "Beranda no ha respost. Espereu un moment i torneu a tocar el micròfon."
+  },
+  "prayer": {
+    "next": "Propera pregària: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

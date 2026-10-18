@@ -445,6 +445,8 @@
   "edge_hint": "Consejo: Beranda funciona mejor en Google Chrome. Microsoft Edge ha dado problemas (control por voz, páginas guardadas de una versión anterior).",
   "w_nameday": "Santoral en grande, arriba a la derecha",
   "w_nameday_hint": "En los países que celebran el santo (Francia, Alemania, Polonia, Suecia, Hungría…), con los nombres de tu país. En grande arriba a la derecha con el tema Francia; con los demás temas se queda en la línea de efemérides.",
+  "w_prayer": "Próxima oración, bajo la luna",
+  "w_prayer_hint": "En los países cuya religión de Estado es el islam (Marruecos, Argelia, Egipto, Arabia Saudí, Pakistán, Malasia…), la hora de la próxima de las cinco oraciones, calculada en la Pi a partir del sol con el método de su país. Puede diferir en un minuto o dos de la de su mezquita.",
   "a11y": "Accesibilidad",
   "a11y_hint": "Para personas que ven mal o no pueden leer la pantalla. Las tres opciones funcionan con cualquier estilo.",
   "a11y_large": "Texto grande",

@@ -180,5 +180,13 @@
     "mic_offline": "Selaimen puhepalveluun ei saada yhteyttä.",
     "mic_no_answer": "Mitään ei kuulunut. Napauta mikrofonia ja yritä uudelleen.",
     "voice_no_reply": "Beranda ei vastannut. Odota hetki ja napauta mikrofonia uudelleen."
+  },
+  "prayer": {
+    "next": "Seuraava rukous: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

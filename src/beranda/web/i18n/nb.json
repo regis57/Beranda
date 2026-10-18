@@ -180,5 +180,13 @@
     "mic_offline": "Nettleserens taletjeneste kan ikke nås.",
     "mic_no_answer": "Ingenting ble hørt. Trykk på mikrofonen og prøv igjen.",
     "voice_no_reply": "Beranda svarte ikke. Vent litt og trykk på mikrofonen igjen."
+  },
+  "prayer": {
+    "next": "Neste bønn: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

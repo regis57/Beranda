@@ -180,5 +180,13 @@
     "mic_offline": "Huduma ya sauti ya kivinjari haipatikani.",
     "mic_no_answer": "Hakuna kilichosikika. Gusa maikrofoni ujaribu tena.",
     "voice_no_reply": "Beranda haikujibu. Subiri kidogo kisha gusa maikrofoni tena."
+  },
+  "prayer": {
+    "next": "Sala inayofuata: {name} {time}",
+    "fajr": "Alfajiri",
+    "dhuhr": "Adhuhuri",
+    "asr": "Alasiri",
+    "maghrib": "Magharibi",
+    "isha": "Isha"
   }
 }

@@ -237,3 +237,10 @@ One line per version, newest last. Each one was a pull request on
   `[limits]` profile and a hand-set cache folder survive a save, the voice-phrase limit follows the board.
   **Install**: re-running the install line restarts Beranda, image installs can update, `--no-wifi-setup`
   is respected, and the safety net turns the Wi-Fi radio on and survives a wrong password
+- **v0.20.0**: the **next prayer under the moon**, in local time, in the countries whose constitution
+  makes Islam the state religion (Morocco, Algeria, Egypt, Saudi Arabia, the Gulf states, Iran, Iraq,
+  Jordan, Libya, Mauritania, Pakistan, Bangladesh, Afghanistan, Malaysia, Brunei, the Maldives,
+  Somalia, Djibouti, the Comoros, Yemen, Palestine). Worked out on the Pi from the sun, with no web
+  service, using each country's own method (Umm al-Qura, Egyptian, Karachi with Hanafi Asr, Tehran,
+  JAKIM, Morocco...); it can differ from a mosque's timetable by a minute or two. Shown in all 55
+  display languages, and it can be switched off in box 4 like the other extras

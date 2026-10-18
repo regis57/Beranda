@@ -31,6 +31,7 @@ from .providers import calendar_ics, demo, news_catalog, photos, seasons, specia
 from .providers import ephemeris as eph_mod
 from .providers import history as history_mod
 from .providers import news as news_mod
+from .providers import prayer as prayer_mod
 from .providers import tv as tv_mod
 from .providers import voice as voice_mod
 from .providers import weather as weather_mod
@@ -313,6 +314,11 @@ async def build_state(
 
     # --- sky & season (all local) --------------------------------------------------
     sky = astro_mod.astro(now, loc.latitude, loc.longitude, loc.timezone)
+    # Worked out from the sun on the Pi; None outside the countries it is meant for.
+    sky["prayer"] = (
+        prayer_mod.next_prayer(now, loc.latitude, loc.longitude, loc.timezone, cfg.country)
+        if cfg.widget_prayer else None
+    )
     mode = cfg.mode if cfg.mode != "auto" else ("night" if sky["night"] else "light")
 
     return {

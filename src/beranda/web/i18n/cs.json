@@ -180,5 +180,13 @@
     "mic_offline": "Hlasovou službu prohlížeče nelze kontaktovat.",
     "mic_no_answer": "Nic nebylo slyšet. Klepněte na mikrofon a zkuste to znovu.",
     "voice_no_reply": "Beranda neodpověděla. Chvíli počkejte a znovu klepněte na mikrofon."
+  },
+  "prayer": {
+    "next": "Další modlitba: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

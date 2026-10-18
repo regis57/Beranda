@@ -180,5 +180,13 @@
     "mic_offline": "Der Sprachdienst des Browsers ist nicht erreichbar.",
     "mic_no_answer": "Es wurde nichts gehört. Tippen Sie auf das Mikrofon und versuchen Sie es erneut.",
     "voice_no_reply": "Beranda hat nicht geantwortet. Warten Sie kurz und tippen Sie erneut auf das Mikrofon."
+  },
+  "prayer": {
+    "next": "Nächstes Gebet: {name} {time}",
+    "fajr": "Fadschr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Ischa"
   }
 }

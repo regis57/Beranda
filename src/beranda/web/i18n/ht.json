@@ -180,5 +180,13 @@
     "mic_offline": "Sèvis vwa navigatè a pa aksesib.",
     "mic_no_answer": "Yo pa tande anyen. Touche mikwo a epi eseye ankò.",
     "voice_no_reply": "Beranda pa reponn. Tann yon ti moman epi touche mikwo a ankò."
+  },
+  "prayer": {
+    "next": "Pwochen lapriyè: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

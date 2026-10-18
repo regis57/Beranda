@@ -180,5 +180,13 @@
     "mic_offline": "Die blaaier se spraakdiens is onbereikbaar.",
     "mic_no_answer": "Niks is gehoor nie. Tik op die mikrofoon en probeer weer.",
     "voice_no_reply": "Beranda het nie geantwoord nie. Wag 'n oomblik en tik weer op die mikrofoon."
+  },
+  "prayer": {
+    "next": "Volgende gebed: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

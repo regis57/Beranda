@@ -180,5 +180,13 @@
     "mic_offline": "'Aita e nehenehe e tae i te taviniraa reo a te mātini.",
     "mic_no_answer": "Aita e mea i fa’aro’ohia. A pata i te mikoro e a tamata faahou.",
     "voice_no_reply": "Aita Beranda i pahono. A tia’i ri’i e a pata faahou i te mikoro."
+  },
+  "prayer": {
+    "next": "Pure i muri iho: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

@@ -180,5 +180,13 @@
     "mic_offline": "Nie można połączyć się z usługą mowy przeglądarki.",
     "mic_no_answer": "Nic nie usłyszano. Dotknij mikrofonu i spróbuj ponownie.",
     "voice_no_reply": "Beranda nie odpowiedziała. Poczekaj chwilę i ponownie dotknij mikrofonu."
+  },
+  "prayer": {
+    "next": "Następna modlitwa: {name} {time}",
+    "fajr": "Fadżr",
+    "dhuhr": "Zuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isza"
   }
 }

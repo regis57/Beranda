@@ -180,5 +180,13 @@
     "mic_offline": "Tsy azo idirana ny serivisy feo an'ny navigateur.",
     "mic_no_answer": "Tsy nisy re. Tsindrio ny mikrô ary andramo indray.",
     "voice_no_reply": "Tsy namaly i Beranda. Miandrasa kely ary tsindrio indray ny mikrô."
+  },
+  "prayer": {
+    "next": "Vavaka manaraka: {name} {time}",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
   }
 }

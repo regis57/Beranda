@@ -180,5 +180,13 @@
     "mic_offline": "Adeegga codka ee browserka lama gaari karo.",
     "mic_no_answer": "Waxba lama maqlin. Taabo makarafoonka oo isku day mar kale.",
     "voice_no_reply": "Beranda kama jawaabin. Sug wax yar oo mar kale taabo makarafoonka."
+  },
+  "prayer": {
+    "next": "Salaadda xigta: {name} {time}",
+    "fajr": "Subax",
+    "dhuhr": "Duhur",
+    "asr": "Casar",
+    "maghrib": "Maqrib",
+    "isha": "Cishe"
   }
 }
