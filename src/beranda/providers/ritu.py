@@ -3,8 +3,11 @@
 The ṛtu follow the classical two-month pattern, given here in their usual modern
 approximation on the Gregorian calendar. The tithi is the lunar day: the Moon gains 12°
 on the Sun for each one, 15 in the bright half (śukla pakṣa) up to the full moon, 15 in the
-dark half (kṛṣṇa pakṣa) down to the new moon. Computed from the real Moon-Sun elongation,
-it changes within a few minutes of the almanac (pañcāṅga) of your temple.
+dark half (kṛṣṇa pakṣa) down to the new moon. When the caller passes the moment itself,
+the tithi is computed from the real Moon-Sun elongation and changes within a few minutes of
+the almanac (pañcāṅga) of your temple. When it passes only the Moon's phase (a fraction of
+the synodic month), the tithi is an even split of that month in time, which can be a day off
+near perigee or apogee; that older call style is kept so existing callers still work.
 """
 
 from __future__ import annotations
