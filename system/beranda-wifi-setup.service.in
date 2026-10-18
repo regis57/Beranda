@@ -14,6 +14,8 @@ Before=beranda.service
 Type=simple
 # Same reason as beranda-actions: a fixed, root-owned PATH.
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# The settings, read only for the country: the Wi-Fi radio stays off until one is set.
+Environment=BERANDA_CONFIG=@CONFDIR@/config.toml
 Environment=BERANDA_WIFI_STATUS=@STATEDIR@/wifi-setup.json
 ExecStart=@PREFIX@/venv/bin/beranda-wifi-setup
 Restart=always

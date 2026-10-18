@@ -5,3 +5,7 @@
 # with no Wi-Fi configured, the Pi offers its own "Beranda setup" network on first boot.
 /opt/beranda-src/install.sh --source /opt/beranda-src --with-wifi-setup
 rm -rf /opt/beranda-src
+# The copy has no git history (00-run.sh leaves .git out): make it a checkout of the repository
+# so the Update button and a re-run of the install line can fetch into it later.
+git -C /opt/beranda/src init -q
+git -C /opt/beranda/src remote add origin https://github.com/regis57/Beranda.git

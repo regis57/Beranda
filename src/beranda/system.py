@@ -46,9 +46,18 @@ def screen_should_be_on(cfg: Config, now: datetime) -> bool:
     return on <= current < off  # e.g. off 23:00, on 06:30
 
 
+# install.sh writes this file next to the programs, where only root can change it, because the
+# root helper (beranda-action) trusts what it says. Installs from before that kept it in
+# /etc/beranda until their next update moves it, so that place is still read as a fallback.
+INSTALL_INFO = Path("/opt/beranda/install.env")
+LEGACY_INSTALL_INFO = Path("/etc/beranda/install.env")
+
+
 def install_info() -> dict[str, str]:
     """What install.sh wrote; empty when Beranda was not installed with it."""
-    path = Path(os.environ.get("BERANDA_INSTALL_INFO", "/etc/beranda/install.env"))
+    path = Path(os.environ.get("BERANDA_INSTALL_INFO") or INSTALL_INFO)
+    if not path.exists():
+        path = LEGACY_INSTALL_INFO
     info: dict[str, str] = {}
     try:
         for line in path.read_text().splitlines():

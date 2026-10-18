@@ -4,9 +4,12 @@
 set -euo pipefail
 [ "$(id -u)" = 0 ] || { echo "Please run with sudo." >&2; exit 1; }
 PURGE=0; [ "${1:-}" = "--purge" ] && PURGE=1
+# Beranda lives where this script's own copy of the code sits ($PREFIX/src/uninstall.sh), or
+# in the usual place when run from elsewhere. install.env is deliberately not read: it may sit in
+# /etc/beranda, which the web server can write, and the folder named here is deleted as root.
 PREFIX="/opt/beranda"
-# shellcheck source=/dev/null
-[ -f /etc/beranda/install.env ] && source /etc/beranda/install.env
+here="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+if [ -f "$here/install.env" ] || [ -x "$here/bin/beranda-action" ]; then PREFIX="$here"; fi
 
 for unit in beranda-wifi-setup.service beranda-kiosk.service beranda.service beranda-actions.path beranda-actions.service; do
     systemctl disable --now "$unit" 2>/dev/null || true

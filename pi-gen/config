@@ -7,6 +7,10 @@ IMG_NAME="beranda"
 DEPLOY_COMPRESSION="xz"
 LOCALE_DEFAULT="en_GB.UTF-8"
 TARGET_HOSTNAME="beranda"
+# Raspberry Pi OS keeps the Wi-Fi radio switched off until a Wi-Fi country is set (a legal
+# rule), and the "Beranda setup" safety net could then never open. Change it to your country's
+# two-letter code before building; Beranda also sets it from its own settings when none is set.
+WPA_COUNTRY="GB"
 KEYBOARD_KEYMAP="gb"
 KEYBOARD_LAYOUT="English (UK)"
 # Build only the stages Beranda actually needs: pi-gen's own minimal boot (stage0), basic
