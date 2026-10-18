@@ -61,7 +61,8 @@ def _when(raw: str | None) -> datetime | None:
 
 
 def _kind(event: str) -> str:
-    low = event.lower()
+    # MeteoAlarm spells its types with hyphens ("high-temperature", "snow-ice").
+    low = event.lower().replace("-", " ")
     return next((kind for word, kind in KINDS if word in low), "other")
 
 
@@ -98,13 +99,41 @@ def parse(xml_text: str, now: datetime) -> list[dict]:
     return out
 
 
-def for_area(warnings: list[dict], area: str, limit: int = 3) -> list[dict]:
-    """The warnings for the user's area (names compared without accents, case or hyphens),
-    the worst of each kind only, most serious first."""
-    wanted = _norm(area)
-    if not wanted:
+def _words(text: str) -> list[str]:
+    """The name as words, without accents or case, a hyphenated name kept as one word."""
+    stripped = "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
+    return stripped.lower().split()
+
+
+def same_area(a: str, b: str) -> bool:
+    """True when two area names mean the same place.
+
+    Equal names match whatever their hyphens, and a name also matches a longer one that
+    holds it as whole words ("Barcelona" in "Litoral de Barcelona"). A hyphenated name counts
+    as one word on purpose: French departments are often part of a neighbour's name, and
+    "Rhone" must not pick up the warnings of "Bouches-du-Rhone", nor "Ain" those of
+    "Seine-Saint-Denis".
+    """
+    if _norm(a) and _norm(a) == _norm(b):
+        return True
+    x, y = _words(a), _words(b)
+    short, long_ = (x, y) if len(x) <= len(y) else (y, x)
+    return bool(short) and any(long_[i : i + len(short)] == short for i in range(len(long_) - len(short) + 1))
+
+
+def still_on(warning: dict, now: datetime) -> bool:
+    """False once a warning's end time has passed. It is checked on every build, not only at
+    download, because the cached copy is served for as long as MeteoAlarm cannot be reached."""
+    expires = _when(warning.get("expires"))
+    return not (expires and expires <= now)
+
+
+def for_area(warnings: list[dict], area: str, limit: int = 3, now: datetime | None = None) -> list[dict]:
+    """The warnings for the user's area (see `same_area`), the worst of each kind only, most
+    serious first. With `now`, warnings that are already over are left out."""
+    if not _norm(area):
         return []
-    mine = [w for w in warnings if wanted in _norm(w["area"]) or _norm(w["area"]) in wanted]
+    mine = [w for w in warnings if same_area(area, w["area"]) and (now is None or still_on(w, now))]
     worst: dict[str, dict] = {}
     for warning in mine:
         if warning["kind"] not in worst or warning["level"] > worst[warning["kind"]]["level"]:

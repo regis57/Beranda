@@ -5,7 +5,7 @@ de la tablette qui affiche Beranda**, jamais ceux du Raspberry Pi.
 
 ## Mode d'emploi, pas à pas
 
-1. Dans la page de réglages, case **10 · Contrôle par la voix**, cochez **Afficher le bouton micro**
+1. Dans la page de réglages, case **11 · Contrôle par la voix**, cochez **Afficher le bouton micro**
    puis **Enregistrez**.
 2. Sur la tablette, ouvrez Beranda dans **Google Chrome**. (Edge la propose aussi, mais son service
    vocal répond souvent « network » et ne marche pas ; Firefox et Safari ne l'offrent pas aux pages web.)
@@ -45,7 +45,7 @@ l'intérieur. Si deux modèles conviennent, le plus long l'emporte.
 
 Dire seulement « mets » lance votre **première** station favorite ; « mets France Inter » lance la
 favorite dont le nom ressemble le plus à ce qui a été entendu. Seules vos stations favorites
-(case 8) peuvent être lancées.
+(case 9) peuvent être lancées.
 
 **English** (`en`)
 
@@ -65,7 +65,7 @@ favorite dont le nom ressemble le plus à ce qui a été entendu. Seules vos sta
 
 | Quoi | Vous pouvez dire |
 |---|---|
-| Météo | « quel temps fait-il » · « météo » · « previsions » |
+| Météo | « quel temps fait-il » · « météo » · « prévisions » |
 | Heure | « quelle heure est-il » · « heure » |
 | La télé de ce soir | « à la télé » · « programme tv » · « programme télé » · « télévision » |
 | Lancer une station (dites son nom après) | « joue » · « mets » · « écoute » |
@@ -189,7 +189,7 @@ favorite dont le nom ressemble le plus à ce qui a été entendu. Seules vos sta
 
 ## Ajouter vos propres phrases
 
-Dans la case **10**, sous **Vos propres phrases**, touchez **+ Ajouter une phrase** :
+Dans la case **11**, sous **Vos propres phrases**, touchez **+ Ajouter une phrase** :
 
 1. écrivez ce que *vous* direz (par exemple *bonne nuit*, *réveille-moi*, *c'est quoi ce soir*) ;
 2. choisissez ce qui doit se passer : lancer la radio (et laquelle de vos favorites), l'arrêter,
@@ -218,7 +218,9 @@ station = "960d0c25-0601-11e8-ae97-52543be04c81"   # l'uuid de la favorite ; abs
 ```
 
 Actions possibles : `radio_play`, `radio_stop`, `radio_next`, `radio_prev`, `volume_up`,
-`volume_down`, `weather`, `time`, `tv`, `say`.
+`volume_down`, `weather`, `time`, `tv`, `read_day`, `date`, `agenda`, `tomorrow`, `news`, `bigger`,
+`smaller`, `contrast_on`, `contrast_off`, `quiet`, `say`. La liste complète des phrases de chaque
+action est dans le guide imprimable (case 11) et sur la page Voice control du manuel.
 
 ## Si ça ne marche pas
 

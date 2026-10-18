@@ -24,7 +24,7 @@ Put them after `bash -s --`, for example `... | sudo bash -s -- --no-screen`.
 |---|---|
 | `--no-screen` | server only: show Beranda on a tablet or another device |
 | `--hostname kitchen` | renames the Pi: `http://kitchen.local:8080/admin` |
-| `--no-wifi-setup` | do not install the Wi-Fi safety net (on by default, see below) |
+| `--no-wifi-setup` | do not install the Wi-Fi safety net (on by default, see below), or turn off one already installed; a later plain re-run keeps it off |
 | `--with-wifi-setup` | force the safety net on, installing NetworkManager if needed |
 | `--branch NAME` | install another branch |
 | `--dry-run` | print what would be done, change nothing |

@@ -177,6 +177,8 @@
     "tap_for_sound": "Dotknij ekranu raz, aby Beranda mogła mówić.",
     "mic_none": "Przeglądarka nie może użyć mikrofonu – zobacz ustawienia.",
     "mic_blocked": "Mikrofon jest zablokowany dla tej strony.",
-    "mic_offline": "Nie można połączyć się z usługą mowy przeglądarki."
+    "mic_offline": "Nie można połączyć się z usługą mowy przeglądarki.",
+    "mic_no_answer": "Nic nie usłyszano. Dotknij mikrofonu i spróbuj ponownie.",
+    "voice_no_reply": "Beranda nie odpowiedziała. Poczekaj chwilę i ponownie dotknij mikrofonu."
   }
 }

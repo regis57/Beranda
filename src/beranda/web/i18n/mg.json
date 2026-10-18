@@ -177,6 +177,8 @@
     "tap_for_sound": "Tendreo indray mandeha ny efijery mba hahafahan'i Beranda miteny.",
     "mic_none": "Tsy afaka mampiasa ny mikrô ny navigateur – jereo ny kirakira.",
     "mic_blocked": "Voasakana ho an'ity pejy ity ny mikrô.",
-    "mic_offline": "Tsy azo idirana ny serivisy feo an'ny navigateur."
+    "mic_offline": "Tsy azo idirana ny serivisy feo an'ny navigateur.",
+    "mic_no_answer": "Tsy nisy re. Tsindrio ny mikrô ary andramo indray.",
+    "voice_no_reply": "Tsy namaly i Beranda. Miandrasa kely ary tsindrio indray ny mikrô."
   }
 }

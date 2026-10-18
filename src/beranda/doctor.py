@@ -113,15 +113,16 @@ def _unreadable_settings() -> Path | None:
     return None
 
 
-def run() -> int:
+def run(config_path: Path | None = None) -> int:
     print(f"Beranda {__version__} — checking this computer\n")
     lines = []
     py = sys.version_info
     lines.append(f"{OK if py >= (3, 11) else FAIL} Python {py.major}.{py.minor}"
                  + ("" if py >= (3, 11) else ": Beranda needs 3.11 or newer"))
-    path = config.find_config_path()
+    path = config_path or config.find_config_path()
     cfg = config.Config()
-    hidden = _unreadable_settings()
+    # A file named with --config is the one to check; the installer's private file is beside the point then.
+    hidden = None if config_path and os.access(config_path, os.R_OK) else _unreadable_settings()
     if hidden:
         lines.append(f"{WARN} the settings file {hidden} is private: run  sudo beranda doctor  to check everything "
                      "(without sudo the port and the calendars cannot be checked)")

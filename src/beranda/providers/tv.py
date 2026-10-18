@@ -100,8 +100,16 @@ async def download(url: str) -> bytes:
 def channels(xml_bytes: bytes) -> list[dict]:
     """Every <channel> the guide declares: {id, name}, for the settings page to pick from."""
     found: dict[str, str] = {}
-    for _event, elem in iterparse(_stream(xml_bytes), events=("end",), forbid_dtd=True):
-        if _local(elem.tag) != "channel":
+    # No forbid_dtd: tvheadend and the XMLTV tools start their guides with a harmless
+    # <!DOCTYPE tv SYSTEM "xmltv.dtd"> line, and defusedxml still refuses entities and external
+    # references by default, which is what an XML bomb or a file-reading trick needs.
+    for _event, elem in iterparse(_stream(xml_bytes), events=("end",)):
+        tag = _local(elem.tag)
+        if tag == "programme":
+            # XMLTV lists every <channel> before the first <programme>. Reading on would keep
+            # each programme in memory under the root (never cleared), hundreds of MB on a big guide.
+            break
+        if tag != "channel":
             continue  # leave it for its parent to clear: clearing it here would empty it first
         cid = elem.get("id", "").strip()
         name_el = elem.find("display-name")
@@ -118,7 +126,8 @@ def programmes(xml_bytes: bytes, channel_ids: set[str], start: datetime, end: da
     """<programme>s on the given channels that overlap [start, end), earliest first."""
     names: dict[str, str] = {}
     found: list[dict] = []
-    for _event, elem in iterparse(_stream(xml_bytes), events=("end",), forbid_dtd=True):
+    # The DOCTYPE line is allowed for the same reason as in channels(); entities stay refused.
+    for _event, elem in iterparse(_stream(xml_bytes), events=("end",)):
         tag = _local(elem.tag)
         if tag not in ("channel", "programme"):
             continue  # leave it for its parent to clear, or we'd empty it before reading it

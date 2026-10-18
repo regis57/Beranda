@@ -95,6 +95,33 @@ const dtf = (opts, zone = tz) => new Intl.DateTimeFormat(dateLocale(), { timeZon
 const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 const noon = (iso) => new Date(`${iso}T12:00:00Z`); // a date-only string, safely in the middle of its day
 
+// The calendar day after `key` ('YYYY-MM-DD'). Worked out on the date itself, not by adding
+// 24 hours to a time: the night the clocks change lasts 23 or 25 hours, and "tomorrow" then
+// came out as today or as the day after tomorrow.
+export function nextDayKey(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+}
+
+// Whether an event is on during the day `key`. A holiday that began yesterday is still on
+// today, so the start date alone is not enough. An all-day event's end date is the first day
+// it no longer covers (the calendar convention); a timed event counts while it ends after
+// that day has begun.
+function onDay(e, key) {
+  const startKey = e.start.slice(0, 10);
+  if (startKey === key) return true;
+  if (startKey > key || !e.end) return false;
+  if (e.all_day) return e.end.slice(0, 10) > key;
+  // A timed event ending at midnight sharp is over before that day begins.
+  const endKey = dayKey(new Date(e.end));
+  return endKey > key || (endKey === key && e.end.slice(11, 16) !== '00:00');
+}
+
+// How an event reads in a spoken line for the day `key`: its start time when it starts that
+// day, its title alone when it started on an earlier day (an old start hour would mislead).
+const eventWords = (e, key) => (e.all_day || e.start.slice(0, 10) !== key ? e.title
+  : `${dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start))} ${e.title}`);
+
 // ---------------------------------------------------------------- icons ----
 // Original line icons on a 64x64 grid, drawn with strokes so they inherit the theme colour.
 const CLOUD = 'M18 46h28a10 10 0 0 0 1.5-19.9A14 14 0 0 0 20.5 24 11 11 0 0 0 18 46z';
@@ -143,7 +170,11 @@ function renderClock() {
   const parts = dtf({ hour: h24 ? '2-digit' : 'numeric', minute: '2-digit' }).formatToParts(now);
   const get = (type) => parts.find((p) => p.type === type)?.value ?? '';
   const hour = get('hour');
-  $('hm').textContent = `${hour}${get('literal') || ':'}${get('minute')}`;
+  // The separator is the piece right after the hour, not the first piece of text: Korean puts
+  // the day period first ("오후 2:20"), and its space then replaced the colon.
+  const i = parts.findIndex((p) => p.type === 'hour');
+  const sep = parts[i + 1]?.type === 'literal' ? parts[i + 1].value : ':';
+  $('hm').textContent = `${hour}${sep}${get('minute')}`;
   $('period').textContent = get('dayPeriod');
   $('date').textContent = dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now);
   renderSecondClock(now);
@@ -597,15 +628,21 @@ function renderUpcoming() {
   list.replaceChildren();
   const today = new Date();
   const todayKey = dayKey(today);
-  const tomorrowKey = dayKey(new Date(today.getTime() + 86_400_000));
+  const tomorrowKey = nextDayKey(todayKey);
   const soon = dayKey(new Date(today.getTime() + 6 * 86_400_000));
 
   const items = [
     ...state.special_days.map((d) => ({ date: d.date, kind: d.kind, label: d.label, time: '', sort: '00' })),
-    ...state.events.map((e) => ({
-      date: e.start.slice(0, 10), kind: 'event', label: e.title, sort: e.all_day ? '01' : e.start.slice(11, 16),
-      time: e.all_day ? t('all_day') : dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start)),
-    })),
+    ...state.events.map((e) => {
+      // An event still going on that started before today is listed under today, as all day:
+      // its own start hour belongs to another day.
+      const carried = e.start.slice(0, 10) < todayKey && onDay(e, todayKey);
+      return {
+        date: carried ? todayKey : e.start.slice(0, 10), kind: 'event', label: e.title,
+        sort: e.all_day || carried ? '01' : e.start.slice(11, 16),
+        time: e.all_day || carried ? t('all_day') : dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start)),
+      };
+    }),
   ].filter((i) => i.date >= todayKey)  // everything the server sent: until the end of next month
     .sort((a, b) => a.date.localeCompare(b.date) || a.sort.localeCompare(b.sort))
     .slice(0, 8);
@@ -712,6 +749,7 @@ const TV_NOTES = { no_channels: 'tv_no_channels', empty: 'tv_empty', error: 'tv_
 const TV_LINES = 10;  // at most this many channels at once; more rotate, a page every few seconds
 let tvPage = 0;
 let tvTimer = null;
+let tvKey = '';  // the programmes and page size the running rotation was started with
 
 function tvRows(items) {
   return items.map((p) => {
@@ -733,9 +771,10 @@ function tvRows(items) {
 
 function renderTv() {
   const tv = state?.tv;
-  clearTimeout(tvTimer);
   $('tv').hidden = !tv;
-  if (!tv) return;
+  // Any return before the rotation below stops it, so that the next list starts afresh.
+  const stop = () => { clearTimeout(tvTimer); tvTimer = null; tvKey = ''; tvPage = 0; };
+  if (!tv) { stop(); return; }
   $('tv-title').replaceChildren(t('tv_title'));
   if (tv.from) {
     const when = document.createElement('span');
@@ -748,6 +787,7 @@ function renderTv() {
     li.className = 'tv-note';
     li.textContent = t(TV_NOTES[tv.status] || 'tv_empty');
     $('tv-list').replaceChildren(li);
+    stop();
     return;
   }
   // Show as many channels as fit (up to TV_LINES); if there are more, take turns.
@@ -756,14 +796,24 @@ function renderTv() {
   list.replaceChildren(...tvRows(all.slice(0, TV_LINES)));
   while (list.children.length > 1 && $('tv').scrollHeight > $('tv').clientHeight + 1) list.lastElementChild.remove();
   const size = list.children.length;
-  if (all.length <= size) return;
+  if (all.length <= size) { stop(); return; }
   const pages = Math.ceil(all.length / size);
+  // The box is redrawn every minute (the clock) and at every poll. Starting again from page 1
+  // each time meant the channels past the fourth or fifth page were never shown: when nothing
+  // changed, the current page is drawn again and the running rotation goes on.
+  const key = JSON.stringify([all, size]);
+  if (tvTimer && key === tvKey) {
+    list.replaceChildren(...tvRows(all.slice(tvPage * size, tvPage * size + size)));
+    return;
+  }
+  clearTimeout(tvTimer);
+  tvKey = key;
+  tvPage = 0;
   const show = () => {
     tvPage = (tvPage + 1) % pages;
     list.replaceChildren(...tvRows(all.slice(tvPage * size, tvPage * size + size)));
     tvTimer = setTimeout(show, NEWS_MS);
   };
-  tvPage = 0;
   tvTimer = setTimeout(show, NEWS_MS);
 }
 
@@ -795,6 +845,7 @@ let photosTimer = null;
 let photosIndex = -1;
 let photosNames = [];
 let photosFront = 'photo-a';
+let photosEvery = 0;  // the interval the running slideshow was started with, in ms
 
 function nextPhoto() {
   if (!photosNames.length) return;
@@ -816,13 +867,21 @@ function renderPhotos() {
   const tile = $('phototile');
   const same = names.length === photosNames.length && names.every((n, i) => n === photosNames[i]);
   tile.hidden = !names.length;
-  if (!names.length) { clearInterval(photosTimer); photosTimer = null; photosNames = []; return; }
-  if (photosTimer && same) return;  // the slideshow keeps its own rhythm between polls
+  const every = Math.max(5, state?.photos?.interval || 20) * 1000;
+  if (!names.length) { clearInterval(photosTimer); photosTimer = null; photosNames = []; photosEvery = 0; return; }
+  if (photosTimer && same && every === photosEvery) return;  // the slideshow keeps its own rhythm between polls
+  clearInterval(photosTimer);
+  photosEvery = every;
+  if (photosTimer && same) {
+    // Only the interval changed in the settings: keep the picture on screen and go on from
+    // it at the new pace, rather than jumping back to the first photo.
+    photosTimer = setInterval(nextPhoto, every);
+    return;
+  }
   photosNames = names;
   photosIndex = -1;
-  clearInterval(photosTimer);
   nextPhoto();
-  photosTimer = setInterval(nextPhoto, Math.max(5, state?.photos?.interval || 20) * 1000);
+  photosTimer = setInterval(nextPhoto, every);
 }
 
 // ---------------------------------------------------------------- radio -----------------
@@ -863,8 +922,10 @@ function renderRadio() {
   $('radio').hidden = !stations.length;
   if (state?.radio) radio.defaultVolume(state.radio.volume);
   const snap = radio.snapshot();
-  // A station removed from the favourites stops playing; one still there is left alone.
-  if (snap.station && !stations.some((s) => s.url === snap.station.url)) radio.stop();
+  // A station removed from the favourites stops playing and is forgotten, so the box shows a
+  // station still in the list and the play button cannot bring the removed one back; one
+  // still there is left alone.
+  if (snap.station && !stations.some((s) => s.url === snap.station.url)) radio.stop(true);
   paintRadio();
 }
 
@@ -910,11 +971,20 @@ async function listen() {
     const heard = await voice.listenOnce(lang);
     if (!heard) { $('toast').hidden = true; report('microphone: works, but nothing was heard'); return; }
     report('microphone: ok, a sentence was heard');
-    const response = await fetch('/api/voice', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard }),
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const answer = await response.json();
+    // The microphone worked; if Beranda itself does not answer (restarting, or voice switched
+    // off meanwhile), say that, not "microphone unavailable". The detail goes to the diagnostic file.
+    let answer;
+    try {
+      const response = await fetch('/api/voice', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: heard, language: lang }),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      answer = await response.json();
+    } catch (err) {
+      toast(t('a11y.voice_no_reply'), 9000);
+      report(`voice: the sentence was heard but Beranda did not answer (${err.message || err})`);
+      return;
+    }
     toast(`« ${heard} »\n${answer.reply}`);
     sayOutLoud(answer.reply);
     doAction(answer.action);
@@ -937,20 +1007,18 @@ function doAction(action) {
   if (!type) return;
   const say = (text) => { toast(text, 12000); sayOutLoud(text); };
   const now = new Date();
-  const dayLine = (date, label) => {
-    const key = dayKey(date);
+  const dayLine = (key, label) => {
     const events = [
       ...state.special_days.filter((d) => d.date === key).map((d) => d.label),
-      ...state.events.filter((e) => e.start.slice(0, 10) === key).map((e) =>
-        e.all_day ? e.title : `${dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start))} ${e.title}`),
+      ...state.events.filter((e) => onDay(e, key)).map((e) => eventWords(e, key)),
     ];
     return `${label}: ${events.length ? events.join('. ') : t('nothing_upcoming')}.`;
   };
   const actions = {
     read_day: readDay,
     date: () => say(dtf({ weekday: 'long', day: 'numeric', month: 'long' }).format(now)),
-    agenda: () => say(dayLine(now, t('today'))),
-    tomorrow: () => say(dayLine(new Date(now.getTime() + 86_400_000), t('tomorrow'))),
+    agenda: () => say(dayLine(dayKey(now), t('today'))),
+    tomorrow: () => say(dayLine(nextDayKey(dayKey(now)), t('tomorrow'))),
     news: () => { const items = (state.news?.items || []).slice(0, 3).map((i) => i.title); say(items.length ? items.join('. ') + '.' : t('a11y.no_news')); },
     bigger: () => setLook({ large_text: true }),
     smaller: () => setLook({ large_text: false }),
@@ -980,8 +1048,10 @@ function setLook(change) {
 // The short code a browser gives back, in words. Anything else keeps the code, which the
 // settings page and the diagnostic file explain.
 function micProblem(code) {
+  // 'no answer' is voice.js giving up on a browser that stayed silent for 12 seconds.
   const said = { 'audio-capture': 'a11y.mic_none', 'not-allowed': 'a11y.mic_blocked',
-    network: 'a11y.mic_offline', 'service-not-allowed': 'a11y.mic_offline' }[String(code)];
+    network: 'a11y.mic_offline', 'service-not-allowed': 'a11y.mic_offline',
+    'no answer': 'a11y.mic_no_answer' }[String(code)];
   return said ? t(said) : `${t('voice_unavailable')} (${code})`;
 }
 
@@ -1012,8 +1082,7 @@ export function daySummary() {
   const today = dayKey(now);
   const events = [
     ...state.special_days.filter((d) => d.date === today).map((d) => d.label),
-    ...state.events.filter((e) => e.start.slice(0, 10) === today).map((e) =>
-      e.all_day ? e.title : `${dtf({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start))} ${e.title}`),
+    ...state.events.filter((e) => onDay(e, today)).map((e) => eventWords(e, today)),
   ];
   parts.push(events.length ? `${t('today')}: ${events.join('. ')}` : t('nothing_upcoming'));
   return parts.join('. ') + '.';

@@ -79,6 +79,13 @@ fi
 # The Wi-Fi safety net: on by default where NetworkManager already runs the network (Raspberry
 # Pi OS since Bookworm) and there is a Wi-Fi radio; never forced onto a machine that uses
 # another network tool.
+# A re-run without options is how people update or repair, so a safety net refused earlier
+# (--no-wifi-setup, kept in install.env) stays refused instead of coming back on its own.
+if [ "$WIFI_SETUP" = auto ]; then
+    for info in "$PREFIX/install.env" "$CONFDIR/install.env"; do
+        if [ -f "$info" ] && grep -qx 'WIFI_SETUP=0' "$info"; then WIFI_SETUP=0; break; fi
+    done
+fi
 if [ "$WIFI_SETUP" = auto ]; then
     WIFI_SETUP=0
     if systemctl is-active --quiet NetworkManager 2>/dev/null && nmcli -t -f TYPE device 2>/dev/null | grep -qx wifi; then
@@ -110,6 +117,10 @@ elif [ -d "$PREFIX/src/.git" ]; then
     run git -C "$PREFIX/src" fetch --depth 1 origin "$BRANCH"
     run git -C "$PREFIX/src" reset --hard FETCH_HEAD
 else
+    # A copy with no git history (the ready-to-flash image, or --source) cannot be fetched into,
+    # and git refuses to clone over it. It only holds code - the settings live in $CONFDIR - so
+    # it is safe to replace with a fresh download.
+    if [ -e "$PREFIX/src" ]; then run rm -rf "$PREFIX/src"; fi
     run git clone --depth 1 --branch "$BRANCH" "$REPO" "$PREFIX/src"
 fi
 [ -d "$PREFIX/venv" ] || run python3 -m venv "$PREFIX/venv"
@@ -124,8 +135,10 @@ run ln -sf "$PREFIX/venv/bin/beranda" /usr/local/bin/beranda
 
 commit="$(git -C "$PREFIX/src" rev-parse --short HEAD 2>/dev/null || echo local)"
 if [ "$DRY" = 0 ]; then
-    cat > "$CONFDIR/install.env" <<INFO
-# Written by install.sh: where Beranda lives. Read by the update service.
+    # Next to the programs, in a folder only root can write: beranda-action runs as root and
+    # trusts this file, so it must never sit in $CONFDIR, which the web server can write.
+    cat > "$PREFIX/install.env" <<INFO
+# Written by install.sh: where Beranda lives. Read by the update service. Only root may change it.
 PREFIX=$PREFIX
 BRANCH=$BRANCH
 USER=$USER_NAME
@@ -135,7 +148,8 @@ SCREEN=$SCREEN
 WIFI_SETUP=$WIFI_SETUP
 COMMIT=$commit
 INFO
-    chmod 0644 "$CONFDIR/install.env"
+    chmod 0644 "$PREFIX/install.env"
+    rm -f "$CONFDIR/install.env"  # where older versions kept it
 fi
 
 # ------------------------------------------------------------------ 4. services ---
@@ -154,8 +168,19 @@ if [ "$SYSTEMD" = 1 ]; then
         fi
     done
     run systemctl daemon-reload
-    [ "$WIFI_SETUP" = 1 ] && run systemctl enable --now beranda-wifi-setup.service
+    # A re-run is also how people update: "enable --now" leaves a server that is already
+    # running on its old code, so the services that were just reinstalled are restarted too.
+    if [ "$WIFI_SETUP" = 1 ]; then
+        run systemctl enable --now beranda-wifi-setup.service
+        run systemctl restart beranda-wifi-setup.service
+    elif [ -f /etc/systemd/system/beranda-wifi-setup.service ]; then
+        # Refused now, but installed by an earlier run: off has to mean off.
+        run systemctl disable --now beranda-wifi-setup.service 2>/dev/null || true
+        run rm -f /etc/systemd/system/beranda-wifi-setup.service
+        run systemctl daemon-reload
+    fi
     run systemctl enable --now beranda.service beranda-actions.path
+    run systemctl restart beranda.service
     if [ "$SCREEN" = 1 ]; then
         run systemctl set-default graphical.target
         run systemctl enable beranda-kiosk.service

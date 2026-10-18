@@ -177,6 +177,8 @@
     "tap_for_sound": "Rør skærmen én gang, så Beranda må tale.",
     "mic_none": "Browseren kan ikke bruge mikrofonen – se indstillingerne.",
     "mic_blocked": "Mikrofonen er blokeret for denne side.",
-    "mic_offline": "Browserens taletjeneste kan ikke nås."
+    "mic_offline": "Browserens taletjeneste kan ikke nås.",
+    "mic_no_answer": "Der blev ikke hørt noget. Tryk på mikrofonen, og prøv igen.",
+    "voice_no_reply": "Beranda svarede ikke. Vent et øjeblik, og tryk på mikrofonen igen."
   }
 }

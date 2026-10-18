@@ -478,5 +478,6 @@
   "order_hint": "Le frecce spostano una riga su o giù: la prima viene mostrata per prima.",
   "move_up": "Sposta su",
   "move_down": "Sposta giù",
-  "voice_err_mic_unusable": "Questo dispositivo ha un microfono, ma il browser non riesce a usarlo. Tre cause abituali. (1) Cuffie o vivavoce Bluetooth: Windows presta il microfono solo in modalità «vivavoce» — apra Impostazioni → Sistema → Audio → Ingresso e scelga la voce «Hands-Free» di quel dispositivo, oppure lo colleghi via cavo o con la sua chiavetta USB, che funziona sempre. (2) Windows → Privacy e sicurezza → Microfono: «Consenti alle app desktop di accedere al microfono» deve essere attivo. (3) Un altro programma tiene il microfono: lo chiuda."
+  "voice_err_mic_unusable": "Questo dispositivo ha un microfono, ma il browser non riesce a usarlo. Tre cause abituali. (1) Cuffie o vivavoce Bluetooth: Windows presta il microfono solo in modalità «vivavoce» — apra Impostazioni → Sistema → Audio → Ingresso e scelga la voce «Hands-Free» di quel dispositivo, oppure lo colleghi via cavo o con la sua chiavetta USB, che funziona sempre. (2) Windows → Privacy e sicurezza → Microfono: «Consenti alle app desktop di accedere al microfono» deve essere attivo. (3) Un altro programma tiene il microfono: lo chiuda.",
+  "voice_reply_missing": "Una delle sue frasi deve rispondere ma non ha ancora una risposta: scriva cosa deve dire Beranda, oppure tolga la frase."
 }

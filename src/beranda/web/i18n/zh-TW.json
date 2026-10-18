@@ -68,6 +68,8 @@
     "tap_for_sound": "輕觸螢幕一次，Beranda 才能說話。",
     "mic_none": "瀏覽器無法使用麥克風 – 請查看設定。",
     "mic_blocked": "此頁面的麥克風已被封鎖。",
-    "mic_offline": "無法連線瀏覽器的語音服務。"
+    "mic_offline": "無法連線瀏覽器的語音服務。",
+    "mic_no_answer": "什麼也沒聽到。請點按麥克風再試一次。",
+    "voice_no_reply": "Beranda 沒有回應。請稍候片刻，再點按麥克風。"
   }
 }

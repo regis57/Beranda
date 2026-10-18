@@ -478,5 +478,6 @@
   "order_hint": "As setas sobem ou descem uma linha: a primeira é mostrada primeiro.",
   "move_up": "Subir",
   "move_down": "Descer",
-  "voice_err_mic_unusable": "Este aparelho tem microfone, mas o navegador não o consegue usar. Três causas habituais. (1) Auscultadores ou altifalante Bluetooth: o Windows só empresta o microfone em modo «mãos-livres» — abra Definições → Sistema → Som → Entrada e escolha a entrada «Hands-Free» desse aparelho, ou ligue-o por cabo ou com a sua pen USB, o que funciona sempre. (2) Windows → Privacidade e segurança → Microfone: «Permitir que as aplicações de ambiente de trabalho acedam ao microfone» tem de estar ligado. (3) Outro programa está a segurar o microfone: feche-o."
+  "voice_err_mic_unusable": "Este aparelho tem microfone, mas o navegador não o consegue usar. Três causas habituais. (1) Auscultadores ou altifalante Bluetooth: o Windows só empresta o microfone em modo «mãos-livres» — abra Definições → Sistema → Som → Entrada e escolha a entrada «Hands-Free» desse aparelho, ou ligue-o por cabo ou com a sua pen USB, o que funciona sempre. (2) Windows → Privacidade e segurança → Microfone: «Permitir que as aplicações de ambiente de trabalho acedam ao microfone» tem de estar ligado. (3) Outro programa está a segurar o microfone: feche-o.",
+  "voice_reply_missing": "Uma das suas frases deve responder mas ainda não tem resposta: escreva o que o Beranda deve dizer, ou retire a frase."
 }

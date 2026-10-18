@@ -177,6 +177,8 @@
     "tap_for_sound": "Laal ekraan bi benn yoon ngir Beranda mën a wax.",
     "mic_none": "Naviguteer bi mënul jëfandikoo mikro bi – xoolal paramet yi.",
     "mic_blocked": "Mikro bi dañu ko tëj ci xët wii.",
-    "mic_offline": "Mënuñu agsi ci sarwiis bu baat bi ci naviguteer bi."
+    "mic_offline": "Mënuñu agsi ci sarwiis bu baat bi ci naviguteer bi.",
+    "mic_no_answer": "Dégguñu dara. Laal mikoro bi te jéem ko ci kanam.",
+    "voice_no_reply": "Beranda tontuwul. Xaaral tuuti te laal mikoro bi ci kanam."
   }
 }

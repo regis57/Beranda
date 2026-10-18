@@ -15,7 +15,9 @@ POLLENS = ("alder", "birch", "grass", "mugwort", "olive", "ragweed")
 
 # Upper edge of each band: good / fair / moderate / poor / very poor / extremely poor.
 EU_BANDS = (20, 40, 60, 80, 100)
-US_BANDS = (50, 100, 150, 200, 300)
+# The US (EPA) scale is in whole numbers and each band ends on its edge (0-50 good, 51-100
+# moderate...), so here each value is where the next band starts.
+US_BANDS = (51, 101, 151, 201, 301)
 # UV index: low / moderate / high / very high / extreme (the WHO scale).
 UV_BANDS = (3, 6, 8, 11)
 # Pollen grains per cubic metre, a coarse common scale: none / low / moderate / high / very high.
@@ -44,7 +46,8 @@ def parse(payload: dict, us_scale: bool = False) -> dict:
     pollen.sort(key=lambda p: -p["value"])
     return {
         "aqi": None if aqi is None else round(aqi),
-        "aqi_level": None if aqi is None else _level(aqi, US_BANDS if us_scale else EU_BANDS),
+        # The level comes from the rounded number that is shown, so "51" never sits next to "Good".
+        "aqi_level": None if aqi is None else _level(round(aqi), US_BANDS if us_scale else EU_BANDS),
         "aqi_scale": "us" if us_scale else "eu",
         "uv": None if uv is None else round(uv, 1),
         "uv_level": None if uv is None else _level(uv, UV_BANDS),

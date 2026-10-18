@@ -19,11 +19,55 @@ MIRRORS = (
 MAX_RESULTS = 30
 
 
+# Radio Browser stores a station's language as English names ("french,other") and its search
+# matches the given text anywhere inside them, so sending Beranda's short code ("de", "es")
+# finds the wrong stations or none. Keyed by the base code, so "pt-BR" and "zh-TW" work too.
+LANGUAGE_NAMES = {
+    "af": "afrikaans", "am": "amharic", "ar": "arabic", "bg": "bulgarian", "bn": "bengali",
+    "ca": "catalan", "cs": "czech", "da": "danish", "de": "german", "el": "greek",
+    "en": "english", "es": "spanish", "et": "estonian", "fa": "persian", "fi": "finnish",
+    "fr": "french", "ha": "hausa", "he": "hebrew", "hi": "hindi", "hr": "croatian",
+    "ht": "haitian", "hu": "hungarian", "id": "indonesian", "it": "italian", "ja": "japanese",
+    "ko": "korean", "lt": "lithuanian", "lv": "latvian", "mg": "malagasy", "ms": "malay",
+    "nb": "norwegian", "nl": "dutch", "pl": "polish", "pt": "portuguese", "qu": "quechua",
+    "ro": "romanian", "ru": "russian", "sk": "slovak", "sl": "slovenian", "so": "somali",
+    "sr": "serbian", "sv": "swedish", "sw": "swahili", "ta": "tamil", "th": "thai",
+    "tl": "tagalog", "tr": "turkish", "ty": "tahitian", "uk": "ukrainian", "ur": "urdu",
+    "vi": "vietnamese", "wo": "wolof", "yo": "yoruba", "zh": "chinese", "zu": "zulu",
+}  # fmt: skip
+
+
+def _language_name(code: str) -> str:
+    """Radio Browser's name for a display code; a full name typed by hand passes through."""
+    base = code.strip().lower().split("-")[0]
+    if base in LANGUAGE_NAMES:
+        return LANGUAGE_NAMES[base]
+    # An unknown two- or three-letter code would only match other languages' names by accident.
+    return base if len(base) > 3 else ""
+
+
+def _stream_url(raw: dict) -> str:
+    """The station's address, preferring https.
+
+    A screen opened with https:// (needed for the microphone) cannot play an http:// stream:
+    the browser upgrades it to https and gives up when the station does not answer there.
+    Radio Browser keeps two addresses, and when only one of them is https we take that one.
+    """
+    resolved, given = raw.get("url_resolved") or "", raw.get("url") or ""
+    for candidate in (resolved, given):
+        if candidate.startswith("https://"):
+            return candidate
+    return resolved or given
+
+
 def _station(raw: dict) -> dict:
+    url = _stream_url(raw)
     return {
         "uuid": raw.get("stationuuid", ""),
         "name": raw.get("name", "").strip() or "?",
-        "url": raw.get("url_resolved") or raw.get("url", ""),
+        "url": url,
+        # Lets the settings page warn that an http-only station stays silent on an https screen.
+        "https": url.startswith("https://"),
         "favicon": raw.get("favicon", ""),
         "country": raw.get("countrycode", ""),
         "language": (raw.get("language", "") or "").split(",")[0].strip(),
@@ -43,8 +87,8 @@ async def search(
     }
     if country:
         params["countrycode"] = country.upper()
-    if language:
-        params["language"] = language
+    if language and (language_name := _language_name(language)):
+        params["language"] = language_name
     if name:
         params["name"] = name
     if tag:

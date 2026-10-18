@@ -25,6 +25,7 @@ async def test_search_uses_the_first_mirror_that_answers():
             "uuid": "abc-123",
             "name": "Radio Test",
             "url": "http://stream.example/high",
+            "https": False,
             "favicon": "http://stream.example/icon.png",
             "country": "FR",
             "language": "french",

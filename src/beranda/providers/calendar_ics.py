@@ -24,14 +24,16 @@ MAX_ICS_BYTES = 8 * 1024 * 1024  # a Pi 3B should not be fed a 200 MB calendar
 def normalise_url(url: str) -> str:
     """Accept the links people actually copy, and turn them into the feed address.
 
-    * `webcal://...` is https in disguise.
+    * `webcal://...` and `webcals://...` are https in disguise.
     * Nextcloud's public share page `https://cloud/apps/calendar/p/TOKEN` (or the older
       `.../index.php/apps/calendar/p/TOKEN`) becomes its ICS export
       `https://cloud/remote.php/dav/public-calendars/TOKEN?export`.
     """
     url = url.strip()
-    if url.lower().startswith("webcal://"):
-        url = "https://" + url[len("webcal://") :]
+    for disguise in ("webcal://", "webcals://"):
+        if url.lower().startswith(disguise):
+            url = "https://" + url[len(disguise) :]
+            break
     share = re.match(r"^(https?://.+?)(?:/index\.php)?/apps/calendar/p/([A-Za-z0-9]+)", url)
     if share:
         return f"{share.group(1)}/remote.php/dav/public-calendars/{share.group(2)}?export"
@@ -41,15 +43,23 @@ def normalise_url(url: str) -> str:
 
 
 async def download(url: str) -> str:
+    # Checked again here, not only when the settings were saved (see news.fetch). Downloading
+    # from an address the owner typed is the whole point of a calendar link, so code scanning's
+    # "request forgery" warning here is expected: checked_url keeps it to http(s) web sites.
+    address = checked_url(normalise_url(url), "calendar address")
     async with httpx.AsyncClient(
         timeout=15, headers={"User-Agent": USER_AGENT}, follow_redirects=True
-    ) as client:
-        # Checked again here, not only when the settings were saved (see news.fetch).
-        response = await client.get(checked_url(normalise_url(url), "calendar address"))
+    ) as client, client.stream("GET", address) as response:
         response.raise_for_status()
-        if len(response.content) > MAX_ICS_BYTES:
-            raise ValueError("calendar file is too large")
-        return response.text
+        chunks, size = [], 0
+        async for chunk in response.aiter_bytes():
+            size += len(chunk)
+            if size > MAX_ICS_BYTES:
+                # Stop at the cap: a wrong link to a huge file must never be loaded whole into a small Pi's memory.
+                raise ValueError("calendar file is too large")
+            chunks.append(chunk)
+        encoding = response.encoding or "utf-8"
+    return b"".join(chunks).decode(encoding, errors="replace")
 
 
 def _as_local(value: date | datetime, zone: ZoneInfo) -> tuple[datetime, bool]:
@@ -69,6 +79,10 @@ def events_from_ics(text: str, start: date, end: date, tz: str, source: int = 0)
     out: list[dict] = []
 
     for component in recurring_ical_events.of(calendar).between(start, window_end):
+        # STATUS:CANCELLED means it will not take place. Nextcloud, Outlook and Exchange keep a
+        # cancelled event, or one cancelled week of a series, in the feed instead of removing it.
+        if str(component.get("STATUS", "")).strip().upper() == "CANCELLED":
+            continue
         begin, all_day = _as_local(component.start, zone)
         finish_raw = component.end
         finish, _ = _as_local(finish_raw, zone)

@@ -7,6 +7,7 @@ import calendar as _calendar
 import hashlib
 import io
 import logging
+import re
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from dataclasses import replace
@@ -163,7 +164,10 @@ async def build_state(
             return calendar_ics.events_from_ics(text, start, end, loc.timezone, index)
 
         try:
-            got, is_stale = await cache.get(f"ics:{digest}:{start}:{end}", CALENDAR_TTL, load, name="calendar")
+            # The key holds the link only, not the month window: otherwise, offline on the 1st of
+            # a month, the copy saved minutes before midnight would never be looked up again and
+            # the agenda would go empty instead of showing that copy, flagged stale.
+            got, is_stale = await cache.get(f"ics:{digest}", CALENDAR_TTL, load, name="calendar")
             events.extend(got)
             if is_stale:
                 stale.append(f"calendar:{index}")
@@ -281,7 +285,7 @@ async def build_state(
                     f"alerts:{cfg.country.upper()}", ALERTS_TTL, lambda: alerts_mod.fetch(cfg.country, now),
                     name="weather warnings",
                 )
-                alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area)}
+                alerts = {"status": "ok", "items": alerts_mod.for_area(every, cfg.alerts_area, now=now)}
                 if is_stale:
                     stale.append("alerts")
             except Exception as exc:  # noqa: BLE001
@@ -391,6 +395,12 @@ def create_app(
             response = PlainTextResponse(
                 "Beranda only answers devices on its own home network.", status_code=403
             )
+        elif not access.is_home_name(request.headers.get("host")):
+            # A page from another site whose name was re-pointed at the Pi (DNS rebinding) comes
+            # from a home address, so only the name it was opened under shows it is a stranger.
+            response = PlainTextResponse(
+                "Open Beranda by its own address, for example beranda.local:8080.", status_code=403
+            )
         else:
             response = await call_next(request)
         response.headers["Content-Security-Policy"] = CSP
@@ -475,11 +485,15 @@ def create_app(
         if not cfg.voice_enabled:
             return JSONResponse({"detail": "voice control is turned off in the settings"}, status_code=403)
         text = str(body.get("text", ""))[:300]
+        # A screen opened with ?lang= listens in that language, so its sentences must be matched
+        # in it too. Only a plain language code is taken; anything else falls back to the setting.
+        asked = str(body.get("language", ""))
+        language = asked if re.fullmatch(r"[a-z]{2,3}(-[A-Za-z]{2,4})?", asked) else cfg.language
         now = clock()
         data = await build_state(cfg, cache, now)
         reply = voice_mod.answer(
             text,
-            language=cfg.language,
+            language=language,
             now=now,
             stations=data["radio"]["stations"],
             weather=data["weather"],

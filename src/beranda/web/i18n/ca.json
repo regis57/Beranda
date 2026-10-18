@@ -177,6 +177,8 @@
     "tap_for_sound": "Toqueu la pantalla una vegada perquè Beranda pugui parlar.",
     "mic_none": "El navegador no pot fer servir el micròfon – vegeu la configuració.",
     "mic_blocked": "El micròfon està bloquejat per a aquesta pàgina.",
-    "mic_offline": "No es pot accedir al servei de veu del navegador."
+    "mic_offline": "No es pot accedir al servei de veu del navegador.",
+    "mic_no_answer": "No s’ha sentit res. Toqueu el micròfon i torneu-ho a provar.",
+    "voice_no_reply": "Beranda no ha respost. Espereu un moment i torneu a tocar el micròfon."
   }
 }

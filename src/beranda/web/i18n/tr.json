@@ -177,6 +177,8 @@
     "tap_for_sound": "Beranda konuşabilsin diye ekrana bir kez dokunun.",
     "mic_none": "Tarayıcı mikrofonu kullanamıyor – ayarlara bakın.",
     "mic_blocked": "Bu sayfa için mikrofon engellendi.",
-    "mic_offline": "Tarayıcının konuşma servisine ulaşılamıyor."
+    "mic_offline": "Tarayıcının konuşma servisine ulaşılamıyor.",
+    "mic_no_answer": "Hiçbir şey duyulmadı. Mikrofona dokunup yeniden deneyin.",
+    "voice_no_reply": "Beranda yanıt vermedi. Biraz bekleyip mikrofona yeniden dokunun."
   }
 }

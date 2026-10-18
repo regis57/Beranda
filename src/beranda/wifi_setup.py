@@ -188,8 +188,28 @@ def start_hotspot() -> None:
         )
     except OSError:
         log.warning("could not write %s; the setup page still works once opened by hand", DNSMASQ_DROPIN)
-    _run(["nmcli", "connection", "up", AP_CON_NAME])
-    write_status(AP_SSID)
+    # Raspberry Pi OS leaves the radio off until a Wi-Fi country is set (an image built
+    # without one, or a Pi set up over a cable): switch it on first, or no network appears.
+    from .wifi import radio_on
+
+    radio_on(_country())
+    # Only announce the network once it really opened: the screen would otherwise show a QR
+    # code for a network no phone can find.
+    if _run(["nmcli", "connection", "up", AP_CON_NAME]).returncode == 0:
+        write_status(AP_SSID)
+    else:
+        log.warning("the setup network %r could not be opened", AP_SSID)
+        write_status(None)
+
+
+def _country() -> str:
+    """The country chosen in Beranda's settings, used to set the Wi-Fi country if none is."""
+    try:
+        from .config import load
+
+        return load().country.upper()
+    except Exception:  # noqa: BLE001 - a broken settings file must never stop the safety net
+        return ""
 
 
 def stop_hotspot() -> None:
@@ -209,13 +229,48 @@ def write_status(ssid: str | None) -> None:
     path = status_file()
     try:
         if ssid:
+            # Root writes this into a folder the web server's user owns, so a link planted at
+            # this name must not be followed: write a fresh file beside it and move it in place.
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps({"ssid": ssid, "open": True}))
-            path.chmod(0o644)  # this service runs as root; the web server (another user) must read it
+            dfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+                # The folder belongs to the web server's user, so its owner is who must read the
+                # file: handing it over keeps it owner-only instead of readable by everyone.
+                folder = os.fstat(dfd)
+                tmp = f".{path.name}.tmp"
+                try:
+                    os.unlink(tmp, dir_fd=dfd)
+                except FileNotFoundError:
+                    pass
+                fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=dfd)
+                with os.fdopen(fd, "w") as out:
+                    out.write(json.dumps({"ssid": ssid, "open": True}))
+                    os.fchmod(out.fileno(), 0o600)
+                    os.fchown(out.fileno(), folder.st_uid, folder.st_gid)
+                os.replace(tmp, path.name, src_dir_fd=dfd, dst_dir_fd=dfd)
+            finally:
+                os.close(dfd)
         else:
             path.unlink(missing_ok=True)
     except OSError:
         log.warning("could not update %s", path)
+
+
+def _saved_names() -> set[str]:
+    out = _run(["nmcli", "-t", "-f", "NAME", "connection", "show"]).stdout
+    return {line.replace("\\:", ":") for line in out.splitlines() if line}
+
+
+def _reopen_after_failed_connect(ssid: str, before: set[str]) -> None:
+    """A try at another network takes the one radio away from "Beranda setup". When it fails
+    (a mistyped password, most often), bring the setup network straight back so the person can
+    try again, instead of leaving them with no network for up to 15 minutes. A half-made
+    profile for that network is removed too, unless it was saved before this try."""
+    name = _usable_name(ssid)
+    if name and name != AP_CON_NAME and name not in before:
+        _run(["nmcli", "connection", "delete", "id", name])
+    if _run(["nmcli", "connection", "up", AP_CON_NAME]).returncode == 0:
+        write_status(AP_SSID)
 
 
 # -------------------------------------------------------------------- the setup page -----
@@ -331,7 +386,10 @@ def create_portal_app():
     async def do_connect(body: dict) -> dict:
         ssid = (body.get("ssid") or "").strip()
         password = body.get("password") or ""
+        before = _saved_names()
         ok, message = connect(ssid, password)
+        if not ok:
+            _reopen_after_failed_connect(ssid, before)
         return {"ok": ok, "message": message}
 
     # Most phones and computers fetch one of the URLs below right after joining a new network;
@@ -373,11 +431,14 @@ def main() -> None:  # pragma: no cover - needs a real Wi-Fi radio
     import uvicorn
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s wifi-setup: %(message)s")
-    write_status(None)
+    # A restart (or a crash) while "Beranda setup" was open leaves it up, and an open network
+    # makes NetworkManager say "connected": close any leftover one first, so the watch below
+    # sees the real state and the open network never stays up for good.
+    stop_hotspot()
     while True:
         lost = 0
         while lost < grace_seconds():
-            if is_connected():
+            if is_connected() and not _hotspot_only():
                 lost = 0
                 time_mod.sleep(CHECK_SECONDS)
             else:
@@ -408,9 +469,13 @@ def main() -> None:  # pragma: no cover - needs a real Wi-Fi radio
 
 
 def _hotspot_only() -> bool:
-    """While the setup network is up, NetworkManager calls the Pi "connected" (to itself)."""
-    out = _run(["nmcli", "-t", "-f", "NAME", "connection", "show", "--active"]).stdout.split()
-    return out == [AP_CON_NAME]
+    """While the setup network is up, NetworkManager calls the Pi "connected" (to itself).
+
+    The loopback profile "lo" is left out: NetworkManager 1.42 and newer (Raspberry Pi OS
+    Bookworm) lists it among the active connections, and counting it closed the setup
+    network a few seconds after it opened."""
+    out = _run(["nmcli", "-t", "-f", "NAME", "connection", "show", "--active"]).stdout.splitlines()
+    return [name for name in out if name and name != "lo"] == [AP_CON_NAME]
 
 
 if __name__ == "__main__":

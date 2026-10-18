@@ -21,9 +21,10 @@ key is optional. Example: [config.example.toml](https://github.com/regis57/Beran
 | `[tv]` `url`, `channels`, `names` | none | 10 | XMLTV guide, ticked channel ids and their names |
 | `[voice]` `enabled`, `commands` | off | 11 | your own phrases |
 | `[screen]` `rotate`, `off`, `on` | 0, never | 12 | rotation in degrees, night hours `"23:00"` |
-| `[admin]` `pin` | none | 14 | |
-| `[server]` `host`, `port` | `0.0.0.0`, 8080 | 15 | the port also answers https |
-| `[widgets]` `chart`, `air`, `alerts`, `alerts_area`, `ephemeris`, `second_clock` | on, on, off, -, on, - | 4 | extras of the main screen |
+| `[admin]` `pin` | none | 15 | |
+| `[server]` `host`, `port` | `0.0.0.0`, 8080 | 17 | the port also answers https |
+| `[widgets]` `chart`, `air`, `alerts`, `alerts_area`, `ephemeris`, `second_clock`, `nameday_top` | on, on, off, -, on, -, on | 4 | extras of the main screen |
+| `[accessibility]` `large_text`, `high_contrast`, `read_aloud` | off, off, off | 16 | bigger text, stronger contrast, read the screen aloud |
 | `[limits]` `profile` | `auto` | - | `lite`, `standard`, `comfort`, `plus`, `max` |
 
 Environment: `BERANDA_CONFIG` (settings file), `BERANDA_PROFILE` (limits), `BERANDA_PHOTOS`,

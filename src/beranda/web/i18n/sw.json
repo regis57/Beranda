@@ -177,6 +177,8 @@
     "tap_for_sound": "Gusa skrini mara moja ili Beranda iweze kuongea.",
     "mic_none": "Kivinjari hakiwezi kutumia kipaza sauti – angalia mipangilio.",
     "mic_blocked": "Kipaza sauti kimezuiwa kwa ukurasa huu.",
-    "mic_offline": "Huduma ya sauti ya kivinjari haipatikani."
+    "mic_offline": "Huduma ya sauti ya kivinjari haipatikani.",
+    "mic_no_answer": "Hakuna kilichosikika. Gusa maikrofoni ujaribu tena.",
+    "voice_no_reply": "Beranda haikujibu. Subiri kidogo kisha gusa maikrofoni tena."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "Dodirnite zaslon jednom kako bi Beranda mogla govoriti.",
     "mic_none": "Preglednik ne može koristiti mikrofon – pogledajte postavke.",
     "mic_blocked": "Mikrofon je blokiran za ovu stranicu.",
-    "mic_offline": "Govorna usluga preglednika nije dostupna."
+    "mic_offline": "Govorna usluga preglednika nije dostupna.",
+    "mic_no_answer": "Ništa se nije čulo. Dodirnite mikrofon i pokušajte ponovno.",
+    "voice_no_reply": "Beranda nije odgovorila. Pričekajte trenutak i ponovno dodirnite mikrofon."
   }
 }

@@ -177,6 +177,8 @@
     "tap_for_sound": "轻触屏幕一次，Beranda 才能说话。",
     "mic_none": "浏览器无法使用麦克风 – 请查看设置。",
     "mic_blocked": "此页面的麦克风已被阻止。",
-    "mic_offline": "无法连接浏览器的语音服务。"
+    "mic_offline": "无法连接浏览器的语音服务。",
+    "mic_no_answer": "什么也没听到。请点按麦克风再试一次。",
+    "voice_no_reply": "Beranda 没有回应。请稍等片刻，再点按麦克风。"
   }
 }

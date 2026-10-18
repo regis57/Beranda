@@ -177,6 +177,8 @@
     "tap_for_sound": "Puudutage ekraani korra, et Beranda saaks rääkida.",
     "mic_none": "Brauser ei saa mikrofoni kasutada – vaadake seadeid.",
     "mic_blocked": "Mikrofon on sellel lehel blokeeritud.",
-    "mic_offline": "Brauseri kõneteenus pole kättesaadav."
+    "mic_offline": "Brauseri kõneteenus pole kättesaadav.",
+    "mic_no_answer": "Midagi ei kuuldud. Puudutage mikrofoni ja proovige uuesti.",
+    "voice_no_reply": "Beranda ei vastanud. Oodake hetk ja puudutage mikrofoni uuesti."
   }
 }
