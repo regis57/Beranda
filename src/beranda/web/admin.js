@@ -766,7 +766,8 @@ function renderVoiceCommands() {
     rm.addEventListener('click', () => { voiceCommands.splice(i, 1); renderVoiceCommands(); markDirty(); });
     return el('div', { className: 'item voice' }, phrase, action, extra, rm);
   }));
-  $('voice-add').disabled = voiceCommands.length >= 50;
+  // No greying out here: the click handler's atLimit() uses this board's own maximum and says
+  // so in a sentence, whereas a fixed number greyed the button silently on boards allowed more.
 }
 
 // The built-in phrases, in the language chosen for the display (that is the language the
@@ -1301,6 +1302,20 @@ async function save(event) {
     $('w-clock2-tz').scrollIntoView({ block: 'center' });
     return;
   }
+  // An own phrase that should answer but has no answer would be refused by the server with an
+  // English sentence, so it is caught here and the empty answer box is shown in the page language.
+  const silent = [...document.querySelectorAll('#voice-commands .item.voice')].find((row, i) => {
+    const c = voiceCommands[i];
+    return c && c.phrase.trim() && c.action === 'say' && !(c.reply || '').trim();
+  });
+  if (silent) {
+    state.textContent = t('admin.voice_reply_missing');
+    state.className = 'bad';
+    const box = silent.querySelector('.v-extra');
+    box.scrollIntoView({ block: 'center' });
+    box.focus();
+    return;
+  }
   $('save').disabled = true;
   try {
     const body = collect();
@@ -1315,6 +1330,9 @@ async function save(event) {
     state.className = 'ok';
     $('welcome').hidden = true;
     cfg = { ...cfg, ...body };
+    // collect() leaves the region out when none is chosen, so the merge above would keep the old
+    // one and a redraw after a language change would bring it back and save it again.
+    if (!('subdivision' in body)) delete cfg.subdivision;
     if (body.language !== lang) { await loadStrings(body.language); translateStatic(); renderAll(); }
     refreshPreview();
   } catch (e) {
