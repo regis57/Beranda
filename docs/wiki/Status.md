@@ -13,7 +13,7 @@
 | One-line installer, update button, `beranda doctor` | ✅ works | real Pi 4 + a fresh Ubuntu machine in CI |
 | Port change, https on the same port | ✅ works | real Pi 4 (October 2026) |
 | Diagnostic file | ✅ works | real Pi 4 |
-| Voice control | ✅ Google Chrome · ❌ Microsoft Edge | real PC: Edge's speech service answers "network" |
+| Voice control (microphone button, https) | ✅ Google Chrome · ❌ Microsoft Edge | real Pi 4 with Chrome on Windows, 0.18.0 (October 2026): several sentences heard in a row; Edge's speech service answers "network" |
 | Air quality, UV, pollen | ✅ works | real Pi 4 (pollen: Europe, in season only) |
 | Weather warnings (MeteoAlarm) | ⚠️ works, area names differ by country | France only; the settings page now spots an area that does not match the town |
 | Limits per board (Pi 2 to Pi 5) | ⚠️ estimates | only the Pi 4 2 GB was measured |
