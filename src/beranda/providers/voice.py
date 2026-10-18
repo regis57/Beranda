@@ -44,10 +44,10 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "quiet": ('be quiet', 'stop talking', 'shut up', 'enough'),
     },
     "fr": {
-        "weather": ("quel temps fait-il", "météo", "previsions"),
+        "weather": ("quel temps fait-il", "météo", "prévisions"),
         "time": ("quelle heure est-il", "heure"),
         "radio_stop": ("coupe la radio", "arrête la radio", "silence", "arrête", "stop"),
-        "radio_play": ("joue", "mets", "écoute"),
+        "radio_play": ("joue", "mets", "remets", "écoute"),
         "radio_next": ("station suivante", "radio suivante", "suivante", "suivant"),
         "radio_prev": ("station précédente", "radio précédente", "précédente", "précédent"),
         "volume_up": ("plus fort", "monte le son", "augmente le volume"),
@@ -62,7 +62,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('plus petit', 'texte plus petit', 'texte normal', 'taille normale'),
         "contrast_on": ('fort contraste', 'plus de contraste', 'noir et blanc'),
         "contrast_off": ('contraste normal', 'couleurs normales', 'remets les couleurs'),
-        "quiet": ('tais-toi', 'silence', 'arrête de parler', 'chut'),
+        "quiet": ('tais-toi', 'arrête de parler', 'chut'),
     },
     "de": {
         "weather": ("wie ist das wetter", "wetter", "vorhersage"),
@@ -104,7 +104,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('más pequeño', 'texto más pequeño', 'texto normal', 'tamaño normal'),
         "contrast_on": ('alto contraste', 'más contraste', 'blanco y negro'),
         "contrast_off": ('contraste normal', 'colores normales', 'devuelve los colores'),
-        "quiet": ('cállate', 'silencio', 'deja de hablar', 'basta'),
+        "quiet": ('cállate', 'deja de hablar', 'basta'),
     },
     "it": {
         "weather": ("che tempo fa", "meteo", "previsioni"),
@@ -125,7 +125,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('più piccolo', 'testo più piccolo', 'testo normale', 'dimensione normale'),
         "contrast_on": ('alto contrasto', 'più contrasto', 'bianco e nero'),
         "contrast_off": ('contrasto normale', 'colori normali', 'rimetti i colori'),
-        "quiet": ('zitto', 'silenzio', 'smetti di parlare', 'basta'),
+        "quiet": ('zitto', 'smetti di parlare', 'basta'),
     },
     "pt": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -146,7 +146,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('mais pequeno', 'texto mais pequeno', 'texto normal', 'tamanho normal'),
         "contrast_on": ('alto contraste', 'mais contraste', 'preto e branco'),
         "contrast_off": ('contraste normal', 'cores normais', 'repõe as cores'),
-        "quiet": ('cala-te', 'silêncio', 'pára de falar', 'chega'),
+        "quiet": ('cala-te', 'para de falar', 'chega'),
     },
     "pt-BR": {
         "weather": ("que tempo faz", "previsão", "meteorologia"),
@@ -167,7 +167,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('menor', 'texto menor', 'texto normal', 'tamanho normal'),
         "contrast_on": ('alto contraste', 'mais contraste', 'preto e branco'),
         "contrast_off": ('contraste normal', 'cores normais', 'volta as cores'),
-        "quiet": ('fica quieto', 'silêncio', 'para de falar', 'chega'),
+        "quiet": ('fica quieto', 'para de falar', 'chega'),
     },
     "ar": {
         "weather": ("كيف حال الطقس", "الطقس", "توقعات"),
@@ -188,7 +188,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('أصغر', 'نص أصغر', 'نص عادي', 'الحجم العادي'),
         "contrast_on": ('تباين عال', 'تباين عالٍ', 'أبيض وأسود'),
         "contrast_off": ('تباين عادي', 'الألوان العادية', 'أعد الألوان'),
-        "quiet": ('اصمت', 'صمت', 'توقف عن الكلام', 'كفى'),
+        "quiet": ('اصمت', 'توقف عن الكلام', 'كفى'),
     },
     "sw": {
         "weather": ("hali ya hewa", "utabiri"),
@@ -209,7 +209,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('ndogo zaidi', 'maandishi madogo', 'maandishi ya kawaida', 'ukubwa wa kawaida'),
         "contrast_on": ('utofauti mkubwa', 'nyeusi na nyeupe'),
         "contrast_off": ('utofauti wa kawaida', 'rangi za kawaida', 'rudisha rangi'),
-        "quiet": ('nyamaza', 'kimya', 'acha kuongea', 'inatosha'),
+        "quiet": ('nyamaza', 'acha kuongea', 'inatosha'),
     },
     "id": {
         "weather": ("bagaimana cuacanya", "cuaca", "ramalan"),
@@ -230,7 +230,7 @@ _INTENTS: dict[str, dict[str, tuple[str, ...]]] = {
         "smaller": ('lebih kecil', 'teks lebih kecil', 'teks normal', 'ukuran normal'),
         "contrast_on": ('kontras tinggi', 'lebih kontras', 'hitam putih'),
         "contrast_off": ('kontras normal', 'warna normal', 'kembalikan warna'),
-        "quiet": ('diam', 'tenang', 'berhenti bicara', 'cukup'),
+        "quiet": ('tenang', 'berhenti bicara', 'cukup'),
     },
 }
 
@@ -239,6 +239,14 @@ def _normalise(text: str) -> str:
     """Lower case, one space between words, and no dashes or punctuation: a speech service
     writes "tais-toi" or "tais toi" as it pleases, and both must mean the same."""
     text = unicodedata.normalize("NFKC", text).lower().strip()
+    # A phone keyboard types a curly apostrophe (what’s) where a speech service writes a straight
+    # one (what's); an own phrase typed on an iPhone must still match what was heard.
+    text = re.sub(r"[\u2018\u2019\u02bc\u00b4`]", "'", text)
+    # Accents are dropped on both sides: a speech service and a person typing an own phrase do
+    # not always agree on them ("pára" or "para", "previsions" or "prévisions"), and the meaning
+    # does not change. A test checks that no two built-in phrases clash once accents are gone.
+    text = "".join(c for c in unicodedata.normalize("NFD", text) if not unicodedata.combining(c))
+    text = unicodedata.normalize("NFC", text)
     text = re.sub(r"[-–—,;:!?.]+", " ", text)
     return re.sub(r"\s+", " ", text).strip()
 
@@ -248,18 +256,20 @@ def parse_intent(text: str, language: str = "en") -> dict | None:
     text = _normalise(text)
     if not text:
         return None
-    keywords = _INTENTS.get(language, _INTENTS["en"])
+    # "fr-FR" must hear French phrases, as the replies and the guide already fall back that way.
+    keywords = _INTENTS.get(language) or _INTENTS.get(language.split("-")[0]) or _INTENTS["en"]
     candidates = sorted(
         ((intent, trig) for intent, trigs in keywords.items() for trig in trigs),
         key=lambda pair: -len(pair[1]),
     )
     for intent, trig in candidates:
         trig = _normalise(trig)  # "tais-toi" in the list, "tais toi" from the microphone: the same
-        idx = text.find(trig)
-        if idx == -1:
+        # Whole words only: "time" must not fire inside "Times Radio", nor "mets" inside "remets".
+        m = re.search(rf"(?<!\w){re.escape(trig)}(?!\w)", text)
+        if m is None:
             continue
         if intent == "radio_play":
-            remainder = (text[:idx] + text[idx + len(trig) :]).strip()
+            remainder = re.sub(r"\s+", " ", text[: m.start()] + text[m.end() :]).strip()
             return {"intent": intent, "query": remainder}
         return {"intent": intent}
     return None
@@ -415,6 +425,22 @@ def _similar(a: str, b: str) -> float:
     return SequenceMatcher(None, _normalise(a), _normalise(b)).ratio()
 
 
+# Words people add around "radio" when they name no station ("put the radio on", "mets la radio"),
+# in every voice language, already without accents. One shared set is enough: a word here only
+# matters when no favourite's name came close to what was heard.
+_RADIO_FILLER = frozenset(
+    "the a an some on radio music "
+    "la le les l' de du des un une musique "
+    "das die der den ein eine radio musik "
+    "el los las una musica "
+    "il lo i gli "
+    "o os as uma "
+    "الراديو راديو الموسيقى موسيقى "
+    "redio muziki "
+    "musik".split()
+)
+
+
 def best_station(stations: list[dict], query: str) -> dict | None:
     """The saved favourite whose name is closest to what was heard, if any is close enough.
 
@@ -425,7 +451,12 @@ def best_station(stations: list[dict], query: str) -> dict | None:
     if not query.strip():
         return stations[0]
     best = max(stations, key=lambda s: _similar(s.get("name", ""), query))
-    return best if _similar(best.get("name", ""), query) >= MATCH_THRESHOLD else None
+    if _similar(best.get("name", ""), query) >= MATCH_THRESHOLD:
+        return best
+    # Only after the names had their chance, so that "play radio 4" still finds "BBC Radio 4".
+    if all(word in _RADIO_FILLER for word in _normalise(query).split()):
+        return stations[0]
+    return None
 
 
 def default_commands(language: str) -> dict[str, list[str]]:
