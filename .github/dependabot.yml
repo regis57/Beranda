@@ -20,3 +20,9 @@ updates:
       day: monday
     commit-message:
       prefix: "ci"
+    groups:
+      # CodeQL refuses to run when its init and analyze steps are on different versions, so the
+      # two must always be bumped in the same pull request (they were split once and both failed).
+      codeql:
+        patterns:
+          - "github/codeql-action/*"
